@@ -1,4 +1,7 @@
 #include "GameScene.h"
+#include "GameManager.h"
+#include "GameClearScene.h"
+#include "GameOverScene.h"
 #include <cassert>
 
 GameScene::GameScene() {};
@@ -31,6 +34,21 @@ void GameScene::Update(GameManager* gameManager) {
 			isDebugCameraActive_ = false;
 		}
 	}
+
+	if (input_->IsPushKeyEnter(DIK_1))
+	{
+		gameManager->ChangeScene(new GameClearScene);
+	}
+
+	if (input_->IsPushKeyEnter(DIK_2))
+	{
+		gameManager->ChangeScene(new GameOverScene);
+	}
+
+	ImGui::Begin("Game Play");
+	ImGui::Text("push 1 : Game Clear");
+	ImGui::Text("push 2 : Game Over");
+	ImGui::End();
 };
 
 void GameScene::Draw(GameManager* gameManager) {

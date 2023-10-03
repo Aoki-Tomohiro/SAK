@@ -52,7 +52,7 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <AdditionalIncludeDirectories>$(ProjectDir)Engine;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)Project\Game;$(ProjectDir)Project\Game\TitleScene;$(ProjectDir)Project\Game\SelectScene;$(ProjectDir)Project\Game\ClearScene;$(ProjectDir)Project\Game\OverScene;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -76,7 +76,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <AdditionalIncludeDirectories>$(ProjectDir)Engine;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)Project\Game;$(ProjectDir)Project\Game\TitleScene;$(ProjectDir)Project\Game\SelectScene;$(ProjectDir)Project\Game\ClearScene;$(ProjectDir)Project\Game\OverScene;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -119,8 +119,12 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\Utility\Log.cpp" />
     <ClCompile Include="Engine\Utility\MathFunction.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Project\Game\ClearScene\GameClearScene.cpp" />
     <ClCompile Include="Project\Game\GameManager.cpp" />
+    <ClCompile Include="Project\Game\OverScene\GameOverScene.cpp" />
     <ClCompile Include="Project\Game\GameScene.cpp" />
+    <ClCompile Include="Project\Game\SelectScene\GameSelectScene.cpp" />
+    <ClCompile Include="Project\Game\TitleScene\GameTitleScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\2D\ImGuiManager.h" />
@@ -153,8 +157,12 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\Utility\GlobalVariables.h" />
     <ClInclude Include="Engine\Utility\Log.h" />
     <ClInclude Include="Engine\Utility\MathFunction.h" />
+    <ClInclude Include="Project\Game\ClearScene\GameClearScene.h" />
     <ClInclude Include="Project\Game\GameManager.h" />
+    <ClInclude Include="Project\Game\OverScene\GameOverScene.h" />
     <ClInclude Include="Project\Game\GameScene.h" />
+    <ClInclude Include="Project\Game\SelectScene\GameSelectScene.h" />
+    <ClInclude Include="Project\Game\TitleScene\GameTitleScene.h" />
     <ClInclude Include="Project\Game\IScene.h" />
   </ItemGroup>
   <ItemGroup>
