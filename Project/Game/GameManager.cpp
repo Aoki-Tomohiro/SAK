@@ -32,6 +32,10 @@ GameManager::GameManager() {
 	input_ = Input::GetInstance();
 	input_->Initialize();
 
+	//PostProcessの初期化
+	postProcess_ = PostProcess::GetInstance();
+	postProcess_->Initialize();
+
 	//モデルの静的初期化
 	Model::StaticInitialize();
 

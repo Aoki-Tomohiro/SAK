@@ -8,7 +8,7 @@ Model::ComPtr<IDxcCompiler3> Model::sDxcCompiler_ = nullptr;
 Model::ComPtr<IDxcIncludeHandler> Model::sIncludeHandler_ = nullptr;
 Model::ComPtr<ID3D12RootSignature> Model::sRootSignature_ = nullptr;
 Model::ComPtr<ID3D12PipelineState> Model::sGraphicsPipelineState_ = nullptr;
-std::unique_ptr<DirectionalLight> Model::sDirectionalLight_ = nullptr;
+std::list<Model::ModelData> Model::modelDatas_{};
 
 
 void Model::StaticInitialize() {
@@ -23,10 +23,6 @@ void Model::StaticInitialize() {
 
 	//PipelineStateObjectの作成
 	Model::CreatePipelineStateObject();
-
-	//DirectionalLightの作成
-	sDirectionalLight_ = std::make_unique<DirectionalLight>();
-	sDirectionalLight_->Initialize();
 }
 
 
@@ -37,7 +33,6 @@ void Model::Release() {
 	sIncludeHandler_.Reset();
 	sRootSignature_.Reset();
 	sGraphicsPipelineState_.Reset();
-	sDirectionalLight_.reset();
 }
 
 
@@ -46,15 +41,41 @@ Model* Model::CreateFromOBJ(const std::string& directoryPath, const std::string&
 	//モデルを生成
 	Model* model = new Model();
 
+	for (ModelData modelData : modelDatas_) {
+		if (modelData.name == filename) {
+			//メッシュの作成
+			model->mesh_ = std::make_unique<Mesh>();
+			model->mesh_->Initialize(modelData.vertices);
+
+			//テクスチャの読み込み
+			model->textureHandle_ = TextureManager::GetInstance()->Load(modelData.material.textureFilePath);
+
+			//マテリアルの作成
+			model->material_ = std::make_unique<Material>();
+			model->material_->Initialize();
+
+			//WVPリソースの作成
+			model->CreateWVPResource();
+
+			//DirectionalLightの作成
+			model->directionalLight_ = std::make_unique<DirectionalLight>();
+			model->directionalLight_->Initialize();
+			
+			return model;
+		}
+	}
+
 	//モデルデータを読み込む
-	model->modelData_ = model->LoadObjFile(directoryPath, filename);
+	ModelData modelData = model->LoadObjFile(directoryPath, filename);
+	modelData.name = filename;
+	modelDatas_.push_back(modelData);
 
 	//テクスチャを読み込む
-	model->textureHandle_ = TextureManager::Load(model->modelData_.material.textureFilePath);
+	model->textureHandle_ = TextureManager::Load(modelData.material.textureFilePath);
 
 	//メッシュの作成
 	model->mesh_ = std::make_unique<Mesh>();
-	model->mesh_->Initialize(model->modelData_.vertices);
+	model->mesh_->Initialize(modelData.vertices);
 
 	//マテリアルの作成
 	model->material_ = std::make_unique<Material>();
@@ -62,6 +83,9 @@ Model* Model::CreateFromOBJ(const std::string& directoryPath, const std::string&
 
 	//WVPリソースの作成
 	model->CreateWVPResource();
+
+	model->directionalLight_ = std::make_unique<DirectionalLight>();
+	model->directionalLight_->Initialize();
 
 	return model;
 }
@@ -136,8 +160,6 @@ void Model::PreDraw() {
 	sCommandList_->SetGraphicsRootSignature(sRootSignature_.Get());
 	//PSOを設定
 	sCommandList_->SetPipelineState(sGraphicsPipelineState_.Get());
-	//DirectionalLightを設定
-	sDirectionalLight_->SetGraphicsCommand(UINT(RootParameterIndex::DirectionalLight));
 }
 
 
@@ -157,6 +179,8 @@ void Model::Draw(const WorldTransform& worldTransform, const ViewProjection& vie
 	sCommandList_->SetGraphicsRootConstantBufferView(UINT(RootParameterIndex::TransformationMatrix), wvpResource_->GetGPUVirtualAddress());
 	//DescriptorTableを設定
 	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(UINT(RootParameterIndex::Texture), textureHandle_);
+	//DirectionalLightを設定
+	directionalLight_->SetGraphicsCommand(UINT(RootParameterIndex::DirectionalLight));
 	//描画!(DrawCall/ドローコール)。3頂点で1つのインスタンス。インスタンスについては今後
 	mesh_->Draw();
 }
@@ -167,10 +191,6 @@ void Model::Draw(const WorldTransform& worldTransform, const ViewProjection& vie
 	//行列を計算する
 	Model::UpdateMatrix(worldTransform, viewProjection);
 
-	//RootSignatureを設定。PSOに設定しているけど別途設定が必要
-	sCommandList_->SetGraphicsRootSignature(sRootSignature_.Get());
-	//PSOを設定
-	sCommandList_->SetPipelineState(sGraphicsPipelineState_.Get());
 	//頂点データを設定
 	mesh_->SetGraphicsCommand();
 	//マテリアルCBufferの場所を設定
@@ -180,7 +200,7 @@ void Model::Draw(const WorldTransform& worldTransform, const ViewProjection& vie
 	//DescriptorTableを設定
 	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(UINT(RootParameterIndex::Texture), textureHandle);
 	//DirectionalLightを設定
-	sDirectionalLight_->SetGraphicsCommand(UINT(RootParameterIndex::DirectionalLight));
+	directionalLight_->SetGraphicsCommand(UINT(RootParameterIndex::DirectionalLight));
 	//描画!(DrawCall/ドローコール)。3頂点で1つのインスタンス。インスタンスについては今後
 	mesh_->Draw();
 }

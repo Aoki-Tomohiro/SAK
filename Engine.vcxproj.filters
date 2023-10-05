@@ -343,6 +343,30 @@
     <FxCompile Include="Resources\Shader\SpritePS.hlsl">
       <Filter>Shader</Filter>
     </FxCompile>
+    <FxCompile Include="Resources\Shader\MultiPassVS.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shader\MultiPassPS.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shader\HorizontalBlurVS.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shader\HorizontalBlurPS.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shader\VerticalBlurVS.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shader\VerticalBlurPS.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shader\PostProcessVS.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shader\PostProcessPS.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Engine\Externals\imgui\LICENSE.txt">
@@ -354,6 +378,18 @@
       <Filter>Shader</Filter>
     </None>
     <None Include="Resources\Shader\Sprite.hlsli">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="Resources\Shader\MultiPass.hlsli">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="Resources\Shader\HorizontalBlur.hlsli">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="Resources\Shader\VerticalBlur.hlsli">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="Resources\Shader\PostProcess.hlsli">
       <Filter>Shader</Filter>
     </None>
   </ItemGroup>

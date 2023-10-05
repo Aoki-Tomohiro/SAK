@@ -4,6 +4,7 @@
 #include "Base/D3DResourceLeakChecker.h"
 #include "Components/Audio.h"
 #include "Components/Input.h"
+#include "Components/PostProcess.h"
 #include "3D/Model/Model.h"
 #include "2D/Sprite.h"
 #include "2D/ImGuiManager.h"
@@ -41,5 +42,6 @@ private:
 	ImGuiManager* imguiManager_ = nullptr;
 	Audio* audio_ = nullptr;
 	Input* input_ = nullptr;
+	PostProcess* postProcess_ = nullptr;
 	IScene* currentScene_;
 };
