@@ -33,6 +33,7 @@ void Player::Update()
 	ImGui::Text("translationX %f", worldTransform_.translation_.x);
 	ImGui::Text("translationY %f", worldTransform_.translation_.y);
 	ImGui::Text("translationZ %f", worldTransform_.translation_.z);
+	ImGui::Text("A : moveLeft  D : moveRight");
 	ImGui::End();
 }
 
