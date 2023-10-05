@@ -91,6 +91,30 @@
     <Filter Include="ヘッダー ファイル\Engine\3D\DebugCamera">
       <UniqueIdentifier>{3ef29a89-0edb-4db7-89a0-9a0d973bb5a6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Project\Game\TitleScene">
+      <UniqueIdentifier>{c38a9ba5-f5b3-4f01-bc15-0d3b79570cc0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Project\Game\SelectScene">
+      <UniqueIdentifier>{a5d60355-65cd-42ca-9275-d0727d0a3c6a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Project\Game\ClearScene">
+      <UniqueIdentifier>{8c643529-690a-4ab6-abb6-d2fe6fea82d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Project\Game\OverScene">
+      <UniqueIdentifier>{b391a48c-2cc2-4359-bc65-8f5bd6603869}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Project\Game\TitleScene">
+      <UniqueIdentifier>{73042874-1595-4438-8196-902d93f9b633}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Project\Game\SelectScene">
+      <UniqueIdentifier>{1c0d7836-0a37-43cc-aabb-e1c8ecea7f19}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Project\Game\ClearScene">
+      <UniqueIdentifier>{45b4034f-6c5f-4a30-a076-452ba18d6ec6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Project\Game\OverScene">
+      <UniqueIdentifier>{85bc802c-30f6-4311-a38a-61fdb7e016d0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -179,6 +203,18 @@
     </ClCompile>
     <ClCompile Include="Engine\Components\PostProcess.cpp">
       <Filter>ソース ファイル\Engine\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\Game\TitleScene\GameTitleScene.cpp">
+      <Filter>ソース ファイル\Project\Game\TitleScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\Game\SelectScene\GameSelectScene.cpp">
+      <Filter>ソース ファイル\Project\Game\SelectScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\Game\ClearScene\GameClearScene.cpp">
+      <Filter>ソース ファイル\Project\Game\ClearScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\Game\OverScene\GameOverScene.cpp">
+      <Filter>ソース ファイル\Project\Game\OverScene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -280,6 +316,18 @@
     </ClInclude>
     <ClInclude Include="Engine\Components\PostProcess.h">
       <Filter>ヘッダー ファイル\Engine\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\Game\TitleScene\GameTitleScene.h">
+      <Filter>ヘッダー ファイル\Project\Game\TitleScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\Game\SelectScene\GameSelectScene.h">
+      <Filter>ヘッダー ファイル\Project\Game\SelectScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\Game\ClearScene\GameClearScene.h">
+      <Filter>ヘッダー ファイル\Project\Game\ClearScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\Game\OverScene\GameOverScene.h">
+      <Filter>ヘッダー ファイル\Project\Game\OverScene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
