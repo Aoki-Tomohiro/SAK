@@ -20,9 +20,19 @@ void GameScene::Initialize(GameManager* gameManager) {
 	input_ = Input::GetInstance();
 	//デバッグカメラの生成
 	debugCamera_ = new DebugCamera();
+
+	//ボスの作成
+	boss_ = std::make_unique<Boss>();
+	boss_->Initialize();
 };
 
 void GameScene::Update(GameManager* gameManager) {
+	//ボスの更新
+	boss_->Update();
+
+	//ビュープロジェクションの更新
+	viewProjection_.UpdateMatrix();
+
 	//デバッグカメラの更新
 	debugCamera_->Update();
 	//デバッグカメラの切り替え
@@ -56,10 +66,12 @@ void GameScene::Draw(GameManager* gameManager) {
 	//モデルの描画
 	Model::PreDraw();
 
+	//ボスの描画
+	boss_->Draw(viewProjection_);
 
 	Model::PostDraw();
 
-	//スプライトの描画処理
+	//スプライトの描画
 	Sprite::PreDraw(Sprite::kBlendModeNormal);
 	
 
