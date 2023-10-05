@@ -11,6 +11,8 @@
 #include "3D/Matrix/WorldTransform.h"
 #include "3D/Matrix/ViewProjection.h"
 
+#include "Player.h"
+
 #include <memory>
 
 class GameScene : public IScene {
@@ -73,4 +75,5 @@ private:
 	WorldTransform worldTransform1_{};
 	WorldTransform worldTransform2_{};
 
+	std::unique_ptr<Player> player_ = nullptr;
 };
