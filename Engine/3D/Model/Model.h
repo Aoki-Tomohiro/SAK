@@ -11,6 +11,8 @@
 #include <cassert>
 #include <dxcapi.h>
 #include <fstream>
+#include <list>
+#include <string>
 #include <sstream>
 #pragma comment(lib,"dxcompiler.lib")
 
@@ -46,6 +48,7 @@ public:
 	struct ModelData {
 		std::vector<Mesh::VertexData> vertices;
 		MaterialData material;
+		std::string name;
 	};
 
 	/// <summary>
@@ -109,7 +112,7 @@ public:
 	/// DirectionalLightを取得
 	/// </summary>
 	/// <returns>DirectionalLight</returns>
-	DirectionalLight* GetDirectionalLight() { return sDirectionalLight_.get(); };
+	DirectionalLight* GetDirectionalLight() { return directionalLight_.get(); };
 
 	/// <summary>
 	/// マテリアルを取得
@@ -177,16 +180,16 @@ private:
 	static ComPtr<ID3D12RootSignature> sRootSignature_;
 	//PipelineStateObject
 	static ComPtr<ID3D12PipelineState> sGraphicsPipelineState_;
-	//DirectionalLight
-	static std::unique_ptr<DirectionalLight> sDirectionalLight_;
+	//モデルデータ
+	static std::list<ModelData> modelDatas_;
 	//WVP用のリソース
 	ComPtr<ID3D12Resource> wvpResource_ = nullptr;
-	//モデルデータ
-	ModelData modelData_;
 	//頂点データ
 	std::unique_ptr<Mesh> mesh_ = nullptr;
 	//マテリアルデータ
 	std::unique_ptr<Material> material_ = nullptr;
+	//DirectionalLight
+	std::unique_ptr<DirectionalLight> directionalLight_;
 	//テクスチャハンドル
 	uint32_t textureHandle_{};
 

@@ -42,6 +42,11 @@ public:
 	void PostDraw();
 
 	/// <summary>
+	/// バックバッファをセット
+	/// </summary>
+	void SetBackBuffer();
+
+	/// <summary>
 	/// ディスクリプタヒープの作成
 	/// </summary>
 	/// <param name="heapType">ディスクリプタヒープの種類</param>

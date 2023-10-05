@@ -170,6 +170,20 @@ void DirectXCommon::PostDraw() {
 }
 
 
+void DirectXCommon::SetBackBuffer() {
+
+	//これから書き込むバックバッファのインデックスを取得
+	UINT backBufferIndex = swapChain_->GetCurrentBackBufferIndex();
+	//ディスクリプタハンドルを取得
+	D3D12_CPU_DESCRIPTOR_HANDLE rtvHandles[2]{};
+	rtvHandles[0] = rtvDescriptorHeap_->GetCPUDescriptorHandleForHeapStart();
+	rtvHandles[1].ptr = rtvHandles[0].ptr + descriptorSizeRTV;
+	D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle = dsvDescriptorHeap_->GetCPUDescriptorHandleForHeapStart();
+	//描画先のRTVとDSVを設定する
+	commandList_->OMSetRenderTargets(1, &rtvHandles[backBufferIndex], false, &dsvHandle);
+}
+
+
 Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> DirectXCommon::CreateDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE heapType, UINT numDescriptors, bool shaderVisible) {
 
 	//ディスクリプタヒープの作成
