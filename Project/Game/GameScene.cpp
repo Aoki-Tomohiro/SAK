@@ -21,16 +21,10 @@ void GameScene::Initialize(GameManager* gameManager) {
 	//デバッグカメラの生成
 	debugCamera_ = new DebugCamera();
 
-	textureHandle_ = TextureManager::Load("Resources/uvChecker.png");
-
-	model1_ = std::make_unique<Model>();
-	model1_.reset(Model::CreateFromOBJ("Resources", "sphere.obj"));
-
 	// 自キャラの生成
 	player_ = std::make_unique<Player>();
-
 	// 自キャラの初期化
-	player_->Initialize(model1_.get(), textureHandle_);
+	player_->Initialize();
 };
 
 void GameScene::Update(GameManager* gameManager) {
