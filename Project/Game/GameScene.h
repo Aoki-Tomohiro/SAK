@@ -12,6 +12,7 @@
 #include "3D/Matrix/ViewProjection.h"
 
 #include "Player.h"
+#include "Missile.h"
 
 #include <memory>
 
@@ -76,4 +77,6 @@ private:
 	WorldTransform worldTransform2_{};
 
 	std::unique_ptr<Player> player_ = nullptr;
+
+	std::unique_ptr<Missile> missile_ = nullptr;
 };

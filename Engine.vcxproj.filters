@@ -216,8 +216,11 @@
     <ClCompile Include="Project\Game\OverScene\GameOverScene.cpp">
       <Filter>ソース ファイル\Project\Game\OverScene</Filter>
     </ClCompile>
+    <ClCompile Include="Project\Game\Missile.cpp">
+      <Filter>ソース ファイル\Project\Game</Filter>
+    </ClCompile>
     <ClCompile Include="Project\Game\Player.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\Project\Game</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -332,8 +335,11 @@
     <ClInclude Include="Project\Game\OverScene\GameOverScene.h">
       <Filter>ヘッダー ファイル\Project\Game\OverScene</Filter>
     </ClInclude>
+    <ClInclude Include="Project\Game\Missile.h">
+      <Filter>ヘッダー ファイル\Project\Game</Filter>
+    </ClInclude>
     <ClInclude Include="Project\Game\Player.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>ヘッダー ファイル\Project\Game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
