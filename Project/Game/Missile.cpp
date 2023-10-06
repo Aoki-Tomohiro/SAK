@@ -1,5 +1,4 @@
 #include "missile.h"
-
 #include "Utility/GlobalVariables.h"
 
 void Missile::Initialize()
@@ -17,7 +16,7 @@ void Missile::Initialize()
 	worldTransform_[0].scale_ = { 0.5f,0.5f,0.5f };
 
 	worldTransform_[1].translation_.x = -8.0f;
-	worldTransform_[1].translation_.y = RandomTY2();
+	worldTransform_[1].translation_.y = RandomTY();
 	worldTransform_[1].translation_.z = 10.0f;
 	worldTransform_[1].scale_ = { 0.5f,0.5f,0.5f };
 
@@ -30,24 +29,37 @@ void Missile::Initialize()
 
 void Missile::Update()
 {
-	
-	worldTransform_[0].translation_.x -= missileMoveSpeed_;
-	if (worldTransform_[0].translation_.x <= -9.0f)
+	for (int i = 0; i < 2; i++)
 	{
-		worldTransform_[0].translation_.x = 8.0f;
-		worldTransform_[0].translation_.y = RandomTY();
+		if (isAlive_[i] == 0)
+		{
+			isAlive_[i] = 1;
+		}
 	}
 
-	worldTransform_[1].translation_.x += missileMoveSpeed_;
-	if (worldTransform_[1].translation_.x >= 9.0f)
+	if (isAlive_[0] == 1)
 	{
-		worldTransform_[1].translation_.x = -8.0f;
-		worldTransform_[1].translation_.y = RandomTY2();
+		worldTransform_[0].translation_.x -= missileMoveSpeed_;
+		worldTransform_[0].UpdateMatrix();
+		if (worldTransform_[0].translation_.x <= -9.0f)
+		{
+			isAlive_[0] = 0;
+			worldTransform_[0].translation_.x = 8.0f;
+			worldTransform_[0].translation_.y = RandomTY();
+		}
 	}
 
+	if (isAlive_[1] == 1)
+	{
+		worldTransform_[1].translation_.x += missileMoveSpeed_;
+		worldTransform_[1].UpdateMatrix();
+		if (worldTransform_[1].translation_.x >= 9.0f)
+		{
+			worldTransform_[1].translation_.x = -8.0f;
+			worldTransform_[1].translation_.y = RandomTY();
+		}
+	}
 
-	worldTransform_[0].UpdateMatrix();
-	worldTransform_[1].UpdateMatrix();
 
 	/*Missile::ApplyGlobalVariables();*/
 
@@ -55,14 +67,19 @@ void Missile::Update()
 	ImGui::Text("translationX %f", worldTransform_[0].translation_.x);
 	ImGui::Text("translationY %f", worldTransform_[0].translation_.y);
 	ImGui::Text("translationZ %f", worldTransform_[0].translation_.z);
+	ImGui::Text("isAlive %d", isAlive_[0]);
 	ImGui::End();
 }
 
 void Missile::Draw(const ViewProjection viewProjection)
 {
-	model_[0]->Draw(worldTransform_[0], viewProjection, textureHandle_);
-
-	model_[1]->Draw(worldTransform_[1], viewProjection, textureHandle_);
+	for (int i = 0; i < 2; i++)
+	{
+		if (isAlive_[i] == 1)
+		{
+			model_[i]->Draw(worldTransform_[i], viewProjection, textureHandle_);
+		}
+	}
 }
 
 //void Missile::ApplyGlobalVariables()
@@ -74,16 +91,14 @@ void Missile::Draw(const ViewProjection viewProjection)
 
 float Missile::RandomTY()
 {
-	float min = 2.5f;
-	float max = 0.0f;
+	float min = -5.0f;
+	float max = 5.0f;
 
-	return min + static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / (max - min)));
+	// srandを使って乱数のシードを設定する
+	std::srand(static_cast<unsigned int>(std::time(nullptr)));
+
+	// 指定された範囲内でランダムな浮動小数点数を生成
+	float random_fraction = static_cast<float>(std::rand()) / RAND_MAX;
+	return random_fraction * (max - min) + min;
 }
 
-float Missile::RandomTY2()
-{
-	float min = 0.0f;
-	float max = -1.8f;
-
-	return min + static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / (max - min)));
-}

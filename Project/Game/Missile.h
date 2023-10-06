@@ -4,6 +4,9 @@
 #include "2D/ImGuiManager.h"
 #include "Components/Input.h"
 
+#include <cstdlib>
+#include <ctime>
+
 class Missile
 {
 public:
@@ -18,8 +21,6 @@ public:
 
 	float RandomTY();
 
-	float RandomTY2();
-
 private:
 	Input* input_ = nullptr;
 
@@ -30,5 +31,7 @@ private:
 	uint32_t textureHandle_ = 0u;
 
 	float missileMoveSpeed_ = 0.05f;
+
+	bool isAlive_[2];
 };
 
