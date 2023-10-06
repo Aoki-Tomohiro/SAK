@@ -1,6 +1,7 @@
 #pragma once
 #include "3D/Model/Model.h"
 #include "3D/Matrix/WorldTransform.h"
+#include "State/IBossState.h"
 
 /// <summary>
 /// ボス
@@ -24,16 +25,29 @@ public:
 	void Draw(const ViewProjection& viewProjection);
 
 	/// <summary>
-	/// グローバル変数の適応
+	/// 行動パターンの変更
 	/// </summary>
-	void ApplyGlobalVariables();
+	/// <param name="state">行動パターン</param>
+	void ChangeState(IBossState* state);
+
+	/// <summary>
+	/// 移動処理
+	/// </summary>
+	/// <param name="velocity">速度</param>
+	void Move(const Vector3& velocity);
+
+	/// <summary>
+	/// ワールドトランスフォームの取得
+	/// </summary>
+	/// <returns>ワールドトランスフォーム</returns>
+	const WorldTransform* GetWorldTransform() const { return &worldTransform_; };
 
 private:
 	//モデル
 	std::unique_ptr<Model> model_ = nullptr;
 	//ワールドトランスフォーム
 	WorldTransform worldTransform_{};
-	//スピード
-	float moveDirection_ = 1.0f;
-	float moveSpeed_ = 0.04f;
+	//ボスの行動パターン
+	std::unique_ptr<IBossState> state_ = nullptr;
+
 };
