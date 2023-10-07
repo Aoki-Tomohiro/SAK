@@ -13,6 +13,7 @@
 
 #include "Player.h"
 #include "Missile.h"
+#include "PlayerAttack.h"
 
 #include <memory>
 
@@ -79,4 +80,6 @@ private:
 	std::unique_ptr<Player> player_ = nullptr;
 
 	std::unique_ptr<Missile> missile_ = nullptr;
+
+	std::unique_ptr<PlayerAttack> playerAttack_ = nullptr;
 };

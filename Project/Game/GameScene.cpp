@@ -30,12 +30,19 @@ void GameScene::Initialize(GameManager* gameManager) {
 	missile_ = std::make_unique<Missile>();
 	// ミサイルの初期化
 	missile_->Initialize();
+
+	// プレイヤー攻撃の生成
+	playerAttack_ = std::make_unique<PlayerAttack>();
+	// プレイヤー攻撃の初期化
+	playerAttack_->Initialize();
 };
 
 void GameScene::Update(GameManager* gameManager) {
 	player_->Update();
 
 	missile_->Update();
+
+	playerAttack_->Update();
 
 	//デバッグカメラの更新
 	debugCamera_->Update();
@@ -71,9 +78,11 @@ void GameScene::Draw(GameManager* gameManager) {
 
 	//モデルの描画
 	Model::PreDraw();
-	player_->Draw(viewProjection_);
+	/*player_->Draw(viewProjection_);
 
-	missile_->Draw(viewProjection_);
+	missile_->Draw(viewProjection_);*/
+
+	playerAttack_->Draw(viewProjection_);
 
 	Model::PostDraw();
 
