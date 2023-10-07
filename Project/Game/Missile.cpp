@@ -11,14 +11,14 @@ void Missile::Initialize()
 	input_ = Input::GetInstance();
 
 	worldTransform_[0].translation_.x = 8.0f;
-	worldTransform_[0].translation_.y = RandomTY();
+	worldTransform_[0].translation_.y = RandomTY(-1.3f, 2.0f);
 	worldTransform_[0].translation_.z = 10.0f;
-	worldTransform_[0].scale_ = { 0.5f,0.5f,0.5f };
+	worldTransform_[0].scale_ = { 0.3f,0.3f,0.3f };
 
 	worldTransform_[1].translation_.x = -8.0f;
-	worldTransform_[1].translation_.y = RandomTY();
+	worldTransform_[1].translation_.y = RandomTY(-1.3f, 2.0f);
 	worldTransform_[1].translation_.z = 10.0f;
-	worldTransform_[1].scale_ = { 0.5f,0.5f,0.5f };
+	worldTransform_[1].scale_ = { 0.3f,0.3f,0.3f };
 
 	//GlobalVariables* globalVariables = GlobalVariables::GetInstance();
 	//const char* groupName = "Missile";
@@ -45,7 +45,7 @@ void Missile::Update()
 		{
 			isAlive_[0] = 0;
 			worldTransform_[0].translation_.x = 8.0f;
-			worldTransform_[0].translation_.y = RandomTY();
+			worldTransform_[0].translation_.y = RandomTY(-1.3f, 2.0f);
 		}
 	}
 
@@ -56,7 +56,7 @@ void Missile::Update()
 		if (worldTransform_[1].translation_.x >= 9.0f)
 		{
 			worldTransform_[1].translation_.x = -8.0f;
-			worldTransform_[1].translation_.y = RandomTY();
+			worldTransform_[1].translation_.y = RandomTY(-1.3f, 2.0f);
 		}
 	}
 
@@ -89,16 +89,12 @@ void Missile::Draw(const ViewProjection viewProjection)
 //	missileMoveSpeed_ = globalVariables->GetFloatValue(groupName, "missileMoveSpeed_");
 //}
 
-float Missile::RandomTY()
+float Missile::RandomTY(float min_value, float max_value)
 {
-	float min = -5.0f;
-	float max = 5.0f;
+	std::random_device rd;  
+	std::mt19937 gen(rd()); 
+	std::uniform_real_distribution<float> dis(min_value, max_value); 
 
-	// srandを使って乱数のシードを設定する
-	std::srand(static_cast<unsigned int>(std::time(nullptr)));
-
-	// 指定された範囲内でランダムな浮動小数点数を生成
-	float random_fraction = static_cast<float>(std::rand()) / RAND_MAX;
-	return random_fraction * (max - min) + min;
+	return dis(gen); // ランダムな浮動小数点数を生成して返す
 }
 

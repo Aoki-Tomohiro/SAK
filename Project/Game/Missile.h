@@ -4,8 +4,7 @@
 #include "2D/ImGuiManager.h"
 #include "Components/Input.h"
 
-#include <cstdlib>
-#include <ctime>
+#include <random>
 
 class Missile
 {
@@ -19,7 +18,7 @@ public:
 
 	/*void ApplyGlobalVariables();*/
 
-	float RandomTY();
+	float RandomTY(float min_value, float max_value);
 
 private:
 	Input* input_ = nullptr;
