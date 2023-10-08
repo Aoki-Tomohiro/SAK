@@ -5,12 +5,11 @@
 #include "Components/Input.h"
 #include "2D/ImGuiManager.h"
 #include "3D/DebugCamera/DebugCamera.h"
-
 #include "3D/Model/Model.h"
 #include "2D/Sprite.h"
 #include "3D/Matrix/WorldTransform.h"
 #include "3D/Matrix/ViewProjection.h"
-
+#include "Particle.h"
 #include <memory>
 
 class GameScene : public IScene {
