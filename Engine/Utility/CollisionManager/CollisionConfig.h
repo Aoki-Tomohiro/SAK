@@ -14,4 +14,6 @@ const uint32_t kCollisionMaskEnemy             = 0b11011;
 const uint32_t kCollisionMaskEnemyBullet       = 0b10001;
 
 
-
+//形状
+const uint32_t kCollisionPrimitiveSphere = 0b1;
+const uint32_t kCollisionPrimitiveAABB = 0b1 << 1;

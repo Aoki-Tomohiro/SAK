@@ -1,12 +1,13 @@
 #pragma once
 #include "3D/Model/Model.h"
 #include "3D/Matrix/WorldTransform.h"
+#include "Utility/CollisionManager/Collider.h"
 #include "State/IBossState.h"
 
 /// <summary>
 /// ボス
 /// </summary>
-class Boss {
+class Boss : public Collider {
 public:
 	/// <summary>
 	/// 初期化
@@ -41,6 +42,17 @@ public:
 	/// </summary>
 	/// <returns>ワールドトランスフォーム</returns>
 	const WorldTransform* GetWorldTransform() const { return &worldTransform_; };
+
+	/// <summary>
+	/// 当たり判定
+	/// </summary>
+	void OnCollision() override;
+
+	/// <summary>
+	/// ワールド座標を取得
+	/// </summary>
+	/// <returns></returns>
+	Vector3 GetWorldPosition() override;
 
 private:
 	//モデル

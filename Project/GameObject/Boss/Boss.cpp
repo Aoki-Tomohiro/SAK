@@ -10,6 +10,10 @@ void Boss::Initialize() {
 	//ボスの行動パターンの初期化
 	state_ = std::make_unique<BossStateNormal>();
 	state_->Initialize(this);
+
+	//衝突属性を設定
+	SetCollisionAttribute(kCollisionAttributeEnemy);
+	SetCollisionMask(kCollisionMaskEnemy);
 }
 
 void Boss::Update() {
@@ -33,4 +37,16 @@ void Boss::ChangeState(IBossState* state) {
 void Boss::Move(const Vector3& velocity) {
 	//移動処理
 	worldTransform_.translation_ = Add(worldTransform_.translation_, velocity);
+}
+
+void Boss::OnCollision() {
+
+}
+
+Vector3 Boss::GetWorldPosition() {
+	Vector3 position{};
+	position.x = worldTransform_.matWorld_.m[3][0];
+	position.y = worldTransform_.matWorld_.m[3][1];
+	position.z = worldTransform_.matWorld_.m[3][2];
+	return position;
 }
