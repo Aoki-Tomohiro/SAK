@@ -24,8 +24,12 @@ private:
 	uint32_t textureHandle_ = 0u;
 
 	float attackSpeed_ = 0.05f;
-	float upAttackSpeed_ = 3.0f;
+	float upAttackSpeed_ = 0.12f;
 
 	int count_ = 0;
+	int attackTimer = 60;
+
+	bool IsUP = false;
+	bool IsDown = false;
 };
 
