@@ -35,8 +35,12 @@ private:
 	int attackCount_ = 0;
 	int attackTimer = 60;
 
+
+	int count_ = 0;
+
 	bool IsUP_ = false;
 	bool IsDown_ = false;
+	bool IsCharge = false;
 };
 
 

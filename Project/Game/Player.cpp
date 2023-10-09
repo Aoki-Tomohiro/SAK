@@ -18,7 +18,7 @@ void Player::Initialize()
 
 	//Weapon
 	weaponWorldTransform_.translation_.x = 0.0f;
-	weaponWorldTransform_.translation_.y = -2.3f;
+	weaponWorldTransform_.translation_.y = 1.8f;
 	weaponWorldTransform_.translation_.z = 10.0f;
 	weaponWorldTransform_.scale_ = { 0.4f,0.4f,0.4f };
 
@@ -43,17 +43,57 @@ void Player::Update()
 		weaponWorldTransform_.translation_.x += playerMoveSpeed_;
 	}
 
-	if (input_->IsPushKey(DIK_RETURN) && weaponWorldTransform_.translation_.y <= -2.3f)
+	if (input_->IsPushKey(DIK_RETURN) && IsDown_ == false)
 	{
-		attackCount_++;
-	}
-
-	if (input_->IsPushKeyExit(DIK_RETURN) && weaponWorldTransform_.translation_.y <= -2.3f)
-	{
+		count_++;
 		IsUP_ = true;
 	}
 
-	if (IsUP_ == true && attackCount_ < 40)
+	/*if (input_->IsPushKeyEnter(DIK_F))
+	{
+		IsCharge = false;
+		IsDown_ = true;
+	}*/
+
+	if (input_->IsPushKeyExit(DIK_RETURN))
+	{
+		if (count_ < 15)
+		{
+			IsDown_ = true;
+			IsUP_ = false;
+			count_ = 0;
+		}
+
+		if (count_ >= 15)
+		{
+			IsUP_ = false;
+			count_ = 0;
+		}
+	}
+
+	if (IsUP_ == true)
+	{
+		weaponWorldTransform_.translation_.y -= attackSpeed_[0];
+
+		if (weaponWorldTransform_.translation_.y <= -2.3f)
+		{
+			weaponWorldTransform_.translation_.y = -2.3f;
+		}
+	}
+
+	if (IsDown_ == true)
+	{
+		weaponWorldTransform_.translation_.y += attackSpeed_[0];
+
+		if (weaponWorldTransform_.translation_.y >= 2.0f)
+		{
+			weaponWorldTransform_.translation_.y = 2.0f;
+			IsDown_ = false;
+		}
+	}
+
+
+	/*if (IsUP_ == true && attackCount_ < 40)
 	{
 		attackTimer--;
 		weaponWorldTransform_.translation_.y += attackSpeed_[0];
@@ -63,9 +103,9 @@ void Player::Update()
 			IsUP_ = false;
 			IsDown_ = true;
 		}
-	}
+	}*/
 
-	if (IsUP_ == true && attackCount_ > 40 && attackCount_ < 80)
+	/*if (IsUP_ == true && attackCount_ > 40 && attackCount_ < 80)
 	{
 		attackTimer--;
 		weaponWorldTransform_.translation_.y += attackSpeed_[1];
@@ -87,19 +127,7 @@ void Player::Update()
 			IsUP_ = false;
 			IsDown_ = true;
 		}
-	}
-
-	if (IsDown_ == true)
-	{
-		attackTimer = 60;
-		weaponWorldTransform_.translation_.y -= coolTimeSpeed_;
-		if (weaponWorldTransform_.translation_.y <= -2.3f)
-		{
-			weaponWorldTransform_.translation_.y = -2.3f;
-			attackCount_ = 0;
-			IsDown_ = false;
-		}
-	}
+	}*/
 
 	playerWorldTransform_.UpdateMatrix();
 	weaponWorldTransform_.UpdateMatrix();
@@ -117,6 +145,8 @@ void Player::Update()
 	ImGui::Text("translationY %f", weaponWorldTransform_.translation_.y);
 	ImGui::Text("attackSpeed %f", attackSpeed_);
 	ImGui::Text("attackCount %d", attackCount_);
+	ImGui::Text("count %d", count_);
+	ImGui::Text("charge %d", IsCharge);
 	ImGui::Text("attackTimer %d", attackTimer);
 	ImGui::End();
 }
