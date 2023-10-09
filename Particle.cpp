@@ -4,7 +4,7 @@ Particle::Particle()
 {
 }
 
-void Particle::Initialize()
+void Particle::Initialize(Vector3 startPos, Vector3 velocity,float scale,float scaleMinus)
 {
 	model_.reset(Model::CreateFromOBJ("Resources", "sphere.obj"));
 
@@ -12,27 +12,30 @@ void Particle::Initialize()
 
 	input_ = Input::GetInstance();
 
-	time_t currentTime = time(nullptr);
-	srand((unsigned int)currentTime);
+	isDead = false;
 
-	int randNumint = rand() % 10 - 5;
-	float randNum = randNumint / 10.0f;
-	worldTransform_.translation_.x = randNum;
-
-	randNumint = rand() % 50 - 25;
-	randNum = randNumint / 10.0f;
-	worldTransform_.translation_.y = randNum;
-
-	randNumint = rand() % 50 - 25;
-	randNum = randNumint / 10.0f;
-	worldTransform_.translation_.z = randNum;
+	worldTransform_.translation_ = startPos;
+	worldTransform_.scale_ = { scale,scale,scale };
+	velocity_ = velocity;
+	scaleMinus_ = scaleMinus;
 
 	worldTransform_.UpdateMatrix();
 }
 
 void Particle::Update()
 {
-	
+
+	//今回はxyz全部大きさ同じなので、xから大きさを取るよ
+	float scale = worldTransform_.scale_.x;
+	scale -= scaleMinus_;
+	if (scale < 0.0f) {
+		scale = 0.0f;
+		isDead = true;
+	}
+
+	worldTransform_.translation_ = Add(worldTransform_.translation_, velocity_);
+	worldTransform_.scale_ = { scale,scale,scale };
+
 	worldTransform_.UpdateMatrix();
 
 }

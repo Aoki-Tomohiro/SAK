@@ -10,12 +10,13 @@ public:
 
 	Particle();
 
-	void Initialize();
+	void Initialize(Vector3 startPos, Vector3 velocity, float scale, float scaleMinus);
 
 	void Update();
 
 	void Draw(const ViewProjection viewProjection);
 
+	bool GetIsDead() { return isDead; };
 
 private:
 	Input* input_ = nullptr;
@@ -26,4 +27,9 @@ private:
 
 	uint32_t textureHandle_ = 0u;
 
+	Vector3 velocity_;
+	
+	float scaleMinus_ = 0.0f;
+
+	bool isDead = false;
 };

@@ -1,4 +1,6 @@
 #include "ParticleEmitter.h"
+#define _USE_MATH_DEFINES
+#include <math.h>
 
 ParticleEmitter::ParticleEmitter()
 {
@@ -13,10 +15,6 @@ ParticleEmitter::~ParticleEmitter()
 
 void ParticleEmitter::Initialize()
 {
-	/*Particle* newParticle = new Particle();
-	newParticle->Initialize();
-
-	particles_.push_back(newParticle);*/
 }
 
 void ParticleEmitter::Update()
@@ -25,9 +23,22 @@ void ParticleEmitter::Update()
 		particle->Update();
 	}
 
-	ImGui::Begin("ParticleCount");
-	ImGui::Text("count %d",count);
-	ImGui::End();
+	particles_.remove_if([](Particle* particle) {
+		if (particle->GetIsDead()) {
+
+			delete particle;
+			return true;
+		}
+		return false;
+		}
+	);
+
+	nowFrame++;
+
+	if (nowFrame > deleteFrame) {
+		isDead = true;
+	}
+
 }
 
 void ParticleEmitter::Draw(const ViewProjection viewProjection)
@@ -39,16 +50,42 @@ void ParticleEmitter::Draw(const ViewProjection viewProjection)
 
 void ParticleEmitter::Pop(int popCount)
 {
-	count = 0;
 	for (int i = 0; i < popCount; i++) {
 		Particle* newParticle = new Particle();
-		newParticle->Initialize();
+
+		float scale = RandomF(0.1f, 0.2f);
+		float scaleMinus = 0.01f;
+		float speed = RandomF(0.02f, 0.04f);
+
+		float angle = RandomF(0.0f, 360.0f);
+		float radian = angle * float(M_PI / 180.0f);
+		//Z軸を含めた回転ってどうやんの！？
+		float zAngle = RandomF(0.0f, 180.0f);
+		float zRadian = zAngle * float(M_PI / 180.0f);
+
+		Vector3 speedVec3 = { 
+			speed * cos(radian),
+			speed * sin(radian),
+			speed * cos(zRadian),
+		};
+
+		newParticle->Initialize(worldTransform_.translation_, speedVec3, scale, scaleMinus);
 
 		particles_.push_back(newParticle);
-		count++;
 	}
 }
 
 void ParticleEmitter::ApplyGlobalVariables()
 {
 }
+
+float ParticleEmitter::RandomF(float min, float max)
+{
+	float diff = max - min;
+
+	int randNumInt = int(min * 100.0f) + rand() % int(diff * 100.0f);
+	float randNum = randNumInt / 100.0f;
+
+	return randNum;
+}
+

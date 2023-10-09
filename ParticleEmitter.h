@@ -23,6 +23,10 @@ public:
 
 	void ApplyGlobalVariables();
 
+	bool GetIsDead() { return isDead; };
+	
+	float RandomF(float min, float max);
+
 private:
 	Input* input_ = nullptr;
 
@@ -34,6 +38,9 @@ private:
 
 	std::list<Particle*> particles_;
 
-	int count;
+	const int deleteFrame = 180;
 
+	int nowFrame = 0;
+
+	bool isDead = false;
 };

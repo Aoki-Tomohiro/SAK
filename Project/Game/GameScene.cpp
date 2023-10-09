@@ -26,23 +26,35 @@ void GameScene::Initialize(GameManager* gameManager) {
 	//デバッグカメラの生成
 	debugCamera_ = new DebugCamera();
 
-	//particle_ = std::make_unique<Particle>();
-
-	//particle_->Initialize();
-
-	ParticleEmitter* newParticleEmitter = new ParticleEmitter();
-	newParticleEmitter->Pop(10);
-
-	particleEmitters_.push_back(newParticleEmitter);
+	time_t currentTime = time(nullptr);
+	srand((unsigned int)currentTime);
+	
 };
 
 void GameScene::Update(GameManager* gameManager) {
 
-	//particle_->Update();
+	//P押すとパーティクル
+	if (input_->IsPushKeyEnter(DIK_P))
+	{
+		ParticleEmitter* newParticleEmitter = new ParticleEmitter();
+		newParticleEmitter->Pop(10);
 
+		particleEmitters_.push_back(newParticleEmitter);
+	}
+	//パーティクルエミッターUpdate
 	for (ParticleEmitter* particleEmitter : particleEmitters_) {
 		particleEmitter->Update();
 	}
+	//パーティクルエミッターデリーと
+	particleEmitters_.remove_if([](ParticleEmitter* particleEmitter) {
+		if (particleEmitter->GetIsDead()) {
+
+			delete particleEmitter;
+			return true;
+		}
+		return false;
+		}
+	);
 
 	//デバッグカメラの更新
 	debugCamera_->Update();
@@ -79,8 +91,7 @@ void GameScene::Draw(GameManager* gameManager) {
 	//モデルの描画
 	Model::PreDraw();
 
-	//particle_->Draw(viewProjection_);
-
+	//パーティクルDraw
 	for (ParticleEmitter* particleEmitter : particleEmitters_) {
 		particleEmitter->Draw(viewProjection_);
 	}
