@@ -222,9 +222,6 @@
     <ClCompile Include="Project\Game\Player.cpp">
       <Filter>ソース ファイル\Project\Game</Filter>
     </ClCompile>
-    <ClCompile Include="Project\Game\PlayerAttack.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Base\WinApp.h">
@@ -343,9 +340,6 @@
     </ClInclude>
     <ClInclude Include="Project\Game\Player.h">
       <Filter>ヘッダー ファイル\Project\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="Project\Game\PlayerAttack.h">
-      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
