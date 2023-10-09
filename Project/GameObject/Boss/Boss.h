@@ -3,6 +3,7 @@
 #include "3D/Matrix/WorldTransform.h"
 #include "Utility/CollisionManager/Collider.h"
 #include "State/IBossState.h"
+#include "Laser/Laser.h"
 
 /// <summary>
 /// ボス
@@ -32,16 +33,22 @@ public:
 	void ChangeState(IBossState* state);
 
 	/// <summary>
-	/// 移動処理
+	/// レーザーを追加
 	/// </summary>
-	/// <param name="velocity">速度</param>
-	void Move(const Vector3& velocity);
+	/// <param name="laser">レーザー</param>
+	void AddLaser(Laser* laser);
+
+	/// <summary>
+	/// ワールドトランスフォームを設定
+	/// </summary>
+	/// <param name="worldTransform">ワールドトランスフォーム</param>
+	void SetWorldTransform(const WorldTransform& worldTransform) { worldTransform_ = worldTransform; };
 
 	/// <summary>
 	/// ワールドトランスフォームの取得
 	/// </summary>
 	/// <returns>ワールドトランスフォーム</returns>
-	const WorldTransform* GetWorldTransform() const { return &worldTransform_; };
+	const WorldTransform& GetWorldTransform() const { return worldTransform_; };
 
 	/// <summary>
 	/// 当たり判定
@@ -51,15 +58,18 @@ public:
 	/// <summary>
 	/// ワールド座標を取得
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>ワールド座標</returns>
 	Vector3 GetWorldPosition() override;
 
 private:
-	//モデル
+	//ボスのモデル
 	std::unique_ptr<Model> model_ = nullptr;
 	//ワールドトランスフォーム
 	WorldTransform worldTransform_{};
 	//ボスの行動パターン
 	std::unique_ptr<IBossState> state_ = nullptr;
+
+	//レーザーのリスト
+	std::list<std::unique_ptr<Laser>> lasers_{};
 
 };

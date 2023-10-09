@@ -1,22 +1,41 @@
 #include "Laser.h"
-#include "2D/ImGuiManager.h"
-#include "Components/Input.h"
 
-void Laser::Initialize(const Vector3& position) {
+int Laser::deadTime = 60;
+
+void Laser::Initialize(const Vector3& position, const Vector3& scale) {
+
 	//モデルの作成
-	model_.reset(Model::CreateFromOBJ("Resources/Cube", "cube.obj"));
+	model_.reset(Model::CreateFromOBJ("Resources/Plane", "Plane.obj"));
 	//ワールドトランスフォームの初期化
 	worldTransform_.translation_ = position;
+	worldTransform_.scale_ = scale;
+
+	//タイマーの初期化
+	deadTimer_ = deadTime;
 
 	//衝突属性を設定
 	SetCollisionAttribute(kCollisionAttributeEnemy);
 	SetCollisionMask(kCollisionMaskEnemy);
 	SetCollisionPrimitive(kCollisionPrimitiveAABB);
+
+	AABB aabbSize{ {-scale.x,-scale.y,-scale.z},{scale.x,scale.y,scale.z} };
+	SetAABB(aabbSize);
 }
 
 void Laser::Update() {
+	worldTransform_.translation_.y -= 4.0f;
+
+	if (worldTransform_.translation_.y < 0.0f) {
+		worldTransform_.translation_.y = 0.0f;
+	}
+
 	//ワールドトランスフォームの更新
 	worldTransform_.UpdateMatrix();
+
+	//死亡フラグを立てる
+	if (--deadTimer_ < 0) {
+		isDead_ = true;
+	}
 }
 
 void Laser::Draw(const ViewProjection& viewProjection) {

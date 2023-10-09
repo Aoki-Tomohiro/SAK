@@ -2,6 +2,7 @@
 #include "State/BossStateNormal.h"
 
 void Boss::Initialize() {
+
 	//モデルの作成
 	model_.reset(Model::CreateFromOBJ("Resources/Sphere", "sphere.obj"));
 	//ワールドトランスフォームの初期化
@@ -17,26 +18,52 @@ void Boss::Initialize() {
 }
 
 void Boss::Update() {
+
 	//状態の更新
 	state_->Update(this);
+
+	//死亡フラグの立ったレーザーをリストから削除
+	lasers_.remove_if([](std::unique_ptr<Laser>& laser) {
+		if (laser->IsDead()) {
+			laser.reset();
+			return true;
+		}
+		return false;
+	});
+
+	//レーザーの更新
+	for (std::unique_ptr<Laser>& laser : lasers_) {
+		laser->Update();
+	}
 
 	//ワールドトランスフォームの更新
 	worldTransform_.UpdateMatrix();
 }
 
 void Boss::Draw(const ViewProjection& viewProjection) {
-	//モデルの描画
+
+	//ボスのモデルの描画
 	model_->Draw(worldTransform_, viewProjection);
+
+	//状態の描画
+	state_->Draw(this, viewProjection);
+
+	//レーザーの描画
+	for (std::unique_ptr<Laser>& laser : lasers_) {
+		laser->Draw(viewProjection);
+	}
 }
 
 void Boss::ChangeState(IBossState* state) {
+
 	state_.reset(state);
 	state_->Initialize(this);
 }
 
-void Boss::Move(const Vector3& velocity) {
-	//移動処理
-	worldTransform_.translation_ = Add(worldTransform_.translation_, velocity);
+void Boss::AddLaser(Laser* laser) {
+
+	//レーザーをリストに追加
+	lasers_.push_back(std::unique_ptr<Laser>(laser));
 }
 
 void Boss::OnCollision() {
