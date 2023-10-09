@@ -1,14 +1,17 @@
 #pragma once
+#include "Particle.h"
+#include <list>
 #include "3D/Model/Model.h"
 #include "3D/Matrix/WorldTransform.h"
 #include "2D/ImGuiManager.h"
 #include "Components/Input.h"
 
-class Particle
+
+class ParticleEmitter
 {
 public:
-
-	Particle();
+	ParticleEmitter();
+	~ParticleEmitter();
 
 	void Initialize();
 
@@ -16,6 +19,9 @@ public:
 
 	void Draw(const ViewProjection viewProjection);
 
+	void Pop(int popCount);
+
+	void ApplyGlobalVariables();
 
 private:
 	Input* input_ = nullptr;
@@ -25,5 +31,9 @@ private:
 	WorldTransform worldTransform_;
 
 	uint32_t textureHandle_ = 0u;
+
+	std::list<Particle*> particles_;
+
+	int count;
 
 };

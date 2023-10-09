@@ -1,5 +1,9 @@
 #include "Particle.h"
-#include "Utility/GlobalVariables.h"
+
+Particle::Particle()
+{
+}
+
 void Particle::Initialize()
 {
 	model_.reset(Model::CreateFromOBJ("Resources", "sphere.obj"));
@@ -8,17 +12,22 @@ void Particle::Initialize()
 
 	input_ = Input::GetInstance();
 
-	worldTransform_.translation_.x = 0.0f;
-	worldTransform_.translation_.y = 0.0f;
-	worldTransform_.translation_.z = 0.0f;
+	time_t currentTime = time(nullptr);
+	srand((unsigned int)currentTime);
 
+	int randNumint = rand() % 10 - 5;
+	float randNum = randNumint / 10.0f;
+	worldTransform_.translation_.x = randNum;
 
-	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
-	const char* groupName = "Particle";
-	//グループを追加
-	globalVariables->CreateGroup(groupName);
+	randNumint = rand() % 50 - 25;
+	randNum = randNumint / 10.0f;
+	worldTransform_.translation_.y = randNum;
 
+	randNumint = rand() % 50 - 25;
+	randNum = randNumint / 10.0f;
+	worldTransform_.translation_.z = randNum;
 
+	worldTransform_.UpdateMatrix();
 }
 
 void Particle::Update()
@@ -26,16 +35,9 @@ void Particle::Update()
 	
 	worldTransform_.UpdateMatrix();
 
-	Particle::ApplyGlobalVariables();
 }
 
 void Particle::Draw(const ViewProjection viewProjection)
 {
 	model_->Draw(worldTransform_, viewProjection, textureHandle_);
-}
-
-void Particle::ApplyGlobalVariables()
-{
-	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
-	const char* groupName = "Particle";
 }

@@ -3,11 +3,16 @@
 #include "GameClearScene.h"
 #include "GameOverScene.h"
 #include <cassert>
+#include <time.h>
 
 GameScene::GameScene() {};
 
 GameScene::~GameScene() {
 	delete debugCamera_;
+
+	for (ParticleEmitter* particleEmitter : particleEmitters_) {
+		delete particleEmitter;
+	}
 };
 
 void GameScene::Initialize(GameManager* gameManager) {
@@ -21,14 +26,23 @@ void GameScene::Initialize(GameManager* gameManager) {
 	//デバッグカメラの生成
 	debugCamera_ = new DebugCamera();
 
-	particle_ = std::make_unique<Particle>();
+	//particle_ = std::make_unique<Particle>();
 
-	particle_->Initialize();
+	//particle_->Initialize();
+
+	ParticleEmitter* newParticleEmitter = new ParticleEmitter();
+	newParticleEmitter->Pop(10);
+
+	particleEmitters_.push_back(newParticleEmitter);
 };
 
 void GameScene::Update(GameManager* gameManager) {
 
-	particle_->Update();
+	//particle_->Update();
+
+	for (ParticleEmitter* particleEmitter : particleEmitters_) {
+		particleEmitter->Update();
+	}
 
 	//デバッグカメラの更新
 	debugCamera_->Update();
@@ -65,7 +79,11 @@ void GameScene::Draw(GameManager* gameManager) {
 	//モデルの描画
 	Model::PreDraw();
 
-	particle_->Draw(viewProjection_);
+	//particle_->Draw(viewProjection_);
+
+	for (ParticleEmitter* particleEmitter : particleEmitters_) {
+		particleEmitter->Draw(viewProjection_);
+	}
 
 	Model::PostDraw();
 
