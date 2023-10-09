@@ -20,9 +20,16 @@ void GameScene::Initialize(GameManager* gameManager) {
 	input_ = Input::GetInstance();
 	//デバッグカメラの生成
 	debugCamera_ = new DebugCamera();
+
+	particle_ = std::make_unique<Particle>();
+
+	particle_->Initialize();
 };
 
 void GameScene::Update(GameManager* gameManager) {
+
+	particle_->Update();
+
 	//デバッグカメラの更新
 	debugCamera_->Update();
 	//デバッグカメラの切り替え
@@ -49,6 +56,8 @@ void GameScene::Update(GameManager* gameManager) {
 	ImGui::Text("push 1 : Game Clear");
 	ImGui::Text("push 2 : Game Over");
 	ImGui::End();
+
+	viewProjection_.UpdateMatrix();
 };
 
 void GameScene::Draw(GameManager* gameManager) {
@@ -56,6 +65,7 @@ void GameScene::Draw(GameManager* gameManager) {
 	//モデルの描画
 	Model::PreDraw();
 
+	particle_->Draw(viewProjection_);
 
 	Model::PostDraw();
 

@@ -9,8 +9,8 @@
 #include "2D/Sprite.h"
 #include "3D/Matrix/WorldTransform.h"
 #include "3D/Matrix/ViewProjection.h"
-#include "Particle.h"
 #include <memory>
+#include "../../Particle.h"
 
 class GameScene : public IScene {
 public:
@@ -72,4 +72,5 @@ private:
 	WorldTransform worldTransform1_{};
 	WorldTransform worldTransform2_{};
 
+	std::unique_ptr<Particle> particle_ = nullptr;
 };
