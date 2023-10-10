@@ -24,7 +24,7 @@ struct ViewProjection {
 	//角度
 	Vector3 rotation_ = { 0.0f,0.0f,0.0f };
 	//座標
-	Vector3 translation_ = { 0.0f,0.0f,-10.0f };
+	Vector3 translation_ = { 0.0f,0.0f,-20.0f };
 	//ビュー行列
 	Matrix4x4 matView_{};
 	//プロジェクション行列
