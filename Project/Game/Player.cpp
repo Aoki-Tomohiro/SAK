@@ -19,6 +19,10 @@ void Player::Initialize()
 	//グループを追加
 	globalVariables->CreateGroup(groupName);
 	globalVariables->AddItem(groupName, "playerMoveSpeed", playerMoveSpeed_);
+
+	//衝突属性を設定
+	SetCollisionAttribute(kCollisionAttributePlayer);
+	SetCollisionMask(kCollisionMaskPlayer);
 }
 
 void Player::Update() 
@@ -66,4 +70,18 @@ void Player::ApplyGlobalVariables()
 	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
 	const char* groupName = "Player";
 	playerMoveSpeed_ = globalVariables->GetFloatValue(groupName, "playerMoveSpeed");
+}
+
+void Player::OnCollision() {
+	ImGui::Begin(" ");
+	ImGui::Text("PlayerHit");
+	ImGui::End();
+}
+
+Vector3 Player::GetWorldPosition() {
+	Vector3 pos;
+	pos.x = playerWorldTransform_.matWorld_.m[3][0];
+	pos.y = playerWorldTransform_.matWorld_.m[3][1];
+	pos.z = playerWorldTransform_.matWorld_.m[3][2];
+	return pos;
 }

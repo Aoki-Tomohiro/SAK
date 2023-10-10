@@ -51,6 +51,12 @@ public:
 	const WorldTransform& GetWorldTransform() const { return worldTransform_; };
 
 	/// <summary>
+	/// レーザーのリストを取得
+	/// </summary>
+	/// <returns>レーザーのリスト</returns>
+	const std::list<std::unique_ptr<Laser>>& GetLaser() { return lasers_; };
+
+	/// <summary>
 	/// 当たり判定
 	/// </summary>
 	void OnCollision() override;

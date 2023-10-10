@@ -264,6 +264,9 @@
     <ClCompile Include="Project\Game\Player.cpp">
       <Filter>ソース ファイル\Project\Game</Filter>
     </ClCompile>
+    <ClCompile Include="Project\Game\MissileManager.cpp">
+      <Filter>ソース ファイル\Project\Game</Filter>
+    </ClCompile>
     <ClCompile Include="Project\GameObject\Weapon\Weapon.cpp">
       <Filter>ソース ファイル\Project\GameObject\Weapon</Filter>
     </ClCompile>
@@ -399,6 +402,9 @@
       <Filter>ヘッダー ファイル\Project\Game</Filter>
     </ClInclude>
     <ClInclude Include="Project\Game\Player.h">
+      <Filter>ヘッダー ファイル\Project\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\Game\MissileManager.h">
       <Filter>ヘッダー ファイル\Project\Game</Filter>
     </ClInclude>
     <ClInclude Include="Project\GameObject\Weapon\Weapon.h">

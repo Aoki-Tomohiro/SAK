@@ -13,8 +13,10 @@
 
 #include "../GameObject/Boss/Boss.h"
 #include "Player.h"
+#include "MissileManager.h"
+
+#include "Utility/CollisionManager/CollisionManager.h"
 #include "../GameObject/Weapon/Weapon.h"
-#include "Missile.h"
 
 #include <memory>
 
@@ -83,7 +85,9 @@ private:
 
 	std::unique_ptr<Player> player_ = nullptr;
 
-	std::unique_ptr<Weapon> weapon_ = nullptr;
+	std::unique_ptr<MissileManager> missileManager_ = nullptr;
 
-	std::unique_ptr<Missile> missile_ = nullptr;
+	//衝突マネージャー
+	std::unique_ptr<CollisionManager> collisionManager_ = nullptr;
+	std::unique_ptr<Weapon> weapon_ = nullptr;
 };

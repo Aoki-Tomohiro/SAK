@@ -43,7 +43,11 @@ void Laser::Draw(const ViewProjection& viewProjection) {
 	model_->Draw(worldTransform_, viewProjection);
 }
 
-void Laser::OnCollision() {}
+void Laser::OnCollision() {
+	ImGui::Begin(" ");
+	ImGui::Text("LaserHit");
+	ImGui::End();
+}
 
 Vector3 Laser::GetWorldPosition() {
 	Vector3 position{};

@@ -3,8 +3,9 @@
 #include "3D/Matrix/WorldTransform.h"
 #include "2D/ImGuiManager.h"
 #include "Components/Input.h"
+#include "Utility/CollisionManager/Collider.h"
 
-class Player
+class Player : public Collider
 {
 public:
 
@@ -15,6 +16,10 @@ public:
 	void Draw(const ViewProjection viewProjection);
 
 	void ApplyGlobalVariables();
+
+	void OnCollision() override;
+
+	Vector3 GetWorldPosition() override;
 
 private:
 	Input* input_ = nullptr;
