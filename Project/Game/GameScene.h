@@ -13,6 +13,7 @@
 
 #include "../GameObject/Boss/Boss.h"
 #include "Player.h"
+#include "../GameObject/Weapon/Weapon.h"
 #include "Missile.h"
 
 #include <memory>
@@ -81,6 +82,8 @@ private:
 	std::unique_ptr<Boss> boss_ = nullptr;
 
 	std::unique_ptr<Player> player_ = nullptr;
+
+	std::unique_ptr<Weapon> weapon_ = nullptr;
 
 	std::unique_ptr<Missile> missile_ = nullptr;
 };
