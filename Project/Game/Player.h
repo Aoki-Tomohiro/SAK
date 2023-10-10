@@ -34,7 +34,7 @@ private:
 	float chargeSpeed_ = 0.05f;
 
 	//攻撃時のスピード
-	float attackSpeed_[4] = { 0.05f ,0.085f ,0.12f , 0.155f };
+	float attackSpeed_[4] = { 0.03f ,0.085f ,0.15f , 0.2f };
 
 	//チャージ時のカウント
 	int chargeCount_ = 0;
