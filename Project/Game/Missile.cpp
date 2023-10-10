@@ -11,22 +11,22 @@ void Missile::Initialize()
 	input_ = Input::GetInstance();
 
 	worldTransform_[0].translation_.x = 8.0f;
-	worldTransform_[0].translation_.y = RandomTY(-1.3f, 2.0f);
+	worldTransform_[0].translation_.y = RandomTY(-1.3f, 1.8f);
 	worldTransform_[0].translation_.z = 10.0f;
 	worldTransform_[0].scale_ = { 0.3f,0.3f,0.3f };
 
 	worldTransform_[1].translation_.x = -8.0f;
-	worldTransform_[1].translation_.y = RandomTY(-1.3f, 2.0f);
+	worldTransform_[1].translation_.y = RandomTY(-1.3f, 1.8f);
 	worldTransform_[1].translation_.z = 10.0f;
 	worldTransform_[1].scale_ = { 0.3f,0.3f,0.3f };
 
-	//GlobalVariables* globalVariables = GlobalVariables::GetInstance();
-	//const char* groupName = "Missile";
-	////グループを追加
-	//globalVariables->CreateGroup(groupName);
-	//globalVariables->AddItem(groupName, "missileMoveSpeed", missileMoveSpeed_);
+	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
+	const char* groupName = "Missile";
+	//グループを追加
+	globalVariables->CreateGroup(groupName);
+	globalVariables->AddItem(groupName, "missileMoveSpeed", missileMoveSpeed_);
 
-	//Missile::ApplyGlobalVariables();
+	Missile::ApplyGlobalVariables();
 }
 
 void Missile::Update()
@@ -62,8 +62,7 @@ void Missile::Update()
 		}
 	}
 
-
-	/*Missile::ApplyGlobalVariables();*/
+	Missile::ApplyGlobalVariables();
 
 	ImGui::Begin("Missile");
 	ImGui::Text("translationX %f", worldTransform_[0].translation_.x);
@@ -84,12 +83,12 @@ void Missile::Draw(const ViewProjection viewProjection)
 	}
 }
 
-//void Missile::ApplyGlobalVariables()
-//{
-//	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
-//	const char* groupName = "Missile";
-//	missileMoveSpeed_ = globalVariables->GetFloatValue(groupName, "missileMoveSpeed_");
-//}
+void Missile::ApplyGlobalVariables()
+{
+	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
+	const char* groupName = "Missile";
+	missileMoveSpeed_ = globalVariables->GetFloatValue(groupName, "missileMoveSpeed");
+}
 
 float Missile::RandomTY(float min_value, float max_value)
 {

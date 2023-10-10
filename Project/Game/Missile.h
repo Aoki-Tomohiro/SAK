@@ -15,7 +15,7 @@ public:
 
 	void Draw(const ViewProjection viewProjection);
 
-	/*void ApplyGlobalVariables();*/
+	void ApplyGlobalVariables();
 
 	float RandomTY(float min_value, float max_value);
 
