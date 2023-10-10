@@ -123,6 +123,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Project\GameObject\Boss\Laser\Laser.cpp" />
     <ClCompile Include="Project\GameObject\Boss\State\BossStateLazerAttack.cpp" />
     <ClCompile Include="Project\GameObject\Boss\State\BossStateNormal.cpp" />
+    <ClCompile Include="Project\GameObject\Weapon\Weapon.cpp" />
     <ClCompile Include="Project\Game\ClearScene\GameClearScene.cpp" />
     <ClCompile Include="Project\Game\GameManager.cpp" />
     <ClCompile Include="Project\Game\Missile.cpp" />
@@ -169,6 +170,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Project\GameObject\Boss\State\BossStateLaserAttack.h" />
     <ClInclude Include="Project\GameObject\Boss\State\BossStateNormal.h" />
     <ClInclude Include="Project\GameObject\Boss\State\IBossState.h" />
+    <ClInclude Include="Project\GameObject\Weapon\Weapon.h" />
     <ClInclude Include="Project\Game\ClearScene\GameClearScene.h" />
     <ClInclude Include="Project\Game\GameManager.h" />
     <ClInclude Include="Project\Game\Missile.h" />

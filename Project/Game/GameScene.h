@@ -16,6 +16,7 @@
 #include "MissileManager.h"
 
 #include "Utility/CollisionManager/CollisionManager.h"
+#include "../GameObject/Weapon/Weapon.h"
 
 #include <memory>
 
@@ -88,4 +89,5 @@ private:
 
 	//衝突マネージャー
 	std::unique_ptr<CollisionManager> collisionManager_ = nullptr;
+	std::unique_ptr<Weapon> weapon_ = nullptr;
 };

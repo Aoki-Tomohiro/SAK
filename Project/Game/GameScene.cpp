@@ -25,6 +25,11 @@ void GameScene::Initialize(GameManager* gameManager) {
 	player_ = std::make_unique<Player>();
 	// 自キャラの初期化
 	player_->Initialize();
+
+	// 自キャラの生成
+	weapon_ = std::make_unique<Weapon>();
+	// 自キャラの初期化
+ 	weapon_->Initialize();
   
 	//ミサイルの生成
 	missileManager_ = std::make_unique<MissileManager>();
@@ -43,7 +48,10 @@ void GameScene::Update(GameManager* gameManager) {
 
 	player_->Update();
 
-  	boss_->Update();
+	weapon_->Update();
+
+  	//ボスの更新
+	boss_->Update();
 
 	missileManager_->Update();
 
@@ -99,6 +107,9 @@ void GameScene::Draw(GameManager* gameManager) {
 
 	player_->Draw(viewProjection_);
 
+	weapon_->Draw(viewProjection_);
+
+	//ボスの描画
 	boss_->Draw(viewProjection_);
   
 	missileManager_->Draw(viewProjection_);

@@ -1,0 +1,8 @@
+{
+    "Weapon": {
+        "attackSpeedLevel1": 0.08500000089406967,
+        "attackSpeedLevel2": 0.15000000596046448,
+        "attackSpeedNormal": 0.029999999329447746,
+        "chargeSpeed": 0.05000000074505806
+    }
+}

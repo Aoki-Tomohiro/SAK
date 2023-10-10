@@ -7,8 +7,7 @@ void Boss::Initialize() {
 	//モデルの作成
 	model_.reset(Model::CreateFromOBJ("Resources/Sphere", "sphere.obj"));
 	//ワールドトランスフォームの初期化
-	worldTransform_.translation_.y = 3.0f;
-	worldTransform_.translation_.z = 10.0f;
+	worldTransform_.translation_.y = 3.3f;
 	//ボスの行動パターンの初期化
 	state_ = std::make_unique<BossStateNormal>();
 	state_->Initialize(this);
