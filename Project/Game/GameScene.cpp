@@ -8,6 +8,9 @@ GameScene::GameScene() {};
 
 GameScene::~GameScene() {
 	delete debugCamera_;
+	for (ModelTester* mdoelTester : modelTester_) {
+		delete mdoelTester;
+	}
 };
 
 void GameScene::Initialize(GameManager* gameManager) {
@@ -20,13 +23,25 @@ void GameScene::Initialize(GameManager* gameManager) {
 	input_ = Input::GetInstance();
 	//デバッグカメラの生成
 	debugCamera_ = new DebugCamera();
+
+	
+	ModelTester* newModelTester = new ModelTester();
+	newModelTester->Initialize();
+
+	modelTester_.push_back(newModelTester);
+
 };
 
 void GameScene::Update(GameManager* gameManager) {
+
+	for (ModelTester* modelTester : modelTester_) {
+		modelTester->Update();
+	}
+
 	//デバッグカメラの更新
 	debugCamera_->Update();
 	//デバッグカメラの切り替え
-	if (input_->IsPushKeyEnter(DIK_1)) {
+	if (input_->IsPushKeyEnter(DIK_D)) {
 		if (isDebugCameraActive_ == false) {
 			isDebugCameraActive_ = true;
 		}
@@ -55,6 +70,10 @@ void GameScene::Draw(GameManager* gameManager) {
 
 	//モデルの描画
 	Model::PreDraw();
+
+	for (ModelTester* modelTester : modelTester_) {
+		mdoelTester->Draw(viewProjection_);
+	}
 
 
 	Model::PostDraw();

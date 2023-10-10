@@ -11,7 +11,10 @@
 #include "3D/Matrix/WorldTransform.h"
 #include "3D/Matrix/ViewProjection.h"
 
+#include "../ModelTester.h"
+
 #include <memory>
+#include <list>
 
 class GameScene : public IScene {
 public:
@@ -73,4 +76,5 @@ private:
 	WorldTransform worldTransform1_{};
 	WorldTransform worldTransform2_{};
 
+	std::list<ModelTester*> modelTester_;
 };
