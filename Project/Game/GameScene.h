@@ -12,6 +12,8 @@
 #include "3D/Matrix/ViewProjection.h"
 
 #include "../GameObject/Boss/Boss.h"
+#include "Player.h"
+#include "Missile.h"
 
 #include <memory>
 
@@ -78,4 +80,7 @@ private:
 	//ボス
 	std::unique_ptr<Boss> boss_ = nullptr;
 
+	std::unique_ptr<Player> player_ = nullptr;
+
+	std::unique_ptr<Missile> missile_ = nullptr;
 };

@@ -20,18 +20,28 @@ void GameScene::Initialize(GameManager* gameManager) {
 	input_ = Input::GetInstance();
 	//デバッグカメラの生成
 	debugCamera_ = new DebugCamera();
-
+  
+	// 自キャラの生成
+	player_ = std::make_unique<Player>();
+	// 自キャラの初期化
+	player_->Initialize();
+  
+  //ミサイルの生成
+	missile_ = std::make_unique<Missile>();
+	// ミサイルの初期化
+	missile_->Initialize();
+  
 	//ボスの作成
 	boss_ = std::make_unique<Boss>();
 	boss_->Initialize();
 };
 
 void GameScene::Update(GameManager* gameManager) {
-	//ボスの更新
+	player_->Update();
+  	//ボスの更新
 	boss_->Update();
 
-	//ビュープロジェクションの更新
-	viewProjection_.UpdateMatrix();
+	missile_->Update();
 
 	//デバッグカメラの更新
 	debugCamera_->Update();
@@ -59,15 +69,20 @@ void GameScene::Update(GameManager* gameManager) {
 	ImGui::Text("push 1 : Game Clear");
 	ImGui::Text("push 2 : Game Over");
 	ImGui::End();
+
+	viewProjection_.UpdateMatrix();
 };
 
 void GameScene::Draw(GameManager* gameManager) {
 
 	//モデルの描画
 	Model::PreDraw();
+	player_->Draw(viewProjection_);
 
 	//ボスの描画
 	boss_->Draw(viewProjection_);
+  
+	missile_->Draw(viewProjection_);
 
 	Model::PostDraw();
 
