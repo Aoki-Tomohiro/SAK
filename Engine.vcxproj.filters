@@ -251,6 +251,7 @@
     </ClCompile>
     <ClCompile Include="Project\GameObject\Boss\Laser\Laser.cpp">
       <Filter>ソース ファイル\Project\GameObject\Boss\Lazer</Filter>
+	</ClCompile>
     <ClCompile Include="Project\Game\Missile.cpp">
       <Filter>ソース ファイル\Project\Game</Filter>
     </ClCompile>
@@ -384,6 +385,7 @@
     </ClInclude>
     <ClInclude Include="Project\GameObject\Boss\Laser\Laser.h">
       <Filter>ヘッダー ファイル\Project\GameObject\Boss\Lazer</Filter>
+	</ClInclude>
     <ClInclude Include="Project\Game\Missile.h">
       <Filter>ヘッダー ファイル\Project\Game</Filter>
     </ClInclude>
