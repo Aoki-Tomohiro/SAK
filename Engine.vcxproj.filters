@@ -251,11 +251,14 @@
     </ClCompile>
     <ClCompile Include="Project\GameObject\Boss\Laser\Laser.cpp">
       <Filter>ソース ファイル\Project\GameObject\Boss\Lazer</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="Project\Game\Missile.cpp">
       <Filter>ソース ファイル\Project\Game</Filter>
     </ClCompile>
     <ClCompile Include="Project\Game\Player.cpp">
+      <Filter>ソース ファイル\Project\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\Game\MissileManager.cpp">
       <Filter>ソース ファイル\Project\Game</Filter>
     </ClCompile>
   </ItemGroup>
@@ -385,11 +388,14 @@
     </ClInclude>
     <ClInclude Include="Project\GameObject\Boss\Laser\Laser.h">
       <Filter>ヘッダー ファイル\Project\GameObject\Boss\Lazer</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="Project\Game\Missile.h">
       <Filter>ヘッダー ファイル\Project\Game</Filter>
     </ClInclude>
     <ClInclude Include="Project\Game\Player.h">
+      <Filter>ヘッダー ファイル\Project\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\Game\MissileManager.h">
       <Filter>ヘッダー ファイル\Project\Game</Filter>
     </ClInclude>
   </ItemGroup>

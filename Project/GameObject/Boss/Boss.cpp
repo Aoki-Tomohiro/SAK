@@ -1,5 +1,6 @@
 #include "Boss.h"
 #include "State/BossStateNormal.h"
+#include "State/BossStateLaserAttack.h"
 
 void Boss::Initialize() {
 
@@ -67,7 +68,9 @@ void Boss::AddLaser(Laser* laser) {
 }
 
 void Boss::OnCollision() {
-
+	ImGui::Begin(" ");
+	ImGui::Text("BossHit");
+	ImGui::End();
 }
 
 Vector3 Boss::GetWorldPosition() {

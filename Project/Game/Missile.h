@@ -4,32 +4,38 @@
 #include "2D/ImGuiManager.h"
 #include "Components/Input.h"
 #include <random>
+#include "Utility/CollisionManager/Collider.h"
+#include "Utility/CollisionManager/CollisionConfig.h"
 
-class Missile
+class Missile : public Collider
 {
 public:
 
-	void Initialize();
+	void Initialize(const Vector3& position, const float& speed);
 
 	void Update();
 
 	void Draw(const ViewProjection viewProjection);
 
-	void ApplyGlobalVariables();
+	bool IsAlive() { return isAlive_; };
 
-	float RandomTY(float min_value, float max_value);
+	void SetPosition(const Vector3& position) { worldTransform_.translation_ = position; };
+
+	void OnCollision() override;
+
+	Vector3 GetWorldPosition() override;
 
 private:
 	Input* input_ = nullptr;
 
-	std::unique_ptr<Model> model_[2];
+	std::unique_ptr<Model> model_;
 
-	WorldTransform worldTransform_[2];
+	WorldTransform worldTransform_;
 
 	uint32_t textureHandle_ = 0u;
 
 	float missileMoveSpeed_ = 0.05f;
 
-	bool isAlive_[2];
+	bool isAlive_;
 };
 

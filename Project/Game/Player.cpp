@@ -31,6 +31,10 @@ void Player::Initialize()
 	globalVariables->AddItem(groupName, "attackSpeedLevel1", attackSpeed_[1]);
 	globalVariables->AddItem(groupName, "attackSpeedLevel2", attackSpeed_[2]);
 	globalVariables->AddItem(groupName, "chargeSpeed", chargeSpeed_);
+
+	//衝突属性を設定
+	SetCollisionAttribute(kCollisionAttributePlayer);
+	SetCollisionMask(kCollisionMaskPlayer);
 }
 
 void Player::Update() 
@@ -169,4 +173,18 @@ void Player::ApplyGlobalVariables()
 	attackSpeed_[1] = globalVariables->GetFloatValue(groupName, "attackSpeedLevel1");
 	attackSpeed_[2] = globalVariables->GetFloatValue(groupName, "attackSpeedLevel2");
 	chargeSpeed_ = globalVariables->GetFloatValue(groupName, "chargeSpeed");
+}
+
+void Player::OnCollision() {
+	ImGui::Begin(" ");
+	ImGui::Text("PlayerHit");
+	ImGui::End();
+}
+
+Vector3 Player::GetWorldPosition() {
+	Vector3 pos;
+	pos.x = playerWorldTransform_.matWorld_.m[3][0];
+	pos.y = playerWorldTransform_.matWorld_.m[3][1];
+	pos.z = playerWorldTransform_.matWorld_.m[3][2];
+	return pos;
 }

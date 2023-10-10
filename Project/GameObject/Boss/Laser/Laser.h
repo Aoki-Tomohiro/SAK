@@ -1,6 +1,7 @@
 #pragma once
 #include "3D/Model/Model.h"
 #include "3D/Matrix/WorldTransform.h"
+#include "2D/ImGuiManager.h"
 #include "Utility/CollisionManager/Collider.h"
 #include "Utility/CollisionManager/CollisionConfig.h"
 
