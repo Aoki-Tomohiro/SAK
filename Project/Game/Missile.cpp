@@ -3,8 +3,8 @@
 
 void Missile::Initialize()
 {
-	model_[0].reset(Model::CreateFromOBJ("Resources", "sphere.obj"));
-	model_[1].reset(Model::CreateFromOBJ("Resources", "sphere.obj"));
+	model_[0].reset(Model::CreateFromOBJ("Resources/Sphere", "sphere.obj"));
+	model_[1].reset(Model::CreateFromOBJ("Resources/Sphere", "sphere.obj"));
 
 	textureHandle_ = TextureManager::Load("Resources/white.png");
 
