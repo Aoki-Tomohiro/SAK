@@ -6,9 +6,11 @@ Particle::Particle()
 
 void Particle::Initialize(Vector3 startPos, Vector3 velocity,float scale,float scaleMinus)
 {
-	model_.reset(Model::CreateFromOBJ("Resources", "sphere.obj"));
+	model_.reset(Model::CreateFromOBJ("Resources/particlePop", "particlePop.obj"));
 
 	textureHandle_ = TextureManager::Load("Resources/uvChecker.png");
+
+	model_->GetMaterial()->SetColor({1.0f,1.0f,1.0f,0.5f});
 
 	input_ = Input::GetInstance();
 
@@ -42,5 +44,5 @@ void Particle::Update()
 
 void Particle::Draw(const ViewProjection viewProjection)
 {
-	model_->Draw(worldTransform_, viewProjection, textureHandle_);
+	model_->Draw(worldTransform_, viewProjection);
 }
