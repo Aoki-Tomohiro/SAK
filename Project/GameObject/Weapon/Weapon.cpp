@@ -3,7 +3,7 @@
 
 void Weapon::Initialize()
 {
-	weaponModel_.reset(Model::CreateFromOBJ("Resources", "sphere.obj"));
+	weaponModel_.reset(Model::CreateFromOBJ("Resources/Sphere", "sphere.obj"));
 
 	input_ = Input::GetInstance();
 

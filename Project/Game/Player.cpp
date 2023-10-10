@@ -3,7 +3,7 @@
 
 void Player::Initialize()
 {
-	playerModel_.reset(Model::CreateFromOBJ("Resources", "sphere.obj"));
+	playerModel_.reset(Model::CreateFromOBJ("Resources/Sphere", "sphere.obj"));
 
 	textureHandle_ = TextureManager::Load("Resources/uvChecker.png");
 
