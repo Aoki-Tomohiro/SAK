@@ -59,7 +59,7 @@ void GameScene::Update(GameManager* gameManager) {
 	//デバッグカメラの更新
 	debugCamera_->Update();
 	//デバッグカメラの切り替え
-	if (input_->IsPushKeyEnter(DIK_1)) {
+	if (input_->IsPushKeyEnter(DIK_3)) {
 		if (isDebugCameraActive_ == false) {
 			isDebugCameraActive_ = true;
 		}

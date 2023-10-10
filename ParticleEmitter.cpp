@@ -53,9 +53,8 @@ void ParticleEmitter::Pop(int popCount)
 	for (int i = 0; i < popCount; i++) {
 		Particle* newParticle = new Particle();
 
-		float scale = RandomF(0.1f, 0.2f);
-		float scaleMinus = 0.01f;
-		float speed = RandomF(0.02f, 0.04f);
+		float scale = RandomF(scale_.min, scale_.max);
+		float speed = RandomF(speed_.min, speed_.max);
 
 		float angle = RandomF(0.0f, 360.0f);
 		float radian = angle * float(M_PI / 180.0f);
@@ -69,7 +68,7 @@ void ParticleEmitter::Pop(int popCount)
 			speed * cos(zRadian),
 		};
 
-		newParticle->Initialize(worldTransform_.translation_, speedVec3, scale, scaleMinus);
+		newParticle->Initialize(worldTransform_.translation_, speedVec3, scale, scaleMinus_);
 
 		particles_.push_back(newParticle);
 	}

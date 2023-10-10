@@ -43,4 +43,16 @@ private:
 	int nowFrame = 0;
 
 	bool isDead = false;
+
+	struct minmaxStruct {
+		float min;
+		float max;
+	};
+
+	float scaleMinus_ = 0.01f;
+
+	//それぞれの最小最大ランダム
+	minmaxStruct scale_ = { 0.1f,0.15f };
+	minmaxStruct speed_ = { 0.02f,0.04f };
+
 };
