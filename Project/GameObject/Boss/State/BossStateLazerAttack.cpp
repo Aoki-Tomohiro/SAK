@@ -13,6 +13,9 @@ BossStateLaserAttack::~BossStateLaserAttack() {
 
 void BossStateLaserAttack::Initialize(Boss* pBoss) {
 
+	//ランド関数の初期化
+	std::srand(unsigned int(time(NULL)));
+
 	//グローバル変数
 	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
 	const char* groupName = "BossStateLaserAttack";
@@ -35,10 +38,10 @@ void BossStateLaserAttack::Initialize(Boss* pBoss) {
 	}
 	
 	//ワールドトランスフォームの初期化
-	warningWorldTransforms_[0].translation_.x = -4.0f;
+	warningWorldTransforms_[0].translation_.x = ((rand() % 61 - 60) / 10) - laserScale_.x;
 	warningWorldTransforms_[0].translation_.z = 10.0f;
 	warningWorldTransforms_[0].scale_ = laserScale_;
-	warningWorldTransforms_[1].translation_.x = 4.0f;
+	warningWorldTransforms_[1].translation_.x = (rand() % 61 / 10) + laserScale_.x;
 	warningWorldTransforms_[1].translation_.z = 10.0f;
 	warningWorldTransforms_[1].scale_ = laserScale_;
 

@@ -53,6 +53,7 @@ private:
 	int deadTimer_ = 0;
 	//レーザーのスケール
 	Vector3 laserScale_ = { 1.0f,5.0f,1.0f };
+	//レーザーの速さ
 	float laserSpeed_ = 2.0f;
 };
 

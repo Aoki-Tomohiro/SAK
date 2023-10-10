@@ -23,7 +23,7 @@ void Laser::Initialize(const Vector3& position, const Vector3& scale) {
 }
 
 void Laser::Update() {
-	worldTransform_.translation_.y -= 4.0f;
+	worldTransform_.translation_.y -= laserSpeed_;
 
 	if (worldTransform_.translation_.y < 0.0f) {
 		worldTransform_.translation_.y = 0.0f;

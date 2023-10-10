@@ -3,6 +3,8 @@
 #include "3D/Model/Model.h"
 #include "3D/Matrix/WorldTransform.h"
 #include <array>
+#include <ctime>
+#include <cstdlib>
 #include <memory>
 
 class BossStateLaserAttack : public IBossState{
