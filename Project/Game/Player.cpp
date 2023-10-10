@@ -13,13 +13,11 @@ void Player::Initialize()
 	//Player
 	playerWorldTransform_.translation_.x = 0.0f;
 	playerWorldTransform_.translation_.y = -3.3f;
-	playerWorldTransform_.translation_.z = 10.0f;
 	playerWorldTransform_.scale_ = { 0.8f,0.8f,0.8f };
 
 	//Weapon
 	weaponWorldTransform_.translation_.x = 0.0f;
-	weaponWorldTransform_.translation_.y = 2.3f;
-	weaponWorldTransform_.translation_.z = 10.0f;
+	weaponWorldTransform_.translation_.y = 1.8f;
 	weaponWorldTransform_.scale_ = { 0.4f,0.4f,0.4f };
 
 	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
@@ -40,12 +38,24 @@ void Player::Update()
 	{
 		playerWorldTransform_.translation_.x -= playerMoveSpeed_;
 		weaponWorldTransform_.translation_.x -= playerMoveSpeed_;
+
+		if (playerWorldTransform_.translation_.x <= -7.3f)
+		{
+			playerWorldTransform_.translation_.x = -7.3f;
+			weaponWorldTransform_.translation_.x = -7.3f;
+		}
 	}
 
 	if (input_->IsPushKey(DIK_D))
 	{
 		playerWorldTransform_.translation_.x += playerMoveSpeed_;
 		weaponWorldTransform_.translation_.x += playerMoveSpeed_;
+
+		if (playerWorldTransform_.translation_.x >= 7.3f)
+		{
+			playerWorldTransform_.translation_.x = 7.3f;
+			weaponWorldTransform_.translation_.x = 7.3f;
+		}
 	}
 
 
@@ -77,9 +87,9 @@ void Player::Update()
 		chargeCount_++;
 		weaponWorldTransform_.translation_.y -= chargeSpeed_;
 
-		if (weaponWorldTransform_.translation_.y <= -2.3f)
+		if (weaponWorldTransform_.translation_.y <= -1.8f)
 		{
-			weaponWorldTransform_.translation_.y = -2.3f;
+			weaponWorldTransform_.translation_.y = -1.8f;
 		}
 	}
 
@@ -87,9 +97,9 @@ void Player::Update()
 	{
 		weaponWorldTransform_.translation_.y += attackSpeed_[0];
 
-		if (weaponWorldTransform_.translation_.y >= 2.3f)
+		if (weaponWorldTransform_.translation_.y >= 1.8f)
 		{
-			weaponWorldTransform_.translation_.y = 2.3f;
+			weaponWorldTransform_.translation_.y = 1.8f;
 			chargeCount_ = 0;
 			IsAttack_ = false;
 		}
@@ -100,9 +110,9 @@ void Player::Update()
 	{
 		weaponWorldTransform_.translation_.y += attackSpeed_[1];
 
-		if (weaponWorldTransform_.translation_.y >= 2.3f)
+		if (weaponWorldTransform_.translation_.y >= 1.8f)
 		{
-			weaponWorldTransform_.translation_.y = 2.3f;
+			weaponWorldTransform_.translation_.y = 1.8f;
 			chargeCount_ = 0;
 			IsAttack_ = false;
 		}
@@ -113,9 +123,9 @@ void Player::Update()
 	{
 		weaponWorldTransform_.translation_.y += attackSpeed_[2];
 
-		if (weaponWorldTransform_.translation_.y >= 2.3f)
+		if (weaponWorldTransform_.translation_.y >= 1.8f)
 		{
-			weaponWorldTransform_.translation_.y = 2.3f;
+			weaponWorldTransform_.translation_.y = 1.8f;
 			chargeCount_ = 0;
 			IsAttack_ = false;
 		}

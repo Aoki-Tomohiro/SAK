@@ -11,13 +11,11 @@ void Missile::Initialize()
 	input_ = Input::GetInstance();
 
 	worldTransform_[0].translation_.x = 8.0f;
-	worldTransform_[0].translation_.y = RandomTY(-1.3f, 1.8f);
-	worldTransform_[0].translation_.z = 10.0f;
+	worldTransform_[0].translation_.y = RandomTY(-1.3f, 0.2f);
 	worldTransform_[0].scale_ = { 0.3f,0.3f,0.3f };
 
 	worldTransform_[1].translation_.x = -8.0f;
-	worldTransform_[1].translation_.y = RandomTY(-1.3f, 1.8f);
-	worldTransform_[1].translation_.z = 10.0f;
+	worldTransform_[1].translation_.y = RandomTY(0.4f, 1.0f);
 	worldTransform_[1].scale_ = { 0.3f,0.3f,0.3f };
 
 	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
@@ -47,7 +45,7 @@ void Missile::Update()
 		{
 			isAlive_[0] = 0;
 			worldTransform_[0].translation_.x = 8.0f;
-			worldTransform_[0].translation_.y = RandomTY(-1.3f, 0.35f);
+			worldTransform_[0].translation_.y = RandomTY(-1.3f, 0.2f);
 		}
 	}
 
@@ -58,7 +56,7 @@ void Missile::Update()
 		if (worldTransform_[1].translation_.x >= 9.0f)
 		{
 			worldTransform_[1].translation_.x = -8.0f;
-			worldTransform_[1].translation_.y = RandomTY(0.35f, 2.0f);
+			worldTransform_[1].translation_.y = RandomTY(0.4f, 1.0f);
 		}
 	}
 
