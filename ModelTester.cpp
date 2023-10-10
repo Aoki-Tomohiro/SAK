@@ -2,7 +2,7 @@
 
 void ModelTester::Initialize()
 {
-	model_.reset(Model::CreateFromOBJ("Resources/particlePop", "particlePop.obj"));
+	model_.reset(Model::CreateFromOBJ("Resources/Missile", "Missile.obj"));
 	worldTransform_.translation_ = { 0.0f,0.0f ,0.0f };
 	worldTransform_.UpdateMatrix();
 }

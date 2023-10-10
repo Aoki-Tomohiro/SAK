@@ -64,6 +64,8 @@ void GameScene::Update(GameManager* gameManager) {
 	ImGui::Text("push 1 : Game Clear");
 	ImGui::Text("push 2 : Game Over");
 	ImGui::End();
+
+	viewProjection_.UpdateMatrix();
 };
 
 void GameScene::Draw(GameManager* gameManager) {
@@ -72,7 +74,7 @@ void GameScene::Draw(GameManager* gameManager) {
 	Model::PreDraw();
 
 	for (ModelTester* modelTester : modelTester_) {
-		mdoelTester->Draw(viewProjection_);
+		modelTester->Draw(viewProjection_);
 	}
 
 
