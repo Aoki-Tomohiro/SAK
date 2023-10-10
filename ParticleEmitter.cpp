@@ -46,17 +46,18 @@ void ParticleEmitter::Draw(const ViewProjection viewProjection)
 	for (Particle* particle : particles_) {
 		particle->Draw(viewProjection);
 	}
+	
 }
 
-void ParticleEmitter::Pop(int popCount)
+void ParticleEmitter::Pop(int popCount,float minAngle,float maxAngle)
 {
 	for (int i = 0; i < popCount; i++) {
 		Particle* newParticle = new Particle();
 
-		float scale = RandomF(scale_.min, scale_.max);
-		float speed = RandomF(speed_.min, speed_.max);
+		float scale = RandomF(popScale_.min, popScale_.max);
+		float speed = RandomF(popSpeed_.min, popSpeed_.max);
 
-		float angle = RandomF(0.0f, 360.0f);
+		float angle = RandomF(minAngle, maxAngle);
 		float radian = angle * float(M_PI / 180.0f);
 		//Z軸を含めた回転ってどうやんの！？
 		float zAngle = RandomF(0.0f, 180.0f);
@@ -68,7 +69,7 @@ void ParticleEmitter::Pop(int popCount)
 			speed * cos(zRadian),
 		};
 
-		newParticle->Initialize(worldTransform_.translation_, speedVec3, scale, scaleMinus_);
+		newParticle->PopInitialize(worldTransform_.translation_, speedVec3, scale, popScaleMinus_);
 
 		particles_.push_back(newParticle);
 	}

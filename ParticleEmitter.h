@@ -19,7 +19,13 @@ public:
 
 	void Draw(const ViewProjection viewProjection);
 
-	void Pop(int popCount);
+	///<summary>
+	///1回だけパーティクルを指定角度に呼び出す
+	/// </summary>
+	/// <param name ="popCount">一度に出す個数</param>
+	/// <param name ="minAngle">最小角度</param>
+	/// <param name ="maxAngle">最大角度</param>
+	void Pop(int popCount, float minAngle, float maxAngle);
 
 	void ApplyGlobalVariables();
 
@@ -49,10 +55,10 @@ private:
 		float max;
 	};
 
-	float scaleMinus_ = 0.01f;
+	float popScaleMinus_ = 0.01f;
 
 	//それぞれの最小最大ランダム
-	minmaxStruct scale_ = { 0.1f,0.15f };
-	minmaxStruct speed_ = { 0.02f,0.04f };
+	minmaxStruct popScale_ = { 0.1f,0.15f };
+	minmaxStruct popSpeed_ = { 0.02f,0.04f };
 
 };

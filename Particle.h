@@ -10,7 +10,9 @@ public:
 
 	Particle();
 
-	void Initialize(Vector3 startPos, Vector3 velocity, float scale, float scaleMinus);
+	void GeneralInitialize();
+
+	void PopInitialize(Vector3 startPos, Vector3 velocity, float scale, float scaleMinus);
 
 	void Update();
 

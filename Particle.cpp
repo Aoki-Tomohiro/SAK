@@ -4,24 +4,25 @@ Particle::Particle()
 {
 }
 
-void Particle::Initialize(Vector3 startPos, Vector3 velocity,float scale,float scaleMinus)
+void Particle::GeneralInitialize()
+{
+	isDead = false;
+	input_ = Input::GetInstance();
+	worldTransform_.UpdateMatrix();
+}
+
+void Particle::PopInitialize(Vector3 startPos, Vector3 velocity,float scale,float scaleMinus)
 {
 	model_.reset(Model::CreateFromOBJ("Resources/particlePop", "particlePop.obj"));
 
-	textureHandle_ = TextureManager::Load("Resources/uvChecker.png");
-
 	model_->GetMaterial()->SetColor({1.0f,1.0f,1.0f,0.5f});
-
-	input_ = Input::GetInstance();
-
-	isDead = false;
 
 	worldTransform_.translation_ = startPos;
 	worldTransform_.scale_ = { scale,scale,scale };
 	velocity_ = velocity;
 	scaleMinus_ = scaleMinus;
 
-	worldTransform_.UpdateMatrix();
+	GeneralInitialize();
 }
 
 void Particle::Update()

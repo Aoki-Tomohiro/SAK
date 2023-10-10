@@ -37,7 +37,7 @@ void GameScene::Update(GameManager* gameManager) {
 	if (input_->IsPushKeyEnter(DIK_P))
 	{
 		ParticleEmitter* newParticleEmitter = new ParticleEmitter();
-		newParticleEmitter->Pop(10);
+		newParticleEmitter->Pop(10,0.0f,360.0f);
 
 		particleEmitters_.push_back(newParticleEmitter);
 	}
