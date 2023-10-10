@@ -27,20 +27,23 @@ private:
 
 	uint32_t textureHandle_ = 0u;
 
+	//プレイヤーのスピード
 	float playerMoveSpeed_ = 0.05f;
 
-	float attackSpeed_[3] = { 0.05f ,0.085f ,0.12f };
-	float coolTimeSpeed_ = 0.05f;
+	//チャージ時のスピード
+	float chargeSpeed_ = 0.05f;
 
-	int attackCount_ = 0;
-	int attackTimer = 60;
+	//攻撃時のスピード
+	float attackSpeed_[4] = { 0.05f ,0.085f ,0.12f , 0.155f };
 
+	//チャージ時のカウント
+	int chargeCount_ = 0;
 
-	int count_ = 0;
+	//キーを押しているときのカウント
+	int pushCount_ = 0;
 
-	bool IsUP_ = false;
-	bool IsDown_ = false;
-	bool IsCharge = false;
+	bool IsCharge_ = false;
+	bool IsAttack_ = false;
 };
 
 

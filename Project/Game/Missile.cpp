@@ -25,6 +25,8 @@ void Missile::Initialize()
 	////グループを追加
 	//globalVariables->CreateGroup(groupName);
 	//globalVariables->AddItem(groupName, "missileMoveSpeed", missileMoveSpeed_);
+
+	//Missile::ApplyGlobalVariables();
 }
 
 void Missile::Update()
