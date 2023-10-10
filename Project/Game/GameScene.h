@@ -11,6 +11,7 @@
 #include "3D/Matrix/WorldTransform.h"
 #include "3D/Matrix/ViewProjection.h"
 
+#include "../GameObject/Boss/Boss.h"
 #include "Player.h"
 #include "Missile.h"
 
@@ -75,6 +76,9 @@ private:
 	//ワールドトランスフォーム
 	WorldTransform worldTransform1_{};
 	WorldTransform worldTransform2_{};
+
+	//ボス
+	std::unique_ptr<Boss> boss_ = nullptr;
 
 	std::unique_ptr<Player> player_ = nullptr;
 

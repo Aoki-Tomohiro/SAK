@@ -115,6 +115,30 @@
     <Filter Include="ヘッダー ファイル\Project\Game\OverScene">
       <UniqueIdentifier>{85bc802c-30f6-4311-a38a-61fdb7e016d0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ヘッダー ファイル\Project\GameObject">
+      <UniqueIdentifier>{d46a3d4b-9f62-48c5-826b-5bb98ccec81a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Project\GameObject">
+      <UniqueIdentifier>{b63892bf-a8e3-49fa-94cc-2e7e4a27d9c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Project\GameObject\Boss">
+      <UniqueIdentifier>{bc64e7b4-c3f8-4624-875f-f4a6a418ea75}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Project\GameObject\Boss">
+      <UniqueIdentifier>{1e4e073e-fd36-4817-af5d-1bad967a74ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Project\GameObject\Boss\State">
+      <UniqueIdentifier>{2a632a23-34cc-42e8-9dff-301e45e55351}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Project\GameObject\Boss\State">
+      <UniqueIdentifier>{c3e4d182-3c7e-4069-ac44-f9200800086e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Project\GameObject\Boss\Lazer">
+      <UniqueIdentifier>{526917ed-1ee8-48b0-946d-b63e167e38ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Project\GameObject\Boss\Lazer">
+      <UniqueIdentifier>{808ed72f-025b-4c76-904a-fd3654a583eb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -216,6 +240,17 @@
     <ClCompile Include="Project\Game\OverScene\GameOverScene.cpp">
       <Filter>ソース ファイル\Project\Game\OverScene</Filter>
     </ClCompile>
+    <ClCompile Include="Project\GameObject\Boss\Boss.cpp">
+      <Filter>ソース ファイル\Project\GameObject\Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\GameObject\Boss\State\BossStateNormal.cpp">
+      <Filter>ソース ファイル\Project\GameObject\Boss\State</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\GameObject\Boss\State\BossStateLazerAttack.cpp">
+      <Filter>ソース ファイル\Project\GameObject\Boss\State</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\GameObject\Boss\Laser\Laser.cpp">
+      <Filter>ソース ファイル\Project\GameObject\Boss\Lazer</Filter>
     <ClCompile Include="Project\Game\Missile.cpp">
       <Filter>ソース ファイル\Project\Game</Filter>
     </ClCompile>
@@ -335,6 +370,20 @@
     <ClInclude Include="Project\Game\OverScene\GameOverScene.h">
       <Filter>ヘッダー ファイル\Project\Game\OverScene</Filter>
     </ClInclude>
+    <ClInclude Include="Project\GameObject\Boss\Boss.h">
+      <Filter>ヘッダー ファイル\Project\GameObject\Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\GameObject\Boss\State\BossStateLaserAttack.h">
+      <Filter>ヘッダー ファイル\Project\GameObject\Boss\State</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\GameObject\Boss\State\BossStateNormal.h">
+      <Filter>ヘッダー ファイル\Project\GameObject\Boss\State</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\GameObject\Boss\State\IBossState.h">
+      <Filter>ヘッダー ファイル\Project\GameObject\Boss\State</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\GameObject\Boss\Laser\Laser.h">
+      <Filter>ヘッダー ファイル\Project\GameObject\Boss\Lazer</Filter>
     <ClInclude Include="Project\Game\Missile.h">
       <Filter>ヘッダー ファイル\Project\Game</Filter>
     </ClInclude>
