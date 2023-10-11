@@ -40,7 +40,7 @@ void Missile::Update()
 		worldTransform_.UpdateMatrix();
 	}
 
-	if (worldTransform_.translation_.x <= -9.0f || worldTransform_.translation_.x >= 9.0f) {
+	if (worldTransform_.translation_.x < -13.0f || worldTransform_.translation_.x > 13.0f) {
 		isAlive_ = false;
 	}
 	else {

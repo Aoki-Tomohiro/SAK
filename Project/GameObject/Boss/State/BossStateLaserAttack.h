@@ -51,5 +51,5 @@ private:
 	//攻撃終了までのタイマー
 	int endTimer_ = 0;
 	//レーザーのスケール
-	Vector3 laserScale_{ 1.0f,5.0f,1.0f };
+	Vector3 laserScale_{ 1.0f,10.0f,1.0f };
 };
