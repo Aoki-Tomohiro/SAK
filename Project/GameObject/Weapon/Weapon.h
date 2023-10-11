@@ -34,13 +34,20 @@ private:
 	//攻撃時のスピード
 	float attackSpeed_[4] = { 0.03f ,0.085f ,0.15f , 0.2f };
 
+	//クールダウン中のスピード
+	float coolDownSpeed_ = 0.05f;
+
 	//チャージ時のカウント
 	int chargeCount_ = 0;
 
 	//キーを押しているときのカウント
 	int pushCount_ = 0;
 
+	//クールダウン中のタイマー
+	int coolDownTimer_ = 60;
+
 	bool IsCharge_ = false;
 	bool IsAttack_ = false;
+	bool IsCoolDown_ = false;
 };
 

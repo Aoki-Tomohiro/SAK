@@ -18,6 +18,7 @@ void Weapon::Initialize()
 	globalVariables->AddItem(groupName, "attackSpeedNormal", attackSpeed_[0]);
 	globalVariables->AddItem(groupName, "attackSpeedLevel1", attackSpeed_[1]);
 	globalVariables->AddItem(groupName, "attackSpeedLevel2", attackSpeed_[2]);
+	globalVariables->AddItem(groupName, "attackSpeedLevel3", attackSpeed_[3]);
 	globalVariables->AddItem(groupName, "chargeSpeed", chargeSpeed_);
 }
 
@@ -44,15 +45,14 @@ void Weapon::Update()
 		}
 	}
 
-
 	//攻撃処理
-	if (input_->IsPushKey(DIK_RETURN) && IsAttack_ == false)
+	if (input_->IsPushKey(DIK_RETURN) && IsAttack_ == false && IsCoolDown_ == false)
 	{
 		pushCount_++;
 		IsCharge_ = true;
 	}
 
-	if (input_->IsPushKeyExit(DIK_RETURN))
+	if (input_->IsPushKeyExit(DIK_RETURN) && IsCoolDown_ == false)
 	{
 		if (pushCount_ < 10)
 		{
@@ -73,61 +73,79 @@ void Weapon::Update()
 		chargeCount_++;
 		weaponWorldTransform_.translation_.y -= chargeSpeed_;
 
-		if (weaponWorldTransform_.translation_.y <= -1.8f)
+		if (weaponWorldTransform_.translation_.y <= -2.3f)
 		{
-			weaponWorldTransform_.translation_.y = -1.8f;
+			weaponWorldTransform_.translation_.y = -2.3f;
 		}
 	}
 
-	if (IsAttack_ == true && chargeCount_ < 45)
+	if (IsAttack_ == true && chargeCount_ < 20)
 	{
 		weaponWorldTransform_.translation_.y += attackSpeed_[0];
 
-		if (weaponWorldTransform_.translation_.y >= 1.8f)
+		if (weaponWorldTransform_.translation_.y >= 2.2f)
 		{
-			weaponWorldTransform_.translation_.y = 1.8f;
+			weaponWorldTransform_.translation_.y = 2.2f;
 			chargeCount_ = 0;
 			IsAttack_ = false;
+			IsCoolDown_ = true;
 		}
 	}
 
 	//チャージ1
-	if (IsAttack_ == true && chargeCount_ >= 45 && chargeCount_ < 90)
+	if (IsAttack_ == true && chargeCount_ >= 20 && chargeCount_ < 50)
 	{
 		weaponWorldTransform_.translation_.y += attackSpeed_[1];
 
-		if (weaponWorldTransform_.translation_.y >= 1.8f)
+		if (weaponWorldTransform_.translation_.y >= 2.9f)
 		{
-			weaponWorldTransform_.translation_.y = 1.8f;
+			weaponWorldTransform_.translation_.y = 2.9f;
 			chargeCount_ = 0;
 			IsAttack_ = false;
+			IsCoolDown_ = true;
 		}
 	}
 
 	//チャージ2
-	if (IsAttack_ == true && chargeCount_ >= 90)
+	if (IsAttack_ == true && chargeCount_ >= 50 && chargeCount_ < 90)
 	{
 		weaponWorldTransform_.translation_.y += attackSpeed_[2];
 
-		if (weaponWorldTransform_.translation_.y >= 1.8f)
+		if (weaponWorldTransform_.translation_.y >= 3.5f)
 		{
-			weaponWorldTransform_.translation_.y = 1.8f;
+			weaponWorldTransform_.translation_.y = 3.5f;
 			chargeCount_ = 0;
 			IsAttack_ = false;
+			IsCoolDown_ = true;
 		}
 	}
 
-	////チャージ3
-	//if (IsDown_ == true && attackCount_ >= 90)
-	//{
-	//	weaponWorldTransform_.translation_.y += attackSpeed_[3];
+	//チャージ3
+	if (IsAttack_ == true && chargeCount_ >= 90)
+	{
+		weaponWorldTransform_.translation_.y += attackSpeed_[3];
 
-	//	if (weaponWorldTransform_.translation_.y >= 2.0f)
-	//	{
-	//		weaponWorldTransform_.translation_.y = 2.0f;
-	//		IsDown_ = false;
-	//	}
-	//}
+		if (weaponWorldTransform_.translation_.y >= 5.0f)
+		{
+			weaponWorldTransform_.translation_.y = 5.0f;
+			chargeCount_ = 0;
+			IsAttack_ = false;
+			IsCoolDown_ = true;
+		}
+	}
+
+	//攻撃後のクールダウン
+	if (IsCoolDown_ == true)
+	{
+		coolDownTimer_--;
+		weaponWorldTransform_.translation_.y -= coolDownSpeed_;
+		if (weaponWorldTransform_.translation_.y <= 1.8f)
+		{
+			weaponWorldTransform_.translation_.y = 1.8f;
+			coolDownTimer_ = 60;
+			IsCoolDown_ = false;
+		}
+	}
 
 	weaponWorldTransform_.UpdateMatrix();
 
@@ -153,5 +171,6 @@ void Weapon::ApplyGlobalVariables()
 	attackSpeed_[0] = globalVariables->GetFloatValue(groupName, "attackSpeedNormal");
 	attackSpeed_[1] = globalVariables->GetFloatValue(groupName, "attackSpeedLevel1");
 	attackSpeed_[2] = globalVariables->GetFloatValue(groupName, "attackSpeedLevel2");
+	attackSpeed_[3] = globalVariables->GetFloatValue(groupName, "attackSpeedLevel3");
 	chargeSpeed_ = globalVariables->GetFloatValue(groupName, "chargeSpeed");
 }
