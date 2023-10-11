@@ -20,6 +20,11 @@ void Weapon::Initialize()
 	globalVariables->AddItem(groupName, "attackSpeedLevel2", attackSpeed_[2]);
 	globalVariables->AddItem(groupName, "attackSpeedLevel3", attackSpeed_[3]);
 	globalVariables->AddItem(groupName, "chargeSpeed", chargeSpeed_);
+
+	//衝突属性を設定
+	SetCollisionAttribute(kCollisionAttributePlayer);
+	SetCollisionMask(kCollisionMaskPlayer);
+	SetRadius(weaponWorldTransform_.scale_.x);
 }
 
 void Weapon::Update()
@@ -173,4 +178,18 @@ void Weapon::ApplyGlobalVariables()
 	attackSpeed_[2] = globalVariables->GetFloatValue(groupName, "attackSpeedLevel2");
 	attackSpeed_[3] = globalVariables->GetFloatValue(groupName, "attackSpeedLevel3");
 	chargeSpeed_ = globalVariables->GetFloatValue(groupName, "chargeSpeed");
+}
+
+void Weapon::OnCollision() {
+	ImGui::Begin("Collision");
+	ImGui::Text("WeaponHit");
+	ImGui::End();
+}
+
+Vector3 Weapon::GetWorldPosition() {
+	Vector3 pos;
+	pos.x = weaponWorldTransform_.matWorld_.m[3][0];
+	pos.y = weaponWorldTransform_.matWorld_.m[3][1];
+	pos.z = weaponWorldTransform_.matWorld_.m[3][2];
+	return pos;
 }

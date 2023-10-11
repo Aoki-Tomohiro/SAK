@@ -123,14 +123,14 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Project\GameObject\Boss\Laser\Laser.cpp" />
     <ClCompile Include="Project\GameObject\Boss\State\BossStateLazerAttack.cpp" />
     <ClCompile Include="Project\GameObject\Boss\State\BossStateNormal.cpp" />
+    <ClCompile Include="Project\GameObject\Missile\Missile.cpp" />
+    <ClCompile Include="Project\GameObject\Missile\MissileManager.cpp" />
+    <ClCompile Include="Project\GameObject\Player\Player.cpp" />
     <ClCompile Include="Project\GameObject\Weapon\Weapon.cpp" />
     <ClCompile Include="Project\Game\ClearScene\GameClearScene.cpp" />
     <ClCompile Include="Project\Game\GameManager.cpp" />
-    <ClCompile Include="Project\Game\Missile.cpp" />
-    <ClCompile Include="Project\Game\MissileManager.cpp" />
     <ClCompile Include="Project\Game\OverScene\GameOverScene.cpp" />
     <ClCompile Include="Project\Game\GameScene.cpp" />
-    <ClCompile Include="Project\Game\Player.cpp" />
     <ClCompile Include="Project\Game\SelectScene\GameSelectScene.cpp" />
     <ClCompile Include="Project\Game\TitleScene\GameTitleScene.cpp" />
   </ItemGroup>
@@ -170,14 +170,14 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Project\GameObject\Boss\State\BossStateLaserAttack.h" />
     <ClInclude Include="Project\GameObject\Boss\State\BossStateNormal.h" />
     <ClInclude Include="Project\GameObject\Boss\State\IBossState.h" />
+    <ClInclude Include="Project\GameObject\Missile\Missile.h" />
+    <ClInclude Include="Project\GameObject\Missile\MissileManager.h" />
+    <ClInclude Include="Project\GameObject\Player\Player.h" />
     <ClInclude Include="Project\GameObject\Weapon\Weapon.h" />
     <ClInclude Include="Project\Game\ClearScene\GameClearScene.h" />
     <ClInclude Include="Project\Game\GameManager.h" />
-    <ClInclude Include="Project\Game\Missile.h" />
-    <ClInclude Include="Project\Game\MissileManager.h" />
     <ClInclude Include="Project\Game\OverScene\GameOverScene.h" />
     <ClInclude Include="Project\Game\GameScene.h" />
-    <ClInclude Include="Project\Game\Player.h" />
     <ClInclude Include="Project\Game\SelectScene\GameSelectScene.h" />
     <ClInclude Include="Project\Game\TitleScene\GameTitleScene.h" />
     <ClInclude Include="Project\Game\IScene.h" />

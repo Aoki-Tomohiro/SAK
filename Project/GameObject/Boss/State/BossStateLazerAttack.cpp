@@ -32,17 +32,17 @@ void BossStateLaserAttack::Initialize(Boss* pBoss) {
 	Vector4 warningColor = { 1.0f,0.0f,0.0f,0.6f };
 	bool isLighting = false;
 	for (int i = 0; i < warningModels_.size(); i++) {
-		warningModels_[i].reset(Model::CreateFromOBJ("Resources/Plane", "Plane.obj"));
+		warningModels_[i].reset(Model::CreateFromOBJ("Resources/Cube", "Cube.obj"));
 		warningModels_[i]->GetMaterial()->SetColor(warningColor);
 		warningModels_[i]->GetDirectionalLight()->SetEnableLighting(isLighting);
 	}
 	
 	//ワールドトランスフォームの初期化
 	warningWorldTransforms_[0].translation_.x = ((rand() % 61 - 60) / 10) - laserScale_.x;
-	warningWorldTransforms_[0].translation_.z = 10.0f;
+	warningWorldTransforms_[0].translation_.z = 0.0f;
 	warningWorldTransforms_[0].scale_ = laserScale_;
 	warningWorldTransforms_[1].translation_.x = (rand() % 61 / 10) + laserScale_.x;
-	warningWorldTransforms_[1].translation_.z = 10.0f;
+	warningWorldTransforms_[1].translation_.z = 0.0f;
 	warningWorldTransforms_[1].scale_ = laserScale_;
 
 	//タイマーの初期化
@@ -72,7 +72,7 @@ void BossStateLaserAttack::Update(Boss* pBoss) {
 			lasers[i] = new Laser();
 			Vector3 pos = {
 				warningWorldTransforms_[i].translation_.x,
-				warningWorldTransforms_[i].translation_.y + 10.0f,
+				warningWorldTransforms_[i].translation_.y,
 				warningWorldTransforms_[i].translation_.z,
 			};
 			lasers[i]->Initialize(pos, laserScale_);

@@ -67,7 +67,7 @@ void Boss::AddLaser(Laser* laser) {
 }
 
 void Boss::OnCollision() {
-	ImGui::Begin(" ");
+	ImGui::Begin("Collision");
 	ImGui::Text("BossHit");
 	ImGui::End();
 }

@@ -73,7 +73,7 @@ void Player::ApplyGlobalVariables()
 }
 
 void Player::OnCollision() {
-	ImGui::Begin(" ");
+	ImGui::Begin("Collision");
 	ImGui::Text("PlayerHit");
 	ImGui::End();
 }

@@ -145,6 +145,18 @@
     <Filter Include="ヘッダー ファイル\Project\GameObject\Weapon">
       <UniqueIdentifier>{cfc97859-96b3-4152-8792-38650e81ac15}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ヘッダー ファイル\Project\GameObject\Player">
+      <UniqueIdentifier>{0059095f-5a58-441c-9631-e3c3f30228aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Project\GameObject\Player">
+      <UniqueIdentifier>{ceb9aa83-a170-492b-a38a-df5b563b65cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Project\GameObject\Missile">
+      <UniqueIdentifier>{49560295-b95f-473c-bc39-a607aa05de69}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Project\GameObject\Missile">
+      <UniqueIdentifier>{5cc70959-04cd-45ed-b163-1dcef32a83ac}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -258,17 +270,17 @@
     <ClCompile Include="Project\GameObject\Boss\Laser\Laser.cpp">
       <Filter>ソース ファイル\Project\GameObject\Boss\Lazer</Filter>
     </ClCompile>
-    <ClCompile Include="Project\Game\Missile.cpp">
-      <Filter>ソース ファイル\Project\Game</Filter>
-    </ClCompile>
-    <ClCompile Include="Project\Game\Player.cpp">
-      <Filter>ソース ファイル\Project\Game</Filter>
-    </ClCompile>
-    <ClCompile Include="Project\Game\MissileManager.cpp">
-      <Filter>ソース ファイル\Project\Game</Filter>
-    </ClCompile>
     <ClCompile Include="Project\GameObject\Weapon\Weapon.cpp">
       <Filter>ソース ファイル\Project\GameObject\Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\GameObject\Player\Player.cpp">
+      <Filter>ソース ファイル\Project\GameObject\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\GameObject\Missile\Missile.cpp">
+      <Filter>ソース ファイル\Project\GameObject\Missile</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\GameObject\Missile\MissileManager.cpp">
+      <Filter>ソース ファイル\Project\GameObject\Missile</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -398,17 +410,17 @@
     <ClInclude Include="Project\GameObject\Boss\Laser\Laser.h">
       <Filter>ヘッダー ファイル\Project\GameObject\Boss\Lazer</Filter>
     </ClInclude>
-    <ClInclude Include="Project\Game\Missile.h">
-      <Filter>ヘッダー ファイル\Project\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="Project\Game\Player.h">
-      <Filter>ヘッダー ファイル\Project\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="Project\Game\MissileManager.h">
-      <Filter>ヘッダー ファイル\Project\Game</Filter>
-    </ClInclude>
     <ClInclude Include="Project\GameObject\Weapon\Weapon.h">
       <Filter>ヘッダー ファイル\Project\GameObject\Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\GameObject\Player\Player.h">
+      <Filter>ヘッダー ファイル\Project\GameObject\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\GameObject\Missile\MissileManager.h">
+      <Filter>ヘッダー ファイル\Project\GameObject\Missile</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\GameObject\Missile\Missile.h">
+      <Filter>ヘッダー ファイル\Project\GameObject\Missile</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

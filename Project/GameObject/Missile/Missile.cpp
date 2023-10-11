@@ -63,7 +63,7 @@ void Missile::Draw(const ViewProjection viewProjection)
 }
 
 void Missile::OnCollision() {
-	ImGui::Begin(" ");
+	ImGui::Begin("Collision");
 	ImGui::Text("MissileHit");
 	ImGui::End();
 }

@@ -67,6 +67,7 @@ void GameScene::Update(GameManager* gameManager) {
 	const std::unique_ptr<Missile>& rightMissile = missileManager_->GetRightMissile();
 	collisionManager_->SetColliderList(leftMissile.get());
 	collisionManager_->SetColliderList(rightMissile.get());
+	collisionManager_->SetColliderList(weapon_.get());
 	collisionManager_->CheckAllCollisions();
 
 
@@ -95,6 +96,9 @@ void GameScene::Update(GameManager* gameManager) {
 	ImGui::Begin("Game Play");
 	ImGui::Text("push 1 : Game Clear");
 	ImGui::Text("push 2 : Game Over");
+	ImGui::End();
+
+	ImGui::Begin("Collision");
 	ImGui::End();
 
 	viewProjection_.UpdateMatrix();

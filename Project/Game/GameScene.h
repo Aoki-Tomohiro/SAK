@@ -10,12 +10,11 @@
 #include "2D/Sprite.h"
 #include "3D/Matrix/WorldTransform.h"
 #include "3D/Matrix/ViewProjection.h"
+#include "Utility/CollisionManager/CollisionManager.h"
 
 #include "../GameObject/Boss/Boss.h"
-#include "Player.h"
-#include "MissileManager.h"
-
-#include "Utility/CollisionManager/CollisionManager.h"
+#include "../GameObject/Player/Player.h"
+#include "../GameObject/Missile/MissileManager.h"
 #include "../GameObject/Weapon/Weapon.h"
 
 #include <memory>
