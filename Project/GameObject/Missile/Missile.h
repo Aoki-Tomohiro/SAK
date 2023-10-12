@@ -20,9 +20,13 @@ public:
 
 	bool IsAlive() { return isAlive_; };
 
+	void Resporn() { isAlive_ = true; };
+
 	void SetPosition(const Vector3& position) { worldTransform_.translation_ = position; };
 
 	void OnCollision() override;
+
+	void OnCollision(float damage) override;
 
 	Vector3 GetWorldPosition() override;
 

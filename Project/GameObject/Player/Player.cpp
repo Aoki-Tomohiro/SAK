@@ -72,15 +72,21 @@ void Player::ApplyGlobalVariables()
 	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
 	const char* groupName = "Player";
 	playerMoveSpeed_ = globalVariables->GetFloatValue(groupName, "playerMoveSpeed");
+
 }
 
-void Player::OnCollision() {
-	ImGui::Begin("Collision");
-	ImGui::Text("PlayerHit");
-	ImGui::End();
+void Player::OnCollision()
+{
+
 }
 
-Vector3 Player::GetWorldPosition() {
+void Player::OnCollision(float damage)
+{
+
+}
+
+Vector3 Player::GetWorldPosition() 
+{
 	Vector3 pos;
 	pos.x = playerWorldTransform_.matWorld_.m[3][0];
 	pos.y = playerWorldTransform_.matWorld_.m[3][1];

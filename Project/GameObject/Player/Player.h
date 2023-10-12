@@ -20,6 +20,8 @@ public:
 
 	void OnCollision() override;
 
+	void OnCollision(float damage) override;
+
 	Vector3 GetWorldPosition() override;
 
 private:

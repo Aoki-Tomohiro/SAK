@@ -98,9 +98,6 @@ void GameScene::Update(GameManager* gameManager) {
 	ImGui::Text("push 2 : Game Over");
 	ImGui::End();
 
-	ImGui::Begin("Collision");
-	ImGui::End();
-
 	viewProjection_.UpdateMatrix();
 };
 

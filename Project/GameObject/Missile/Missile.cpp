@@ -61,9 +61,6 @@ void Missile::Update()
 		isAlive_ = false;
 		IsMove_ = false;
 	}
-	else {
-		isAlive_ = true;
-	}
 
 	ImGui::Begin("Missile");
 	ImGui::Text("translationX %f", worldTransform_.translation_.x);
@@ -81,6 +78,16 @@ void Missile::Draw(const ViewProjection viewProjection)
 	}
 }
 
+void Missile::OnCollision()
+{
+	isAlive_ = false;
+}
+
+void Missile::OnCollision(float damage)
+{
+
+}
+
 void Missile::OnCollision() 
 {
 	IsFollowingWeapon_ = true;
@@ -91,7 +98,8 @@ void Missile::OnCollision()
 	ImGui::End();
 }
 
-Vector3 Missile::GetWorldPosition() {
+Vector3 Missile::GetWorldPosition()
+{
 	Vector3 pos{};
 	pos.x = worldTransform_.matWorld_.m[3][0];
 	pos.y = worldTransform_.matWorld_.m[3][1];

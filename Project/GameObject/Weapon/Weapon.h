@@ -9,6 +9,8 @@ class Weapon : public Collider
 {
 public:
 
+	static int InvincibleTime;
+
 	void Initialize();
 
 	void Update();
@@ -18,6 +20,8 @@ public:
 	void ApplyGlobalVariables();
 
 	void OnCollision() override;
+
+	void OnCollision(float damage) override;
 
 	Vector3 GetWorldPosition() override;
 
@@ -60,5 +64,13 @@ private:
 	bool IsCharge_ = false;
 	bool IsAttack_ = false;
 	bool IsCoolDown_ = false;
+
+	//体力
+	float Hp_ = 3.0f;
+	//無敵時間
+	bool invincibleFlag_ = false;
+	int invincibleTimer_ = 0;
+
+	float attackDamage_[4] = { 1.0f,2.0f,3.0f,4.0f };
 };
 
