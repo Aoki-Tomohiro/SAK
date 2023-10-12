@@ -61,6 +61,9 @@ void Missile::Update()
 		isAlive_ = false;
 		IsMove_ = false;
 	}
+	else {
+		isAlive_ = true;
+	}
 
 	ImGui::Begin("Missile");
 	ImGui::Text("translationX %f", worldTransform_.translation_.x);
@@ -76,11 +79,6 @@ void Missile::Draw(const ViewProjection viewProjection)
 	if (isAlive_) {
 		model_->Draw(worldTransform_, viewProjection, textureHandle_);
 	}
-}
-
-void Missile::OnCollision()
-{
-	isAlive_ = false;
 }
 
 void Missile::OnCollision(float damage)

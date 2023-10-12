@@ -216,11 +216,14 @@ void Weapon::OnCollision()
 
 void Weapon::OnCollision(float damage)
 {
-	if (invincibleFlag_ == false)
+	if (IsAttack_ == false) 
 	{
-		invincibleFlag_ = true;
-		invincibleTimer_ = InvincibleTime;
-		Hp_ -= damage;
+		if (invincibleFlag_ == false)
+		{
+			invincibleFlag_ = true;
+			invincibleTimer_ = InvincibleTime;
+			Hp_ -= damage;
+		}
 	}
 }
 
