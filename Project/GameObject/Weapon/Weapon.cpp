@@ -86,7 +86,7 @@ void Weapon::Update()
 
 	if (IsAttack_ == true && chargeCount_ < 20)
 	{
-		weaponWorldTransform_.translation_.y += attackSpeed_[0];
+		weaponWorldTransform_.translation_.y += attackSpeed_[3];
 
 		if (weaponWorldTransform_.translation_.y >= 2.2f)
 		{
@@ -100,7 +100,7 @@ void Weapon::Update()
 	//チャージ1
 	if (IsAttack_ == true && chargeCount_ >= 20 && chargeCount_ < 50)
 	{
-		weaponWorldTransform_.translation_.y += attackSpeed_[1];
+		weaponWorldTransform_.translation_.y += attackSpeed_[3];
 
 		if (weaponWorldTransform_.translation_.y >= 2.9f)
 		{
@@ -114,7 +114,7 @@ void Weapon::Update()
 	//チャージ2
 	if (IsAttack_ == true && chargeCount_ >= 50 && chargeCount_ < 90)
 	{
-		weaponWorldTransform_.translation_.y += attackSpeed_[2];
+		weaponWorldTransform_.translation_.y += attackSpeed_[3];
 
 		if (weaponWorldTransform_.translation_.y >= 3.5f)
 		{
