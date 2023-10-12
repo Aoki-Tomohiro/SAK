@@ -44,9 +44,11 @@ void Laser::Draw(const ViewProjection& viewProjection) {
 }
 
 void Laser::OnCollision() {
-	ImGui::Begin("Collision");
-	ImGui::Text("LaserHit");
-	ImGui::End();
+
+}
+
+void Laser::OnCollision(float damage) {
+
 }
 
 Vector3 Laser::GetWorldPosition() {

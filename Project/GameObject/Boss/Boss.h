@@ -62,6 +62,12 @@ public:
 	void OnCollision() override;
 
 	/// <summary>
+	/// 当たり判定
+	/// </summary>
+	/// <param name="damage">ダメージ</param>
+	void OnCollision(float damage) override;
+
+	/// <summary>
 	/// ワールド座標を取得
 	/// </summary>
 	/// <returns>ワールド座標</returns>
@@ -74,8 +80,9 @@ private:
 	WorldTransform worldTransform_{};
 	//ボスの行動パターン
 	std::unique_ptr<IBossState> state_ = nullptr;
-
 	//レーザーのリスト
 	std::list<std::unique_ptr<Laser>> lasers_{};
+	//体力
+	float Hp_ = 100.0f;
 
 };

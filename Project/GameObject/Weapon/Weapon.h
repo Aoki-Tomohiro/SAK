@@ -5,6 +5,8 @@
 #include "Components/Input.h"
 #include "Utility/CollisionManager/Collider.h"
 
+class Player;
+
 class Weapon : public Collider
 {
 public:
@@ -17,7 +19,11 @@ public:
 
 	void ApplyGlobalVariables();
 
+	void SetPlayer(Player* player) { player_ = player; };
+
 	void OnCollision() override;
+
+	void OnCollision(float damage) override;
 
 	Vector3 GetWorldPosition() override;
 
@@ -54,5 +60,9 @@ private:
 	bool IsCharge_ = false;
 	bool IsAttack_ = false;
 	bool IsCoolDown_ = false;
+
+	//プレイヤー
+	Player* player_ = nullptr;
+	float attackDamage_[4] = { 1.0f,2.0f,3.0f,4.0f };
 };
 

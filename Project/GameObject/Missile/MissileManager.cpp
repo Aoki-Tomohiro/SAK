@@ -24,10 +24,12 @@ void MissileManager::Update() {
 
 	if (leftMissile_->IsAlive() == false) {
 		leftMissile_->SetPosition(Vector3{ -13.0f,RandomTY(-1.3f, 1.8f) ,0.0f });
+		leftMissile_->Resporn();
 	}
 
 	if (rightMissile_->IsAlive() == false) {
 		rightMissile_->SetPosition(Vector3{ 13.0f,RandomTY(-1.3f, 1.8f) ,0.0f });
+		rightMissile_->Resporn();
 	}
 
 	//ミサイルの更新

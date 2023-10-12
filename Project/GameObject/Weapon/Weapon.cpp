@@ -1,4 +1,5 @@
 #include "Weapon.h"
+#include "../GameObject/Player/Player.h"
 #include "Utility/GlobalVariables.h"
 
 void Weapon::Initialize()
@@ -19,6 +20,10 @@ void Weapon::Initialize()
 	globalVariables->AddItem(groupName, "attackSpeedLevel1", attackSpeed_[1]);
 	globalVariables->AddItem(groupName, "attackSpeedLevel2", attackSpeed_[2]);
 	globalVariables->AddItem(groupName, "attackSpeedLevel3", attackSpeed_[3]);
+	globalVariables->AddItem(groupName, "attackDamageNormal", attackDamage_[0]);
+	globalVariables->AddItem(groupName, "attackDamageLevel1", attackDamage_[1]);
+	globalVariables->AddItem(groupName, "attackDamageLevel2", attackDamage_[2]);
+	globalVariables->AddItem(groupName, "attackDamageLevel3", attackDamage_[3]);
 	globalVariables->AddItem(groupName, "chargeSpeed", chargeSpeed_);
 
 	//衝突属性を設定
@@ -87,6 +92,7 @@ void Weapon::Update()
 	if (IsAttack_ == true && chargeCount_ < 20)
 	{
 		weaponWorldTransform_.translation_.y += attackSpeed_[3];
+		SetDamage(attackDamage_[0]);
 
 		if (weaponWorldTransform_.translation_.y >= 2.2f)
 		{
@@ -101,6 +107,7 @@ void Weapon::Update()
 	if (IsAttack_ == true && chargeCount_ >= 20 && chargeCount_ < 50)
 	{
 		weaponWorldTransform_.translation_.y += attackSpeed_[3];
+		SetDamage(attackDamage_[1]);
 
 		if (weaponWorldTransform_.translation_.y >= 2.9f)
 		{
@@ -115,6 +122,7 @@ void Weapon::Update()
 	if (IsAttack_ == true && chargeCount_ >= 50 && chargeCount_ < 90)
 	{
 		weaponWorldTransform_.translation_.y += attackSpeed_[3];
+		SetDamage(attackDamage_[2]);
 
 		if (weaponWorldTransform_.translation_.y >= 3.5f)
 		{
@@ -129,6 +137,7 @@ void Weapon::Update()
 	if (IsAttack_ == true && chargeCount_ >= 90)
 	{
 		weaponWorldTransform_.translation_.y += attackSpeed_[3];
+		SetDamage(attackDamage_[3]);
 
 		if (weaponWorldTransform_.translation_.y >= 5.0f)
 		{
@@ -161,6 +170,7 @@ void Weapon::Update()
 	ImGui::Text("attackSpeed %f", attackSpeed_);
 	ImGui::Text("attackCount %d", chargeCount_);
 	ImGui::Text("pushCount %d", pushCount_);
+	ImGui::Text("attackDamage : %f", GetDamage());
 	ImGui::End();
 }
 
@@ -177,16 +187,26 @@ void Weapon::ApplyGlobalVariables()
 	attackSpeed_[1] = globalVariables->GetFloatValue(groupName, "attackSpeedLevel1");
 	attackSpeed_[2] = globalVariables->GetFloatValue(groupName, "attackSpeedLevel2");
 	attackSpeed_[3] = globalVariables->GetFloatValue(groupName, "attackSpeedLevel3");
+	attackDamage_[0] = globalVariables->GetFloatValue(groupName, "attackDamageNormal");
+	attackDamage_[1] = globalVariables->GetFloatValue(groupName, "attackDamageLevel1");
+	attackDamage_[2] = globalVariables->GetFloatValue(groupName, "attackDamageLevel2");
+	attackDamage_[3] = globalVariables->GetFloatValue(groupName, "attackDamageLevel3");
 	chargeSpeed_ = globalVariables->GetFloatValue(groupName, "chargeSpeed");
 }
 
-void Weapon::OnCollision() {
-	ImGui::Begin("Collision");
-	ImGui::Text("WeaponHit");
-	ImGui::End();
+void Weapon::OnCollision() 
+{
+
 }
 
-Vector3 Weapon::GetWorldPosition() {
+void Weapon::OnCollision(float damage)
+{
+	//プレイヤーにダメージを与える
+	player_->OnCollision(damage);
+}
+
+Vector3 Weapon::GetWorldPosition()
+{
 	Vector3 pos;
 	pos.x = weaponWorldTransform_.matWorld_.m[3][0];
 	pos.y = weaponWorldTransform_.matWorld_.m[3][1];

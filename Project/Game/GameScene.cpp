@@ -30,6 +30,8 @@ void GameScene::Initialize(GameManager* gameManager) {
 	weapon_ = std::make_unique<Weapon>();
 	// 自キャラの初期化
  	weapon_->Initialize();
+	//自キャラを設定
+	weapon_->SetPlayer(player_.get());
   
 	//ミサイルの生成
 	missileManager_ = std::make_unique<MissileManager>();
@@ -96,9 +98,6 @@ void GameScene::Update(GameManager* gameManager) {
 	ImGui::Begin("Game Play");
 	ImGui::Text("push 1 : Game Clear");
 	ImGui::Text("push 2 : Game Over");
-	ImGui::End();
-
-	ImGui::Begin("Collision");
 	ImGui::End();
 
 	viewProjection_.UpdateMatrix();

@@ -43,9 +43,6 @@ void Missile::Update()
 	if (worldTransform_.translation_.x < -13.0f || worldTransform_.translation_.x > 13.0f) {
 		isAlive_ = false;
 	}
-	else {
-		isAlive_ = true;
-	}
 
 	ImGui::Begin("Missile");
 	ImGui::Text("translationX %f", worldTransform_.translation_.x);
@@ -62,13 +59,18 @@ void Missile::Draw(const ViewProjection viewProjection)
 	}
 }
 
-void Missile::OnCollision() {
-	ImGui::Begin("Collision");
-	ImGui::Text("MissileHit");
-	ImGui::End();
+void Missile::OnCollision()
+{
+	isAlive_ = false;
 }
 
-Vector3 Missile::GetWorldPosition() {
+void Missile::OnCollision(float damage)
+{
+
+}
+
+Vector3 Missile::GetWorldPosition()
+{
 	Vector3 pos{};
 	pos.x = worldTransform_.matWorld_.m[3][0];
 	pos.y = worldTransform_.matWorld_.m[3][1];

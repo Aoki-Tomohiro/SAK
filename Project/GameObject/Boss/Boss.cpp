@@ -1,6 +1,7 @@
 #include "Boss.h"
 #include "State/BossStateNormal.h"
 #include "State/BossStateLaserAttack.h"
+#include "2D/ImGuiManager.h"
 
 void Boss::Initialize() {
 
@@ -38,6 +39,10 @@ void Boss::Update() {
 
 	//ワールドトランスフォームの更新
 	worldTransform_.UpdateMatrix();
+
+	ImGui::Begin("Boss");
+	ImGui::Text("HP : %f", Hp_);
+	ImGui::End();
 }
 
 void Boss::Draw(const ViewProjection& viewProjection) {
@@ -67,9 +72,12 @@ void Boss::AddLaser(Laser* laser) {
 }
 
 void Boss::OnCollision() {
-	ImGui::Begin("Collision");
-	ImGui::Text("BossHit");
-	ImGui::End();
+
+}
+
+void Boss::OnCollision(float damage) {
+	//体力を減らす
+	Hp_ -= damage;
 }
 
 Vector3 Boss::GetWorldPosition() {
