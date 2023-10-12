@@ -11,6 +11,7 @@ void Missile::Initialize(const Vector3& position, const float& speed)
 
 	worldTransform_.translation_ = position;
 	worldTransform_.scale_ = { 0.3f,0.3f,0.3f };
+	/*worldTransform_.scale_ = { 1.0f,1.0f,1.0f };*/
 
 	missileMoveSpeed_ = speed;
 
@@ -35,13 +36,24 @@ void Missile::Initialize(const Vector3& position, const float& speed)
 
 void Missile::Update()
 {
-	if (isAlive_) {
-		worldTransform_.translation_.x += missileMoveSpeed_;
-		worldTransform_.UpdateMatrix();
+	if (isAlive_) 
+	{
+		if (IsFollowingWeapon_ == true && weapon_->GetIsAttack() == true)
+		{
+			worldTransform_.translation_.y += missileFollowingSpeed_;
+			worldTransform_.UpdateMatrix();
+		}
+		else {
+			worldTransform_.translation_.x += missileMoveSpeed_;
+			worldTransform_.UpdateMatrix();
+		}
 	}
 
-	if (worldTransform_.translation_.x < -13.0f || worldTransform_.translation_.x > 13.0f) {
+	
+
+	if (worldTransform_.translation_.x < -13.0f || worldTransform_.translation_.x > 13.0f || worldTransform_.translation_.y > 10.0f) {
 		isAlive_ = false;
+		IsFollowingWeapon_ = false;
 	}
 	else {
 		isAlive_ = true;
@@ -52,6 +64,7 @@ void Missile::Update()
 	ImGui::Text("translationY %f", worldTransform_.translation_.y);
 	ImGui::Text("translationZ %f", worldTransform_.translation_.z);
 	ImGui::Text("isAlive %d", isAlive_);
+	ImGui::Text("IsFollowingWeapon : %d", IsFollowingWeapon_);
 	ImGui::End();
 }
 
@@ -62,9 +75,13 @@ void Missile::Draw(const ViewProjection viewProjection)
 	}
 }
 
-void Missile::OnCollision() {
+void Missile::OnCollision() 
+{
+	IsFollowingWeapon_ = true;
+
 	ImGui::Begin("Collision");
 	ImGui::Text("MissileHit");
+	ImGui::Text("IsFollowingWeapon %d", IsFollowingWeapon_);
 	ImGui::End();
 }
 

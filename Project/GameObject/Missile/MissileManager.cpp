@@ -1,7 +1,9 @@
 #include "MissileManager.h"
 #include "Utility/GlobalVariables.h"
 
-void MissileManager::Initialize() {
+void MissileManager::Initialize(Weapon* weapon) {
+
+	weapon_ = weapon;
 
 	//ミサイルの生成
 	leftMissile_ = std::make_unique<Missile>();
@@ -10,6 +12,9 @@ void MissileManager::Initialize() {
 	//ミサイルの初期化
 	leftMissile_->Initialize(Vector3{ -13.0f,RandomTY(-1.3f, 1.8f) ,0.0f }, missileMoveSpeed_);
 	rightMissile_->Initialize(Vector3{ 13.0f,RandomTY(-1.3f, 1.8f) ,0.0f }, -missileMoveSpeed_);
+
+	leftMissile_->SetWeapon(weapon_);
+	rightMissile_->SetWeapon(weapon_);
 
 	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
 	const char* groupName = "Missile";

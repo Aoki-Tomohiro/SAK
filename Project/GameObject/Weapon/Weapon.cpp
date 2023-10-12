@@ -11,6 +11,7 @@ void Weapon::Initialize()
 	weaponWorldTransform_.translation_.x = 0.0f;
 	weaponWorldTransform_.translation_.y = 1.8f;
 	weaponWorldTransform_.scale_ = { 0.4f,0.4f,0.4f };
+	/*weaponWorldTransform_.scale_ = { 1.0f,1.0f,1.0f };*/
 
 	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
 	const char* groupName = "Weapon";
@@ -30,7 +31,7 @@ void Weapon::Initialize()
 void Weapon::Update()
 {
 	//プレイヤーの左右移動
-	if (input_->IsPushKey(DIK_A))
+	if (input_->IsPushKey(DIK_A) && IsAttack_ == false)
 	{
 		weaponWorldTransform_.translation_.x -= weaponMoveSpeed_;
 
@@ -40,7 +41,7 @@ void Weapon::Update()
 		}
 	}
 
-	if (input_->IsPushKey(DIK_D))
+	if (input_->IsPushKey(DIK_D) && IsAttack_ == false)
 	{
 		weaponWorldTransform_.translation_.x += weaponMoveSpeed_;
 

@@ -4,12 +4,13 @@
 #include "2D/ImGuiManager.h"
 #include "Components/Input.h"
 #include "Utility/CollisionManager/Collider.h"
+#include "../GameObject/Weapon/Weapon.h"
 
 class Player : public Collider
 {
 public:
 
-	void Initialize();
+	void Initialize(Weapon* weapon);
 
 	void Update();
 
@@ -29,6 +30,8 @@ private:
 	WorldTransform playerWorldTransform_;
 
 	uint32_t textureHandle_ = 0u;
+
+	Weapon* weapon_;
 
 	//自機の横移動スピード
 	float playerMoveSpeed_ = 0.05f;

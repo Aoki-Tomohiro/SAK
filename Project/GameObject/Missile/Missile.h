@@ -6,6 +6,7 @@
 #include <random>
 #include "Utility/CollisionManager/Collider.h"
 #include "Utility/CollisionManager/CollisionConfig.h"
+#include "../GameObject/Weapon/Weapon.h"
 
 class Missile : public Collider
 {
@@ -25,6 +26,8 @@ public:
 
 	Vector3 GetWorldPosition() override;
 
+	void SetWeapon(Weapon* weapon) { weapon_ = weapon; }
+
 private:
 	Input* input_ = nullptr;
 
@@ -34,8 +37,16 @@ private:
 
 	uint32_t textureHandle_ = 0u;
 
+	Weapon* weapon_;
+
+	Matrix4x4 localMatrix_;
+
 	float missileMoveSpeed_ = 0.05f;
 
-	bool isAlive_;
+	float missileFollowingSpeed_ = 0.2f;
+
+	bool isAlive_ = true;
+
+	bool IsFollowingWeapon_ = false;
 };
 
