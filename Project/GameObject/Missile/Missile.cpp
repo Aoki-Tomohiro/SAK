@@ -40,20 +40,26 @@ void Missile::Update()
 	{
 		if (IsFollowingWeapon_ == true && weapon_->GetIsAttack() == true)
 		{
-			worldTransform_.translation_.y += missileFollowingSpeed_;
-			worldTransform_.UpdateMatrix();
+			IsMove_ = true;
 		}
 		else {
 			worldTransform_.translation_.x += missileMoveSpeed_;
+			IsFollowingWeapon_ = false;
+			worldTransform_.UpdateMatrix();
+		}
+
+		if (IsMove_ == true)
+		{
+			worldTransform_.translation_.y += missileFollowingSpeed_;
 			worldTransform_.UpdateMatrix();
 		}
 	}
 
 	
 
-	if (worldTransform_.translation_.x < -13.0f || worldTransform_.translation_.x > 13.0f || worldTransform_.translation_.y > 10.0f) {
+	if (worldTransform_.translation_.x < -13.0f || worldTransform_.translation_.x > 13.0f || worldTransform_.translation_.y > 13.0f) {
 		isAlive_ = false;
-		IsFollowingWeapon_ = false;
+		IsMove_ = false;
 	}
 	else {
 		isAlive_ = true;

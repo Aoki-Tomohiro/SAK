@@ -48,5 +48,7 @@ private:
 	bool isAlive_ = true;
 
 	bool IsFollowingWeapon_ = false;
+
+	bool IsMove_ = false;
 };
 
