@@ -1,8 +1,10 @@
 #include "Player.h"
 #include "Utility/GlobalVariables.h"
 
-void Player::Initialize()
+void Player::Initialize(Weapon* weapon)
 {
+	weapon_ = weapon;
+
 	playerModel_.reset(Model::CreateFromOBJ("Resources/Sphere", "sphere.obj"));
 
 	textureHandle_ = TextureManager::Load("Resources/uvChecker.png");
@@ -28,7 +30,7 @@ void Player::Initialize()
 void Player::Update() 
 {
 	//プレイヤーの左右移動
-	if (input_->IsPushKey(DIK_A))
+	if (input_->IsPushKey(DIK_A) && weapon_->GetIsAttack() == false)
 	{
 		playerWorldTransform_.translation_.x -= playerMoveSpeed_;
 
@@ -38,7 +40,7 @@ void Player::Update()
 		}
 	}
 
-	if (input_->IsPushKey(DIK_D))
+	if (input_->IsPushKey(DIK_D) && weapon_->GetIsAttack() == false)
 	{
 		playerWorldTransform_.translation_.x += playerMoveSpeed_;
 

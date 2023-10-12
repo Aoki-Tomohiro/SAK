@@ -20,21 +20,21 @@ void GameScene::Initialize(GameManager* gameManager) {
 	input_ = Input::GetInstance();
 	//デバッグカメラの生成
 	debugCamera_ = new DebugCamera();
-  
-	// 自キャラの生成
-	player_ = std::make_unique<Player>();
-	// 自キャラの初期化
-	player_->Initialize();
 
 	// 自キャラの生成
 	weapon_ = std::make_unique<Weapon>();
 	// 自キャラの初期化
  	weapon_->Initialize();
   
+	// 自キャラの生成
+	player_ = std::make_unique<Player>();
+	// 自キャラの初期化
+	player_->Initialize(weapon_.get());
+
 	//ミサイルの生成
 	missileManager_ = std::make_unique<MissileManager>();
 	// ミサイルの初期化
-	missileManager_->Initialize();
+	missileManager_->Initialize(weapon_.get());
   
 	//ボスの作成
 	boss_ = std::make_unique<Boss>();

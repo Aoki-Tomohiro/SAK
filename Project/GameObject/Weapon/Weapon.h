@@ -25,6 +25,12 @@ public:
 
 	Vector3 GetWorldPosition() override;
 
+	WorldTransform& GetWeaponWorldTransform() { return weaponWorldTransform_; }
+
+	bool GetIsCharge() { return IsCharge_; }
+
+	bool GetIsAttack() { return IsAttack_; }
+
 private:
 	Input* input_ = nullptr;
 
