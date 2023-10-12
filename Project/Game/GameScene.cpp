@@ -30,8 +30,6 @@ void GameScene::Initialize(GameManager* gameManager) {
 	weapon_ = std::make_unique<Weapon>();
 	// 自キャラの初期化
  	weapon_->Initialize();
-	//自キャラを設定
-	weapon_->SetPlayer(player_.get());
   
 	//ミサイルの生成
 	missileManager_ = std::make_unique<MissileManager>();

@@ -5,11 +5,11 @@
 #include "Components/Input.h"
 #include "Utility/CollisionManager/Collider.h"
 
-class Player;
-
 class Weapon : public Collider
 {
 public:
+
+	static int InvincibleTime;
 
 	void Initialize();
 
@@ -18,8 +18,6 @@ public:
 	void Draw(const ViewProjection viewProjection);
 
 	void ApplyGlobalVariables();
-
-	void SetPlayer(Player* player) { player_ = player; };
 
 	void OnCollision() override;
 
@@ -61,8 +59,12 @@ private:
 	bool IsAttack_ = false;
 	bool IsCoolDown_ = false;
 
-	//プレイヤー
-	Player* player_ = nullptr;
+	//体力
+	float Hp_ = 3.0f;
+	//無敵時間
+	bool invincibleFlag_ = false;
+	int invincibleTimer_ = 0;
+
 	float attackDamage_[4] = { 1.0f,2.0f,3.0f,4.0f };
 };
 

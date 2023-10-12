@@ -1,9 +1,6 @@
 #include "Player.h"
 #include "Utility/GlobalVariables.h"
 
-//実体定義
-int Player::InvincibleTime = 60;
-
 void Player::Initialize()
 {
 	playerModel_.reset(Model::CreateFromOBJ("Resources/Sphere", "sphere.obj"));
@@ -22,7 +19,6 @@ void Player::Initialize()
 	//グループを追加
 	globalVariables->CreateGroup(groupName);
 	globalVariables->AddItem(groupName, "playerMoveSpeed", playerMoveSpeed_);
-	globalVariables->AddItem(groupName, "InvincibleTime", InvincibleTime);
 
 	//衝突属性を設定
 	SetCollisionAttribute(kCollisionAttributePlayer);
@@ -54,14 +50,6 @@ void Player::Update()
 
 	playerWorldTransform_.UpdateMatrix();
 
-	//無敵時間の処理
-	if (invincibleFlag_) {
-		invincibleTimer_--;
-		if (invincibleTimer_ < 0) {
-			invincibleFlag_ = false;
-		}
-	}
-
 	Player::ApplyGlobalVariables();
 
 	ImGui::Begin("Player");
@@ -69,9 +57,6 @@ void Player::Update()
 	ImGui::Text("translationY %f", playerWorldTransform_.translation_.y);
 	ImGui::Text("translationZ %f", playerWorldTransform_.translation_.z);
 	ImGui::Text("A : moveLeft  D : moveRight");
-	ImGui::Text("HP : %f", Hp_);
-	ImGui::Text("InvincibleTime : %d", InvincibleTime);
-	ImGui::Text("InvincibleTimer : %d", invincibleTimer_);
 	ImGui::End();
 }
 
@@ -85,7 +70,7 @@ void Player::ApplyGlobalVariables()
 	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
 	const char* groupName = "Player";
 	playerMoveSpeed_ = globalVariables->GetFloatValue(groupName, "playerMoveSpeed");
-	InvincibleTime = globalVariables->GetIntValue(groupName, "InvincibleTime");
+
 }
 
 void Player::OnCollision()
@@ -95,12 +80,6 @@ void Player::OnCollision()
 
 void Player::OnCollision(float damage)
 {
-	if (invincibleFlag_ == false)
-	{
-		invincibleFlag_ = true;
-		invincibleTimer_ = InvincibleTime;
-		Hp_ -= damage;
-	}
 
 }
 

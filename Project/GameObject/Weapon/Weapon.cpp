@@ -2,6 +2,9 @@
 #include "../GameObject/Player/Player.h"
 #include "Utility/GlobalVariables.h"
 
+//実体定義
+int Weapon::InvincibleTime = 60;
+
 void Weapon::Initialize()
 {
 	weaponModel_.reset(Model::CreateFromOBJ("Resources/Sphere", "sphere.obj"));
@@ -25,6 +28,7 @@ void Weapon::Initialize()
 	globalVariables->AddItem(groupName, "attackDamageLevel2", attackDamage_[2]);
 	globalVariables->AddItem(groupName, "attackDamageLevel3", attackDamage_[3]);
 	globalVariables->AddItem(groupName, "chargeSpeed", chargeSpeed_);
+	globalVariables->AddItem(groupName, "InvincibleTime", InvincibleTime);
 
 	//衝突属性を設定
 	SetCollisionAttribute(kCollisionAttributePlayer);
@@ -163,6 +167,14 @@ void Weapon::Update()
 
 	weaponWorldTransform_.UpdateMatrix();
 
+	//無敵時間の処理
+	if (invincibleFlag_) {
+		invincibleTimer_--;
+		if (invincibleTimer_ < 0) {
+			invincibleFlag_ = false;
+		}
+	}
+
 	Weapon::ApplyGlobalVariables();
 
 	ImGui::Begin("PlayerWeapon");
@@ -171,6 +183,7 @@ void Weapon::Update()
 	ImGui::Text("attackCount %d", chargeCount_);
 	ImGui::Text("pushCount %d", pushCount_);
 	ImGui::Text("attackDamage : %f", GetDamage());
+	ImGui::Text("HP : %f", Hp_);
 	ImGui::End();
 }
 
@@ -192,6 +205,7 @@ void Weapon::ApplyGlobalVariables()
 	attackDamage_[2] = globalVariables->GetFloatValue(groupName, "attackDamageLevel2");
 	attackDamage_[3] = globalVariables->GetFloatValue(groupName, "attackDamageLevel3");
 	chargeSpeed_ = globalVariables->GetFloatValue(groupName, "chargeSpeed");
+	InvincibleTime = globalVariables->GetIntValue(groupName, "InvincibleTime");
 }
 
 void Weapon::OnCollision() 
@@ -201,8 +215,12 @@ void Weapon::OnCollision()
 
 void Weapon::OnCollision(float damage)
 {
-	//プレイヤーにダメージを与える
-	player_->OnCollision(damage);
+	if (invincibleFlag_ == false)
+	{
+		invincibleFlag_ = true;
+		invincibleTimer_ = InvincibleTime;
+		Hp_ -= damage;
+	}
 }
 
 Vector3 Weapon::GetWorldPosition()

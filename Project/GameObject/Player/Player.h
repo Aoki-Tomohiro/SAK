@@ -9,8 +9,6 @@ class Player : public Collider
 {
 public:
 
-	static int InvincibleTime;
-
 	void Initialize();
 
 	void Update();
@@ -36,12 +34,6 @@ private:
 
 	//自機の横移動スピード
 	float playerMoveSpeed_ = 0.05f;
-
-	//体力
-	float Hp_ = 3.0f;
-	//無敵時間
-	bool invincibleFlag_ = false;
-	int invincibleTimer_ = 0;
 };
 
 
