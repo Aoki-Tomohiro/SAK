@@ -157,6 +157,12 @@
     <Filter Include="ヘッダー ファイル\Project\GameObject\Missile">
       <UniqueIdentifier>{5cc70959-04cd-45ed-b163-1dcef32a83ac}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Project\GameObject\Boss\ChargeShot">
+      <UniqueIdentifier>{ebc76282-31e8-4c1e-ba0d-ad9dde173033}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Project\GameObject\Boss\ChargeShot">
+      <UniqueIdentifier>{ac2286af-b026-45d8-ac88-f15d54df38e9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -281,6 +287,12 @@
     </ClCompile>
     <ClCompile Include="Project\GameObject\Missile\MissileManager.cpp">
       <Filter>ソース ファイル\Project\GameObject\Missile</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\GameObject\Boss\ChargeShot\ChargeShot.cpp">
+      <Filter>ソース ファイル\Project\GameObject\Boss\ChargeShot</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\GameObject\Boss\State\BossStateChargeShot.cpp">
+      <Filter>ソース ファイル\Project\GameObject\Boss\State</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -421,6 +433,12 @@
     </ClInclude>
     <ClInclude Include="Project\GameObject\Missile\Missile.h">
       <Filter>ヘッダー ファイル\Project\GameObject\Missile</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\GameObject\Boss\ChargeShot\ChargeShot.h">
+      <Filter>ヘッダー ファイル\Project\GameObject\Boss\ChargeShot</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\GameObject\Boss\State\BossStateChargeShot.h">
+      <Filter>ヘッダー ファイル\Project\GameObject\Boss\State</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

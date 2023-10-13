@@ -32,8 +32,8 @@ void BossStateNormal::Update(Boss* pBoss) {
 	BossStateNormal::ApplyGlobalVariables();
 
 	//移動処理
-	moveSpeed_ *= moveDirection_;
-	worldTransform_.translation_ = Add(worldTransform_.translation_, Vector3{ moveSpeed_,0.0f,0.0f });
+	/*moveSpeed_ *= moveDirection_;
+	worldTransform_.translation_ = Add(worldTransform_.translation_, Vector3{ moveSpeed_,0.0f,0.0f });*/
 
 	//画面端まで移動したら移動方向を変える
 	if (worldTransform_.translation_.x <= -7.0f || worldTransform_.translation_.x >= 7.0f) {
@@ -43,10 +43,10 @@ void BossStateNormal::Update(Boss* pBoss) {
 	//ワールドトランスフォームを設定
 	pBoss->SetWorldTransform(worldTransform_);
 
-	//レーザー攻撃状態に変更
-	if (--nextAttackTimer_ < 0) {
-		pBoss->ChangeState(new BossStateLaserAttack());
-	}
+	////レーザー攻撃状態に変更
+	//if (--nextAttackTimer_ < 0) {
+	//	pBoss->ChangeState(new BossStateLaserAttack());
+	//}
 }
 
 void BossStateNormal::Draw(Boss* pBoss, const ViewProjection& viewProjection) {

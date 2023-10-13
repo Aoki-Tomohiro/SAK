@@ -120,7 +120,9 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\Utility\MathFunction.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Project\GameObject\Boss\Boss.cpp" />
+    <ClCompile Include="Project\GameObject\Boss\ChargeShot\ChargeShot.cpp" />
     <ClCompile Include="Project\GameObject\Boss\Laser\Laser.cpp" />
+    <ClCompile Include="Project\GameObject\Boss\State\BossStateChargeShot.cpp" />
     <ClCompile Include="Project\GameObject\Boss\State\BossStateLazerAttack.cpp" />
     <ClCompile Include="Project\GameObject\Boss\State\BossStateNormal.cpp" />
     <ClCompile Include="Project\GameObject\Missile\Missile.cpp" />
@@ -166,7 +168,9 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\Utility\Log.h" />
     <ClInclude Include="Engine\Utility\MathFunction.h" />
     <ClInclude Include="Project\GameObject\Boss\Boss.h" />
+    <ClInclude Include="Project\GameObject\Boss\ChargeShot\ChargeShot.h" />
     <ClInclude Include="Project\GameObject\Boss\Laser\Laser.h" />
+    <ClInclude Include="Project\GameObject\Boss\State\BossStateChargeShot.h" />
     <ClInclude Include="Project\GameObject\Boss\State\BossStateLaserAttack.h" />
     <ClInclude Include="Project\GameObject\Boss\State\BossStateNormal.h" />
     <ClInclude Include="Project\GameObject\Boss\State\IBossState.h" />
