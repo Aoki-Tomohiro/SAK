@@ -11,7 +11,6 @@ void Missile::Initialize(const Vector3& position, const float& speed)
 
 	worldTransform_.translation_ = position;
 	worldTransform_.scale_ = { 0.3f,0.3f,0.3f };
-	/*worldTransform_.scale_ = { 1.0f,1.0f,1.0f };*/
 
 	missileMoveSpeed_ = speed;
 
@@ -22,47 +21,18 @@ void Missile::Initialize(const Vector3& position, const float& speed)
 
 	AABB aabb = { { -worldTransform_.scale_.x,-worldTransform_.scale_.y,-worldTransform_.scale_.z}, { worldTransform_.scale_.x,worldTransform_.scale_.y,worldTransform_.scale_.z} };
 	SetAABB(aabb);
-
-	//worldTransform_[0].translation_.x = 8.0f;
-	//worldTransform_[0].translation_.y = RandomTY(-1.3f, 1.8f);
-	//worldTransform_[0].translation_.z = 10.0f;
-	//worldTransform_[0].scale_ = { 0.3f,0.3f,0.3f };
-
-	//worldTransform_[1].translation_.x = -8.0f;
-	//worldTransform_[1].translation_.y = RandomTY(-1.3f, 1.8f);
-	//worldTransform_[1].translation_.z = 10.0f;
-	//worldTransform_[1].scale_ = { 0.3f,0.3f,0.3f };
 }
 
 void Missile::Update()
 {
 	if (isAlive_) 
 	{
-		if (IsFollowingWeapon_ == true && weapon_->GetIsAttack() == true)
-		{
-			IsMove_ = true;
-		}
-		else {
-			worldTransform_.translation_.x += missileMoveSpeed_;
-			IsFollowingWeapon_ = false;
-			worldTransform_.UpdateMatrix();
-		}
-
-		if (IsMove_ == true)
-		{
-			worldTransform_.translation_.y += missileFollowingSpeed_;
-			worldTransform_.UpdateMatrix();
-		}
+		worldTransform_.translation_.x += missileMoveSpeed_;
+		worldTransform_.UpdateMatrix();
 	}
-
-	
 
 	if (worldTransform_.translation_.x < -13.0f || worldTransform_.translation_.x > 13.0f || worldTransform_.translation_.y > 13.0f) {
 		isAlive_ = false;
-		IsMove_ = false;
-	}
-	else {
-		isAlive_ = true;
 	}
 
 	ImGui::Begin("Missile");
@@ -83,10 +53,7 @@ void Missile::Draw(const ViewProjection viewProjection)
 
 void Missile::OnCollision(uint32_t collisionAttribute, float damage)
 {
-	IsFollowingWeapon_ = true;
-	if (weapon_->GetIsAttack() == true) {
-		worldTransform_.translation_.y += 0.1f;
-	}
+	isAlive_ = false;
 
 	ImGui::Begin("Collision");
 	ImGui::Text("MissileHit");
