@@ -2,6 +2,10 @@
 #include "State/BossStateNormal.h"
 #include "State/BossStateLaserAttack.h"
 #include "2D/ImGuiManager.h"
+#include "../GameObject/Weapon/Weapon.h"
+
+//実体定義
+int Boss::InvincibleTime = 60;
 
 void Boss::Initialize() {
 
@@ -71,13 +75,10 @@ void Boss::AddLaser(Laser* laser) {
 	lasers_.push_back(std::unique_ptr<Laser>(laser));
 }
 
-void Boss::OnCollision() {
-
-}
-
-void Boss::OnCollision(float damage) {
-	//体力を減らす
-	Hp_ -= damage;
+void Boss::OnCollision(uint32_t collisionAttribute, float damage) {
+	if (IsHit_ == false) {
+		Hp_ -= damage;
+	}
 }
 
 Vector3 Boss::GetWorldPosition() {

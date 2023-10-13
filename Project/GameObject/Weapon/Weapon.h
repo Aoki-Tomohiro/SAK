@@ -19,9 +19,7 @@ public:
 
 	void ApplyGlobalVariables();
 
-	void OnCollision() override;
-
-	void OnCollision(float damage) override;
+	void OnCollision(uint32_t collisionAttribute, float damage) override;
 
 	Vector3 GetWorldPosition() override;
 
@@ -30,6 +28,8 @@ public:
 	bool GetIsCharge() { return IsCharge_; }
 
 	bool GetIsAttack() { return IsAttack_; }
+
+	bool GetIsHit() { return IsHit_; };
 
 private:
 	Input* input_ = nullptr;
@@ -64,6 +64,7 @@ private:
 	bool IsCharge_ = false;
 	bool IsAttack_ = false;
 	bool IsCoolDown_ = false;
+	bool IsHit_ = false;
 
 	//体力
 	float Hp_ = 3.0f;

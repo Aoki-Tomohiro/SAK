@@ -10,6 +10,10 @@
 /// </summary>
 class Boss : public Collider {
 public:
+
+	//無敵時間
+	static int InvincibleTime;
+
 	/// <summary>
 	/// 初期化
 	/// </summary>
@@ -57,15 +61,15 @@ public:
 	const std::list<std::unique_ptr<Laser>>& GetLaser() { return lasers_; };
 
 	/// <summary>
-	/// 当たり判定
+	/// 攻撃が当たったかのフラグを取得
 	/// </summary>
-	void OnCollision() override;
+	/// <param name="IsHit"></param>
+	void IsHit(bool IsHit) { IsHit_ = IsHit; };
 
 	/// <summary>
 	/// 当たり判定
 	/// </summary>
-	/// <param name="damage">ダメージ</param>
-	void OnCollision(float damage) override;
+	void OnCollision(uint32_t collisionAttribute, float damage) override;
 
 	/// <summary>
 	/// ワールド座標を取得
@@ -84,5 +88,7 @@ private:
 	std::list<std::unique_ptr<Laser>> lasers_{};
 	//体力
 	float Hp_ = 100.0f;
+	//プレイヤーの攻撃が当たっているか
+	bool IsHit_ = false;
 
 };

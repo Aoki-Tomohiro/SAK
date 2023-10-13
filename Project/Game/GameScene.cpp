@@ -52,12 +52,12 @@ void GameScene::Update(GameManager* gameManager) {
 
   	//ボスの更新
 	boss_->Update();
+	boss_->IsHit(weapon_->GetIsHit());
 
 	missileManager_->Update();
 
 	//衝突判定
 	collisionManager_->ClearColliderList();
-	collisionManager_->SetColliderList(player_.get());
 	collisionManager_->SetColliderList(boss_.get());
 	const std::list<std::unique_ptr<Laser>>& lasers = boss_->GetLaser();
 	for (const std::unique_ptr<Laser>& laser : lasers) {

@@ -24,9 +24,7 @@ public:
 
 	void SetPosition(const Vector3& position) { worldTransform_.translation_ = position; };
 
-	void OnCollision() override;
-
-	void OnCollision(float damage) override;
+	void OnCollision(uint32_t collisionAttribute, float damage) override;
 
 	Vector3 GetWorldPosition() override;
 

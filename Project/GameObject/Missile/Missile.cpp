@@ -16,8 +16,8 @@ void Missile::Initialize(const Vector3& position, const float& speed)
 	missileMoveSpeed_ = speed;
 
 	//衝突属性を設定
-	SetCollisionAttribute(kCollisionAttributeEnemy);
-	SetCollisionMask(kCollisionMaskEnemy);
+	SetCollisionAttribute(kCollisionAttributeMissile);
+	SetCollisionMask(kCollisionMaskMissile);
 	SetCollisionPrimitive(kCollisionPrimitiveAABB);
 
 	AABB aabb = { { -worldTransform_.scale_.x,-worldTransform_.scale_.y,-worldTransform_.scale_.z}, { worldTransform_.scale_.x,worldTransform_.scale_.y,worldTransform_.scale_.z} };
@@ -81,14 +81,12 @@ void Missile::Draw(const ViewProjection viewProjection)
 	}
 }
 
-void Missile::OnCollision(float damage)
-{
-
-}
-
-void Missile::OnCollision() 
+void Missile::OnCollision(uint32_t collisionAttribute, float damage)
 {
 	IsFollowingWeapon_ = true;
+	if (weapon_->GetIsAttack() == true) {
+		worldTransform_.translation_.y += 0.1f;
+	}
 
 	ImGui::Begin("Collision");
 	ImGui::Text("MissileHit");

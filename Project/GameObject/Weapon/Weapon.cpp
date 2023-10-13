@@ -163,6 +163,7 @@ void Weapon::Update()
 			weaponWorldTransform_.translation_.y = 1.8f;
 			coolDownTimer_ = 60;
 			IsCoolDown_ = false;
+			IsHit_ = false;
 		}
 	}
 
@@ -209,20 +210,24 @@ void Weapon::ApplyGlobalVariables()
 	InvincibleTime = globalVariables->GetIntValue(groupName, "InvincibleTime");
 }
 
-void Weapon::OnCollision() 
+void Weapon::OnCollision(uint32_t collisionAttribute, float damage)
 {
-
-}
-
-void Weapon::OnCollision(float damage)
-{
-	if (IsAttack_ == false) 
+	//衝突相手がボスの場合
+	if (collisionAttribute & kCollisionAttributeEnemy)
 	{
-		if (invincibleFlag_ == false)
+		IsHit_ = true;
+	}
+	//ボス以外の場合
+	else
+	{
+		if (IsAttack_ == false)
 		{
-			invincibleFlag_ = true;
-			invincibleTimer_ = InvincibleTime;
-			Hp_ -= damage;
+			if (invincibleFlag_ == false)
+			{
+				invincibleFlag_ = true;
+				invincibleTimer_ = InvincibleTime;
+				Hp_ -= damage;
+			}
 		}
 	}
 }
