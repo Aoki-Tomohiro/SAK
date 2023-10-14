@@ -3,7 +3,7 @@
 #include "BossStateNormal.h"
 #include "Utility/GlobalVariables.h"
 
-int BossStateChargeShot::chargeTime = 1200;
+int BossStateChargeShot::chargeTime = 600;
 int BossStateChargeShot::LaserAttackEndTime = 1280;
 
 
@@ -31,6 +31,9 @@ void BossStateChargeShot::Initialize(Boss* pBoss) {
 	chargeWorldTransform_.translation_.y = 2.0f;
 	chargeWorldTransform_.scale_ = { 0.1f,0.1f,0.1f };
 
+	chargeShot_ = std::make_unique<ChargeShot>();
+	chargeShot_->Initialize();
+
 	//タイマーの初期化
 	chargeTimer_ = chargeTime;
 	endTimer_ = LaserAttackEndTime;
@@ -41,11 +44,18 @@ void BossStateChargeShot::Update(Boss* pBoss) {
 	//グローバル変数の適応
 	BossStateChargeShot::ApplyGlobalVariables();
 
-	if (--chargeTimer_ > 0)
+	chargeTimer_--;
+
+	if (chargeTimer_ > 0)
 	{
 		chargeWorldTransform_.scale_.x += 0.0008f;
 		chargeWorldTransform_.scale_.y += 0.0008f;
 		chargeWorldTransform_.scale_.z += 0.0008f;
+	}
+
+	if (chargeTimer_ < 0)
+	{
+		chargeShot_->Update();
 	}
 
 	//ワールドトランスフォームの更新
@@ -59,8 +69,16 @@ void BossStateChargeShot::Update(Boss* pBoss) {
 
 void BossStateChargeShot::Draw(Boss* pBoss, const ViewProjection& viewProjection) {
 
-	//モデルの描画
-	chargemodel_->Draw(chargeWorldTransform_, viewProjection);
+	if (chargeTimer_ > 0)
+	{
+		//モデルの描画
+		chargemodel_->Draw(chargeWorldTransform_, viewProjection);
+	}
+
+	if (chargeTimer_ < 0)
+	{
+		chargeShot_->Draw(viewProjection);
+	}
 }
 
 void BossStateChargeShot::ApplyGlobalVariables() {

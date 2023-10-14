@@ -25,23 +25,8 @@ void ChargeShot::Initialize() {
 
 void ChargeShot::Update() {
 
-	/*if (input_->IsPushKey(DIK_C))
-	{
-		chargeWorldTransform_.scale_.x += 0.001f;
-		chargeWorldTransform_.scale_.y += 0.001f;
-		chargeWorldTransform_.scale_.z += 0.001f;
-	}*/
+	chargeWorldTransform_.scale_.y += 0.08f;
 
-	if (--chargeTimer_ > 0)
-	{
-		chargeWorldTransform_.scale_.x += 0.0008f;
-		chargeWorldTransform_.scale_.y += 0.0008f;
-		chargeWorldTransform_.scale_.z += 0.0008f;
-	}
-
-	/*if (chargeWorldTransform_.translation_.y < 0.0f) {
-		chargeWorldTransform_.translation_.y = 0.0f;
-	}*/
 
 	//ワールドトランスフォームの更新
 	chargeWorldTransform_.UpdateMatrix();
