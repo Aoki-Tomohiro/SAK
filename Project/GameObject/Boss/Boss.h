@@ -4,6 +4,7 @@
 #include "Utility/CollisionManager/Collider.h"
 #include "State/IBossState.h"
 #include "Laser/Laser.h"
+#include "ChargeShot/ChargeShot.h"
 
 /// <summary>
 /// ボス
@@ -82,6 +83,8 @@ private:
 	std::unique_ptr<IBossState> state_ = nullptr;
 	//レーザーのリスト
 	std::list<std::unique_ptr<Laser>> lasers_{};
+	//チャージショット
+	std::unique_ptr<ChargeShot> chargeShot_ = nullptr;
 	//体力
 	float Hp_ = 100.0f;
 

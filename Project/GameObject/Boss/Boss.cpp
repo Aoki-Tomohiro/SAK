@@ -1,6 +1,7 @@
 #include "Boss.h"
 #include "State/BossStateNormal.h"
 #include "State/BossStateLaserAttack.h"
+#include "State/BossStateChargeShot.h"
 #include "2D/ImGuiManager.h"
 
 void Boss::Initialize() {
@@ -23,19 +24,19 @@ void Boss::Update() {
 	//状態の更新
 	state_->Update(this);
 
-	//死亡フラグの立ったレーザーをリストから削除
-	lasers_.remove_if([](std::unique_ptr<Laser>& laser) {
-		if (laser->IsDead()) {
-			laser.reset();
-			return true;
-		}
-		return false;
-	});
+	////死亡フラグの立ったレーザーをリストから削除
+	//lasers_.remove_if([](std::unique_ptr<Laser>& laser) {
+	//	if (laser->IsDead()) {
+	//		laser.reset();
+	//		return true;
+	//	}
+	//	return false;
+	//});
 
-	//レーザーの更新
-	for (std::unique_ptr<Laser>& laser : lasers_) {
-		laser->Update();
-	}
+	////レーザーの更新
+	//for (std::unique_ptr<Laser>& laser : lasers_) {
+	//	laser->Update();
+	//}
 
 	//ワールドトランスフォームの更新
 	worldTransform_.UpdateMatrix();
@@ -53,10 +54,10 @@ void Boss::Draw(const ViewProjection& viewProjection) {
 	//状態の描画
 	state_->Draw(this, viewProjection);
 
-	//レーザーの描画
-	for (std::unique_ptr<Laser>& laser : lasers_) {
-		laser->Draw(viewProjection);
-	}
+	////レーザーの描画
+	//for (std::unique_ptr<Laser>& laser : lasers_) {
+	//	laser->Draw(viewProjection);
+	//}
 }
 
 void Boss::ChangeState(IBossState* state) {

@@ -40,10 +40,6 @@ void GameScene::Initialize(GameManager* gameManager) {
 	boss_ = std::make_unique<Boss>();
 	boss_->Initialize();
 
-	//ボスの作成
-	chargeShot_ = std::make_unique<ChargeShot>();
-	chargeShot_->Initialize();
-
 	//衝突マネージャーの生成
 	collisionManager_ = std::make_unique<CollisionManager>();
 };
@@ -58,8 +54,6 @@ void GameScene::Update(GameManager* gameManager) {
 	boss_->Update();
 
 	missileManager_->Update();
-
-	chargeShot_->Update();
 
 	//衝突判定
 	collisionManager_->ClearColliderList();
@@ -112,16 +106,14 @@ void GameScene::Draw(GameManager* gameManager) {
 	//モデルの描画
 	Model::PreDraw();
 
-	chargeShot_->Draw(viewProjection_);
+	player_->Draw(viewProjection_);
 
-	//player_->Draw(viewProjection_);
-
-	//weapon_->Draw(viewProjection_);
+	weapon_->Draw(viewProjection_);
 
 	//ボスの描画
 	boss_->Draw(viewProjection_);
   
-	//missileManager_->Draw(viewProjection_);
+	missileManager_->Draw(viewProjection_);
 
 	Model::PostDraw();
 

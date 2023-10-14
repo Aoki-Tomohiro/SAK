@@ -44,7 +44,12 @@ private:
 	static int moveDirection_;
 	float moveSpeed_ = 0.06f;
 
-	//レーザー攻撃のタイマー
+	//次の攻撃までのタイマー
 	int nextAttackTimer_ = 0;
 
+	//レーザー攻撃のタイマー
+	int lazerAttackTimer_ = 0;
+
+	//チャージショットのタイマー
+	int chargeShotTimer_ = 0;
 };
