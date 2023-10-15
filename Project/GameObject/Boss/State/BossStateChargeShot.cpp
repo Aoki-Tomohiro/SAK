@@ -3,8 +3,8 @@
 #include "BossStateNormal.h"
 #include "Utility/GlobalVariables.h"
 
-int BossStateChargeShot::chargeTime = 600;
-int BossStateChargeShot::LaserAttackEndTime = 1280;
+int BossStateChargeShot::chargeTime = 400;
+int BossStateChargeShot::LaserAttackEndTime = 800;
 
 
 BossStateChargeShot::~BossStateChargeShot() {
@@ -75,7 +75,7 @@ void BossStateChargeShot::Draw(Boss* pBoss, const ViewProjection& viewProjection
 		chargemodel_->Draw(chargeWorldTransform_, viewProjection);
 	}
 
-	if (chargeTimer_ < 0)
+	if (chargeTimer_ < 0 && endTimer_ > 0)
 	{
 		chargeShot_->Draw(viewProjection);
 	}

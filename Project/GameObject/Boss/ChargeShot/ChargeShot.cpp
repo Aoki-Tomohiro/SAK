@@ -1,18 +1,12 @@
 #include "ChargeShot.h"
 
-int ChargeShot::chargeTime = 1200;
-
 void ChargeShot::Initialize() {
-	input_ = Input::GetInstance();
-
 	//モデルの作成
 	chargemodel_.reset(Model::CreateFromOBJ("Resources/Sphere", "sphere.obj"));
 	//ワールドトランスフォームの初期化
+	chargeWorldTransform_.translation_.x = -7.0f;
 	chargeWorldTransform_.translation_.y = 2.0f;
 	chargeWorldTransform_.scale_ = { 0.1f,0.1f,0.1f };
-
-	//タイマーの初期化
-	chargeTimer_ = chargeTime;
 
 	//衝突属性を設定
 	/*SetCollisionAttribute(kCollisionAttributeEnemy);
@@ -24,16 +18,13 @@ void ChargeShot::Initialize() {
 }
 
 void ChargeShot::Update() {
-
-	chargeWorldTransform_.scale_.y += 0.08f;
+	chargeWorldTransform_.translation_.x += 0.05f;
+	chargeWorldTransform_.scale_.y = 8.0f;
 
 
 	//ワールドトランスフォームの更新
 	chargeWorldTransform_.UpdateMatrix();
 
-	ImGui::Begin("Game Play");
-	ImGui::Text("chargeTimer : %d",chargeTimer_);
-	ImGui::End();
 
 	////死亡フラグを立てる
 	//if (--deadTimer_ < 0) {

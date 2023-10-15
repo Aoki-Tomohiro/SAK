@@ -4,14 +4,10 @@
 #include "2D/ImGuiManager.h"
 #include "Utility/CollisionManager/Collider.h"
 #include "Utility/CollisionManager/CollisionConfig.h"
-#include "Components/Input.h"
 
 class ChargeShot : public Collider
 {
 public:
-	//レーザーが消えるまでの時間
-	static int chargeTime;
-
 	/// <summary>
 	/// 初期化
 	/// </summary>
@@ -52,18 +48,14 @@ public:
 	/// <returns>ワールド座標</returns>
 	Vector3 GetWorldPosition() override;
 
-private:
-	Input* input_ = nullptr;
+	const WorldTransform& GetWorldTransform() const { return chargeWorldTransform_; };
 
+private:
 	//モデル
 	std::unique_ptr<Model> chargemodel_ = nullptr;
-	std::unique_ptr<Model> chargeShotmodel_ = nullptr;
 	//ワールドトランスフォーム
 	WorldTransform chargeWorldTransform_{};
-	WorldTransform chargeShotWorldTransform_{};
 
-	//チャージ中のタイマー
-	int chargeTimer_ = 0;
 
 	//死亡フラグ
 	bool isDead_ = false;
