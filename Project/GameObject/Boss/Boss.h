@@ -4,6 +4,7 @@
 #include "Utility/CollisionManager/Collider.h"
 #include "State/IBossState.h"
 #include "Laser/Laser.h"
+#include "ChargeShot/ChargeShot.h"
 
 /// <summary>
 /// ボス
@@ -39,6 +40,12 @@ public:
 	void AddLaser(Laser* laser);
 
 	/// <summary>
+	/// チャージショットを追加
+	/// </summary>
+	/// <param name="chargeShot">チャージショット</param>
+	void AddChargeShot(ChargeShot* chargeShot);
+
+	/// <summary>
 	/// ワールドトランスフォームを設定
 	/// </summary>
 	/// <param name="worldTransform">ワールドトランスフォーム</param>
@@ -55,6 +62,12 @@ public:
 	/// </summary>
 	/// <returns>レーザーのリスト</returns>
 	const std::list<std::unique_ptr<Laser>>& GetLaser() { return lasers_; };
+
+	/// <summary>
+	/// チャージショットのリストを取得
+	/// </summary>
+	/// <returns>チャージショットのリスト</returns>
+	const std::list<std::unique_ptr<ChargeShot>>& GetChargeShot() { return chargeShot_; };
 
 	/// <summary>
 	/// 当たり判定
@@ -82,6 +95,8 @@ private:
 	std::unique_ptr<IBossState> state_ = nullptr;
 	//レーザーのリスト
 	std::list<std::unique_ptr<Laser>> lasers_{};
+	//チャージショットのリスト
+	std::list<std::unique_ptr<ChargeShot>> chargeShot_{};
 	//体力
 	float Hp_ = 100.0f;
 

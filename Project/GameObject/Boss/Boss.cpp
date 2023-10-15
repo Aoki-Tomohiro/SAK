@@ -38,6 +38,20 @@ void Boss::Update() {
 	//	laser->Update();
 	//}
 
+	//死亡フラグの立ったチャージショットをリストから削除
+	chargeShot_.remove_if([](std::unique_ptr<ChargeShot>& chargeShot) {
+		if (chargeShot->IsDead()) {
+			chargeShot.reset();
+			return true;
+		}
+		return false;
+	});
+
+	//チャージショットの更新
+	for (std::unique_ptr<ChargeShot>& chargeShot : chargeShot_) {
+		chargeShot->Update();
+	}
+
 	//ワールドトランスフォームの更新
 	worldTransform_.UpdateMatrix();
 
@@ -58,6 +72,11 @@ void Boss::Draw(const ViewProjection& viewProjection) {
 	//for (std::unique_ptr<Laser>& laser : lasers_) {
 	//	laser->Draw(viewProjection);
 	//}
+
+	//レーザーの描画
+	for (std::unique_ptr<ChargeShot>& chargeShot : chargeShot_) {
+		chargeShot->Draw(viewProjection);
+	}
 }
 
 void Boss::ChangeState(IBossState* state) {
@@ -71,6 +90,13 @@ void Boss::AddLaser(Laser* laser) {
 	//レーザーをリストに追加
 	lasers_.push_back(std::unique_ptr<Laser>(laser));
 }
+
+void Boss::AddChargeShot(ChargeShot* chargeShot) {
+
+	//レーザーをリストに追加
+	chargeShot_.push_back(std::unique_ptr<ChargeShot>(chargeShot));
+}
+
 
 void Boss::OnCollision() {
 

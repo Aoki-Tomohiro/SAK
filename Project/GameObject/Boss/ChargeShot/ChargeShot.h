@@ -8,6 +8,9 @@
 class ChargeShot : public Collider
 {
 public:
+	//チャージショットが消えるまでの時間
+	static int deadTime;
+
 	/// <summary>
 	/// 初期化
 	/// </summary>
@@ -48,15 +51,11 @@ public:
 	/// <returns>ワールド座標</returns>
 	Vector3 GetWorldPosition() override;
 
-	const WorldTransform& GetWorldTransform() const { return chargeWorldTransform_; };
-
 private:
 	//モデル
-	std::unique_ptr<Model> chargemodel_ = nullptr;
+	std::unique_ptr<Model> model_ = nullptr;
 	//ワールドトランスフォーム
-	WorldTransform chargeWorldTransform_{};
-
-
+	WorldTransform worldTransform_{};
 	//死亡フラグ
 	bool isDead_ = false;
 	int deadTimer_ = 0;

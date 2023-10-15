@@ -3,7 +3,6 @@
 #include "2D/ImGuiManager.h"
 #include "3D/Model/Model.h"
 #include "3D/Matrix/WorldTransform.h"
-#include "../ChargeShot/ChargeShot.h"
 
 class BossStateChargeShot : public IBossState
 {
@@ -45,19 +44,10 @@ private:
 	std::unique_ptr<Model> chargemodel_ = nullptr;
 	//ワールドトランスフォーム
 	WorldTransform chargeWorldTransform_{};
-
-	//チャージショット
-	std::unique_ptr<ChargeShot> chargeShot_ = nullptr;
-
 	//チャージ中の時間
 	int chargeTimer_ = 0;
-
 	//攻撃終了までのタイマー
 	int endTimer_ = 0;
-
-	////死亡フラグ
-	//bool isDead_ = false;
-	//int deadTimer_ = 0;
 	//チャージショットのスケール
 	Vector3 chargeShotScale_ = { 1.0f,10.0f,1.0f };
 };

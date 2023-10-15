@@ -1,40 +1,44 @@
 #include "ChargeShot.h"
 
+int ChargeShot::deadTime = 400;
+
 void ChargeShot::Initialize() {
 	//モデルの作成
-	chargemodel_.reset(Model::CreateFromOBJ("Resources/Sphere", "sphere.obj"));
+	model_.reset(Model::CreateFromOBJ("Resources/Sphere", "sphere.obj"));
 	//ワールドトランスフォームの初期化
-	chargeWorldTransform_.translation_.x = -7.0f;
-	chargeWorldTransform_.translation_.y = 2.0f;
-	chargeWorldTransform_.scale_ = { 0.1f,0.1f,0.1f };
+	worldTransform_.translation_.x = -7.0f;
+	worldTransform_.translation_.y = 2.0f;
 
-	//衝突属性を設定
-	/*SetCollisionAttribute(kCollisionAttributeEnemy);
-	SetCollisionMask(kCollisionMaskEnemy);
-	SetCollisionPrimitive(kCollisionPrimitiveAABB);
+	//タイマーの初期化
+	deadTimer_ = deadTime;
 
-	AABB aabbSize{ {-scale.x,-scale.y,-scale.z},{scale.x,scale.y,scale.z} };
-	SetAABB(aabbSize);*/
+	////衝突属性を設定
+	//SetCollisionAttribute(kCollisionAttributeEnemy);
+	//SetCollisionMask(kCollisionMaskEnemy);
+	//SetCollisionPrimitive(kCollisionPrimitiveAABB);
+
+	//AABB aabbSize{ {-scale.x,-scale.y,-scale.z},{scale.x,scale.y,scale.z} };
+	//SetAABB(aabbSize);
 }
 
 void ChargeShot::Update() {
-	chargeWorldTransform_.translation_.x += 0.05f;
-	chargeWorldTransform_.scale_.y = 8.0f;
+	worldTransform_.translation_.x += 0.05f;
+	worldTransform_.scale_.y = 8.0f;
 
 
 	//ワールドトランスフォームの更新
-	chargeWorldTransform_.UpdateMatrix();
+	worldTransform_.UpdateMatrix();
 
 
-	////死亡フラグを立てる
-	//if (--deadTimer_ < 0) {
-	//	isDead_ = true;
-	//}
+	//死亡フラグを立てる
+	if (--deadTimer_ < 0) {
+		isDead_ = true;
+	}
 }
 
 void ChargeShot::Draw(const ViewProjection& viewProjection) {
 	//モデルの描画
-	chargemodel_->Draw(chargeWorldTransform_, viewProjection);
+	model_->Draw(worldTransform_, viewProjection);
 }
 
 void ChargeShot::OnCollision() {
@@ -47,8 +51,8 @@ void ChargeShot::OnCollision(float damage) {
 
 Vector3 ChargeShot::GetWorldPosition() {
 	Vector3 position{};
-	position.x = chargeWorldTransform_.matWorld_.m[3][0];
-	position.y = chargeWorldTransform_.matWorld_.m[3][1];
-	position.z = chargeWorldTransform_.matWorld_.m[3][2];
+	position.x = worldTransform_.matWorld_.m[3][0];
+	position.y = worldTransform_.matWorld_.m[3][1];
+	position.z = worldTransform_.matWorld_.m[3][2];
 	return position;
 }
