@@ -1,9 +1,12 @@
 #include "Player.h"
+#define _USE_MATH_DEFINES
+#include <math.h>
 #include "Utility/GlobalVariables.h"
 
 void Player::Initialize()
 {
-	playerModel_.reset(Model::CreateFromOBJ("Resources/Sphere", "sphere.obj"));
+	playerModelDummy_.reset(Model::CreateFromOBJ("Resources/Sphere", "sphere.obj"));
+	platformModel_.reset(Model::CreateFromOBJ("Resources/Platform", "Platform.obj"));
 
 	textureHandle_ = TextureManager::Load("Resources/uvChecker.png");
 
@@ -14,6 +17,8 @@ void Player::Initialize()
 	playerWorldTransform_.translation_.y = -3.3f;
 	playerWorldTransform_.scale_ = { 0.8f,0.8f,0.8f };
 
+	playerWorldTransform_.UpdateMatrix();
+
 	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
 	const char* groupName = "Player";
 	//グループを追加
@@ -23,6 +28,29 @@ void Player::Initialize()
 	//衝突属性を設定
 	SetCollisionAttribute(kCollisionAttributePlayer);
 	SetCollisionMask(kCollisionMaskPlayer);
+
+	//Motion
+	platformMotion_ = {
+		{0.0f,0.0f,0.0f},
+		{0.0f,0.0f,0.0f},
+		{1.0f,1.0f,1.0f},
+		{1.0f,1.0f,1.0f,1.0f},
+	};
+
+	NormalScale_ = { 1.0f,1.0f,1.0f };
+
+	platformMotionMove_ = {
+		0.1f,
+		20,
+		0,
+		1,
+		{1.0f,1.0f,1.0f},
+		{0.0f,0.0f,0.0f},
+	};
+
+	ModelMotion();
+
+
 }
 
 void Player::Update() 
@@ -49,7 +77,8 @@ void Player::Update()
 	}
 
 	playerWorldTransform_.UpdateMatrix();
-
+	ModelMotion();
+	prePlayerTranslation_ = playerWorldTransform_.translation_;
 	Player::ApplyGlobalVariables();
 
 	ImGui::Begin("Player");
@@ -62,7 +91,9 @@ void Player::Update()
 
 void Player::Draw(const ViewProjection viewProjection)
 {
-	playerModel_->Draw(playerWorldTransform_, viewProjection, textureHandle_);
+	platformModel_->Draw(platformMotionWorldTransform_, viewProjection);
+
+	playerModelDummy_->Draw(playerWorldTransform_, viewProjection, textureHandle_);
 }
 
 void Player::ApplyGlobalVariables() 
@@ -84,4 +115,61 @@ Vector3 Player::GetWorldPosition() {
 	pos.y = playerWorldTransform_.matWorld_.m[3][1];
 	pos.z = playerWorldTransform_.matWorld_.m[3][2];
 	return pos;
+}
+
+void Player::ModelMotion()
+{
+
+	//MoveMotion
+	{
+
+		motionMode_ = Stay;
+
+		if (prePlayerTranslation_.x != playerWorldTransform_.translation_.x) {
+			motionMode_ = Move;
+		}
+
+
+
+
+
+		switch (motionMode_)
+		{
+		case Stay:
+		default:
+
+			platformMotion_.translation_ = {0.0f,0.0f ,0.0f };
+			platformMotion_.rotation_ = { 0.0f,0.0f ,0.0f };
+			platformMotion_.scale_ = { 1.0f,1.0f ,1.0f };
+
+			break;
+		case Move:
+			
+			platformMotionMove_.time += platformMotionMove_.timePlus;
+
+			if (platformMotionMove_.time >= platformMotionMove_.duration || platformMotionMove_.time <= 0) {
+				platformMotionMove_.time = std::clamp(platformMotionMove_.time, 0.0f, platformMotionMove_.duration);
+				platformMotionMove_.timePlus *= -1;
+			}
+
+			float t = platformMotionMove_.time / platformMotionMove_.duration;
+			float ta = t < 0.5 ? 4 * t * t * t : 1 - powf(-2 * t + 2, 3) / 2;
+
+			platformMotionMove_.flex_.x = NormalScale_.x + platformMotionMove_.maxFlex_ * ta - platformMotionMove_.maxFlex_ * 0.5f;
+			platformMotionMove_.flex_.y = NormalScale_.y + platformMotionMove_.maxFlex_ * (1.0f - ta) - platformMotionMove_.maxFlex_ * 0.5f;
+			platformMotionMove_.flexPos_.y = (platformMotionMove_.maxFlex_ * ta) * -0.25f;
+
+			platformMotion_.scale_ = platformMotionMove_.flex_;
+			platformMotion_.translation_ = platformMotionMove_.flexPos_;
+
+			break;
+		}
+	}
+
+	platformMotionWorldTransform_.translation_ = Add(platformMotion_.translation_, playerWorldTransform_.translation_);
+	platformMotionWorldTransform_.scale_ = Multiply(platformMotion_.scale_, playerWorldTransform_.scale_);
+	platformMotionWorldTransform_.rotation_ = Add(platformMotion_.rotation_, playerWorldTransform_.rotation_);
+	platformModel_->GetMaterial()->SetColor(platformMotion_.color_);
+
+	platformMotionWorldTransform_.UpdateMatrix();
 }

@@ -3,7 +3,9 @@
 
 void Weapon::Initialize()
 {
-	weaponModel_.reset(Model::CreateFromOBJ("Resources/Sphere", "sphere.obj"));
+	weaponModelDummy_.reset(Model::CreateFromOBJ("Resources/Sphere", "sphere.obj"));
+
+	weaponModel_.reset(Model::CreateFromOBJ("Resources/Head", "Head.obj"));
 
 	input_ = Input::GetInstance();
 
@@ -11,6 +13,8 @@ void Weapon::Initialize()
 	weaponWorldTransform_.translation_.x = 0.0f;
 	weaponWorldTransform_.translation_.y = 1.8f;
 	weaponWorldTransform_.scale_ = { 0.4f,0.4f,0.4f };
+
+	weaponWorldTransform_.UpdateMatrix();
 
 	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
 	const char* groupName = "Weapon";
@@ -25,6 +29,25 @@ void Weapon::Initialize()
 	SetCollisionAttribute(kCollisionAttributePlayer);
 	SetCollisionMask(kCollisionMaskPlayer);
 	SetRadius(weaponWorldTransform_.scale_.x);
+
+	//モーション
+
+	weaponMotion_ = {
+		{0.0f,0.0f,0.0f},
+		{0.0f,0.0f,0.0f},
+		{1.0f,1.0f,1.0f},
+		{1.0f,1.0f,1.0f,1.0f},
+	};
+
+	normalScale_ = { 1.7f,1.7f,1.7f };
+	normalTransration_ = { 0.0f,-0.1f,0.0f };
+
+	chargeRotateSpeed_ = 0.2f;
+	for (int i = 0; i < 3; i++) {
+		attackRotateSpeed_[i] = i * 0.2f;;
+	}
+
+	ModelMotion();
 }
 
 void Weapon::Update()
@@ -153,7 +176,7 @@ void Weapon::Update()
 	}
 
 	weaponWorldTransform_.UpdateMatrix();
-
+	ModelMotion();
 	Weapon::ApplyGlobalVariables();
 
 	ImGui::Begin("PlayerWeapon");
@@ -166,7 +189,8 @@ void Weapon::Update()
 
 void Weapon::Draw(const ViewProjection viewProjection)
 {
-	weaponModel_->Draw(weaponWorldTransform_, viewProjection);
+	weaponModel_->Draw(weaponMotionWorldTransform_, viewProjection);
+	weaponModelDummy_->Draw(weaponWorldTransform_, viewProjection);
 }
 
 void Weapon::ApplyGlobalVariables()
@@ -192,4 +216,54 @@ Vector3 Weapon::GetWorldPosition() {
 	pos.y = weaponWorldTransform_.matWorld_.m[3][1];
 	pos.z = weaponWorldTransform_.matWorld_.m[3][2];
 	return pos;
+}
+
+void Weapon::ModelMotion()
+{
+
+	motionMode_ = Stay;
+
+	if (IsCharge_ == true && chargeCount_< 90) {
+		motionMode_ = Charge;
+	}else if (IsAttack_ == true) {
+		motionMode_ = Attack;
+	}
+
+	switch (motionMode_)
+	{
+	default:
+		case  Stay:
+
+		break;
+		case  Charge:
+			weaponMotion_.rotation_.y += chargeRotateSpeed_;
+			break;
+		case  Attack:
+
+			if (chargeCount_ < 20)
+			{
+				weaponMotion_.rotation_.y += attackRotateSpeed_[0];
+			}
+			else if (chargeCount_ >= 20 && chargeCount_ < 50)
+			{
+				weaponMotion_.rotation_.y += attackRotateSpeed_[1];
+			}
+			else if (chargeCount_ >= 50 && chargeCount_ < 90)
+			{
+				weaponMotion_.rotation_.y += attackRotateSpeed_[2];
+			}
+			else if (chargeCount_ >= 90 )
+			{
+				weaponMotion_.rotation_.y += attackRotateSpeed_[3];
+			}
+			break;
+	}
+
+	weaponMotionWorldTransform_.translation_ = Add(Add(weaponMotion_.translation_, weaponWorldTransform_.translation_),normalTransration_);
+	weaponMotionWorldTransform_.scale_ = Multiply(Multiply(weaponMotion_.scale_, weaponWorldTransform_.scale_),normalScale_);
+	weaponMotionWorldTransform_.rotation_ = Add(weaponMotion_.rotation_, weaponWorldTransform_.rotation_);
+	weaponModel_->GetMaterial()->SetColor(weaponMotion_.color_);
+
+	weaponMotionWorldTransform_.UpdateMatrix();
+
 }
