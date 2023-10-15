@@ -12,7 +12,7 @@ class Missile : public Collider
 {
 public:
 
-	void Initialize(const Vector3& position, const float& speed);
+	void Initialize(const Vector3& position, const Vector3& velocity);
 
 	void Update();
 
@@ -43,7 +43,7 @@ private:
 
 	Matrix4x4 localMatrix_;
 
-	float missileMoveSpeed_ = 0.05f;
+	Vector3 missileMoveSpeed_ = { 0.0f,0.05f,0.0f };
 
 	float missileFollowingSpeed_ = 0.2f;
 

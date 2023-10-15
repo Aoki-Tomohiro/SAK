@@ -31,10 +31,10 @@ void GameScene::Initialize(GameManager* gameManager) {
 	// 自キャラの初期化
 	player_->Initialize(weapon_.get());
 
-	//ミサイルの生成
-	missileManager_ = std::make_unique<MissileManager>();
-	// ミサイルの初期化
-	missileManager_->Initialize(weapon_.get());
+	////ミサイルの生成
+	//missileManager_ = std::make_unique<MissileManager>();
+	//// ミサイルの初期化
+	//missileManager_->Initialize(weapon_.get());
   
 	//ボスの作成
 	boss_ = std::make_unique<Boss>();
@@ -54,7 +54,7 @@ void GameScene::Update(GameManager* gameManager) {
 	boss_->Update();
 	boss_->IsHit(weapon_->GetIsHit());
 
-	missileManager_->Update();
+	//missileManager_->Update();
 
 	//衝突判定
 	collisionManager_->ClearColliderList();
@@ -63,10 +63,14 @@ void GameScene::Update(GameManager* gameManager) {
 	for (const std::unique_ptr<Laser>& laser : lasers) {
 		collisionManager_->SetColliderList(laser.get());
 	}
-	const std::unique_ptr<Missile>& leftMissile = missileManager_->GetLeftMissile();
-	const std::unique_ptr<Missile>& rightMissile = missileManager_->GetRightMissile();
-	collisionManager_->SetColliderList(leftMissile.get());
-	collisionManager_->SetColliderList(rightMissile.get());
+	const std::list<std::unique_ptr<Missile>>& missiles = boss_->GetMissiles();
+	for (const std::unique_ptr<Missile>& missile : missiles) {
+		collisionManager_->SetColliderList(missile.get());
+	}
+	//const std::unique_ptr<Missile>& leftMissile = missileManager_->GetLeftMissile();
+	//const std::unique_ptr<Missile>& rightMissile = missileManager_->GetRightMissile();
+	//collisionManager_->SetColliderList(leftMissile.get());
+	//collisionManager_->SetColliderList(rightMissile.get());
 	collisionManager_->SetColliderList(weapon_.get());
 	collisionManager_->CheckAllCollisions();
 
@@ -113,7 +117,7 @@ void GameScene::Draw(GameManager* gameManager) {
 	//ボスの描画
 	boss_->Draw(viewProjection_);
   
-	missileManager_->Draw(viewProjection_);
+	//missileManager_->Draw(viewProjection_);
 
 	Model::PostDraw();
 

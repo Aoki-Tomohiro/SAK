@@ -170,6 +170,7 @@ void Weapon::Update()
 			IsHit_ = false;
 			isInvolvedMissile_ = false;
 			involvedCount_ = 0;
+			involvedMissile_->GetMaterial()->SetColor(missileColor_[involvedCount_]);
 		}
 	}
 

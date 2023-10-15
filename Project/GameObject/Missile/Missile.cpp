@@ -1,7 +1,7 @@
 #include "missile.h"
 #include "Utility/GlobalVariables.h"
 
-void Missile::Initialize(const Vector3& position, const float& speed)
+void Missile::Initialize(const Vector3& position, const Vector3& velocity)
 {
 	model_.reset(Model::CreateFromOBJ("Resources", "sphere.obj"));
 
@@ -12,7 +12,7 @@ void Missile::Initialize(const Vector3& position, const float& speed)
 	worldTransform_.translation_ = position;
 	worldTransform_.scale_ = { 0.3f,0.3f,0.3f };
 
-	missileMoveSpeed_ = speed;
+	missileMoveSpeed_ = velocity;
 
 	//衝突属性を設定
 	SetCollisionAttribute(kCollisionAttributeMissile);
@@ -27,7 +27,7 @@ void Missile::Update()
 {
 	if (isAlive_) 
 	{
-		worldTransform_.translation_.x += missileMoveSpeed_;
+		worldTransform_.translation_ = Add(worldTransform_.translation_, missileMoveSpeed_);
 		worldTransform_.UpdateMatrix();
 	}
 
