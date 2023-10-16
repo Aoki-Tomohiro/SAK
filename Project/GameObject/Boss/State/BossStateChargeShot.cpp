@@ -1,6 +1,7 @@
 #include "BossStateChargeShot.h"
 #include "../GameObject/Boss/Boss.h"
 #include "BossStateNormal.h"
+#include "BossStateStun.h"
 #include "Utility/GlobalVariables.h"
 
 int BossStateChargeShot::chargeTime = 400;
@@ -12,6 +13,8 @@ BossStateChargeShot::~BossStateChargeShot() {
 }
 
 void BossStateChargeShot::Initialize(Boss* pBoss) {
+
+	input_ = input_->GetInstance();
 
 	//グローバル変数
 	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
@@ -51,6 +54,13 @@ void BossStateChargeShot::Update(Boss* pBoss) {
 		chargeWorldTransform_.scale_.y += 0.0008f;
 		chargeWorldTransform_.scale_.z += 0.0008f;
 
+		if (chargeTimer_ <= 200)
+		{
+			pBoss->ChangeState(new BossStateStun());
+			return;
+		}
+
+
 		if (chargeTimer_ == 0)
 		{
 			IsMove_ = true;
@@ -85,9 +95,13 @@ void BossStateChargeShot::Update(Boss* pBoss) {
 	chargeWorldTransform_.UpdateMatrix();
 
 	//攻撃終了
-	if (bossWorldTransform_.translation_.x >= 6.0f) {
+	if (bossWorldTransform_.translation_.x >= 5.8f)
+	{
 		pBoss->ChangeState(new BossStateNormal());
 	}
+
+	ImGui::Begin("ChargeShot");
+	ImGui::End();
 }
 
 void BossStateChargeShot::Draw(Boss* pBoss, const ViewProjection& viewProjection) {

@@ -294,6 +294,9 @@
     <ClCompile Include="Project\GameObject\Boss\State\BossStateChargeShot.cpp">
       <Filter>ソース ファイル\Project\GameObject\Boss\State</Filter>
     </ClCompile>
+    <ClCompile Include="Project\GameObject\Boss\State\BossStateStun.cpp">
+      <Filter>ソース ファイル\Project\GameObject\Boss\State</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Base\WinApp.h">
@@ -438,6 +441,9 @@
       <Filter>ヘッダー ファイル\Project\GameObject\Boss\ChargeShot</Filter>
     </ClInclude>
     <ClInclude Include="Project\GameObject\Boss\State\BossStateChargeShot.h">
+      <Filter>ヘッダー ファイル\Project\GameObject\Boss\State</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\GameObject\Boss\State\BossStateStun.h">
       <Filter>ヘッダー ファイル\Project\GameObject\Boss\State</Filter>
     </ClInclude>
   </ItemGroup>

@@ -5,16 +5,12 @@
 #include "3D/Matrix/WorldTransform.h"
 #include "Components/Input.h"
 
-class BossStateChargeShot : public IBossState
+class BossStateStun : public IBossState
 {
-	//チャージ中の時間
-	static int chargeTime;
-	static int LaserAttackEndTime;
-
 	/// <summary>
 	/// デストラクタ
 	/// </summary>
-	~BossStateChargeShot() override;
+	~BossStateStun() override;
 
 	/// <summary>
 	/// 初期化
@@ -42,19 +38,5 @@ class BossStateChargeShot : public IBossState
 
 private:
 	Input* input_ = nullptr;
-
-	//モデル
-	std::unique_ptr<Model> chargemodel_ = nullptr;
-	//ワールドトランスフォーム
-	WorldTransform chargeWorldTransform_{};
-	WorldTransform bossWorldTransform_{};
-	//チャージ中の時間
-	int chargeTimer_ = 0;
-	//攻撃終了までのタイマー
-	int endTimer_ = 0;
-	//チャージショットのスケール
-	Vector3 chargeShotScale_ = { 1.0f,10.0f,1.0f };
-
-	bool IsMove_ = false;
 };
 

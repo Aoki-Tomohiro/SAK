@@ -2,6 +2,7 @@
 #include "../GameObject/Boss/Boss.h"
 #include "BossStateLaserAttack.h"
 #include "BossStateChargeShot.h"
+#include "BossStateStun.h"
 #include "Utility/GlobalVariables.h"
 
 //実態定義

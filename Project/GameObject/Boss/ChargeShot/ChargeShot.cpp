@@ -1,16 +1,15 @@
 #include "ChargeShot.h"
 
-int ChargeShot::deadTime = 400;
-
 void ChargeShot::Initialize() {
 	//モデルの作成
 	model_.reset(Model::CreateFromOBJ("Resources/Sphere", "sphere.obj"));
 	//ワールドトランスフォームの初期化
 	worldTransform_.translation_.x = -7.0f;
-	worldTransform_.translation_.y = 2.0f;
+	worldTransform_.translation_.y = -1.0f;
 
-	//タイマーの初期化
-	deadTimer_ = deadTime;
+	worldTransform_.scale_.x = 0.5f;
+	worldTransform_.scale_.y = 3.5f;
+	worldTransform_.scale_.z = 0.5f;
 
 	////衝突属性を設定
 	//SetCollisionAttribute(kCollisionAttributeEnemy);
@@ -22,8 +21,7 @@ void ChargeShot::Initialize() {
 }
 
 void ChargeShot::Update() {
-	worldTransform_.translation_.x += 0.05f;
-	worldTransform_.scale_.y = 8.0f;
+	worldTransform_.translation_.x += chargeShotSpeed_;
 
 
 	//ワールドトランスフォームの更新
@@ -31,7 +29,7 @@ void ChargeShot::Update() {
 
 
 	//死亡フラグを立てる
-	if (--deadTimer_ < 0) {
+	if (worldTransform_.translation_.x >= 5.8f) {
 		isDead_ = true;
 	}
 }

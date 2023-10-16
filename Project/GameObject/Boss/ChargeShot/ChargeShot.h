@@ -8,9 +8,6 @@
 class ChargeShot : public Collider
 {
 public:
-	//チャージショットが消えるまでの時間
-	static int deadTime;
-
 	/// <summary>
 	/// 初期化
 	/// </summary>
@@ -60,8 +57,8 @@ private:
 	bool isDead_ = false;
 	int deadTimer_ = 0;
 	//チャージショットのスケール
-	Vector3 chargeShotScale_ = { 1.0f,10.0f,1.0f };
+	Vector3 chargeShotScale_ = { 1.0f,1.0f,1.0f };
 	//チャージショットの速さ
-	float chargeShotSpeed_ = 2.0f;
+	float chargeShotSpeed_ = 0.05f;
 };
 
