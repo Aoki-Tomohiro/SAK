@@ -8,7 +8,7 @@ void ChargeShot::Initialize() {
 	worldTransform_.translation_.y = -1.0f;
 
 	worldTransform_.scale_.x = 0.5f;
-	worldTransform_.scale_.y = 3.5f;
+	worldTransform_.scale_.y = 3.7f;
 	worldTransform_.scale_.z = 0.5f;
 
 	////衝突属性を設定

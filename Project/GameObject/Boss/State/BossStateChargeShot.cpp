@@ -54,7 +54,7 @@ void BossStateChargeShot::Update(Boss* pBoss) {
 		chargeWorldTransform_.scale_.y += 0.0008f;
 		chargeWorldTransform_.scale_.z += 0.0008f;
 
-		if (chargeTimer_ <= 200)
+		if (input_->IsPushKey(DIK_T))
 		{
 			pBoss->ChangeState(new BossStateStun());
 			return;
@@ -101,6 +101,7 @@ void BossStateChargeShot::Update(Boss* pBoss) {
 	}
 
 	ImGui::Begin("ChargeShot");
+	ImGui::Text("Push T Key : BossStateStun");
 	ImGui::End();
 }
 

@@ -12,6 +12,8 @@ void BossStateStun::Initialize(Boss* pBoss)
 {
 	input_ = input_->GetInstance();
 
+	stunTimer_ = 60;
+
 	//グローバル変数
 	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
 	//const char* groupName = "BossStateLaserAttack";
@@ -27,13 +29,14 @@ void BossStateStun::Initialize(Boss* pBoss)
 
 void BossStateStun::Update(Boss* pBoss) 
 {
-	if (input_->IsPushKey(DIK_T))
+	stunTimer_--;
+	if (stunTimer_ < 0)
 	{
 		pBoss->ChangeState(new BossStateNormal());
 	}
 
 	ImGui::Begin("Stun");
-	ImGui::Text("Push T Key : BossStateNormal");
+	ImGui::Text("stunTimer : %d",stunTimer_);
 	ImGui::End();
 }
 
