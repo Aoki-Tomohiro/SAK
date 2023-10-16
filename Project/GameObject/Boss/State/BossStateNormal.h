@@ -39,11 +39,8 @@ public:
 private:
 	//ワールドトランスフォーム
 	WorldTransform worldTransform_{};
-
 	//スピード
-	static int moveDirection_;
 	float moveSpeed_ = 0.06f;
-
 	//レーザー攻撃のタイマー
 	int nextAttackTimer_ = 0;
 

@@ -88,6 +88,18 @@ public:
 	float RandomTY(float min_value, float max_value);
 
 	/// <summary>
+	/// 進行方向を取得
+	/// </summary>
+	/// <returns></returns>
+	int GetMoveDirection() { return moveDirection_; };
+
+	/// <summary>
+	/// 進行方向を設定
+	/// </summary>
+	/// <param name="moveDirection"></param>
+	void SetMoveDirection(int moveDirection) { moveDirection_ = moveDirection; };
+
+	/// <summary>
 	/// グローバル変数の適応
 	/// </summary>
 	void ApplyGlobalVariables();
@@ -124,5 +136,7 @@ private:
 	int missileDirection_ = 1;
 	//ミサイルの速度
 	float missileMoveSpeed_ = 0.05f;
+	//進行方向
+	int moveDirection_ = 1;
 
 };
