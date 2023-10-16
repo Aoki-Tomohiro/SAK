@@ -46,15 +46,10 @@ void BossStateNormal::Update(Boss* pBoss) {
 	//ワールドトランスフォームを設定
 	pBoss->SetWorldTransform(worldTransform_);
 
-	//レーザー攻撃状態に変更
-	if (--nextAttackTimer_ < 0) {
-		chargeShotTimer_--;
-		worldTransform_.translation_.x = 0.0f;
-
-		if (chargeShotTimer_ < 0)
-		{
-			pBoss->ChangeState(new BossStateChargeShot());
-		}
+	//チャージショット状態に変更
+	if (--nextAttackTimer_ < 0)
+	{
+		pBoss->ChangeState(new BossStateChargeShot());
 	}
 
 	////レーザー攻撃状態に変更

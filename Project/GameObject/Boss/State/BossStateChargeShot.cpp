@@ -31,6 +31,9 @@ void BossStateChargeShot::Initialize(Boss* pBoss) {
 	chargeWorldTransform_.translation_.y = 2.0f;
 	chargeWorldTransform_.scale_ = { 0.1f,0.1f,0.1f };
 
+	bossWorldTransform_.translation_.y = 3.3f;
+	pBoss->SetWorldTransform(bossWorldTransform_);
+
 	//タイマーの初期化
 	chargeTimer_ = chargeTime;
 	endTimer_ = LaserAttackEndTime;
@@ -47,16 +50,34 @@ void BossStateChargeShot::Update(Boss* pBoss) {
 		chargeWorldTransform_.scale_.x += 0.0008f;
 		chargeWorldTransform_.scale_.y += 0.0008f;
 		chargeWorldTransform_.scale_.z += 0.0008f;
+
+		if (chargeTimer_ == 0)
+		{
+			IsMove_ = true;
+		}
 	}
 
-	if (chargeTimer_ == 0) 
+	if (IsMove_ == true)
 	{
-		chargeTimer_ = -1;
+		bossWorldTransform_.translation_.x = -6.9f;
+		pBoss->SetWorldTransform(bossWorldTransform_);
+
 		ChargeShot* chargeShot;
-		
+
 		chargeShot = new ChargeShot();
 		chargeShot->Initialize();
 		pBoss->AddChargeShot(chargeShot);
+
+		IsMove_ = false;
+	}
+
+	if (chargeTimer_ < 0) 
+	{
+		chargeTimer_ = -1;
+
+		//ボスの移動
+		bossWorldTransform_.translation_.x += 0.05f;
+		pBoss->SetWorldTransform(bossWorldTransform_);
 	}
 
 
@@ -64,7 +85,7 @@ void BossStateChargeShot::Update(Boss* pBoss) {
 	chargeWorldTransform_.UpdateMatrix();
 
 	//攻撃終了
-	if (--endTimer_ < 0) {
+	if (bossWorldTransform_.translation_.x >= 6.0f) {
 		pBoss->ChangeState(new BossStateNormal());
 	}
 }
