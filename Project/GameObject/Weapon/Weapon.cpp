@@ -43,7 +43,7 @@ void Weapon::Initialize()
 	normalTransration_ = { 0.0f,-0.1f,0.0f };
 
 	chargeRotateSpeed_ = 0.2f;
-	for (int i = 0; i < 3; i++) {
+	for (int i = 0; i < 4; i++) {
 		attackRotateSpeed_[i] = i * 0.2f;;
 	}
 

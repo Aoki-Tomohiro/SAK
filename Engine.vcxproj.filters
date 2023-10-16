@@ -157,6 +157,12 @@
     <Filter Include="ヘッダー ファイル\Project\GameObject\Missile">
       <UniqueIdentifier>{5cc70959-04cd-45ed-b163-1dcef32a83ac}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Project\GameObject\BackGround">
+      <UniqueIdentifier>{25259415-a6cd-4ff4-9343-342d8d0576a9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Project\GameObject\BackGround">
+      <UniqueIdentifier>{b16715b0-86a3-46f0-a8e1-021af681c434}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -281,6 +287,9 @@
     </ClCompile>
     <ClCompile Include="Project\GameObject\Missile\MissileManager.cpp">
       <Filter>ソース ファイル\Project\GameObject\Missile</Filter>
+    </ClCompile>
+    <ClCompile Include="BackGround.cpp">
+      <Filter>ソース ファイル\Project\GameObject\BackGround</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -421,6 +430,9 @@
     </ClInclude>
     <ClInclude Include="Project\GameObject\Missile\Missile.h">
       <Filter>ヘッダー ファイル\Project\GameObject\Missile</Filter>
+    </ClInclude>
+    <ClInclude Include="BackGround.h">
+      <Filter>ヘッダー ファイル\Project\GameObject\BackGround</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
