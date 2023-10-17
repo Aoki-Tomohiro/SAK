@@ -7,6 +7,12 @@ public:
 	//攻撃間隔
 	static int AttackInterval;
 
+	enum AttackState {
+		LaserAttack,
+		MissileAttack,
+		ChargeShot,
+	};
+
 	/// <summary>
 	/// デストラクタ
 	/// </summary>
@@ -50,4 +56,10 @@ private:
 
 	//チャージショットのタイマー
 	int chargeShotTimer_ = 0;
+
+	//攻撃中のフラグ
+	bool isAttack_ = false;
+
+	//次の攻撃
+	int nextAttack_ = LaserAttack;
 };

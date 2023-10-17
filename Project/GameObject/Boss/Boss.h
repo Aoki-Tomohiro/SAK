@@ -18,6 +18,8 @@ public:
 	//ミサイルの発生時間
 	static int MissileSpornTime;
 
+	static const int kHpMax = 100;
+
 	/// <summary>
 	/// 初期化
 	/// </summary>
@@ -93,7 +95,15 @@ public:
 	/// <param name="min_value"></param>
 	/// <param name="max_value"></param>
 	/// <returns></returns>
-	float RandomTY(float min_value, float max_value);
+	float Random(float min_value, float max_value);
+
+	/// <summary>
+	/// ランダム生成
+	/// </summary>
+	/// <param name="min_value"></param>
+	/// <param name="max_value"></param>
+	/// <returns></returns>
+	int Random(int min_value, int max_value);
 
 	/// <summary>
 	/// 進行方向を取得
@@ -137,6 +147,12 @@ public:
 	int GetHitMissileCount() { return hitMissileCount_; };
 
 	/// <summary>
+	/// HPを取得
+	/// </summary>
+	/// <returns></returns>
+	float GetHP() { return Hp_; };
+
+	/// <summary>
 	/// 当たり判定
 	/// </summary>
 	void OnCollision(uint32_t collisionAttribute, float damage) override;
@@ -172,8 +188,6 @@ private:
 	std::list<std::unique_ptr<ChargeShot>> chargeShot_{};
 	//体力
 	float Hp_ = 100.0f;
-	////プレイヤーの攻撃が当たったか
-	//bool IsHit_ = false;
 	//当たったミサイルの数
 	int hitMissileCount_ = 0;
 	//ミサイルのスポーンタイマー
