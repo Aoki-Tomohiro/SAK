@@ -44,23 +44,23 @@ void Boss::Update() {
 		missileSpornTimer_ = MissileSpornTime;
 		missileDirection_ *= -1;
 		Missile* missile = new Missile();
-		missile->Initialize(Vector3{ 13.0f * missileDirection_,RandomTY(-1.3f, 1.0f) ,0.0f }, Vector3{ missileMoveSpeed_ * (missileDirection_ * -1),0.0f,0.0f });
+		missile->Initialize(Vector3{ 13.0f * missileDirection_,RandomTY(/*-1.3f,*/-2.2f, 1.0f) ,0.0f }, Vector3{ missileMoveSpeed_ * (missileDirection_ * -1),0.0f,0.0f });
 		Boss::AddMissile(missile);
 	}
 
-	////死亡フラグの立ったレーザーをリストから削除
-	//lasers_.remove_if([](std::unique_ptr<Laser>& laser) {
-	//	if (laser->IsDead()) {
-	//		laser.reset();
-	//		return true;
-	//	}
-	//	return false;
-	//});
+	//死亡フラグの立ったレーザーをリストから削除
+	lasers_.remove_if([](std::unique_ptr<Laser>& laser) {
+		if (laser->IsDead()) {
+			laser.reset();
+			return true;
+		}
+		return false;
+	});
 
-	////レーザーの更新
-	//for (std::unique_ptr<Laser>& laser : lasers_) {
-	//	laser->Update();
-	//}
+	//レーザーの更新
+	for (std::unique_ptr<Laser>& laser : lasers_) {
+		laser->Update();
+	}
 
 	//死亡フラグの立ったチャージショットをリストから削除
 	chargeShot_.remove_if([](std::unique_ptr<ChargeShot>& chargeShot) {
@@ -107,10 +107,10 @@ void Boss::Draw(const ViewProjection& viewProjection) {
 	//状態の描画
 	state_->Draw(this, viewProjection);
 
-	////レーザーの描画
-	//for (std::unique_ptr<Laser>& laser : lasers_) {
-	//	laser->Draw(viewProjection);
-	//}
+	//レーザーの描画
+	for (std::unique_ptr<Laser>& laser : lasers_) {
+		laser->Draw(viewProjection);
+	}
 
 	//レーザーの描画
 	for (std::unique_ptr<ChargeShot>& chargeShot : chargeShot_) {

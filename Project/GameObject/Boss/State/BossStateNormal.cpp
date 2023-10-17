@@ -63,11 +63,23 @@ void BossStateNormal::Update(Boss* pBoss) {
 	//チャージショット状態に変更
 	if (--nextAttackTimer_ < 0)
 	{
-		if (worldTransform_.translation_.x <= 0.1f && worldTransform_.translation_.x >= -0.1f)
-		{
-			worldTransform_.translation_.x = 0.0f;
-			pBoss->SetWorldTransform(worldTransform_);
-			pBoss->ChangeState(new BossStateChargeShot());
+		int nextAttack = rand() % 3;
+
+		switch (nextAttack) {
+		case 0:
+			pBoss->ChangeState(new BossStateLaserAttack());
+			break;
+		case 1:
+			pBoss->ChangeState(new BossStateMissileAttack());
+			break;
+		case 2:
+			if (worldTransform_.translation_.x <= 0.1f && worldTransform_.translation_.x >= -0.1f)
+			{
+				worldTransform_.translation_.x = 0.0f;
+				pBoss->SetWorldTransform(worldTransform_);
+				pBoss->ChangeState(new BossStateChargeShot());
+			}
+			break;
 		}
 	}
 
