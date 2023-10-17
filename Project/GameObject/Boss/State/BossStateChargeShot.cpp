@@ -4,8 +4,8 @@
 #include "BossStateStun.h"
 #include "Utility/GlobalVariables.h"
 
-int BossStateChargeShot::chargeTime = 1600;
-int BossStateChargeShot::LaserAttackEndTime = 800;
+int BossStateChargeShot::chargeTime = 10;
+int BossStateChargeShot::chargeShotEndTime = 240;
 
 
 BossStateChargeShot::~BossStateChargeShot() {
@@ -37,9 +37,12 @@ void BossStateChargeShot::Initialize(Boss* pBoss) {
 	bossWorldTransform_.translation_.y = 3.3f;
 	pBoss->SetWorldTransform(bossWorldTransform_);
 
+	chargeShotSpeed_ = 0.05f;
+	respownCount_ = rand() % 2 + 1;
+
 	//タイマーの初期化
 	chargeTimer_ = chargeTime;
-	endTimer_ = LaserAttackEndTime;
+	endTimer_ = chargeShotEndTime;
 }
 
 void BossStateChargeShot::Update(Boss* pBoss) {
@@ -66,9 +69,42 @@ void BossStateChargeShot::Update(Boss* pBoss) {
 		IsMove_ = true;
 	}
 
-	if (IsMove_ == true)
+	if (IsMove_ == true && respownCount_ == 1)
 	{
-		bossWorldTransform_.translation_.x -= 0.05f;
+		bossWorldTransform_.translation_.x += chargeShotSpeed_;
+		pBoss->SetWorldTransform(bossWorldTransform_);
+
+		if (bossWorldTransform_.translation_.x >= 6.9f)
+		{
+			bossWorldTransform_.translation_.x = 6.9f;
+			pBoss->SetWorldTransform(bossWorldTransform_);
+
+			ChargeShot* chargeShot;
+
+			chargeShot = new ChargeShot();
+			chargeShot->Initialize(bossWorldTransform_.translation_,chargeShotSpeed_);
+			pBoss->AddChargeShot(chargeShot);
+
+			IsMove_ = false;
+			IsAttack_ = true;
+		}
+	}
+
+	if (IsAttack_ == true && respownCount_ == 1)
+	{
+		chargeTimer_ = -1;
+		chargeShotSpeed_ = -0.05f;
+		endTimer_--;
+
+		//ボスの移動
+		bossWorldTransform_.translation_.x += chargeShotSpeed_;
+		pBoss->SetWorldTransform(bossWorldTransform_);
+	}
+
+	if (IsMove_ == true && respownCount_ == 2)
+	{
+		chargeShotSpeed_ = -0.05f;
+		bossWorldTransform_.translation_.x += chargeShotSpeed_;
 		pBoss->SetWorldTransform(bossWorldTransform_);
 
 		if (bossWorldTransform_.translation_.x <= -6.9f)
@@ -79,7 +115,7 @@ void BossStateChargeShot::Update(Boss* pBoss) {
 			ChargeShot* chargeShot;
 
 			chargeShot = new ChargeShot();
-			chargeShot->Initialize();
+			chargeShot->Initialize(bossWorldTransform_.translation_, chargeShotSpeed_);
 			pBoss->AddChargeShot(chargeShot);
 
 			IsMove_ = false;
@@ -87,12 +123,14 @@ void BossStateChargeShot::Update(Boss* pBoss) {
 		}
 	}
 
-	if (IsAttack_ == true) 
+	if (IsAttack_ == true && respownCount_ == 2)
 	{
 		chargeTimer_ = -1;
+		chargeShotSpeed_ = 0.05f;
+		endTimer_--;
 
 		//ボスの移動
-		bossWorldTransform_.translation_.x += 0.05f;
+		bossWorldTransform_.translation_.x += chargeShotSpeed_;
 		pBoss->SetWorldTransform(bossWorldTransform_);
 	}
 
@@ -101,7 +139,7 @@ void BossStateChargeShot::Update(Boss* pBoss) {
 	chargeWorldTransform_.UpdateMatrix();
 
 	//攻撃終了
-	if (bossWorldTransform_.translation_.x >= 5.8f)
+	if (endTimer_ <= 0)
 	{
 		pBoss->ChangeState(new BossStateNormal());
 	}
@@ -110,6 +148,7 @@ void BossStateChargeShot::Update(Boss* pBoss) {
 	ImGui::Text("Push T Key : BossStateStun");
 	ImGui::Text("bossTransform %f", bossWorldTransform_.translation_.x);
 	ImGui::Text("chargeTimer %d", chargeTimer_);
+	ImGui::Text("endTimer %d", endTimer_);
 	ImGui::End();
 }
 
