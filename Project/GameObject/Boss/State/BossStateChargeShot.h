@@ -1,16 +1,20 @@
 #pragma once
 #include "IBossState.h"
+#include "2D/ImGuiManager.h"
+#include "3D/Model/Model.h"
 #include "3D/Matrix/WorldTransform.h"
+#include "Components/Input.h"
 
-class BossStateNormal : public IBossState {
-public:
-	//攻撃間隔
-	static int AttackInterval;
+class BossStateChargeShot : public IBossState
+{
+	//チャージ中の時間
+	static int chargeTime;
+	static int LaserAttackEndTime;
 
 	/// <summary>
 	/// デストラクタ
 	/// </summary>
-	~BossStateNormal() override;
+	~BossStateChargeShot() override;
 
 	/// <summary>
 	/// 初期化
@@ -37,17 +41,21 @@ public:
 	void ApplyGlobalVariables() override;
 
 private:
+	Input* input_ = nullptr;
+
+	//モデル
+	std::unique_ptr<Model> chargemodel_ = nullptr;
 	//ワールドトランスフォーム
-	WorldTransform worldTransform_{};
-	//スピード
-	float moveSpeed_ = 0.06f;
+	WorldTransform chargeWorldTransform_{};
+	WorldTransform bossWorldTransform_{};
+	//チャージ中の時間
+	int chargeTimer_ = 0;
+	//攻撃終了までのタイマー
+	int endTimer_ = 0;
+	//チャージショットのスケール
+	Vector3 chargeShotScale_ = { 1.0f,10.0f,1.0f };
 
-	//次の攻撃までのタイマー
-	int nextAttackTimer_ = 0;
-
-	//レーザー攻撃のタイマー
-	int lazerAttackTimer_ = 0;
-
-	//チャージショットのタイマー
-	int chargeShotTimer_ = 0;
+	bool IsMove_ = false;
+	bool IsAttack_ = false;
 };
+

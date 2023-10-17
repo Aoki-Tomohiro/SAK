@@ -5,6 +5,7 @@
 #include "State/IBossState.h"
 #include "Laser/Laser.h"
 #include "../GameObject/Missile/Missile.h"
+#include "ChargeShot/ChargeShot.h"
 #include <random>
 
 class Weapon;
@@ -50,6 +51,11 @@ public:
 	/// </summary>
 	/// <param name="missile">ミサイル</param>
 	void AddMissile(Missile* missile);
+  
+	/// チャージショットを追加
+	/// </summary>
+	/// <param name="chargeShot">チャージショット</param>
+	void AddChargeShot(ChargeShot* chargeShot);
 
 	/// <summary>
 	/// ワールドトランスフォームを設定
@@ -119,6 +125,12 @@ public:
 	void SetHitMissileCount(int missileCount) { hitMissileCount_ = missileCount; };
 
 	/// <summary>
+	/// チャージショットのリストを取得
+	/// </summary>
+	/// <returns>チャージショットのリスト</returns>
+	const std::list<std::unique_ptr<ChargeShot>>& GetChargeShot() { return chargeShot_; };
+
+	/// <summary>
 	/// ミサイルの当たった数を取得
 	/// </summary>
 	/// <returns></returns>
@@ -146,6 +158,8 @@ private:
 	std::list<std::unique_ptr<Laser>> lasers_{};
 	//ミサイルのリスト
 	std::list<std::unique_ptr<Missile>> missiles_{};
+	//チャージショットのリスト
+	std::list<std::unique_ptr<ChargeShot>> chargeShot_{};
 	//体力
 	float Hp_ = 100.0f;
 	////プレイヤーの攻撃が当たったか

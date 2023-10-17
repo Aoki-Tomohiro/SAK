@@ -1,6 +1,7 @@
 #include "Boss.h"
 #include "State/BossStateNormal.h"
 #include "State/BossStateLaserAttack.h"
+#include "State/BossStateChargeShot.h"
 #include "2D/ImGuiManager.h"
 #include "../GameObject/Weapon/Weapon.h"
 #include "Utility/GlobalVariables.h"
@@ -47,18 +48,32 @@ void Boss::Update() {
 		Boss::AddMissile(missile);
 	}
 
-	//死亡フラグの立ったレーザーをリストから削除
-	lasers_.remove_if([](std::unique_ptr<Laser>& laser) {
-		if (laser->IsDead()) {
-			laser.reset();
+	////死亡フラグの立ったレーザーをリストから削除
+	//lasers_.remove_if([](std::unique_ptr<Laser>& laser) {
+	//	if (laser->IsDead()) {
+	//		laser.reset();
+	//		return true;
+	//	}
+	//	return false;
+	//});
+
+	////レーザーの更新
+	//for (std::unique_ptr<Laser>& laser : lasers_) {
+	//	laser->Update();
+	//}
+
+	//死亡フラグの立ったチャージショットをリストから削除
+	chargeShot_.remove_if([](std::unique_ptr<ChargeShot>& chargeShot) {
+		if (chargeShot->IsDead()) {
+			chargeShot.reset();
 			return true;
 		}
 		return false;
 	});
 
-	//レーザーの更新
-	for (std::unique_ptr<Laser>& laser : lasers_) {
-		laser->Update();
+	//チャージショットの更新
+	for (std::unique_ptr<ChargeShot>& chargeShot : chargeShot_) {
+		chargeShot->Update();
 	}
 
 	//死亡フラグの立ったミサイルをリストから削除
@@ -92,9 +107,14 @@ void Boss::Draw(const ViewProjection& viewProjection) {
 	//状態の描画
 	state_->Draw(this, viewProjection);
 
+	////レーザーの描画
+	//for (std::unique_ptr<Laser>& laser : lasers_) {
+	//	laser->Draw(viewProjection);
+	//}
+
 	//レーザーの描画
-	for (std::unique_ptr<Laser>& laser : lasers_) {
-		laser->Draw(viewProjection);
+	for (std::unique_ptr<ChargeShot>& chargeShot : chargeShot_) {
+		chargeShot->Draw(viewProjection);
 	}
 
 	//ミサイルの描画
@@ -114,6 +134,12 @@ void Boss::AddLaser(Laser* laser) {
 
 void Boss::AddMissile(Missile* missile){
 	missiles_.push_back(std::unique_ptr<Missile>(missile));
+}
+
+void Boss::AddChargeShot(ChargeShot* chargeShot) {
+
+	//レーザーをリストに追加
+	chargeShot_.push_back(std::unique_ptr<ChargeShot>(chargeShot));
 }
 
 float Boss::RandomTY(float min_value, float max_value)

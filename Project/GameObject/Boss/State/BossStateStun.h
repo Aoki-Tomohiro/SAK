@@ -1,16 +1,16 @@
 #pragma once
 #include "IBossState.h"
+#include "2D/ImGuiManager.h"
+#include "3D/Model/Model.h"
 #include "3D/Matrix/WorldTransform.h"
+#include "Components/Input.h"
 
-class BossStateNormal : public IBossState {
-public:
-	//攻撃間隔
-	static int AttackInterval;
-
+class BossStateStun : public IBossState
+{
 	/// <summary>
 	/// デストラクタ
 	/// </summary>
-	~BossStateNormal() override;
+	~BossStateStun() override;
 
 	/// <summary>
 	/// 初期化
@@ -37,17 +37,8 @@ public:
 	void ApplyGlobalVariables() override;
 
 private:
-	//ワールドトランスフォーム
-	WorldTransform worldTransform_{};
-	//スピード
-	float moveSpeed_ = 0.06f;
+	Input* input_ = nullptr;
 
-	//次の攻撃までのタイマー
-	int nextAttackTimer_ = 0;
-
-	//レーザー攻撃のタイマー
-	int lazerAttackTimer_ = 0;
-
-	//チャージショットのタイマー
-	int chargeShotTimer_ = 0;
+	int stunTimer_;
 };
+
