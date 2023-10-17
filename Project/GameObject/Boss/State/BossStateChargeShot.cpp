@@ -102,6 +102,8 @@ void BossStateChargeShot::Update(Boss* pBoss) {
 
 	ImGui::Begin("ChargeShot");
 	ImGui::Text("Push T Key : BossStateStun");
+	ImGui::Text("bossTransform %f", bossWorldTransform_.translation_.x);
+	ImGui::Text("chargeTimer %d", chargeTimer_);
 	ImGui::End();
 }
 

@@ -50,8 +50,18 @@ void BossStateNormal::Update(Boss* pBoss) {
 	//チャージショット状態に変更
 	if (--nextAttackTimer_ < 0)
 	{
-		pBoss->ChangeState(new BossStateChargeShot());
+		if (worldTransform_.translation_.x <= 0.1f && worldTransform_.translation_.x >= -0.1f)
+		{
+			worldTransform_.translation_.x = 0.0f;
+			pBoss->SetWorldTransform(worldTransform_);
+			pBoss->ChangeState(new BossStateChargeShot());
+		}
 	}
+
+	ImGui::Begin("Normal");
+	ImGui::Text("transform : %f", worldTransform_.translation_.x);
+	ImGui::Text("nextAttackTimer %d", nextAttackTimer_);
+	ImGui::End();
 
 	////レーザー攻撃状態に変更
 	//if (--lazerAttackTimer_ < 0) {
