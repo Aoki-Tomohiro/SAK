@@ -43,6 +43,7 @@ private:
 	std::unique_ptr<Model> weaponModelDummy_ = nullptr;
 
 	std::unique_ptr<Model> weaponModel_ = nullptr;
+	std::unique_ptr<Model> weaponRodModel_ = nullptr;
 	std::unique_ptr<Model> involvedMissile_ = nullptr;
 
 	WorldTransform weaponWorldTransform_;
@@ -75,34 +76,7 @@ private:
 	bool IsAttack_ = false;
 	bool IsCoolDown_ = false;
 
-	//モデルとモーション
-
-	enum {
-		Stay,
-		Charge,
-		Attack,
-	};
-
-	int  motionMode_;
-
-	WorldTransform weaponMotionWorldTransform_;
-
-	struct weaponMotionStruct {
-		Vector3 translation_; /*weaponWorldTransform_.translation_を基準としたLocal座標*/
-		Vector3 rotation_;/*weaponWorldTransform_.rotation_を基準としたLocal回転*/
-		Vector3 scale_;/*weaponWorldTransform_.scale_を基準としたLocalスケール*/
-		Vector4 color_;/*色やんね*/
-	};
-
-	//そもそものサイズ
-	Vector3 normalScale_;
-	//そもそもの位置
-	Vector3 normalTransration_;
-
-	float chargeRotateSpeed_;
-	float attackRotateSpeed_[4];
-
-	weaponMotionStruct weaponMotion_;
+	
   
 	bool IsHit_ = false;
 
@@ -126,6 +100,37 @@ private:
 		{0.0f,0.0f,1.0f,1.0f},
 		{0.0f,0.0f,0.0f,0.0f},
 	};
+
+	//モデルとモーション
+	enum {
+		Stay,
+		Charge,
+		Attack,
+	};
+
+	int  motionMode_;
+
+	WorldTransform weaponMotionWorldTransform_;
+	WorldTransform weaponRodMotionWorldTransform_;
+
+	struct weaponMotionStruct {
+		Vector3 translation_; /*weaponWorldTransform_.translation_を基準としたLocal座標*/
+		Vector3 rotation_;/*weaponWorldTransform_.rotation_を基準としたLocal回転*/
+		Vector3 scale_;/*weaponWorldTransform_.scale_を基準としたLocalスケール*/
+		Vector4 color_;/*色やんね*/
+
+		Vector3 normalTransration_;//そもそものサイズ
+		Vector3 normalScale_;		//そもそもの位置
+	};
+
+
+	float chargeRotateSpeed_;
+	float attackRotateSpeed_[4];
+
+	float playerPosY = -2.5f;
+
+	weaponMotionStruct weaponMotion_;
+	weaponMotionStruct weaponRodMotion_;
   
 };
 
