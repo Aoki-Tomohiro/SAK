@@ -127,7 +127,7 @@ private:
 	float chargeRotateSpeed_;
 	float attackRotateSpeed_[4];
 
-	float playerPosY = -2.5f;
+	float playerPosY = -3.3f;
 
 	weaponMotionStruct weaponMotion_;
 	weaponMotionStruct weaponRodMotion_;
