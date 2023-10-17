@@ -129,7 +129,7 @@ void Player::ModelMotion()
 
 			break;
 		case Move:
-			
+			//
 			platformMotionMove_.time += platformMotionMove_.timePlus;
 
 			if (platformMotionMove_.time >= platformMotionMove_.duration || platformMotionMove_.time <= 0) {
