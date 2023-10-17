@@ -60,7 +60,7 @@ void BossStateChargeShot::Update(Boss* pBoss) {
 
 		ta = std::clamp(ta, 0.0f, 1.0f);
 
-		float scale = 1.0f * ta;
+		float scale = 0.6f * ta;
 
 		chargeWorldTransform_.scale_.x = scale;
 		chargeWorldTransform_.scale_.y = scale;
