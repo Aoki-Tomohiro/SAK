@@ -38,7 +38,7 @@ void Boss::Update() {
 
 	//状態の更新
 	state_->Update(this);
-
+	//
 	//ミサイルを生成
 	if (--missileSpornTimer_ < 0) {
 		missileSpornTimer_ = MissileSpornTime;
