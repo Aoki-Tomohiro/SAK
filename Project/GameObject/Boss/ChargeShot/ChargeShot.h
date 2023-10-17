@@ -8,11 +8,13 @@
 class ChargeShot : public Collider
 {
 public:
+	static int chargeShotEndTime;
+
 	/// <summary>
 	/// 初期化
 	/// </summary>
 	/// <param name="position">座標</param>
-	void Initialize();
+	void Initialize(Vector3 position, float chargeShotpeed);
 
 	/// <summary>
 	/// 更新

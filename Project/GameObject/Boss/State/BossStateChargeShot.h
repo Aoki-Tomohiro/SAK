@@ -9,7 +9,7 @@ class BossStateChargeShot : public IBossState
 {
 	//チャージ中の時間
 	static int chargeTime;
-	static int LaserAttackEndTime;
+	static int chargeShotEndTime;
 
 	/// <summary>
 	/// デストラクタ
@@ -40,6 +40,8 @@ class BossStateChargeShot : public IBossState
 	/// </summary>
 	void ApplyGlobalVariables() override;
 
+	int Random(int min_value, int max_value);
+
 private:
 	Input* input_ = nullptr;
 
@@ -54,6 +56,10 @@ private:
 	int endTimer_ = 0;
 	//チャージショットのスケール
 	Vector3 chargeShotScale_ = { 1.0f,10.0f,1.0f };
+
+	float chargeShotSpeed_ = 0.05f;
+
+	int respownCount_ = 0;
 
 	bool IsMove_ = false;
 	bool IsAttack_ = false;
