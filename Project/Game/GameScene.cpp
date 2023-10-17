@@ -67,11 +67,11 @@ void GameScene::Update(GameManager* gameManager) {
 	for (const std::unique_ptr<Missile>& missile : missiles) {
 		collisionManager_->SetColliderList(missile.get());
 	}
-	//const std::unique_ptr<Missile>& leftMissile = missileManager_->GetLeftMissile();
-	//const std::unique_ptr<Missile>& rightMissile = missileManager_->GetRightMissile();
-	//collisionManager_->SetColliderList(leftMissile.get());
-	//collisionManager_->SetColliderList(rightMissile.get());
 	collisionManager_->SetColliderList(weapon_.get());
+	const std::list<std::unique_ptr<ChargeShot>>& chargeShots = boss_->GetChargeShot();
+	for (const std::unique_ptr<ChargeShot>& chargeShot : chargeShots) {
+		collisionManager_->SetColliderList(chargeShot.get());
+	}
 	collisionManager_->CheckAllCollisions();
 
 
