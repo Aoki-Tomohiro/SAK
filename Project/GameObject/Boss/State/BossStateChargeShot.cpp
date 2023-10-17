@@ -47,7 +47,7 @@ void BossStateChargeShot::Update(Boss* pBoss) {
 	//グローバル変数の適応
 	BossStateChargeShot::ApplyGlobalVariables();
 
-	if (chargeTimer_ >= 0)
+	if (chargeTimer_ > 0)
 	{
 		chargeTimer_--;
 		chargeWorldTransform_.scale_.x += 0.0008f;
@@ -59,29 +59,35 @@ void BossStateChargeShot::Update(Boss* pBoss) {
 			pBoss->ChangeState(new BossStateStun());
 			return;
 		}
+	}
 
-
-		if (chargeTimer_ == 0)
-		{
-			IsMove_ = true;
-		}
+	if (chargeTimer_ <= 0 && IsAttack_ == false)
+	{
+		IsMove_ = true;
 	}
 
 	if (IsMove_ == true)
 	{
-		bossWorldTransform_.translation_.x = -6.9f;
+		bossWorldTransform_.translation_.x -= 0.05f;
 		pBoss->SetWorldTransform(bossWorldTransform_);
 
-		ChargeShot* chargeShot;
+		if (bossWorldTransform_.translation_.x <= -6.9f)
+		{
+			bossWorldTransform_.translation_.x = -6.9f;
+			pBoss->SetWorldTransform(bossWorldTransform_);
 
-		chargeShot = new ChargeShot();
-		chargeShot->Initialize();
-		pBoss->AddChargeShot(chargeShot);
+			ChargeShot* chargeShot;
 
-		IsMove_ = false;
+			chargeShot = new ChargeShot();
+			chargeShot->Initialize();
+			pBoss->AddChargeShot(chargeShot);
+
+			IsMove_ = false;
+			IsAttack_ = true;
+		}
 	}
 
-	if (chargeTimer_ < 0) 
+	if (IsAttack_ == true) 
 	{
 		chargeTimer_ = -1;
 
