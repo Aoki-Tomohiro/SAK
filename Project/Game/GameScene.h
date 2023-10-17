@@ -16,6 +16,7 @@
 #include "../GameObject/Player/Player.h"
 #include "../GameObject/Missile/MissileManager.h"
 #include "../GameObject/Weapon/Weapon.h"
+#include "../BackGround.h"
 
 #include <memory>
 
@@ -89,4 +90,6 @@ private:
 	//衝突マネージャー
 	std::unique_ptr<CollisionManager> collisionManager_ = nullptr;
 	std::unique_ptr<Weapon> weapon_ = nullptr;
+
+	std::unique_ptr<BackGround> backGround_ = nullptr;
 };

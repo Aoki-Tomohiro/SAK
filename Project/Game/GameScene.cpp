@@ -42,6 +42,11 @@ void GameScene::Initialize(GameManager* gameManager) {
 
 	//衝突マネージャーの生成
 	collisionManager_ = std::make_unique<CollisionManager>();
+
+	//背景の生成
+	backGround_ = std::make_unique<BackGround>();
+	backGround_->Initialize();
+
 };
 
 void GameScene::Update(GameManager* gameManager) {
@@ -70,6 +75,8 @@ void GameScene::Update(GameManager* gameManager) {
 	collisionManager_->SetColliderList(weapon_.get());
 	collisionManager_->CheckAllCollisions();
 
+	//背景の更新
+	backGround_->Update();
 
 	//デバッグカメラの更新
 	debugCamera_->Update();
@@ -117,6 +124,9 @@ void GameScene::Draw(GameManager* gameManager) {
 	boss_->Draw(viewProjection_);
   
 	missileManager_->Draw(viewProjection_);
+
+	//背景の描画
+	backGround_->Draw(viewProjection_);
 
 	Model::PostDraw();
 
