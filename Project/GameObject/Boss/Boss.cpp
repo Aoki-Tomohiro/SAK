@@ -121,7 +121,7 @@ void Boss::Update() {
 void Boss::Draw(const ViewProjection& viewProjection) {
 
 	//ボスのモデルの描画
-	model_->Draw(worldTransform_, viewProjection);
+	//model_->Draw(worldTransform_, viewProjection);
 
 	bossModel_->Draw(bossMotionWorldTransform_, viewProjection);
 

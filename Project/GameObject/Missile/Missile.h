@@ -55,8 +55,6 @@ private:
 
 	bool IsFollowingWeapon_ = false;
 
-	bool isAlive_;
-
 	WorldTransform missileMotionWorldTransform_;
 
 	struct missileMotionStruct {

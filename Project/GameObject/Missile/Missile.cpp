@@ -16,7 +16,6 @@ void Missile::Initialize(const Vector3& position, const Vector3& velocity)
 
 	worldTransform_.UpdateMatrix();
 
-	missileMoveSpeed_ = speed;
 	missileMoveSpeed_ = velocity;
 
 	//衝突属性を設定
@@ -74,7 +73,7 @@ void Missile::Update()
 void Missile::Draw(const ViewProjection viewProjection)
 {
 	if (isAlive_) {
-		model_->Draw(worldTransform_, viewProjection, textureHandle_);
+		//model_->Draw(worldTransform_, viewProjection, textureHandle_);
 
 		missileModel_->Draw(missileMotionWorldTransform_, viewProjection);
 	}
@@ -102,7 +101,7 @@ Vector3 Missile::GetWorldPosition()
 void Missile::ModelMotion()
 {
 
-	if (missileMoveSpeed_ < 0) {
+	if (missileMoveSpeed_.x < 0) {
 		missileMotion_.rotation_.z = 3.14f;
 		missileMotion_.rotation_.x -= 0.1f;
 	}

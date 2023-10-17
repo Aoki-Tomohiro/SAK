@@ -18,10 +18,6 @@ public:
 
 	void ApplyGlobalVariables();
 
-	void OnCollision() override;
-
-	Vector3 GetWorldPosition() override;
-
 	void ModelMotion();
 
 private:

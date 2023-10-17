@@ -11,8 +11,6 @@ void Player::Initialize(Weapon* weapon)
   
 	weapon_ = weapon;
 
-	playerModel_.reset(Model::CreateFromOBJ("Resources/Sphere", "sphere.obj"));
-
 	textureHandle_ = TextureManager::Load("Resources/uvChecker.png");
 
 	input_ = Input::GetInstance();
@@ -30,9 +28,6 @@ void Player::Initialize(Weapon* weapon)
 	globalVariables->CreateGroup(groupName);
 	globalVariables->AddItem(groupName, "playerMoveSpeed", playerMoveSpeed_);
 
-	//衝突属性を設定
-	SetCollisionAttribute(kCollisionAttributePlayer);
-	SetCollisionMask(kCollisionMaskPlayer);
 
 	//Motion
 	platformMotion_ = {
@@ -97,21 +92,14 @@ void Player::Draw(const ViewProjection viewProjection)
 {
 	platformModel_->Draw(platformMotionWorldTransform_, viewProjection);
 
-	playerModelDummy_->Draw(playerWorldTransform_, viewProjection, textureHandle_);
+	//playerModelDummy_->Draw(playerWorldTransform_, viewProjection, textureHandle_);
 }
 
-void Player::ApplyGlobalVariables() 
+void Player::ApplyGlobalVariables()
 {
 	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
 	const char* groupName = "Player";
 	playerMoveSpeed_ = globalVariables->GetFloatValue(groupName, "playerMoveSpeed");
-
-Vector3 Player::GetWorldPosition() {
-	Vector3 pos;
-	pos.x = playerWorldTransform_.matWorld_.m[3][0];
-	pos.y = playerWorldTransform_.matWorld_.m[3][1];
-	pos.z = playerWorldTransform_.matWorld_.m[3][2];
-	return pos;
 }
 
 void Player::ModelMotion()

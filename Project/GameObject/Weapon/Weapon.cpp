@@ -11,8 +11,7 @@ void Weapon::Initialize()
 	weaponModelDummy_.reset(Model::CreateFromOBJ("Resources/Sphere", "sphere.obj"));
 
 	weaponModel_.reset(Model::CreateFromOBJ("Resources/Head", "Head.obj"));
-  
-	weaponModel_.reset(Model::CreateFromOBJ("Resources/Sphere", "sphere.obj"));
+
 	involvedMissile_.reset(Model::CreateFromOBJ("Resources/Sphere", "sphere.obj"));
   
 
@@ -244,7 +243,7 @@ void Weapon::Draw(const ViewProjection viewProjection)
 {
   
 	weaponModel_->Draw(weaponMotionWorldTransform_, viewProjection);
-	weaponModelDummy_->Draw(weaponWorldTransform_, viewProjection);
+	//weaponModelDummy_->Draw(weaponWorldTransform_, viewProjection);
 
 	//ミサイルを巻き込んでいるときに描画する
 	if (isInvolvedMissile_) {
