@@ -4,7 +4,7 @@
 #include "BossStateStun.h"
 #include "Utility/GlobalVariables.h"
 
-int BossStateChargeShot::chargeTime = 10;
+int BossStateChargeShot::chargeTime = 200;
 int BossStateChargeShot::chargeShotEndTime = 240;
 
 
@@ -38,7 +38,7 @@ void BossStateChargeShot::Initialize(Boss* pBoss) {
 	pBoss->SetWorldTransform(bossWorldTransform_);
 
 	chargeShotSpeed_ = 0.05f;
-	respownCount_ = rand() % 2 + 1;
+	respownCount_ = Random(1,2);
 
 	//タイマーの初期化
 	chargeTimer_ = chargeTime;
@@ -72,6 +72,7 @@ void BossStateChargeShot::Update(Boss* pBoss) {
 	if (IsMove_ == true && respownCount_ == 1)
 	{
 		bossWorldTransform_.translation_.x += chargeShotSpeed_;
+		chargeWorldTransform_.translation_.x += chargeShotSpeed_;
 		pBoss->SetWorldTransform(bossWorldTransform_);
 
 		if (bossWorldTransform_.translation_.x >= 6.9f)
@@ -105,6 +106,7 @@ void BossStateChargeShot::Update(Boss* pBoss) {
 	{
 		chargeShotSpeed_ = -0.05f;
 		bossWorldTransform_.translation_.x += chargeShotSpeed_;
+		chargeWorldTransform_.translation_.x += chargeShotSpeed_;
 		pBoss->SetWorldTransform(bossWorldTransform_);
 
 		if (bossWorldTransform_.translation_.x <= -6.9f)
@@ -147,6 +149,7 @@ void BossStateChargeShot::Update(Boss* pBoss) {
 	ImGui::Begin("ChargeShot");
 	ImGui::Text("Push T Key : BossStateStun");
 	ImGui::Text("bossTransform %f", bossWorldTransform_.translation_.x);
+	ImGui::Text("respownCount %d", respownCount_);
 	ImGui::Text("chargeTimer %d", chargeTimer_);
 	ImGui::Text("endTimer %d", endTimer_);
 	ImGui::End();
@@ -154,7 +157,7 @@ void BossStateChargeShot::Update(Boss* pBoss) {
 
 void BossStateChargeShot::Draw(Boss* pBoss, const ViewProjection& viewProjection) {
 
-	if (chargeTimer_ > 0)
+	if (IsAttack_ == false)
 	{
 		//モデルの描画
 		chargemodel_->Draw(chargeWorldTransform_, viewProjection);
@@ -167,4 +170,13 @@ void BossStateChargeShot::ApplyGlobalVariables() {
 	WarningTime = globalVariables->GetIntValue(groupName, "WarningTime");
 	LaserAttackEndTime = globalVariables->GetIntValue(groupName, "LaserAttackEndTime");
 	laserScale_ = globalVariables->GetVector3Value(groupName, "LaserScale");*/
+}
+
+int BossStateChargeShot::Random(int min_value, int max_value)
+{
+	std::random_device rd;
+	std::mt19937 gen(rd());
+	std::uniform_int_distribution<int> dis(min_value, max_value);
+
+	return dis(gen);
 }

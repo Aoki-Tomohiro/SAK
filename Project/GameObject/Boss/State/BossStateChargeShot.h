@@ -40,6 +40,8 @@ class BossStateChargeShot : public IBossState
 	/// </summary>
 	void ApplyGlobalVariables() override;
 
+	int Random(int min_value, int max_value);
+
 private:
 	Input* input_ = nullptr;
 
