@@ -55,10 +55,10 @@ void BossStateMissileAttack::Update(Boss* pBoss) {
 			addMissileCount_++;
 			Missile* missile[2];
 			missile[0] = new Missile();
-			missile[0]->Initialize(Vector3{ -8.0f,pBoss->RandomTY(-2.2f, 1.0f) ,0.0f }, Vector3{ 0.05f,0.0f,0.0f });
+			missile[0]->Initialize(Vector3{ -8.0f,pBoss->Random(-2.2f, 1.0f) ,0.0f }, Vector3{ 0.05f,0.0f,0.0f });
 			pBoss->AddMissile(missile[0]);
 			missile[1] = new Missile();
-			missile[1]->Initialize(Vector3{ 8.0f,pBoss->RandomTY(-2.2f, 1.0f) ,0.0f }, Vector3{ -0.05f,0.0f,0.0f });
+			missile[1]->Initialize(Vector3{ 8.0f,pBoss->Random(-2.2f, 1.0f) ,0.0f }, Vector3{ -0.05f,0.0f,0.0f });
 			pBoss->AddMissile(missile[1]);
 		}
 	}

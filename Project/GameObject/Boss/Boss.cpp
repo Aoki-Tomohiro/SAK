@@ -44,7 +44,7 @@ void Boss::Update() {
 		missileSpornTimer_ = MissileSpornTime;
 		missileDirection_ *= -1;
 		Missile* missile = new Missile();
-		missile->Initialize(Vector3{ 13.0f * missileDirection_,RandomTY(/*-1.3f,*/-2.2f, 1.0f) ,0.0f }, Vector3{ missileMoveSpeed_ * (missileDirection_ * -1),0.0f,0.0f });
+		missile->Initialize(Vector3{ 13.0f * missileDirection_,Random(/*-1.3f,*/-2.2f, 1.0f) ,0.0f }, Vector3{ missileMoveSpeed_ * (missileDirection_ * -1),0.0f,0.0f });
 		Boss::AddMissile(missile);
 	}
 
@@ -142,11 +142,19 @@ void Boss::AddChargeShot(ChargeShot* chargeShot) {
 	chargeShot_.push_back(std::unique_ptr<ChargeShot>(chargeShot));
 }
 
-float Boss::RandomTY(float min_value, float max_value)
+float Boss::Random(float min_value, float max_value)
 {
 	std::random_device rd;
 	std::mt19937 gen(rd());
 	std::uniform_real_distribution<float> dis(min_value, max_value);
+
+	return dis(gen); // ランダムな浮動小数点数を生成して返す
+}
+
+int Boss::Random(int min_value, int max_value) {
+	std::random_device rd;
+	std::mt19937 gen(rd());
+	std::uniform_int_distribution<int> dis(min_value, max_value);
 
 	return dis(gen); // ランダムな浮動小数点数を生成して返す
 }
