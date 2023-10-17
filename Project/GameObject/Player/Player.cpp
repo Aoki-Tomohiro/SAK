@@ -1,0 +1,72 @@
+#include "Player.h"
+#include "Utility/GlobalVariables.h"
+
+void Player::Initialize(Weapon* weapon)
+{
+	weapon_ = weapon;
+
+	playerModel_.reset(Model::CreateFromOBJ("Resources/Sphere", "sphere.obj"));
+
+	textureHandle_ = TextureManager::Load("Resources/uvChecker.png");
+
+	input_ = Input::GetInstance();
+
+	//Player
+	playerWorldTransform_.translation_.x = 0.0f;
+	playerWorldTransform_.translation_.y = -3.3f;
+	playerWorldTransform_.scale_ = { 0.8f,0.8f,0.8f };
+
+	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
+	const char* groupName = "Player";
+	//グループを追加
+	globalVariables->CreateGroup(groupName);
+	globalVariables->AddItem(groupName, "playerMoveSpeed", playerMoveSpeed_);
+}
+
+void Player::Update() 
+{
+	//プレイヤーの左右移動
+	if (input_->IsPushKey(DIK_A) && weapon_->GetIsAttack() == false)
+	{
+		playerWorldTransform_.translation_.x -= playerMoveSpeed_;
+
+		if (playerWorldTransform_.translation_.x <= -7.3f)
+		{
+			playerWorldTransform_.translation_.x = -7.3f;
+		}
+	}
+
+	if (input_->IsPushKey(DIK_D) && weapon_->GetIsAttack() == false)
+	{
+		playerWorldTransform_.translation_.x += playerMoveSpeed_;
+
+		if (playerWorldTransform_.translation_.x >= 7.3f)
+		{
+			playerWorldTransform_.translation_.x = 7.3f;
+		}
+	}
+
+	playerWorldTransform_.UpdateMatrix();
+
+	Player::ApplyGlobalVariables();
+
+	ImGui::Begin("Player");
+	ImGui::Text("translationX %f", playerWorldTransform_.translation_.x);
+	ImGui::Text("translationY %f", playerWorldTransform_.translation_.y);
+	ImGui::Text("translationZ %f", playerWorldTransform_.translation_.z);
+	ImGui::Text("A : moveLeft  D : moveRight");
+	ImGui::End();
+}
+
+void Player::Draw(const ViewProjection viewProjection)
+{
+	playerModel_->Draw(playerWorldTransform_, viewProjection, textureHandle_);
+}
+
+void Player::ApplyGlobalVariables() 
+{
+	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
+	const char* groupName = "Player";
+	playerMoveSpeed_ = globalVariables->GetFloatValue(groupName, "playerMoveSpeed");
+
+}

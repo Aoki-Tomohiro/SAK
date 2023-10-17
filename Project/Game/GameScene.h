@@ -10,6 +10,12 @@
 #include "2D/Sprite.h"
 #include "3D/Matrix/WorldTransform.h"
 #include "3D/Matrix/ViewProjection.h"
+#include "Utility/CollisionManager/CollisionManager.h"
+
+#include "../GameObject/Boss/Boss.h"
+#include "../GameObject/Player/Player.h"
+//#include "../GameObject/Missile/MissileManager.h"
+#include "../GameObject/Weapon/Weapon.h"
 
 #include <memory>
 
@@ -73,4 +79,14 @@ private:
 	WorldTransform worldTransform1_{};
 	WorldTransform worldTransform2_{};
 
+	//ボス
+	std::unique_ptr<Boss> boss_ = nullptr;
+
+	std::unique_ptr<Player> player_ = nullptr;
+
+	//std::unique_ptr<MissileManager> missileManager_ = nullptr;
+
+	//衝突マネージャー
+	std::unique_ptr<CollisionManager> collisionManager_ = nullptr;
+	std::unique_ptr<Weapon> weapon_ = nullptr;
 };

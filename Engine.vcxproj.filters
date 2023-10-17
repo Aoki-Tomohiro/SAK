@@ -91,6 +91,78 @@
     <Filter Include="ヘッダー ファイル\Engine\3D\DebugCamera">
       <UniqueIdentifier>{3ef29a89-0edb-4db7-89a0-9a0d973bb5a6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Project\Game\TitleScene">
+      <UniqueIdentifier>{c38a9ba5-f5b3-4f01-bc15-0d3b79570cc0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Project\Game\SelectScene">
+      <UniqueIdentifier>{a5d60355-65cd-42ca-9275-d0727d0a3c6a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Project\Game\ClearScene">
+      <UniqueIdentifier>{8c643529-690a-4ab6-abb6-d2fe6fea82d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Project\Game\OverScene">
+      <UniqueIdentifier>{b391a48c-2cc2-4359-bc65-8f5bd6603869}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Project\Game\TitleScene">
+      <UniqueIdentifier>{73042874-1595-4438-8196-902d93f9b633}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Project\Game\SelectScene">
+      <UniqueIdentifier>{1c0d7836-0a37-43cc-aabb-e1c8ecea7f19}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Project\Game\ClearScene">
+      <UniqueIdentifier>{45b4034f-6c5f-4a30-a076-452ba18d6ec6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Project\Game\OverScene">
+      <UniqueIdentifier>{85bc802c-30f6-4311-a38a-61fdb7e016d0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Project\GameObject">
+      <UniqueIdentifier>{d46a3d4b-9f62-48c5-826b-5bb98ccec81a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Project\GameObject">
+      <UniqueIdentifier>{b63892bf-a8e3-49fa-94cc-2e7e4a27d9c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Project\GameObject\Boss">
+      <UniqueIdentifier>{bc64e7b4-c3f8-4624-875f-f4a6a418ea75}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Project\GameObject\Boss">
+      <UniqueIdentifier>{1e4e073e-fd36-4817-af5d-1bad967a74ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Project\GameObject\Boss\State">
+      <UniqueIdentifier>{2a632a23-34cc-42e8-9dff-301e45e55351}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Project\GameObject\Boss\State">
+      <UniqueIdentifier>{c3e4d182-3c7e-4069-ac44-f9200800086e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Project\GameObject\Boss\Lazer">
+      <UniqueIdentifier>{526917ed-1ee8-48b0-946d-b63e167e38ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Project\GameObject\Boss\Lazer">
+      <UniqueIdentifier>{808ed72f-025b-4c76-904a-fd3654a583eb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Project\GameObject\Weapon">
+      <UniqueIdentifier>{7bce0458-9853-454b-844e-b1412189854d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Project\GameObject\Weapon">
+      <UniqueIdentifier>{cfc97859-96b3-4152-8792-38650e81ac15}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Project\GameObject\Player">
+      <UniqueIdentifier>{0059095f-5a58-441c-9631-e3c3f30228aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Project\GameObject\Player">
+      <UniqueIdentifier>{ceb9aa83-a170-492b-a38a-df5b563b65cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Project\GameObject\Missile">
+      <UniqueIdentifier>{49560295-b95f-473c-bc39-a607aa05de69}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Project\GameObject\Missile">
+      <UniqueIdentifier>{5cc70959-04cd-45ed-b163-1dcef32a83ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Project\GameObject\Boss\ChargeShot">
+      <UniqueIdentifier>{ebc76282-31e8-4c1e-ba0d-ad9dde173033}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Project\GameObject\Boss\ChargeShot">
+      <UniqueIdentifier>{ac2286af-b026-45d8-ac88-f15d54df38e9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -179,6 +251,54 @@
     </ClCompile>
     <ClCompile Include="Engine\Components\PostProcess.cpp">
       <Filter>ソース ファイル\Engine\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\Game\TitleScene\GameTitleScene.cpp">
+      <Filter>ソース ファイル\Project\Game\TitleScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\Game\SelectScene\GameSelectScene.cpp">
+      <Filter>ソース ファイル\Project\Game\SelectScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\Game\ClearScene\GameClearScene.cpp">
+      <Filter>ソース ファイル\Project\Game\ClearScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\Game\OverScene\GameOverScene.cpp">
+      <Filter>ソース ファイル\Project\Game\OverScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\GameObject\Boss\Boss.cpp">
+      <Filter>ソース ファイル\Project\GameObject\Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\GameObject\Boss\State\BossStateNormal.cpp">
+      <Filter>ソース ファイル\Project\GameObject\Boss\State</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\GameObject\Boss\State\BossStateLazerAttack.cpp">
+      <Filter>ソース ファイル\Project\GameObject\Boss\State</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\GameObject\Boss\Laser\Laser.cpp">
+      <Filter>ソース ファイル\Project\GameObject\Boss\Lazer</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\GameObject\Weapon\Weapon.cpp">
+      <Filter>ソース ファイル\Project\GameObject\Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\GameObject\Player\Player.cpp">
+      <Filter>ソース ファイル\Project\GameObject\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\GameObject\Missile\Missile.cpp">
+      <Filter>ソース ファイル\Project\GameObject\Missile</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\GameObject\Missile\MissileManager.cpp">
+      <Filter>ソース ファイル\Project\GameObject\Missile</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\GameObject\Boss\State\BossStateMissileAttack.cpp">
+       <Filter>ソース ファイル\Project\GameObject\Boss\State</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\GameObject\Boss\ChargeShot\ChargeShot.cpp">
+      <Filter>ソース ファイル\Project\GameObject\Boss\ChargeShot</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\GameObject\Boss\State\BossStateChargeShot.cpp">
+      <Filter>ソース ファイル\Project\GameObject\Boss\State</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\GameObject\Boss\State\BossStateStun.cpp">
+      <Filter>ソース ファイル\Project\GameObject\Boss\State</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -280,6 +400,57 @@
     </ClInclude>
     <ClInclude Include="Engine\Components\PostProcess.h">
       <Filter>ヘッダー ファイル\Engine\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\Game\TitleScene\GameTitleScene.h">
+      <Filter>ヘッダー ファイル\Project\Game\TitleScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\Game\SelectScene\GameSelectScene.h">
+      <Filter>ヘッダー ファイル\Project\Game\SelectScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\Game\ClearScene\GameClearScene.h">
+      <Filter>ヘッダー ファイル\Project\Game\ClearScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\Game\OverScene\GameOverScene.h">
+      <Filter>ヘッダー ファイル\Project\Game\OverScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\GameObject\Boss\Boss.h">
+      <Filter>ヘッダー ファイル\Project\GameObject\Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\GameObject\Boss\State\BossStateLaserAttack.h">
+      <Filter>ヘッダー ファイル\Project\GameObject\Boss\State</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\GameObject\Boss\State\BossStateNormal.h">
+      <Filter>ヘッダー ファイル\Project\GameObject\Boss\State</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\GameObject\Boss\State\IBossState.h">
+      <Filter>ヘッダー ファイル\Project\GameObject\Boss\State</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\GameObject\Boss\Laser\Laser.h">
+      <Filter>ヘッダー ファイル\Project\GameObject\Boss\Lazer</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\GameObject\Weapon\Weapon.h">
+      <Filter>ヘッダー ファイル\Project\GameObject\Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\GameObject\Player\Player.h">
+      <Filter>ヘッダー ファイル\Project\GameObject\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\GameObject\Missile\MissileManager.h">
+      <Filter>ヘッダー ファイル\Project\GameObject\Missile</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\GameObject\Missile\Missile.h">
+      <Filter>ヘッダー ファイル\Project\GameObject\Missile</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\GameObject\Boss\State\BossStateMissileAttack.h">
+      <Filter>ヘッダー ファイル\Project\GameObject\Boss\State</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\GameObject\Boss\ChargeShot\ChargeShot.h">
+      <Filter>ヘッダー ファイル\Project\GameObject\Boss\ChargeShot</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\GameObject\Boss\State\BossStateChargeShot.h">
+      <Filter>ヘッダー ファイル\Project\GameObject\Boss\State</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\GameObject\Boss\State\BossStateStun.h">
+      <Filter>ヘッダー ファイル\Project\GameObject\Boss\State</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

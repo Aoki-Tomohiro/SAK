@@ -55,6 +55,14 @@ Vector3 Multiply(const Vector3& v1, const Vector3& v2);
 float Length(const Vector3& v);
 
 /// <summary>
+/// 行列の引き算
+/// </summary>
+/// <param name="m1"></param>
+/// <param name="m2"></param>
+/// <returns></returns>
+Matrix4x4 Subtract(const Matrix4x4& m1, const Matrix4x4& m2);
+
+/// <summary>
 /// 行列の掛け算
 /// </summary>
 /// <param name="m1">1つ目の行列</param>

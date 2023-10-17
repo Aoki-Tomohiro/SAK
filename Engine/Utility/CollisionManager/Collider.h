@@ -1,5 +1,6 @@
 #pragma once
 #include <stdint.h>
+#include "CollisionConfig.h"
 #include "Utility/MathFunction.h"
 
 class Collider {
@@ -7,7 +8,7 @@ public:
 	/// <summary>
 	/// 衝突時に呼ばれる関数
 	/// </summary>
-	virtual void OnCollision() {};
+	virtual void OnCollision(uint32_t collisionAttribute,float damage) {};
 
 	/// <summary>
 	/// ワールド座標を取得
@@ -63,6 +64,30 @@ public:
 	/// <param name="collisionMask"></param>
 	void SetCollisionMask(uint32_t collisionMask) { collisionMask_ = collisionMask; };
 
+	/// <summary>
+	/// 形状を取得
+	/// </summary>
+	/// <returns></returns>
+	uint32_t GetCollisionPrimitive() { return collisionPrimitive_; };
+
+	/// <summary>
+	/// 形状を設定
+	/// </summary>
+	/// <param name="collisionPrimitive"></param>
+	void SetCollisionPrimitive(uint32_t collisionPrimitive) { collisionPrimitive_ = collisionPrimitive; };
+
+	/// <summary>
+	/// ダメージを取得
+	/// </summary>
+	/// <returns></returns>
+	float GetDamage() { return damage_; };
+
+	/// <summary>
+	/// ダメージを設定
+	/// </summary>
+	/// <param name="damage"></param>
+	void SetDamage(float damage) { damage_ = damage; };
+
 private:
 	//衝突半径
 	float radius_ = 1.0f;
@@ -72,4 +97,8 @@ private:
 	uint32_t collisionAttribute_ = 0xffffffff;
 	//衝突マスク(相手)
 	uint32_t collisionMask_ = 0xffffffff;
+	//形状(デフォルトは球に設定)
+	uint32_t collisionPrimitive_ = kCollisionPrimitiveSphere;
+	//ダメージ
+	float damage_ = 1.0f;
 };
