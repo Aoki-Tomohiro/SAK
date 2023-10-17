@@ -10,8 +10,8 @@ void MissileManager::Initialize(Weapon* weapon) {
 	rightMissile_ = std::make_unique<Missile>();
 
 	//ミサイルの初期化
-	leftMissile_->Initialize(Vector3{ -13.0f,RandomTY(-1.3f, 1.8f) ,0.0f }, missileMoveSpeed_);
-	rightMissile_->Initialize(Vector3{ 13.0f,RandomTY(-1.3f, 1.8f) ,0.0f }, -missileMoveSpeed_);
+	leftMissile_->Initialize(Vector3{ -13.0f,RandomTY(-1.3f, 1.8f) ,0.0f }, Vector3{ missileMoveSpeed_,0.0f,0.0f });
+	rightMissile_->Initialize(Vector3{ 13.0f,RandomTY(-1.3f, 1.8f) ,0.0f }, Vector3{ -missileMoveSpeed_,0.0f,0.0f });
 
 	leftMissile_->SetWeapon(weapon_);
 	rightMissile_->SetWeapon(weapon_);

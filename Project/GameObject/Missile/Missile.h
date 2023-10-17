@@ -12,7 +12,7 @@ class Missile : public Collider
 {
 public:
 
-	void Initialize(const Vector3& position, const float& speed);
+	void Initialize(const Vector3& position, const Vector3& velocity);
 
 	void Update();
 
@@ -24,9 +24,7 @@ public:
 
 	void SetPosition(const Vector3& position) { worldTransform_.translation_ = position; };
 
-	void OnCollision() override;
-
-	void OnCollision(float damage) override;
+	void OnCollision(uint32_t collisionAttribute, float damage) override;
 
 	Vector3 GetWorldPosition() override;
 
@@ -45,7 +43,7 @@ private:
 
 	Matrix4x4 localMatrix_;
 
-	float missileMoveSpeed_ = 0.05f;
+	Vector3 missileMoveSpeed_ = { 0.0f,0.05f,0.0f };
 
 	float missileFollowingSpeed_ = 0.2f;
 

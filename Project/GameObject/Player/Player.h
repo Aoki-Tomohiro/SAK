@@ -6,7 +6,7 @@
 #include "Utility/CollisionManager/Collider.h"
 #include "../GameObject/Weapon/Weapon.h"
 
-class Player : public Collider
+class Player
 {
 public:
 
@@ -17,12 +17,6 @@ public:
 	void Draw(const ViewProjection viewProjection);
 
 	void ApplyGlobalVariables();
-
-	void OnCollision() override;
-
-	void OnCollision(float damage) override;
-
-	Vector3 GetWorldPosition() override;
 
 private:
 	Input* input_ = nullptr;

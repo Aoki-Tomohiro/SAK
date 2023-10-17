@@ -39,9 +39,7 @@ public:
 private:
 	//ワールドトランスフォーム
 	WorldTransform worldTransform_{};
-
 	//スピード
-	static int moveDirection_;
 	float moveSpeed_ = 0.06f;
 
 	//次の攻撃までのタイマー

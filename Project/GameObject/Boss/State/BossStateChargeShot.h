@@ -56,5 +56,6 @@ private:
 	Vector3 chargeShotScale_ = { 1.0f,10.0f,1.0f };
 
 	bool IsMove_ = false;
+	bool IsAttack_ = false;
 };
 

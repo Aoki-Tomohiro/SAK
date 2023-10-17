@@ -14,8 +14,8 @@ void Laser::Initialize(const Vector3& position, const Vector3& scale) {
 	deadTimer_ = deadTime;
 
 	//衝突属性を設定
-	SetCollisionAttribute(kCollisionAttributeEnemy);
-	SetCollisionMask(kCollisionMaskEnemy);
+	SetCollisionAttribute(kCollisionAttributeLaser);
+	SetCollisionMask(kCollisionMaskLaser);
 	SetCollisionPrimitive(kCollisionPrimitiveAABB);
 
 	AABB aabbSize{ {-scale.x,-scale.y,-scale.z},{scale.x,scale.y,scale.z} };
@@ -43,11 +43,7 @@ void Laser::Draw(const ViewProjection& viewProjection) {
 	model_->Draw(worldTransform_, viewProjection);
 }
 
-void Laser::OnCollision() {
-
-}
-
-void Laser::OnCollision(float damage) {
+void Laser::OnCollision(uint32_t collisionAttribute, float damage) {
 
 }
 

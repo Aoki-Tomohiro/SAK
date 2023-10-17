@@ -38,5 +38,7 @@ class BossStateStun : public IBossState
 
 private:
 	Input* input_ = nullptr;
+
+	int stunTimer_;
 };
 

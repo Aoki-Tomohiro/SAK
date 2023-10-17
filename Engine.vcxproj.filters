@@ -288,6 +288,9 @@
     <ClCompile Include="Project\GameObject\Missile\MissileManager.cpp">
       <Filter>ソース ファイル\Project\GameObject\Missile</Filter>
     </ClCompile>
+    <ClCompile Include="Project\GameObject\Boss\State\BossStateMissileAttack.cpp">
+       <Filter>ソース ファイル\Project\GameObject\Boss\State</Filter>
+    </ClCompile>
     <ClCompile Include="Project\GameObject\Boss\ChargeShot\ChargeShot.cpp">
       <Filter>ソース ファイル\Project\GameObject\Boss\ChargeShot</Filter>
     </ClCompile>
@@ -436,6 +439,9 @@
     </ClInclude>
     <ClInclude Include="Project\GameObject\Missile\Missile.h">
       <Filter>ヘッダー ファイル\Project\GameObject\Missile</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\GameObject\Boss\State\BossStateMissileAttack.h">
+      <Filter>ヘッダー ファイル\Project\GameObject\Boss\State</Filter>
     </ClInclude>
     <ClInclude Include="Project\GameObject\Boss\ChargeShot\ChargeShot.h">
       <Filter>ヘッダー ファイル\Project\GameObject\Boss\ChargeShot</Filter>
