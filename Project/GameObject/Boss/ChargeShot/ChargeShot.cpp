@@ -11,13 +11,13 @@ void ChargeShot::Initialize() {
 	worldTransform_.scale_.y = 3.5f;
 	worldTransform_.scale_.z = 0.5f;
 
-	////衝突属性を設定
-	//SetCollisionAttribute(kCollisionAttributeEnemy);
-	//SetCollisionMask(kCollisionMaskEnemy);
-	//SetCollisionPrimitive(kCollisionPrimitiveAABB);
+	//衝突属性を設定
+	SetCollisionAttribute(kCollisionAttributeLaser);
+	SetCollisionMask(kCollisionMaskLaser);
+	SetCollisionPrimitive(kCollisionPrimitiveAABB);
 
-	//AABB aabbSize{ {-scale.x,-scale.y,-scale.z},{scale.x,scale.y,scale.z} };
-	//SetAABB(aabbSize);
+	AABB aabbSize{ {-worldTransform_.scale_.x,-worldTransform_.scale_.y,-worldTransform_.scale_.z},{worldTransform_.scale_.x,worldTransform_.scale_.y,worldTransform_.scale_.z} };
+	SetAABB(aabbSize);
 }
 
 void ChargeShot::Update() {
