@@ -1,12 +1,12 @@
 #include "BossStateNormal.h"
 #include "../GameObject/Boss/Boss.h"
 #include "BossStateLaserAttack.h"
+#include "BossStateMissileAttack.h"
 #include "BossStateChargeShot.h"
 #include "BossStateStun.h"
 #include "Utility/GlobalVariables.h"
 
 //実態定義
-int BossStateNormal::moveDirection_ = 1;
 int BossStateNormal::AttackInterval = 300;
 
 BossStateNormal::~BossStateNormal() {
@@ -18,6 +18,13 @@ void BossStateNormal::Initialize(Boss* pBoss) {
 	worldTransform_ = pBoss->GetWorldTransform();
 	//攻撃間隔の初期化
 	nextAttackTimer_ = AttackInterval;
+	//速度の初期化
+	if (pBoss->GetMoveDirection() == 1) {
+		moveSpeed_ = moveSpeed_;
+	}
+	else {
+		moveSpeed_ = -moveSpeed_;
+	}
 	lazerAttackTimer_ = AttackInterval;
 	chargeShotTimer_ = AttackInterval;
 
@@ -36,17 +43,23 @@ void BossStateNormal::Update(Boss* pBoss) {
 	BossStateNormal::ApplyGlobalVariables();
 
 	//移動処理
-	moveSpeed_ *= moveDirection_;
+	if (pBoss->GetMoveDirection() == 1) {
+		moveSpeed_ = moveSpeed_;
+	}
+	else {
+		moveSpeed_ = -moveSpeed_;
+	}
 	worldTransform_.translation_ = Add(worldTransform_.translation_, Vector3{ moveSpeed_,0.0f,0.0f });
 
 	//画面端まで移動したら移動方向を変える
 	if (worldTransform_.translation_.x <= -7.0f || worldTransform_.translation_.x >= 7.0f) {
-		moveDirection_ *= -1;
+		int direction = pBoss->GetMoveDirection();
+		pBoss->SetMoveDirection(direction *= -1);
 	}
 
 	//ワールドトランスフォームを設定
 	pBoss->SetWorldTransform(worldTransform_);
-
+    
 	//チャージショット状態に変更
 	if (--nextAttackTimer_ < 0)
 	{

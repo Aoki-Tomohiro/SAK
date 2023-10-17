@@ -19,9 +19,9 @@ public:
 
 	void ApplyGlobalVariables();
 
-	void OnCollision() override;
+	int GetInvolvedMissileCount() { return involvedCount_; };
 
-	void OnCollision(float damage) override;
+	void OnCollision(uint32_t collisionAttribute, float damage) override;
 
 	Vector3 GetWorldPosition() override;
 
@@ -31,12 +31,16 @@ public:
 
 	bool GetIsAttack() { return IsAttack_; }
 
+	bool GetIsHit() { return IsHit_; };
+
 private:
 	Input* input_ = nullptr;
 
 	std::unique_ptr<Model> weaponModel_ = nullptr;
+	std::unique_ptr<Model> involvedMissile_ = nullptr;
 
 	WorldTransform weaponWorldTransform_;
+	WorldTransform involvedMissileWorldTransform_;
 
 	uint32_t textureHandle_ = 0u;
 
@@ -64,13 +68,27 @@ private:
 	bool IsCharge_ = false;
 	bool IsAttack_ = false;
 	bool IsCoolDown_ = false;
+	bool IsHit_ = false;
 
 	//体力
 	float Hp_ = 3.0f;
+
 	//無敵時間
 	bool invincibleFlag_ = false;
 	int invincibleTimer_ = 0;
 
+	//攻撃時のダメージ
 	float attackDamage_[4] = { 1.0f,2.0f,3.0f,4.0f };
+
+	//ミサイルを巻き込んでいるか
+	bool isInvolvedMissile_ = false;
+	int involvedCount_ = 0;
+	Vector4 missileColor_[5]{
+		{1.0f,1.0f,1.0f,1.0f},
+		{1.0f,0.0f,0.0f,1.0f},
+		{0.0f,1.0f,0.0f,1.0f},
+		{0.0f,0.0f,1.0f,1.0f},
+		{0.0f,0.0f,0.0f,0.0f},
+	};
 };
 
