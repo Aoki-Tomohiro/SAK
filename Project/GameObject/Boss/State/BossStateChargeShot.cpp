@@ -4,7 +4,7 @@
 #include "BossStateStun.h"
 #include "Utility/GlobalVariables.h"
 
-int BossStateChargeShot::chargeTime = 400;
+int BossStateChargeShot::chargeTime = 1600;
 int BossStateChargeShot::LaserAttackEndTime = 800;
 
 
@@ -54,7 +54,7 @@ void BossStateChargeShot::Update(Boss* pBoss) {
 		chargeWorldTransform_.scale_.y += 0.0008f;
 		chargeWorldTransform_.scale_.z += 0.0008f;
 
-		if (input_->IsPushKey(DIK_T))
+		if (pBoss->GetHitMissileCount() >= 5)
 		{
 			pBoss->ChangeState(new BossStateStun());
 			return;

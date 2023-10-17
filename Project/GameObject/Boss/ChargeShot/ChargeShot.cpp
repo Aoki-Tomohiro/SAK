@@ -39,11 +39,7 @@ void ChargeShot::Draw(const ViewProjection& viewProjection) {
 	model_->Draw(worldTransform_, viewProjection);
 }
 
-void ChargeShot::OnCollision() {
-
-}
-
-void ChargeShot::OnCollision(float damage) {
+void ChargeShot::OnCollision(uint32_t collisionAttribute, float damage) {
 
 }
 
