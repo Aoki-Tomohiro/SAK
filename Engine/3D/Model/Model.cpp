@@ -54,13 +54,10 @@ Model* Model::CreateFromOBJ(const std::string& directoryPath, const std::string&
 			model->material_ = std::make_unique<Material>();
 			model->material_->Initialize();
 
-			//WVPリソースの作成
-			model->CreateWVPResource();
-
 			//DirectionalLightの作成
 			model->directionalLight_ = std::make_unique<DirectionalLight>();
 			model->directionalLight_->Initialize();
-			
+
 			return model;
 		}
 	}
@@ -80,9 +77,6 @@ Model* Model::CreateFromOBJ(const std::string& directoryPath, const std::string&
 	//マテリアルの作成
 	model->material_ = std::make_unique<Material>();
 	model->material_->Initialize();
-
-	//WVPリソースの作成
-	model->CreateWVPResource();
 
 	model->directionalLight_ = std::make_unique<DirectionalLight>();
 	model->directionalLight_->Initialize();
@@ -147,8 +141,8 @@ Model* Model::CreateSphere() {
 	model->material_ = std::make_unique<Material>();
 	model->material_->Initialize();
 
-	//WVPリソースの作成
-	model->CreateWVPResource();
+	model->directionalLight_ = std::make_unique<DirectionalLight>();
+	model->directionalLight_->Initialize();
 
 	return model;
 }
@@ -168,15 +162,20 @@ void Model::PostDraw() {}
 
 void Model::Draw(const WorldTransform& worldTransform, const ViewProjection& viewProjection) {
 
-	//行列を計算する
-	Model::UpdateMatrix(worldTransform, viewProjection);
+	//マテリアルの更新
+	material_->Update();
+
+	//DirectionalLightの更新
+	directionalLight_->Update();
 
 	//頂点データを設定
 	mesh_->SetGraphicsCommand();
 	//マテリアルCBufferの場所を設定
 	material_->SetGraphicsCommand(UINT(RootParameterIndex::Material));
-	//wvp用のCBufferの場所を設定
-	sCommandList_->SetGraphicsRootConstantBufferView(UINT(RootParameterIndex::TransformationMatrix), wvpResource_->GetGPUVirtualAddress());
+	//WorldTransform用のCBufferの場所を設定
+	sCommandList_->SetGraphicsRootConstantBufferView(UINT(RootParameterIndex::WorldlTransform), worldTransform.constBuff_->GetGPUVirtualAddress());
+	//ViewProjection用のCBufferの場所を設定
+	sCommandList_->SetGraphicsRootConstantBufferView(UINT(RootParameterIndex::ViewProjection), viewProjection.constBuff_->GetGPUVirtualAddress());
 	//DescriptorTableを設定
 	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(UINT(RootParameterIndex::Texture), textureHandle_);
 	//DirectionalLightを設定
@@ -188,15 +187,20 @@ void Model::Draw(const WorldTransform& worldTransform, const ViewProjection& vie
 
 void Model::Draw(const WorldTransform& worldTransform, const ViewProjection& viewProjection, uint32_t textureHandle) {
 
-	//行列を計算する
-	Model::UpdateMatrix(worldTransform, viewProjection);
+	//マテリアルの更新
+	material_->Update();
+
+	//DirectionalLightの更新
+	directionalLight_->Update();
 
 	//頂点データを設定
 	mesh_->SetGraphicsCommand();
 	//マテリアルCBufferの場所を設定
 	material_->SetGraphicsCommand(UINT(RootParameterIndex::Material));
-	//wvp用のCBufferの場所を設定
-	sCommandList_->SetGraphicsRootConstantBufferView(UINT(RootParameterIndex::TransformationMatrix), wvpResource_->GetGPUVirtualAddress());
+	//WorldTransform用のCBufferの場所を設定
+	sCommandList_->SetGraphicsRootConstantBufferView(UINT(RootParameterIndex::WorldlTransform), worldTransform.constBuff_->GetGPUVirtualAddress());
+	//ViewProjection用のCBufferの場所を設定
+	sCommandList_->SetGraphicsRootConstantBufferView(UINT(RootParameterIndex::ViewProjection), viewProjection.constBuff_->GetGPUVirtualAddress());
 	//DescriptorTableを設定
 	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(UINT(RootParameterIndex::Texture), textureHandle);
 	//DirectionalLightを設定
@@ -297,20 +301,23 @@ void Model::CreatePipelineStateObject() {
 	descriptorRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;//Offsetを自動計算
 
 	//RootParameter作成。複数設定できるので配列。今回は結果一つだけなので長さ1の配列
-	D3D12_ROOT_PARAMETER rootParameters[4] = {};
+	D3D12_ROOT_PARAMETER rootParameters[5] = {};
 	rootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;//CBVで使う
 	rootParameters[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;//PixelShaderで使う
 	rootParameters[0].Descriptor.ShaderRegister = 0;//レジスタ番号0とバインド
 	rootParameters[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;//CBVを使う
 	rootParameters[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;//VertexShaderで使う
 	rootParameters[1].Descriptor.ShaderRegister = 0;//レジスタ番号0を使う
-	rootParameters[2].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;//DescriptorTableを使う
-	rootParameters[2].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;//PixelShaderで使う
-	rootParameters[2].DescriptorTable.pDescriptorRanges = descriptorRange;//Tableの中身の配列を指定
-	rootParameters[2].DescriptorTable.NumDescriptorRanges = _countof(descriptorRange);//Tableで利用する数
-	rootParameters[3].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;//CBVを使う
+	rootParameters[2].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;//CBVを使う
+	rootParameters[2].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;//VertexShaderで使う
+	rootParameters[2].Descriptor.ShaderRegister = 1;//レジスタ番号1を使う
+	rootParameters[3].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;//DescriptorTableを使う
 	rootParameters[3].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;//PixelShaderで使う
-	rootParameters[3].Descriptor.ShaderRegister = 1;//レジスタ番号１を使う
+	rootParameters[3].DescriptorTable.pDescriptorRanges = descriptorRange;//Tableの中身の配列を指定
+	rootParameters[3].DescriptorTable.NumDescriptorRanges = _countof(descriptorRange);//Tableで利用する数
+	rootParameters[4].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;//CBVを使う
+	rootParameters[4].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;//PixelShaderで使う
+	rootParameters[4].Descriptor.ShaderRegister = 1;//レジスタ番号１を使う
 	descriptionRootSignature.pParameters = rootParameters;//ルートパラメータ配列へのポインタ
 	descriptionRootSignature.NumParameters = _countof(rootParameters);//配列の長さ
 
@@ -413,8 +420,9 @@ void Model::CreatePipelineStateObject() {
 	graphicsPipelineStateDesc.BlendState = blendDesc;//BlendState
 	graphicsPipelineStateDesc.RasterizerState = rasterizerDesc;//RasterizerState
 	//書き込むRTVの情報
-	graphicsPipelineStateDesc.NumRenderTargets = 1;
+	graphicsPipelineStateDesc.NumRenderTargets = 2;
 	graphicsPipelineStateDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+	graphicsPipelineStateDesc.RTVFormats[1] = DXGI_FORMAT_R32_FLOAT;
 	//利用するトポロジ(形状)のタイプ。三角形
 	graphicsPipelineStateDesc.PrimitiveTopologyType =
 		D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
@@ -520,34 +528,4 @@ Model::MaterialData Model::LoadMaterialTemplateFile(const std::string& directory
 		}
 	}
 	return materialData;
-}
-
-
-void Model::CreateWVPResource() {
-
-	//WVP用のリソースを作る。Matrix4x4 1つ分のサイズを用意する
-	wvpResource_ = DirectXCommon::GetInstance()->CreateBufferResource(sizeof(ConstBufferDataTransformationMatrix));
-	//データを書き込む
-	ConstBufferDataTransformationMatrix* wvpData = nullptr;
-	//書き込むためのアドレスを取得
-	wvpResource_->Map(0, nullptr, reinterpret_cast<void**>(&wvpData));
-	//単位行列を書き込んでおく
-	wvpData->WVP = MakeIdentity4x4();
-	wvpData->World = MakeIdentity4x4();
-	wvpResource_->Unmap(0, nullptr);
-}
-
-
-void Model::UpdateMatrix(const WorldTransform& worldTransform, const ViewProjection& viewProjection) {
-
-	//WorldViewProjectionMatrixの作成
-	Matrix4x4 worldViewProjectionMatrix = Multiply(worldTransform.matWorld_, Multiply(viewProjection.matView_, viewProjection.matProjection_));
-	//データを書き込む
-	ConstBufferDataTransformationMatrix* wvpData = nullptr;
-	//書き込むためのアドレスを取得
-	wvpResource_->Map(0, nullptr, reinterpret_cast<void**>(&wvpData));
-	//単位行列を書き込んでおく
-	wvpData->WVP = worldViewProjectionMatrix;
-	wvpData->World = worldTransform.matWorld_;
-	wvpResource_->Unmap(0, nullptr);
 }

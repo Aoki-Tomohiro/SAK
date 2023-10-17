@@ -63,11 +63,33 @@ void BossStateNormal::Update(Boss* pBoss) {
 	//チャージショット状態に変更
 	if (--nextAttackTimer_ < 0)
 	{
-		if (worldTransform_.translation_.x <= 0.1f && worldTransform_.translation_.x >= -0.1f)
-		{
-			worldTransform_.translation_.x = 0.0f;
-			pBoss->SetWorldTransform(worldTransform_);
-			pBoss->ChangeState(new BossStateChargeShot());
+		//次の行動をランダムに決める
+		if (isAttack_ == false) {
+			isAttack_ = true;
+			//ボスの体力が半分以下だったらチャージショットを攻撃パターンに加える
+			if (pBoss->GetHP() > pBoss->kHpMax / 2) {
+				nextAttack_ = pBoss->Random(0, 1);
+			}
+			else {
+				nextAttack_ = pBoss->Random(0, 2);
+			}
+		}
+
+		switch (nextAttack_) {
+		case LaserAttack:
+			pBoss->ChangeState(new BossStateLaserAttack());
+			break;
+		case MissileAttack:
+			pBoss->ChangeState(new BossStateMissileAttack());
+			break;
+		case ChargeShot:
+			if (worldTransform_.translation_.x <= 0.1f && worldTransform_.translation_.x >= -0.1f)
+			{
+				worldTransform_.translation_.x = 0.0f;
+				pBoss->SetWorldTransform(worldTransform_);
+				pBoss->ChangeState(new BossStateChargeShot());
+			}
+			break;
 		}
 	}
 
@@ -75,11 +97,6 @@ void BossStateNormal::Update(Boss* pBoss) {
 	ImGui::Text("transform : %f", worldTransform_.translation_.x);
 	ImGui::Text("nextAttackTimer %d", nextAttackTimer_);
 	ImGui::End();
-
-	////レーザー攻撃状態に変更
-	//if (--lazerAttackTimer_ < 0) {
-	//	pBoss->ChangeState(new BossStateLaserAttack());
-	//}
 }
 
 void BossStateNormal::Draw(Boss* pBoss, const ViewProjection& viewProjection) {

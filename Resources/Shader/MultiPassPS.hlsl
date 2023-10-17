@@ -5,8 +5,8 @@ SamplerState gSampler : register(s0);
 
 struct PixelShaderOutput
 {
-    float32_t4 color : SV_TARGET0;//通常
-    float32_t4 highIntensity : SV_TARGET1;//高輝度
+    float32_t4 color : SV_TARGET0; //通常
+    float32_t4 highIntensity : SV_TARGET1; //高輝度
 };
 
 PixelShaderOutput main(VertexShaderOutput input)
@@ -16,7 +16,7 @@ PixelShaderOutput main(VertexShaderOutput input)
     output.color = textureColor;
     
     //高輝度を取得
-    float y = output.color.r * 0.299 * output.color.g * 0.587 * output.color.b * 0.114;
+    float y = output.color.r * 0.299 + output.color.g * 0.587 + output.color.b * 0.114;
     if (y > 0.99)
     {
         output.highIntensity = y;

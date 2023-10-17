@@ -1,5 +1,20 @@
 #include "ViewProjection.h"
 
+//void ViewProjection::Initialize() {
+//
+//	//CBVの作成
+//	constBuff_ = DirectXCommon::GetInstance()->CreateBufferResource(sizeof(ConstBuffDataViewProjection));
+//}
+
+ViewProjection::ViewProjection() {
+	//CBVの作成
+	constBuff_ = DirectXCommon::GetInstance()->CreateBufferResource(sizeof(ConstBuffDataViewProjection));
+}
+
+ViewProjection::~ViewProjection() {
+
+}
+
 void ViewProjection::UpdateViewMatrix() {
 
 	//カメラのワールド行列を作成
@@ -22,4 +37,17 @@ void ViewProjection::UpdateMatrix() {
 
 	//プロジェクション行列の計算
 	ViewProjection::UpdateProjectionMatrix();
+
+	//ビュープロジェクションを転送する
+	ViewProjection::TransferMatrix();
+}
+
+void ViewProjection::TransferMatrix() {
+
+	//Resourceに書き込む
+	ConstBuffDataViewProjection* viewProjectionData = nullptr;
+	constBuff_->Map(0, nullptr, reinterpret_cast<void**>(&viewProjectionData));
+	viewProjectionData->view = matView_;
+	viewProjectionData->projection = matProjection_;
+	constBuff_->Unmap(0, nullptr);
 }

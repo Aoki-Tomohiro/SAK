@@ -18,6 +18,8 @@ public:
 	//ミサイルの発生時間
 	static int MissileSpornTime;
 
+	static const int kHpMax = 100;
+
 	/// <summary>
 	/// 初期化
 	/// </summary>
@@ -93,7 +95,15 @@ public:
 	/// <param name="min_value"></param>
 	/// <param name="max_value"></param>
 	/// <returns></returns>
-	float RandomTY(float min_value, float max_value);
+	float Random(float min_value, float max_value);
+
+	/// <summary>
+	/// ランダム生成
+	/// </summary>
+	/// <param name="min_value"></param>
+	/// <param name="max_value"></param>
+	/// <returns></returns>
+	int Random(int min_value, int max_value);
 
 	/// <summary>
 	/// 進行方向を取得
@@ -137,6 +147,12 @@ public:
 	int GetHitMissileCount() { return hitMissileCount_; };
 
 	/// <summary>
+	/// HPを取得
+	/// </summary>
+	/// <returns></returns>
+	float GetHP() { return Hp_; };
+
+	/// <summary>
 	/// 当たり判定
 	/// </summary>
 	void OnCollision(uint32_t collisionAttribute, float damage) override;
@@ -147,11 +163,21 @@ public:
 	/// <returns>ワールド座標</returns>
 	Vector3 GetWorldPosition() override;
 
+	/// <summary>
+	/// モーション用関数
+	/// </summary>
+	void ModelMotion();
+
 private:
-	//ボスのモデル
+	//ボスのモデル(ダミー)
 	std::unique_ptr<Model> model_ = nullptr;
+
+	//ボスのモデル
+	std::unique_ptr<Model> bossModel_ = nullptr;
+
 	//ワールドトランスフォーム
 	WorldTransform worldTransform_{};
+
 	//ボスの行動パターン
 	std::unique_ptr<IBossState> state_ = nullptr;
 	//レーザーのリスト
@@ -162,8 +188,6 @@ private:
 	std::list<std::unique_ptr<ChargeShot>> chargeShot_{};
 	//体力
 	float Hp_ = 100.0f;
-	////プレイヤーの攻撃が当たったか
-	//bool IsHit_ = false;
 	//当たったミサイルの数
 	int hitMissileCount_ = 0;
 	//ミサイルのスポーンタイマー
@@ -176,5 +200,24 @@ private:
 	int moveDirection_ = 1;
 	//プレイヤー
 	Weapon* weapon_ = nullptr;
+
+
+	//モデルとモーション
+
+	WorldTransform bossMotionWorldTransform_{};;
+
+	struct bossMotionStruct {
+		Vector3 translation_; /*worldTransform_.translation_を基準としたLocal座標*/
+		Vector3 rotation_;/*worldTransform_.rotation_を基準としたLocal回転*/
+		Vector3 scale_;/*worldTransform_.scale_を基準としたLocalスケール*/
+		Vector4 color_;/*色やんね*/
+	};
+
+	//そもそものサイズ
+	Vector3 normalScale_;
+	//そもそもの位置
+	Vector3 normalTransration_;
+
+	bossMotionStruct bossMotion_;
 
 };

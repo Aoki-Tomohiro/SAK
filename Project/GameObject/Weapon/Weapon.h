@@ -25,6 +25,9 @@ public:
 
 	Vector3 GetWorldPosition() override;
 
+
+	void ModelMotion();
+  
 	WorldTransform& GetWeaponWorldTransform() { return weaponWorldTransform_; }
 
 	bool GetIsCharge() { return IsCharge_; }
@@ -32,9 +35,12 @@ public:
 	bool GetIsAttack() { return IsAttack_; }
 
 	bool GetIsHit() { return IsHit_; };
+  
 
 private:
 	Input* input_ = nullptr;
+
+	std::unique_ptr<Model> weaponModelDummy_ = nullptr;
 
 	std::unique_ptr<Model> weaponModel_ = nullptr;
 	std::unique_ptr<Model> involvedMissile_ = nullptr;
@@ -68,6 +74,36 @@ private:
 	bool IsCharge_ = false;
 	bool IsAttack_ = false;
 	bool IsCoolDown_ = false;
+
+	//モデルとモーション
+
+	enum {
+		Stay,
+		Charge,
+		Attack,
+	};
+
+	int  motionMode_;
+
+	WorldTransform weaponMotionWorldTransform_;
+
+	struct weaponMotionStruct {
+		Vector3 translation_; /*weaponWorldTransform_.translation_を基準としたLocal座標*/
+		Vector3 rotation_;/*weaponWorldTransform_.rotation_を基準としたLocal回転*/
+		Vector3 scale_;/*weaponWorldTransform_.scale_を基準としたLocalスケール*/
+		Vector4 color_;/*色やんね*/
+	};
+
+	//そもそものサイズ
+	Vector3 normalScale_;
+	//そもそもの位置
+	Vector3 normalTransration_;
+
+	float chargeRotateSpeed_;
+	float attackRotateSpeed_[4];
+
+	weaponMotionStruct weaponMotion_;
+  
 	bool IsHit_ = false;
 
 	//体力
@@ -90,5 +126,6 @@ private:
 		{0.0f,0.0f,1.0f,1.0f},
 		{0.0f,0.0f,0.0f,0.0f},
 	};
+  
 };
 

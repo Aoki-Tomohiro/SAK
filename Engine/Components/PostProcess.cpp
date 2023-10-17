@@ -61,8 +61,8 @@ void PostProcess::Initialize() {
 	PostProcess::CreatePostProcessPipelineStateObject();
 
 	//ディスクリプタヒープの作成
-	multiPassRTVDescriptorHeap_ = dxCommon_->CreateDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_RTV, 12, false);
-	multiPassSRVDescriptorHeap_ = dxCommon_->CreateDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, 12, true);
+	multiPassRTVDescriptorHeap_ = dxCommon_->CreateDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_RTV, 14, false);
+	multiPassSRVDescriptorHeap_ = dxCommon_->CreateDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, 14, true);
 	multiPassDSVDescriptorHeap_ = dxCommon_->CreateDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_DSV, 1, false);
 
 	//深度テクスチャの作成
@@ -72,25 +72,48 @@ void PostProcess::Initialize() {
 
 	//リソースの作成
 	float clearColor[] = { 0.1f,0.25f,0.5f,1.0f };
+	float depthColor[] = { 1.0f,0.0f,0.0f,0.0f };
 	firstPassResource_.resource = PostProcess::CreateTextureResource(WinApp::GetInstance()->kClientWidth, WinApp::GetInstance()->kClientHeight, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, clearColor);
+	linearDepthResource_.resource = PostProcess::CreateTextureResource(WinApp::GetInstance()->kClientWidth, WinApp::GetInstance()->kClientHeight, DXGI_FORMAT_R32_FLOAT, depthColor);
 	secondPassResource_.resource = PostProcess::CreateTextureResource(WinApp::GetInstance()->kClientWidth, WinApp::GetInstance()->kClientHeight, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, clearColor);
 	highIntensityResource_.resource = PostProcess::CreateTextureResource(WinApp::GetInstance()->kClientWidth, WinApp::GetInstance()->kClientHeight, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, clearColor);
 	blurResources_[0].resource = PostProcess::CreateTextureResource(WinApp::GetInstance()->kClientWidth, WinApp::GetInstance()->kClientHeight, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, clearColor);
 	blurResources_[1].resource = PostProcess::CreateTextureResource(WinApp::GetInstance()->kClientWidth, WinApp::GetInstance()->kClientHeight, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, clearColor);
+	highIntensityBlurResource_[0].resource = PostProcess::CreateTextureResource(WinApp::GetInstance()->kClientWidth, WinApp::GetInstance()->kClientHeight, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, clearColor);
+	highIntensityBlurResource_[1].resource = PostProcess::CreateTextureResource(WinApp::GetInstance()->kClientWidth, WinApp::GetInstance()->kClientHeight, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, clearColor);
+	shrinkBlurResources_[0].resource = PostProcess::CreateTextureResource(WinApp::GetInstance()->kClientWidth / 2, WinApp::GetInstance()->kClientHeight / 2, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, clearColor);
+	shrinkBlurResources_[1].resource = PostProcess::CreateTextureResource(WinApp::GetInstance()->kClientWidth / 2, WinApp::GetInstance()->kClientHeight / 2, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, clearColor);
+	shrinkHighIntensityBlurResources_[0].resource = PostProcess::CreateTextureResource(WinApp::GetInstance()->kClientWidth / 2, WinApp::GetInstance()->kClientHeight / 2, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, clearColor);
+	shrinkHighIntensityBlurResources_[1].resource = PostProcess::CreateTextureResource(WinApp::GetInstance()->kClientWidth / 2, WinApp::GetInstance()->kClientHeight / 2, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, clearColor);
 
 	//レンダーターゲットビューの作成の作成
 	firstPassResource_.rtvIndex = PostProcess::CreateRenderTargetView(firstPassResource_.resource, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB);
+	linearDepthResource_.rtvIndex = PostProcess::CreateRenderTargetView(linearDepthResource_.resource, DXGI_FORMAT_R32_FLOAT);
 	secondPassResource_.rtvIndex = PostProcess::CreateRenderTargetView(secondPassResource_.resource, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB);
 	highIntensityResource_.rtvIndex = PostProcess::CreateRenderTargetView(highIntensityResource_.resource, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB);
 	blurResources_[0].rtvIndex = PostProcess::CreateRenderTargetView(blurResources_[0].resource, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB);
 	blurResources_[1].rtvIndex = PostProcess::CreateRenderTargetView(blurResources_[1].resource, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB);
+	highIntensityBlurResource_[0].rtvIndex = PostProcess::CreateRenderTargetView(highIntensityBlurResource_[0].resource, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB);
+	highIntensityBlurResource_[1].rtvIndex = PostProcess::CreateRenderTargetView(highIntensityBlurResource_[1].resource, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB);
+	shrinkBlurResources_[0].rtvIndex = PostProcess::CreateRenderTargetView(shrinkBlurResources_[0].resource, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB);
+	shrinkBlurResources_[1].rtvIndex = PostProcess::CreateRenderTargetView(shrinkBlurResources_[1].resource, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB);
+	shrinkHighIntensityBlurResources_[0].rtvIndex = PostProcess::CreateRenderTargetView(shrinkHighIntensityBlurResources_[0].resource, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB);
+	shrinkHighIntensityBlurResources_[1].rtvIndex = PostProcess::CreateRenderTargetView(shrinkHighIntensityBlurResources_[1].resource, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB);
 
 	//シェーダーリソースビューの作成
 	firstPassResource_.srvIndex = PostProcess::CreateShaderResourceView(firstPassResource_.resource, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB);
+	linearDepthResource_.srvIndex = PostProcess::CreateShaderResourceView(linearDepthResource_.resource, DXGI_FORMAT_R32_FLOAT);
 	secondPassResource_.srvIndex = PostProcess::CreateShaderResourceView(secondPassResource_.resource, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB);
 	highIntensityResource_.srvIndex = PostProcess::CreateShaderResourceView(highIntensityResource_.resource, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB);
 	blurResources_[0].srvIndex = PostProcess::CreateShaderResourceView(blurResources_[0].resource, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB);
 	blurResources_[1].srvIndex = PostProcess::CreateShaderResourceView(blurResources_[1].resource, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB);
+	highIntensityBlurResource_[0].srvIndex = PostProcess::CreateShaderResourceView(highIntensityBlurResource_[0].resource, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB);
+	highIntensityBlurResource_[1].srvIndex = PostProcess::CreateShaderResourceView(highIntensityBlurResource_[1].resource, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB);
+	shrinkBlurResources_[0].srvIndex = PostProcess::CreateShaderResourceView(shrinkBlurResources_[0].resource, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB);
+	shrinkBlurResources_[1].srvIndex = PostProcess::CreateShaderResourceView(shrinkBlurResources_[1].resource, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB);
+	shrinkHighIntensityBlurResources_[0].srvIndex = PostProcess::CreateShaderResourceView(shrinkHighIntensityBlurResources_[0].resource, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB);
+	shrinkHighIntensityBlurResources_[1].srvIndex = PostProcess::CreateShaderResourceView(shrinkHighIntensityBlurResources_[1].resource, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB);
+
 
 	//ブラー用のCBVの作成
 	blurConstantBuffer_ = dxCommon_->CreateBufferResource(sizeof(BlurData));
@@ -111,6 +134,18 @@ void PostProcess::Initialize() {
 	}
 	blurConstantBuffer_->Unmap(0, nullptr);
 
+	//縮小ぼかし用のCBVの作成
+	shrinkBlurConstantBuffer_ = dxCommon_->CreateBufferResource(sizeof(BlurData));
+	//ブラー用のCBVに書き込む
+	BlurData* shrinkBlurData = nullptr;
+	shrinkBlurConstantBuffer_->Map(0, nullptr, reinterpret_cast<void**>(&shrinkBlurData));
+	shrinkBlurData->textureWidth = WinApp::GetInstance()->kClientWidth / 2;
+	shrinkBlurData->textureHeight = WinApp::GetInstance()->kClientHeight / 2;
+	for (int i = 0; i < 8; i++) {
+		shrinkBlurData->weight[i] = blurData->weight[i];
+	}
+	shrinkBlurConstantBuffer_->Unmap(0, nullptr);
+
 	//Bloom用のCBVの作成
 	bloomConstantBuffer_ = dxCommon_->CreateBufferResource(sizeof(BloomData));
 	//Bloom用のリソースに書き込む
@@ -118,6 +153,24 @@ void PostProcess::Initialize() {
 	bloomConstantBuffer_->Map(0, nullptr, reinterpret_cast<void**>(&bloomData));
 	bloomData->enable = isBloomActive_;
 	bloomConstantBuffer_->Unmap(0, nullptr);
+
+	//フォグ用のリソースを作成
+	fogConstantBuffer_ = dxCommon_->CreateBufferResource(sizeof(FogData));
+	//フォグ用のリソースに書き込む
+	FogData* fogData = nullptr;
+	fogConstantBuffer_->Map(0, nullptr, reinterpret_cast<void**>(&fogData));
+	fogData->enable = isFogActive_;
+	fogData->scale = fogScale_;
+	fogData->attenuationRate = fogAttenuationRate_;
+	fogConstantBuffer_->Unmap(0, nullptr);
+
+	//Dof用のリソースを作成
+	dofConstantBuffer_ = dxCommon_->CreateBufferResource(sizeof(DofData));
+	//Dof用のリソースに書き込む
+	DofData* dofData = nullptr;
+	dofConstantBuffer_->Map(0, nullptr, reinterpret_cast<void**>(&dofData));
+	dofData->enable = isDofActive_;
+	dofConstantBuffer_->Unmap(0, nullptr);
 
 	//LensDistortion用のリソースを作成
 	lensDistortionConstantBuffer_ = dxCommon_->CreateBufferResource(sizeof(LensDistortionData));
@@ -131,6 +184,49 @@ void PostProcess::Initialize() {
 
 	//ビネット用のリソースの作成
 	vignetteConstantBuffer_ = dxCommon_->CreateBufferResource(sizeof(VignetteData));
+	//ビネットのリソースに書き込む
+	VignetteData* vignetteData = nullptr;
+	vignetteConstantBuffer_->Map(0, nullptr, reinterpret_cast<void**>(&vignetteData));
+	vignetteData->enable = isVignetteActive_;
+	vignetteData->intensity = vignetteIntensity_;
+	vignetteConstantBuffer_->Unmap(0, nullptr);
+}
+
+
+void PostProcess::Update() {
+
+	if (isPostProcessActive_ == false) {
+		return;
+	}
+
+	//Bloom用のリソースに書き込む
+	BloomData* bloomData = nullptr;
+	bloomConstantBuffer_->Map(0, nullptr, reinterpret_cast<void**>(&bloomData));
+	bloomData->enable = isBloomActive_;
+	bloomConstantBuffer_->Unmap(0, nullptr);
+
+	//フォグ用のリソースに書き込む
+	FogData* fogData = nullptr;
+	fogConstantBuffer_->Map(0, nullptr, reinterpret_cast<void**>(&fogData));
+	fogData->enable = isFogActive_;
+	fogData->scale = fogScale_;
+	fogData->attenuationRate = fogAttenuationRate_;
+	fogConstantBuffer_->Unmap(0, nullptr);
+
+	//Dof用のリソースに書き込む
+	DofData* dofData = nullptr;
+	dofConstantBuffer_->Map(0, nullptr, reinterpret_cast<void**>(&dofData));
+	dofData->enable = isDofActive_;
+	dofConstantBuffer_->Unmap(0, nullptr);
+
+	//LensDistortion用のリソースに書き込む
+	LensDistortionData* lensDistortionData = nullptr;
+	lensDistortionConstantBuffer_->Map(0, nullptr, reinterpret_cast<void**>(&lensDistortionData));
+	lensDistortionData->enable = isLensDistortionActive_;
+	lensDistortionData->tightness = lensDistortionTightness_;
+	lensDistortionData->strength = lensDistortionStrength_;
+	lensDistortionConstantBuffer_->Unmap(0, nullptr);
+
 	//ビネットのリソースに書き込む
 	VignetteData* vignetteData = nullptr;
 	vignetteConstantBuffer_->Map(0, nullptr, reinterpret_cast<void**>(&vignetteData));
@@ -154,15 +250,23 @@ void PostProcess::PreDraw() {
 	barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE;
 	barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_RENDER_TARGET;
 	commandList_->ResourceBarrier(1, &barrier);
+	barrier.Transition.pResource = linearDepthResource_.resource.Get();
+	barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE;
+	barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_RENDER_TARGET;
+	commandList_->ResourceBarrier(1, &barrier);
 
 	//ディスクリプタハンドルを取得
-	D3D12_CPU_DESCRIPTOR_HANDLE rtvHandle = PostProcess::GetCPUDescriptorHandle(multiPassRTVDescriptorHeap_.Get(), descriptorSizeRTV, firstPassResource_.rtvIndex);
+	D3D12_CPU_DESCRIPTOR_HANDLE rtvHandles[2];
+	rtvHandles[0] = PostProcess::GetCPUDescriptorHandle(multiPassRTVDescriptorHeap_.Get(), descriptorSizeRTV, firstPassResource_.rtvIndex);
+	rtvHandles[1] = PostProcess::GetCPUDescriptorHandle(multiPassRTVDescriptorHeap_.Get(), descriptorSizeRTV, linearDepthResource_.rtvIndex);
 	D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle = multiPassDSVDescriptorHeap_->GetCPUDescriptorHandleForHeapStart();
 	//レンダーターゲットビューを設定
-	commandList_->OMSetRenderTargets(1, &rtvHandle, false, &dsvHandle);
+	commandList_->OMSetRenderTargets(2, rtvHandles, false, &dsvHandle);
 	//指定した色で画面全体をクリアする
 	float clearColor[] = { 0.1f,0.25f,0.5f,1.0f };
-	commandList_->ClearRenderTargetView(rtvHandle, clearColor, 0, nullptr);
+	float depthColor[] = { 1.0f,0.0f,0.0f,0.0f };
+	commandList_->ClearRenderTargetView(rtvHandles[0], clearColor, 0, nullptr);
+	commandList_->ClearRenderTargetView(rtvHandles[1], depthColor, 0, nullptr);
 	//指定した深度で画面全体をクリアする
 	commandList_->ClearDepthStencilView(dsvHandle, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
 
@@ -204,6 +308,10 @@ void PostProcess::PostDraw() {
 	barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_RENDER_TARGET;
 	barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE;
 	commandList_->ResourceBarrier(1, &barrier);
+	barrier.Transition.pResource = linearDepthResource_.resource.Get();
+	barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_RENDER_TARGET;
+	barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE;
+	commandList_->ResourceBarrier(1, &barrier);
 
 	//2パス目の描画
 	PostProcess::PreSecondPassDraw();
@@ -212,12 +320,21 @@ void PostProcess::PostDraw() {
 
 	//ぼかし処理
 	PostProcess::PreBlur(kHorizontal);
-	PostProcess::Blur(kHorizontal, highIntensityResource_.srvIndex);
+	PostProcess::Blur(kHorizontal, secondPassResource_.srvIndex, highIntensityResource_.srvIndex);
 	PostProcess::PostBlur(kHorizontal);
 
 	PostProcess::PreBlur(kVertical);
-	PostProcess::Blur(kVertical, blurResources_[kHorizontal].srvIndex);
+	PostProcess::Blur(kVertical, blurResources_[kHorizontal].srvIndex, highIntensityBlurResource_[kHorizontal].srvIndex);
 	PostProcess::PostBlur(kVertical);
+
+	//縮小ぼかし処理
+	PostProcess::PreShrinkBlur(kHorizontal);
+	PostProcess::ShrinkBlur(kHorizontal, blurResources_[kVertical].srvIndex, highIntensityBlurResource_[kVertical].srvIndex);
+	PostProcess::PostShrinkBlur(kHorizontal);
+
+	PostProcess::PreShrinkBlur(kVertical);
+	PostProcess::ShrinkBlur(kVertical, shrinkBlurResources_[kHorizontal].srvIndex, shrinkHighIntensityBlurResources_[kHorizontal].srvIndex);
+	PostProcess::PostShrinkBlur(kVertical);
 
 	//バックバッファをセット
 	dxCommon_->SetBackBuffer();
@@ -423,21 +540,29 @@ void PostProcess::CreateBlurPipelineStateObject() {
 	descriptionRootSignature.Flags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
 
 	//DescriptorRange作成
-	D3D12_DESCRIPTOR_RANGE descriptorRange[1] = {};
+	D3D12_DESCRIPTOR_RANGE descriptorRange[2] = {};
 	descriptorRange[0].BaseShaderRegister = 0;//0から始まる
 	descriptorRange[0].NumDescriptors = 1;//数は1つ
 	descriptorRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;//SRVを使う
 	descriptorRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;//Offsetを自動計算
+	descriptorRange[1].BaseShaderRegister = 1;//0から始まる
+	descriptorRange[1].NumDescriptors = 1;//数は1つ
+	descriptorRange[1].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;//SRVを使う
+	descriptorRange[1].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;//Offsetを自動計算
 
 	//RootParameter作成。複数設定できるので配列。今回は結果一つだけなので長さ1の配列
-	D3D12_ROOT_PARAMETER rootParameters[2] = {};
+	D3D12_ROOT_PARAMETER rootParameters[3] = {};
 	rootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;//DescriptorTableを使う
 	rootParameters[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;//PixelShaderで使う
-	rootParameters[0].DescriptorTable.pDescriptorRanges = descriptorRange;//Tableの中身の配列を指定
-	rootParameters[0].DescriptorTable.NumDescriptorRanges = _countof(descriptorRange);//Tableで利用する数
-	rootParameters[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
-	rootParameters[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-	rootParameters[1].Descriptor.ShaderRegister = 0;
+	rootParameters[0].DescriptorTable.pDescriptorRanges = &descriptorRange[0];//Tableの中身の配列を指定
+	rootParameters[0].DescriptorTable.NumDescriptorRanges = 1;//Tableで利用する数
+	rootParameters[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;//DescriptorTableを使う
+	rootParameters[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;//PixelShaderで使う
+	rootParameters[1].DescriptorTable.pDescriptorRanges = &descriptorRange[1];//Tableの中身の配列を指定
+	rootParameters[1].DescriptorTable.NumDescriptorRanges = 1;//Tableで利用する数
+	rootParameters[2].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+	rootParameters[2].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	rootParameters[2].Descriptor.ShaderRegister = 0;
 	descriptionRootSignature.pParameters = rootParameters;//ルートパラメータ配列へのポインタ
 	descriptionRootSignature.NumParameters = _countof(rootParameters);//配列の長さ
 
@@ -517,8 +642,9 @@ void PostProcess::CreateBlurPipelineStateObject() {
 	graphicsPipelineStateDesc.BlendState = blendDesc;//BlendState
 	graphicsPipelineStateDesc.RasterizerState = rasterizerDesc;//RasterizerState
 	//書き込むRTVの情報
-	graphicsPipelineStateDesc.NumRenderTargets = 1;
+	graphicsPipelineStateDesc.NumRenderTargets = 2;
 	graphicsPipelineStateDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+	graphicsPipelineStateDesc.RTVFormats[1] = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
 	//利用するトポロジ(形状)のタイプ。三角形
 	graphicsPipelineStateDesc.PrimitiveTopologyType =
 		D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
@@ -555,22 +681,30 @@ void PostProcess::CreatePostProcessPipelineStateObject() {
 	descriptionRootSignature.Flags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
 
 	//DescriptorRange作成
-	D3D12_DESCRIPTOR_RANGE descriptorRange[3] = {};
-	descriptorRange[0].BaseShaderRegister = 0;//0から始まる
-	descriptorRange[0].NumDescriptors = 1;//数は1つ
-	descriptorRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;//SRVを使う
+	D3D12_DESCRIPTOR_RANGE descriptorRange[5]{};
+	descriptorRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+	descriptorRange[0].BaseShaderRegister = 0;
+	descriptorRange[0].NumDescriptors = 3;
 	descriptorRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;//Offsetを自動計算
-	descriptorRange[1].BaseShaderRegister = 1;//0から始まる
-	descriptorRange[1].NumDescriptors = 1;//数は1つ
-	descriptorRange[1].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;//SRVを使う
+	descriptorRange[1].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+	descriptorRange[1].BaseShaderRegister = 3;
+	descriptorRange[1].NumDescriptors = 1;
 	descriptorRange[1].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;//Offsetを自動計算
-	descriptorRange[2].BaseShaderRegister = 2;//0から始まる
-	descriptorRange[2].NumDescriptors = 1;//数は1つ
-	descriptorRange[2].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;//SRVを使う
+	descriptorRange[2].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+	descriptorRange[2].BaseShaderRegister = 4;
+	descriptorRange[2].NumDescriptors = 1;
 	descriptorRange[2].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;//Offsetを自動計算
+	descriptorRange[3].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+	descriptorRange[3].BaseShaderRegister = 5;
+	descriptorRange[3].NumDescriptors = 1;
+	descriptorRange[3].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;//Offsetを自動計算
+	descriptorRange[4].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+	descriptorRange[4].BaseShaderRegister = 6;
+	descriptorRange[4].NumDescriptors = 1;
+	descriptorRange[4].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;//Offsetを自動計算
 
 	//RootParameter作成。複数設定できるので配列。今回は結果一つだけなので長さ1の配列
-	D3D12_ROOT_PARAMETER rootParameters[6] = {};
+	D3D12_ROOT_PARAMETER rootParameters[10] = {};
 	rootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;//DescriptorTableを使う
 	rootParameters[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;//PixelShaderで使う
 	rootParameters[0].DescriptorTable.pDescriptorRanges = &descriptorRange[0];//Tableの中身の配列を指定
@@ -583,15 +717,29 @@ void PostProcess::CreatePostProcessPipelineStateObject() {
 	rootParameters[2].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;//PixelShaderで使う
 	rootParameters[2].DescriptorTable.pDescriptorRanges = &descriptorRange[2];//Tableの中身の配列を指定
 	rootParameters[2].DescriptorTable.NumDescriptorRanges = 1;//Tableで利用する数
-	rootParameters[3].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
-	rootParameters[3].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-	rootParameters[3].Descriptor.ShaderRegister = 0;
-	rootParameters[4].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
-	rootParameters[4].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-	rootParameters[4].Descriptor.ShaderRegister = 1;
-	rootParameters[5].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
-	rootParameters[5].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-	rootParameters[5].Descriptor.ShaderRegister = 2;
+	rootParameters[3].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;//DescriptorTableを使う
+	rootParameters[3].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;//PixelShaderで使う
+	rootParameters[3].DescriptorTable.pDescriptorRanges = &descriptorRange[3];//Tableの中身の配列を指定
+	rootParameters[3].DescriptorTable.NumDescriptorRanges = 1;//Tableで利用する数
+	rootParameters[4].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;//DescriptorTableを使う
+	rootParameters[4].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;//PixelShaderで使う
+	rootParameters[4].DescriptorTable.pDescriptorRanges = &descriptorRange[4];//Tableの中身の配列を指定
+	rootParameters[4].DescriptorTable.NumDescriptorRanges = 1;//Tableで利用する数
+	rootParameters[5].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;//CBVを使う
+	rootParameters[5].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;//PixelShaderを使う
+	rootParameters[5].Descriptor.ShaderRegister = 0;//レジスタ番号0とバインド
+	rootParameters[6].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;//CBVを使う
+	rootParameters[6].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;//PixelShaderを使う
+	rootParameters[6].Descriptor.ShaderRegister = 1;//レジスタ番号1とバインド
+	rootParameters[7].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;//CBVを使う
+	rootParameters[7].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;//PixelShaderを使う
+	rootParameters[7].Descriptor.ShaderRegister = 2;//レジスタ番号2とバインド
+	rootParameters[8].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;//CBVを使う
+	rootParameters[8].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;//PixelShaderを使う
+	rootParameters[8].Descriptor.ShaderRegister = 3;//レジスタ番号3とバインド
+	rootParameters[9].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;//CBVを使う
+	rootParameters[9].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;//PixelShaderを使う
+	rootParameters[9].Descriptor.ShaderRegister = 4;//レジスタ番号4とバインド
 	descriptionRootSignature.pParameters = rootParameters;//ルートパラメータ配列へのポインタ
 	descriptionRootSignature.NumParameters = _countof(rootParameters);//配列の長さ
 
@@ -710,17 +858,23 @@ void PostProcess::Draw() {
 	ID3D12DescriptorHeap* descriptorHeaps[] = { multiPassSRVDescriptorHeap_.Get() };
 	commandList_->SetDescriptorHeaps(_countof(descriptorHeaps), descriptorHeaps);
 	//ディスクリプタテーブルを設定
-	D3D12_GPU_DESCRIPTOR_HANDLE srvHandles[3];
-	srvHandles[0] = PostProcess::GetGPUDescriptorHandle(multiPassSRVDescriptorHeap_.Get(), descriptorSizeSRV, firstPassResource_.srvIndex);
-	srvHandles[1] = PostProcess::GetGPUDescriptorHandle(multiPassSRVDescriptorHeap_.Get(), descriptorSizeSRV, highIntensityResource_.srvIndex);
-	srvHandles[2] = PostProcess::GetGPUDescriptorHandle(multiPassSRVDescriptorHeap_.Get(), descriptorSizeSRV, blurResources_[kVertical].srvIndex);
+	D3D12_GPU_DESCRIPTOR_HANDLE srvHandles[5];
+	srvHandles[0] = PostProcess::GetGPUDescriptorHandle(multiPassSRVDescriptorHeap_.Get(), descriptorSizeSRV, linearDepthResource_.srvIndex);
+	srvHandles[1] = PostProcess::GetGPUDescriptorHandle(multiPassSRVDescriptorHeap_.Get(), descriptorSizeSRV, blurResources_[kVertical].srvIndex);
+	srvHandles[2] = PostProcess::GetGPUDescriptorHandle(multiPassSRVDescriptorHeap_.Get(), descriptorSizeSRV, highIntensityBlurResource_[kVertical].srvIndex);
+	srvHandles[3] = PostProcess::GetGPUDescriptorHandle(multiPassSRVDescriptorHeap_.Get(), descriptorSizeSRV, shrinkBlurResources_[kVertical].srvIndex);
+	srvHandles[4] = PostProcess::GetGPUDescriptorHandle(multiPassSRVDescriptorHeap_.Get(), descriptorSizeSRV, shrinkHighIntensityBlurResources_[kVertical].srvIndex);
 	commandList_->SetGraphicsRootDescriptorTable(0, srvHandles[0]);
 	commandList_->SetGraphicsRootDescriptorTable(1, srvHandles[1]);
 	commandList_->SetGraphicsRootDescriptorTable(2, srvHandles[2]);
+	commandList_->SetGraphicsRootDescriptorTable(3, srvHandles[3]);
+	commandList_->SetGraphicsRootDescriptorTable(4, srvHandles[4]);
 	//CBVを設定
-	commandList_->SetGraphicsRootConstantBufferView(3, bloomConstantBuffer_->GetGPUVirtualAddress());
-	commandList_->SetGraphicsRootConstantBufferView(4, lensDistortionConstantBuffer_->GetGPUVirtualAddress());
-	commandList_->SetGraphicsRootConstantBufferView(5, vignetteConstantBuffer_->GetGPUVirtualAddress());
+	commandList_->SetGraphicsRootConstantBufferView(5, bloomConstantBuffer_->GetGPUVirtualAddress());
+	commandList_->SetGraphicsRootConstantBufferView(6, fogConstantBuffer_->GetGPUVirtualAddress());
+	commandList_->SetGraphicsRootConstantBufferView(7, dofConstantBuffer_->GetGPUVirtualAddress());
+	commandList_->SetGraphicsRootConstantBufferView(8, lensDistortionConstantBuffer_->GetGPUVirtualAddress());
+	commandList_->SetGraphicsRootConstantBufferView(9, vignetteConstantBuffer_->GetGPUVirtualAddress());
 	//形状を設定
 	commandList_->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	//描画
@@ -822,21 +976,28 @@ void PostProcess::PostSecondPassDraw() {
 void PostProcess::PreBlur(BlurState blurState) {
 
 	//バリアを張る
-	D3D12_RESOURCE_BARRIER barrier{};	
+	D3D12_RESOURCE_BARRIER barrier{};
 	barrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
 	barrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
 	barrier.Transition.pResource = blurResources_[blurState].resource.Get();
 	barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE;
 	barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_RENDER_TARGET;
 	commandList_->ResourceBarrier(1, &barrier);
+	barrier.Transition.pResource = highIntensityBlurResource_[blurState].resource.Get();
+	barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE;
+	barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_RENDER_TARGET;
+	commandList_->ResourceBarrier(1, &barrier);
 
 	//RTVハンドルを取得する
-	D3D12_CPU_DESCRIPTOR_HANDLE rtvHandle = PostProcess::GetCPUDescriptorHandle(multiPassRTVDescriptorHeap_.Get(), descriptorSizeRTV, blurResources_[blurState].rtvIndex);
+	D3D12_CPU_DESCRIPTOR_HANDLE rtvHandles[2];
+	rtvHandles[0] = PostProcess::GetCPUDescriptorHandle(multiPassRTVDescriptorHeap_.Get(), descriptorSizeRTV, blurResources_[blurState].rtvIndex);
+	rtvHandles[1] = PostProcess::GetCPUDescriptorHandle(multiPassRTVDescriptorHeap_.Get(), descriptorSizeRTV, highIntensityBlurResource_[blurState].rtvIndex);
 	//描画先のRTVを設定する
-	commandList_->OMSetRenderTargets(1, &rtvHandle, false, nullptr);
+	commandList_->OMSetRenderTargets(2, rtvHandles, false, nullptr);
 	//指定した色で画面をクリアする
 	float clearColor[] = { 0.1f,0.25f,0.5f,1.0f };
-	commandList_->ClearRenderTargetView(rtvHandle, clearColor, 0, nullptr);
+	commandList_->ClearRenderTargetView(rtvHandles[0], clearColor, 0, nullptr);
+	commandList_->ClearRenderTargetView(rtvHandles[1], clearColor, 0, nullptr);
 
 	//ビューポート
 	D3D12_VIEWPORT viewport{};
@@ -862,7 +1023,7 @@ void PostProcess::PreBlur(BlurState blurState) {
 }
 
 
-void PostProcess::Blur(BlurState blurState, uint32_t srvIndex) {
+void PostProcess::Blur(BlurState blurState, uint32_t srvIndex, uint32_t highIntensitySrvIndex) {
 
 	//ルートシグネチャを設定
 	commandList_->SetGraphicsRootSignature(blurRootSignature_.Get());
@@ -871,10 +1032,13 @@ void PostProcess::Blur(BlurState blurState, uint32_t srvIndex) {
 	//VBVを設定
 	commandList_->IASetVertexBuffers(0, 1, &vertexBufferView_);
 	//ディスクリプタテーブルを設定
-	D3D12_GPU_DESCRIPTOR_HANDLE srvHandle = PostProcess::GetGPUDescriptorHandle(multiPassSRVDescriptorHeap_.Get(), descriptorSizeSRV, srvIndex);
-	commandList_->SetGraphicsRootDescriptorTable(0, srvHandle);
+	D3D12_GPU_DESCRIPTOR_HANDLE srvHandles[2];
+	srvHandles[0] = PostProcess::GetGPUDescriptorHandle(multiPassSRVDescriptorHeap_.Get(), descriptorSizeSRV, srvIndex);
+	srvHandles[1] = PostProcess::GetGPUDescriptorHandle(multiPassSRVDescriptorHeap_.Get(), descriptorSizeSRV, highIntensitySrvIndex);
+	commandList_->SetGraphicsRootDescriptorTable(0, srvHandles[0]);
+	commandList_->SetGraphicsRootDescriptorTable(1, srvHandles[1]);
 	//CBVをセット
-	commandList_->SetGraphicsRootConstantBufferView(1, blurConstantBuffer_->GetGPUVirtualAddress());
+	commandList_->SetGraphicsRootConstantBufferView(2, blurConstantBuffer_->GetGPUVirtualAddress());
 	//形状を設定
 	commandList_->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	//描画
@@ -882,13 +1046,107 @@ void PostProcess::Blur(BlurState blurState, uint32_t srvIndex) {
 }
 
 
-void PostProcess::PostBlur(BlurState blurState){
+void PostProcess::PostBlur(BlurState blurState) {
 
 	//バリアを張る
 	D3D12_RESOURCE_BARRIER barrier{};
 	barrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
 	barrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
 	barrier.Transition.pResource = blurResources_[blurState].resource.Get();
+	barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_RENDER_TARGET;
+	barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE;
+	commandList_->ResourceBarrier(1, &barrier);
+	barrier.Transition.pResource = highIntensityBlurResource_[blurState].resource.Get();
+	barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_RENDER_TARGET;
+	barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE;
+	commandList_->ResourceBarrier(1, &barrier);
+}
+
+
+void PostProcess::PreShrinkBlur(BlurState blurState) {
+
+	//バリアを張る
+	D3D12_RESOURCE_BARRIER barrier{};
+	barrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+	barrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
+	barrier.Transition.pResource = shrinkBlurResources_[blurState].resource.Get();
+	barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE;
+	barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_RENDER_TARGET;
+	commandList_->ResourceBarrier(1, &barrier);
+	barrier.Transition.pResource = shrinkHighIntensityBlurResources_[blurState].resource.Get();
+	barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE;
+	barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_RENDER_TARGET;
+	commandList_->ResourceBarrier(1, &barrier);
+
+	//RTVハンドルを取得する
+	D3D12_CPU_DESCRIPTOR_HANDLE rtvHandles[2];
+	rtvHandles[0] = PostProcess::GetCPUDescriptorHandle(multiPassRTVDescriptorHeap_.Get(), descriptorSizeRTV, shrinkBlurResources_[blurState].rtvIndex);
+	rtvHandles[1] = PostProcess::GetCPUDescriptorHandle(multiPassRTVDescriptorHeap_.Get(), descriptorSizeRTV, shrinkHighIntensityBlurResources_[blurState].rtvIndex);
+	//描画先のRTVを設定する
+	commandList_->OMSetRenderTargets(2, rtvHandles, false, nullptr);
+	//指定した色で画面をクリアする
+	float clearColor[] = { 0.1f,0.25f,0.5f,1.0f };
+	commandList_->ClearRenderTargetView(rtvHandles[0], clearColor, 0, nullptr);
+	commandList_->ClearRenderTargetView(rtvHandles[1], clearColor, 0, nullptr);
+
+	//ビューポート
+	D3D12_VIEWPORT viewport{};
+	//クライアント領域のサイズと一緒にして画面全体に表示
+	viewport.Width = FLOAT(WinApp::GetInstance()->kClientWidth) / 2;
+	viewport.Height = FLOAT(WinApp::GetInstance()->kClientHeight) / 2;
+	viewport.TopLeftX = 0;
+	viewport.TopLeftY = 0;
+	viewport.MinDepth = 0.0f;
+	viewport.MaxDepth = 1.0f;
+	//ビューポートを設定
+	commandList_->RSSetViewports(1, &viewport);
+
+	//シザー矩形
+	D3D12_RECT scissorRect{};
+	//基本的にビューポートと同じ矩形が構成されるようにする
+	scissorRect.left = 0;
+	scissorRect.right = WinApp::GetInstance()->kClientWidth / 2;
+	scissorRect.top = 0;
+	scissorRect.bottom = WinApp::GetInstance()->kClientHeight / 2;
+	//シザーを設定
+	commandList_->RSSetScissorRects(1, &scissorRect);
+}
+
+
+void PostProcess::ShrinkBlur(BlurState blurState, uint32_t srvIndex, uint32_t highIntensitySrvIndex) {
+
+	//ルートシグネチャを設定
+	commandList_->SetGraphicsRootSignature(blurRootSignature_.Get());
+	//パイプラインステートを設定
+	commandList_->SetPipelineState(blurPipelineState_[blurState].Get());
+	//VBVを設定
+	commandList_->IASetVertexBuffers(0, 1, &vertexBufferView_);
+	//ディスクリプタテーブルを設定
+	D3D12_GPU_DESCRIPTOR_HANDLE srvHandles[2];
+	srvHandles[0] = PostProcess::GetGPUDescriptorHandle(multiPassSRVDescriptorHeap_.Get(), descriptorSizeSRV, srvIndex);
+	srvHandles[1] = PostProcess::GetGPUDescriptorHandle(multiPassSRVDescriptorHeap_.Get(), descriptorSizeSRV, highIntensitySrvIndex);
+	commandList_->SetGraphicsRootDescriptorTable(0, srvHandles[0]);
+	commandList_->SetGraphicsRootDescriptorTable(1, srvHandles[1]);
+	//CBVをセット
+	commandList_->SetGraphicsRootConstantBufferView(2, shrinkBlurConstantBuffer_->GetGPUVirtualAddress());
+	//形状を設定
+	commandList_->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	//描画
+	commandList_->DrawInstanced(UINT(vertices_.size()), 1, 0, 0);
+}
+
+
+void PostProcess::PostShrinkBlur(BlurState blurState) {
+
+	//バリアを張る
+	D3D12_RESOURCE_BARRIER barrier{};
+	barrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+	barrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
+	barrier.Transition.pResource = shrinkBlurResources_[blurState].resource.Get();
+	barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_RENDER_TARGET;
+	barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE;
+	commandList_->ResourceBarrier(1, &barrier);
+	barrier.Transition.pResource = shrinkHighIntensityBlurResources_[blurState].resource.Get();
 	barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_RENDER_TARGET;
 	barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE;
 	commandList_->ResourceBarrier(1, &barrier);
