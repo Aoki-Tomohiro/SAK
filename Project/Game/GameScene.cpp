@@ -39,6 +39,7 @@ void GameScene::Initialize(GameManager* gameManager) {
 	//ボスの作成
 	boss_ = std::make_unique<Boss>();
 	boss_->Initialize();
+	boss_->SetWeapon(weapon_.get());
 
 	//衝突マネージャーの生成
 	collisionManager_ = std::make_unique<CollisionManager>();
@@ -52,7 +53,6 @@ void GameScene::Update(GameManager* gameManager) {
 
   	//ボスの更新
 	boss_->Update();
-	boss_->IsHit(weapon_->GetIsHit());
 
 	//missileManager_->Update();
 

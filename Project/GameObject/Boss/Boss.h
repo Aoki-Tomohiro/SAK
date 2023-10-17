@@ -7,6 +7,8 @@
 #include "../GameObject/Missile/Missile.h"
 #include <random>
 
+class Weapon;
+
 /// <summary>
 /// ボス
 /// </summary>
@@ -73,11 +75,11 @@ public:
 	/// <returns>ミサイルのリスト</returns>
 	const std::list<std::unique_ptr<Missile>>& GetMissiles() const { return missiles_; };
 
-	/// <summary>
-	/// 攻撃が当たったかのフラグを取得
-	/// </summary>
-	/// <param name="IsHit"></param>
-	void IsHit(bool IsHit) { IsHit_ = IsHit; };
+	///// <summary>
+	///// 攻撃が当たったかのフラグを取得
+	///// </summary>
+	///// <param name="IsHit"></param>
+	//void IsHit(bool IsHit) { IsHit_ = IsHit; };
 
 	/// <summary>
 	/// ランダム生成
@@ -105,6 +107,24 @@ public:
 	void ApplyGlobalVariables();
 
 	/// <summary>
+	/// プレイヤーのクラスを借りる
+	/// </summary>
+	/// <param name="weapon"></param>
+	void SetWeapon(Weapon* weapon) { weapon_ = weapon; };
+
+	/// <summary>
+	/// ミサイルの当たった数を設定
+	/// </summary>
+	/// <param name="missileCount"></param>
+	void SetHitMissileCount(int missileCount) { hitMissileCount_ = missileCount; };
+
+	/// <summary>
+	/// ミサイルの当たった数を取得
+	/// </summary>
+	/// <returns></returns>
+	int GetHitMissileCount() { return hitMissileCount_; };
+
+	/// <summary>
 	/// 当たり判定
 	/// </summary>
 	void OnCollision(uint32_t collisionAttribute, float damage) override;
@@ -128,8 +148,10 @@ private:
 	std::list<std::unique_ptr<Missile>> missiles_{};
 	//体力
 	float Hp_ = 100.0f;
-	//プレイヤーの攻撃が当たったか
-	bool IsHit_ = false;
+	////プレイヤーの攻撃が当たったか
+	//bool IsHit_ = false;
+	//当たったミサイルの数
+	int hitMissileCount_ = 0;
 	//ミサイルのスポーンタイマー
 	int missileSpornTimer_ = 0;
 	//ミサイルの進行方向
@@ -138,5 +160,7 @@ private:
 	float missileMoveSpeed_ = 0.05f;
 	//進行方向
 	int moveDirection_ = 1;
+	//プレイヤー
+	Weapon* weapon_ = nullptr;
 
 };

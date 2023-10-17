@@ -19,6 +19,8 @@ public:
 
 	void ApplyGlobalVariables();
 
+	int GetInvolvedMissileCount() { return involvedCount_; };
+
 	void OnCollision(uint32_t collisionAttribute, float damage) override;
 
 	Vector3 GetWorldPosition() override;

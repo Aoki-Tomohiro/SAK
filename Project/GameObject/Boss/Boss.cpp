@@ -80,6 +80,7 @@ void Boss::Update() {
 
 	ImGui::Begin("Boss");
 	ImGui::Text("HP : %f", Hp_);
+	ImGui::Text("HitMissileCount : %d", hitMissileCount_);
 	ImGui::End();
 }
 
@@ -133,8 +134,11 @@ void Boss::ApplyGlobalVariables()
 }
 
 void Boss::OnCollision(uint32_t collisionAttribute, float damage) {
-	if (IsHit_ == false) {
+	if (weapon_->GetIsHit() == false) {
 		Hp_ -= damage;
+		if (collisionAttribute & kCollisionAttributePlayer) {
+			hitMissileCount_ += weapon_->GetInvolvedMissileCount();
+		}
 	}
 }
 
