@@ -20,26 +20,17 @@ public:
 	static uint32_t descriptorSizeSRV;
 	static uint32_t descriptorSizeDSV;
 
-	/// <summary>
-	/// Resource構造体
-	/// </summary>
 	struct Texture {
 		ComPtr<ID3D12Resource> resource;
 		uint32_t rtvIndex;
 		uint32_t srvIndex;
 	};
 
-	/// <summary>
-	/// 頂点データ
-	/// </summary>
 	struct VertexPosUV {
 		Vector4 pos;
 		Vector2 texcoord;
 	};
 
-	/// <summary>
-	/// ブラーデータ
-	/// </summary>
 	struct BlurData {
 		int32_t textureWidth;
 		int32_t textureHeight;
@@ -47,9 +38,6 @@ public:
 		float weight[8];
 	};
 
-	/// <summary>
-	/// ブルーム用データ
-	/// </summary>
 	struct BloomData {
 		//フラグ
 		bool enable;
@@ -63,6 +51,21 @@ public:
 		float tightness;
 		//歪みの強さ
 		float strength;
+	};
+
+	struct FogData {
+		//フラグ
+		bool enable;
+		//スケール
+		float scale;
+		//減衰率
+		float attenuationRate;
+	};
+
+	struct DofData {
+		//フラグ
+		bool enable;
+		float padding[3];
 	};
 
 	struct VignetteData {
@@ -84,6 +87,11 @@ public:
 	void Initialize();
 
 	/// <summary>
+	/// 更新
+	/// </summary>
+	void Update();
+
+	/// <summary>
 	/// 描画前処理
 	/// </summary>
 	void PreDraw();
@@ -92,6 +100,72 @@ public:
 	/// 描画後処理
 	/// </summary>
 	void PostDraw();
+
+	/// <summary>
+	/// ポストプロセスのフラグを設定
+	/// </summary>
+	/// <param name="flag">フラグ</param>
+	void SetIsPostProcessActive(bool flag) { isPostProcessActive_ = flag; };
+
+	/// <summary>
+	/// Bloomのフラグを設定
+	/// </summary>
+	/// <param name="flag">フラグ</param>
+	void SetIsBloomActive(bool flag) { isBloomActive_ = flag; };
+
+	/// <summary>
+	/// Fogのフラグを設定
+	/// </summary>
+	/// <param name="flag"></param>
+	void SetIsFogActive(bool flag) { isFogActive_ = false; };
+
+	/// <summary>
+	/// Fogのスケールを設定
+	/// </summary>
+	/// <param name="fogScale"></param>
+	void SetFogScale(float fogScale) { fogScale_ = fogScale; };
+
+	/// <summary>
+	/// Fogの減衰率を設定
+	/// </summary>
+	/// <param name="fogAttenuationRate"></param>
+	void SetFogAttenuationRate(float fogAttenuationRate) { fogAttenuationRate_ = fogAttenuationRate; };
+
+	/// <summary>
+	/// Dofのフラグを設定
+	/// </summary>
+	/// <param name="flag"></param>
+	void SetIsDofActive(bool flag) { isDofActive_ = flag; };
+
+	/// <summary>
+	/// LensDistortionのフラグを設定
+	/// </summary>
+	/// <param name="flag">フラグ</param>
+	void SetIsLensDistortionActive(bool flag) { isLensDistortionActive_ = flag; };
+
+	/// <summary>
+	/// LensDistortionの歪みのきつさを設定
+	/// </summary>
+	/// <param name="tightness">歪みのきつさ</param>
+	void SetLensDistortionTightness(float tightness) { lensDistortionTightness_ = tightness; };
+
+	/// <summary>
+	/// LensDistortionの強さを設定
+	/// </summary>
+	/// <param name="strength">-1 ~ 1までの強さ</param>
+	void SetLensDistortionStrength(float strength) { lensDistortionStrength_ = strength; };
+
+	/// <summary>
+	/// Vignetteのフラグを設定
+	/// </summary>
+	/// <param name="flag">フラグ</param>
+	void SetIsVignetteActive(bool flag) { isVignetteActive_ = flag; };
+
+	/// <summary>
+	/// Vignetteの強度を設定
+	/// </summary>
+	/// <param name="intensity">強度</param>
+	void SetVignetteIntensity(float intensity) { vignetteIntensity_ = intensity; };
 
 private:
 	/// <summary>
@@ -160,12 +234,35 @@ private:
 	/// <summary>
 	/// ぼかし処理
 	/// </summary>
-	void Blur(BlurState blurState, uint32_t srvIndex);
+	/// <param name="blurState"></param>
+	/// <param name="srvIndex"></param>
+	/// <param name="highIntensitySrvIndex"></param>
+	void Blur(BlurState blurState, uint32_t srvIndex, uint32_t highIntensitySrvIndex);
 
 	/// <summary>
 	/// ぼかし後処理
 	/// </summary>
 	void PostBlur(BlurState blurState);
+
+	/// <summary>
+	/// 縮小ぼかし前準備
+	/// </summary>
+	/// <param name="blurState"></param>
+	void PreShrinkBlur(BlurState blurState);
+
+	/// <summary>
+	/// 縮小ぼかし処理
+	/// </summary>
+	/// <param name="blurState"></param>
+	/// <param name="srvIndex"></param>
+	/// <param name="highIntensitySrvIndex"></param>
+	void ShrinkBlur(BlurState blurState, uint32_t srvIndex, uint32_t highIntensitySrvIndex);
+
+	/// <summary>
+	/// 縮小ぼかし後処理
+	/// </summary>
+	/// <param name="blurState"></param>
+	void PostShrinkBlur(BlurState blurState);
 
 	/// <summary>
 	/// マルチパス用のリソースの作成
@@ -264,17 +361,30 @@ private:
 
 	//1パス目用テクスチャ
 	Texture firstPassResource_ = { nullptr };
+	//深度を書き込むテクスチャ
+	Texture linearDepthResource_ = { nullptr };
 	//2パス目用テクスチャ
 	Texture secondPassResource_ = { nullptr };
 	//高輝度を書き込むテクスチャ
 	Texture highIntensityResource_ = { nullptr };
 	//ぼかし用のテクスチャ
 	std::array<Texture, 2> blurResources_ = { nullptr };
+	//高輝度ぼかし用のテクスチャ
+	std::array<Texture, 2> highIntensityBlurResource_ = { nullptr };
+	//縮小ぼかし用のテクスチャ
+	std::array<Texture, 2> shrinkBlurResources_ = { nullptr };
+	//縮小高輝度ぼかしのテクスチャ
+	std::array<Texture, 2> shrinkHighIntensityBlurResources_ = { nullptr };
 
 	//ぼかし用のリソース
 	ComPtr<ID3D12Resource> blurConstantBuffer_ = nullptr;
+	ComPtr<ID3D12Resource> shrinkBlurConstantBuffer_ = nullptr;
 	//Bloom用のリソース
 	ComPtr<ID3D12Resource> bloomConstantBuffer_ = nullptr;
+	//フォグ用のリソース
+	ComPtr<ID3D12Resource> fogConstantBuffer_ = nullptr;
+	//Dof用のリソース
+	ComPtr<ID3D12Resource> dofConstantBuffer_ = nullptr;
 	//LensDistortion用のリソース
 	ComPtr<ID3D12Resource> lensDistortionConstantBuffer_ = nullptr;
 	//Vignette用のリソース
@@ -282,10 +392,19 @@ private:
 
 	//PostProcessの設定項目
 	bool isPostProcessActive_ = false;
+	//Bloomの設定項目
 	bool isBloomActive_ = false;
+	//Fogの調整項目
+	bool isFogActive_ = false;
+	float fogScale_ = 0.5f;
+	float fogAttenuationRate_ = 2.0f;
+	//Dofの調整項目
+	bool isDofActive_ = false;
+	//LensDistortionの設定項目
 	bool isLensDistortionActive_ = false;
 	float lensDistortionTightness_ = 2.5f;
 	float lensDistortionStrength_ = -0.1f;
+	//Vignetteの設定項目
 	bool isVignetteActive_ = false;
 	float vignetteIntensity_ = 1.0f;
 
