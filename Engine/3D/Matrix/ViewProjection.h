@@ -1,10 +1,30 @@
 #pragma once
+#include "Base/DirectXCommon.h"
 #include "Utility/MathFunction.h"
+
+struct ConstBuffDataViewProjection {
+	Matrix4x4 view;
+	Matrix4x4 projection;
+};
 
 /// <summary>
 /// ビュープロジェクション
 /// </summary>
 struct ViewProjection {
+	///// <summary>
+	///// 初期化
+	///// </summary>
+	//void Initialize();
+
+	/// <summary>
+	/// コンストラクタ
+	/// </summary>
+	ViewProjection();
+
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
+	~ViewProjection();
 
 	/// <summary>
 	/// ビュー行列の更新
@@ -21,10 +41,17 @@ struct ViewProjection {
 	/// </summary>
 	void UpdateMatrix();
 
+	/// <summary>
+	/// CBVを転送
+	/// </summary>
+	void TransferMatrix();
+
+	//CBV
+	Microsoft::WRL::ComPtr<ID3D12Resource> constBuff_ = nullptr;
 	//角度
 	Vector3 rotation_ = { 0.0f,0.0f,0.0f };
 	//座標
-	Vector3 translation_ = { 0.0f,0.0f,-10.0f };
+	Vector3 translation_ = { 0.0f,0.0f,-50.0f };
 	//ビュー行列
 	Matrix4x4 matView_{};
 	//プロジェクション行列

@@ -48,11 +48,11 @@ GameManager::GameManager() {
 
 GameManager::~GameManager() {
 
+	//シーンの削除
 	delete currentScene_;
 	currentScene_ = nullptr;
 
 	Model::Release();
-
 	Sprite::Release();
 }
 
@@ -79,6 +79,8 @@ void GameManager::run() {
 		GlobalVariables::GetInstance()->Update();
 		//ゲームシーンの更新
 		currentScene_->Update(this);
+		//ポストプロセスの更新
+		postProcess_->Update();
 		//ImGui受付終了
 		imguiManager_->End();
 

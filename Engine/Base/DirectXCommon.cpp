@@ -13,6 +13,9 @@ DirectXCommon* DirectXCommon::GetInstance() {
 
 void DirectXCommon::Initialize() {
 
+	//FPS固定初期化
+	DirectXCommon::InitializeFixFPS();
+
 	//ウィンドウズアプリケーションのインスタンスを取得
 	winApp_ = WinApp::GetInstance();
 
@@ -136,7 +139,7 @@ void DirectXCommon::PostDraw() {
 	//GPUとOSに画面の交換を行うよう通知する
 	swapChain_->Present(1, 0);
 
-	
+
 	//Fenceの値を更新
 	fenceValue_++;
 	//GPUがここまでたどり着いた時に、Fenceの値を指定した値に代入するようにSignalを送る
@@ -161,6 +164,8 @@ void DirectXCommon::PostDraw() {
 
 	}
 
+	//FPS固定
+	DirectXCommon::UpdateFixFPS();
 
 	//次のフレーム用のコマンドリストを準備
 	hr = commandAllocator_->Reset();
@@ -181,6 +186,28 @@ void DirectXCommon::SetBackBuffer() {
 	D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle = dsvDescriptorHeap_->GetCPUDescriptorHandleForHeapStart();
 	//描画先のRTVとDSVを設定する
 	commandList_->OMSetRenderTargets(1, &rtvHandles[backBufferIndex], false, &dsvHandle);
+
+	//ビューポート
+	D3D12_VIEWPORT viewport{};
+	//クライアント領域のサイズと一緒にして画面全体に表示
+	viewport.Width = winApp_->kClientWidth;
+	viewport.Height = winApp_->kClientHeight;
+	viewport.TopLeftX = 0;
+	viewport.TopLeftY = 0;
+	viewport.MinDepth = 0.0f;
+	viewport.MaxDepth = 1.0f;
+	//ビューポートを設定
+	commandList_->RSSetViewports(1, &viewport);
+
+	//シザー矩形
+	D3D12_RECT scissorRect{};
+	//基本的にビューポートと同じ矩形が構成されるようにする
+	scissorRect.left = 0;
+	scissorRect.right = winApp_->kClientWidth;
+	scissorRect.top = 0;
+	scissorRect.bottom = winApp_->kClientHeight;
+	//シザーを設定
+	commandList_->RSSetScissorRects(1, &scissorRect);
 }
 
 
@@ -238,7 +265,7 @@ void DirectXCommon::CreateDXGIDevice() {
 		debugController->SetEnableGPUBasedValidation(TRUE);
 	}
 #endif
-	
+
 	//DXGIファクトリーの作成
 	//HRESULTはWindows系のエラーコードであり、//関数が成功したかどうかをSUCCEEDEDマクロで判定できる
 	HRESULT hr = CreateDXGIFactory(IID_PPV_ARGS(&dxgiFactory_));
@@ -438,4 +465,32 @@ Microsoft::WRL::ComPtr<ID3D12Resource> DirectXCommon::CreateDepthStencilTextureR
 	assert(SUCCEEDED(hr));
 
 	return resource;
+}
+
+void DirectXCommon::InitializeFixFPS() {
+	//現在時間を記録する
+	reference_ = std::chrono::steady_clock::now();
+}
+
+void DirectXCommon::UpdateFixFPS() {
+	//1/60秒ぴったりの時間
+	const std::chrono::microseconds kMinTime(uint64_t(1000000.0f / 60.0f));
+	//1/60秒よりわずかに短い時間
+	const std::chrono::microseconds kMinCheckTime(uint64_t(1000000.0f / 65.0f));
+
+	//現在時間を取得する
+	std::chrono::steady_clock::time_point now = std::chrono::steady_clock::now();
+	//前回記録からの経過時間を取得する
+	std::chrono::microseconds elapsed = std::chrono::duration_cast<std::chrono::microseconds>(now - reference_);
+
+	//1/60(よりわずかに短い時間)経っていない場合
+	if (elapsed < kMinCheckTime) {
+		//1/60秒経過するまで微小なスリープを繰り返す
+		while (std::chrono::steady_clock::now() - reference_ < kMinTime) {
+			//1マイクロ秒スリープ
+			std::this_thread::sleep_for(std::chrono::microseconds(1));
+		}
+	}
+	//現在の時間を記録する
+	reference_ = std::chrono::steady_clock::now();
 }
