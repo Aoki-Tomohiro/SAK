@@ -1,7 +1,7 @@
 #include "missile.h"
 #include "Utility/GlobalVariables.h"
 
-void Missile::Initialize(const Vector3& position, const float& speed)
+void Missile::Initialize(const Vector3& position, const Vector3& velocity)
 {
 	model_.reset(Model::CreateFromOBJ("Resources", "sphere.obj"));
 
@@ -17,10 +17,11 @@ void Missile::Initialize(const Vector3& position, const float& speed)
 	worldTransform_.UpdateMatrix();
 
 	missileMoveSpeed_ = speed;
+	missileMoveSpeed_ = velocity;
 
 	//衝突属性を設定
-	SetCollisionAttribute(kCollisionAttributeEnemy);
-	SetCollisionMask(kCollisionMaskEnemy);
+	SetCollisionAttribute(kCollisionAttributeMissile);
+	SetCollisionMask(kCollisionMaskMissile);
 	SetCollisionPrimitive(kCollisionPrimitiveAABB);
 
 	AABB aabb = { { -worldTransform_.scale_.x,-worldTransform_.scale_.y,-worldTransform_.scale_.z}, { worldTransform_.scale_.x,worldTransform_.scale_.y,worldTransform_.scale_.z} };
@@ -49,16 +50,14 @@ void Missile::Initialize(const Vector3& position, const float& speed)
 
 void Missile::Update()
 {
-	if (isAlive_) {
-		worldTransform_.translation_.x += missileMoveSpeed_;
+	if (isAlive_) 
+	{
+		worldTransform_.translation_ = Add(worldTransform_.translation_, missileMoveSpeed_);
 		worldTransform_.UpdateMatrix();
 	}
 
-	if (worldTransform_.translation_.x < -13.0f || worldTransform_.translation_.x > 13.0f) {
+	if (worldTransform_.translation_.x < -13.0f || worldTransform_.translation_.x > 13.0f || worldTransform_.translation_.y > 13.0f) {
 		isAlive_ = false;
-	}
-	else {
-		isAlive_ = true;
 	}
 
 	ModelMotion();
@@ -68,6 +67,7 @@ void Missile::Update()
 	ImGui::Text("translationY %f", worldTransform_.translation_.y);
 	ImGui::Text("translationZ %f", worldTransform_.translation_.z);
 	ImGui::Text("isAlive %d", isAlive_);
+	ImGui::Text("IsFollowingWeapon : %d", IsFollowingWeapon_);
 	ImGui::End();
 }
 
@@ -80,13 +80,18 @@ void Missile::Draw(const ViewProjection viewProjection)
 	}
 }
 
-void Missile::OnCollision() {
+void Missile::OnCollision(uint32_t collisionAttribute, float damage)
+{
+	isAlive_ = false;
+
 	ImGui::Begin("Collision");
 	ImGui::Text("MissileHit");
+	ImGui::Text("IsFollowingWeapon %d", IsFollowingWeapon_);
 	ImGui::End();
 }
 
-Vector3 Missile::GetWorldPosition() {
+Vector3 Missile::GetWorldPosition()
+{
 	Vector3 pos{};
 	pos.x = worldTransform_.matWorld_.m[3][0];
 	pos.y = worldTransform_.matWorld_.m[3][1];

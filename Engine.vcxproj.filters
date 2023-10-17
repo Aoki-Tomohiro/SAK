@@ -163,6 +163,12 @@
     <Filter Include="ヘッダー ファイル\Project\GameObject\BackGround">
       <UniqueIdentifier>{b16715b0-86a3-46f0-a8e1-021af681c434}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Project\GameObject\Boss\ChargeShot">
+      <UniqueIdentifier>{ebc76282-31e8-4c1e-ba0d-ad9dde173033}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Project\GameObject\Boss\ChargeShot">
+      <UniqueIdentifier>{ac2286af-b026-45d8-ac88-f15d54df38e9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -290,6 +296,18 @@
     </ClCompile>
     <ClCompile Include="BackGround.cpp">
       <Filter>ソース ファイル\Project\GameObject\BackGround</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\GameObject\Boss\State\BossStateMissileAttack.cpp">
+       <Filter>ソース ファイル\Project\GameObject\Boss\State</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\GameObject\Boss\ChargeShot\ChargeShot.cpp">
+      <Filter>ソース ファイル\Project\GameObject\Boss\ChargeShot</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\GameObject\Boss\State\BossStateChargeShot.cpp">
+      <Filter>ソース ファイル\Project\GameObject\Boss\State</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\GameObject\Boss\State\BossStateStun.cpp">
+      <Filter>ソース ファイル\Project\GameObject\Boss\State</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -433,6 +451,18 @@
     </ClInclude>
     <ClInclude Include="BackGround.h">
       <Filter>ヘッダー ファイル\Project\GameObject\BackGround</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\GameObject\Boss\State\BossStateMissileAttack.h">
+      <Filter>ヘッダー ファイル\Project\GameObject\Boss\State</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\GameObject\Boss\ChargeShot\ChargeShot.h">
+      <Filter>ヘッダー ファイル\Project\GameObject\Boss\ChargeShot</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\GameObject\Boss\State\BossStateChargeShot.h">
+      <Filter>ヘッダー ファイル\Project\GameObject\Boss\State</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\GameObject\Boss\State\BossStateStun.h">
+      <Filter>ヘッダー ファイル\Project\GameObject\Boss\State</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

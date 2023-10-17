@@ -47,9 +47,9 @@ void CollisionManager::CheckCollisionPair(Collider* colliderA, Collider* collide
 		//球と球の交差判定
 		if (distance <= colliderA->GetRadius() + colliderB->GetRadius()) {
 			//コライダーAの衝突時コールバックを呼び出す
-			colliderA->OnCollision();
+			colliderA->OnCollision(colliderB->GetCollisionAttribute(), colliderB->GetDamage());
 			//コライダーBの衝突時コールバックを呼び出す
-			colliderB->OnCollision();
+			colliderB->OnCollision(colliderA->GetCollisionAttribute(), colliderA->GetDamage());
 		}
 	}
 
@@ -68,9 +68,9 @@ void CollisionManager::CheckCollisionPair(Collider* colliderA, Collider* collide
 			posA.y + aabbA.min.y <= posB.y + aabbB.max.y && posA.y + aabbA.max.y >= posB.y + aabbB.min.y &&
 			posA.z + aabbA.min.z <= posB.z + aabbB.max.z && posA.z + aabbA.max.z >= posB.z + aabbB.min.z) {
 			//コライダーAの衝突時コールバックを呼び出す
-			colliderA->OnCollision();
+			colliderA->OnCollision(colliderB->GetCollisionAttribute(), colliderB->GetDamage());
 			//コライダーBの衝突時コールバックを呼び出す
-			colliderB->OnCollision();
+			colliderB->OnCollision(colliderA->GetCollisionAttribute(), colliderA->GetDamage());
 		}
 	}
 
@@ -98,9 +98,9 @@ void CollisionManager::CheckCollisionPair(Collider* colliderA, Collider* collide
 			//距離が半径よりも小さければ衝突
 			if (distance <= colliderA->GetRadius()) {
 				//コライダーAの衝突時コールバックを呼び出す
-				colliderA->OnCollision();
+				colliderA->OnCollision(colliderB->GetCollisionAttribute(), colliderB->GetDamage());
 				//コライダーBの衝突時コールバックを呼び出す
-				colliderB->OnCollision();
+				colliderB->OnCollision(colliderA->GetCollisionAttribute(), colliderA->GetDamage());
 			}
 		}
 		else if(colliderB->GetCollisionPrimitive() & kCollisionPrimitiveSphere){
@@ -114,9 +114,9 @@ void CollisionManager::CheckCollisionPair(Collider* colliderA, Collider* collide
 			//距離が半径よりも小さければ衝突
 			if (distance <= colliderB->GetRadius()) {
 				//コライダーAの衝突時コールバックを呼び出す
-				colliderA->OnCollision();
+				colliderA->OnCollision(colliderB->GetCollisionAttribute(), colliderB->GetDamage());
 				//コライダーBの衝突時コールバックを呼び出す
-				colliderB->OnCollision();
+				colliderB->OnCollision(colliderA->GetCollisionAttribute(), colliderA->GetDamage());
 			}
 		}
 	}

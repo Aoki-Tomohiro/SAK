@@ -6,12 +6,13 @@
 #include <random>
 #include "Utility/CollisionManager/Collider.h"
 #include "Utility/CollisionManager/CollisionConfig.h"
+#include "../GameObject/Weapon/Weapon.h"
 
 class Missile : public Collider
 {
 public:
 
-	void Initialize(const Vector3& position, const float& speed);
+	void Initialize(const Vector3& position, const Vector3& velocity);
 
 	void Update();
 
@@ -19,13 +20,17 @@ public:
 
 	bool IsAlive() { return isAlive_; };
 
+	void Resporn() { isAlive_ = true; };
+
 	void SetPosition(const Vector3& position) { worldTransform_.translation_ = position; };
 
-	void OnCollision() override;
+	void OnCollision(uint32_t collisionAttribute, float damage) override;
 
 	Vector3 GetWorldPosition() override;
 
 	void ModelMotion();
+
+	void SetWeapon(Weapon* weapon) { weapon_ = weapon; }
 
 private:
 	Input* input_ = nullptr;
@@ -38,7 +43,17 @@ private:
 
 	uint32_t textureHandle_ = 0u;
 
-	float missileMoveSpeed_ = 0.05f;
+	Weapon* weapon_;
+
+	Matrix4x4 localMatrix_;
+
+	Vector3 missileMoveSpeed_ = { 0.0f,0.05f,0.0f };
+
+	float missileFollowingSpeed_ = 0.2f;
+
+	bool isAlive_ = true;
+
+	bool IsFollowingWeapon_ = false;
 
 	bool isAlive_;
 
@@ -57,5 +72,7 @@ private:
 	Vector3 normalTransration_;
 
 	missileMotionStruct missileMotion_;
+  
+	bool IsMove_ = false;
 };
 

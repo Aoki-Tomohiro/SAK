@@ -9,7 +9,7 @@ public:
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	void Initialize();
+	void Initialize(Weapon* weapon);
 
 	/// <summary>
 	/// 更新
@@ -38,10 +38,14 @@ public:
 
 	const std::unique_ptr<Missile>& GetRightMissile() { return rightMissile_; };
 
+	void SetWeapon(Weapon* weapon) { weapon_ = weapon; }
+
 private:
 	std::unique_ptr<Missile> leftMissile_ = nullptr;
 	std::unique_ptr<Missile> rightMissile_ = nullptr;
 	float missileMoveSpeed_ = 0.05f;
+
+	Weapon* weapon_;
 
 };
 

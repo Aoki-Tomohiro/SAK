@@ -8,7 +8,7 @@ public:
 	/// <summary>
 	/// 衝突時に呼ばれる関数
 	/// </summary>
-	virtual void OnCollision() {};
+	virtual void OnCollision(uint32_t collisionAttribute,float damage) {};
 
 	/// <summary>
 	/// ワールド座標を取得
@@ -76,6 +76,18 @@ public:
 	/// <param name="collisionPrimitive"></param>
 	void SetCollisionPrimitive(uint32_t collisionPrimitive) { collisionPrimitive_ = collisionPrimitive; };
 
+	/// <summary>
+	/// ダメージを取得
+	/// </summary>
+	/// <returns></returns>
+	float GetDamage() { return damage_; };
+
+	/// <summary>
+	/// ダメージを設定
+	/// </summary>
+	/// <param name="damage"></param>
+	void SetDamage(float damage) { damage_ = damage; };
+
 private:
 	//衝突半径
 	float radius_ = 1.0f;
@@ -87,4 +99,6 @@ private:
 	uint32_t collisionMask_ = 0xffffffff;
 	//形状(デフォルトは球に設定)
 	uint32_t collisionPrimitive_ = kCollisionPrimitiveSphere;
+	//ダメージ
+	float damage_ = 1.0f;
 };

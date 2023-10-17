@@ -3,10 +3,15 @@
 #include <math.h>
 #include "Utility/GlobalVariables.h"
 
-void Player::Initialize()
+void Player::Initialize(Weapon* weapon)
 {
+  
 	playerModelDummy_.reset(Model::CreateFromOBJ("Resources/Sphere", "sphere.obj"));
 	platformModel_.reset(Model::CreateFromOBJ("Resources/Platform", "Platform.obj"));
+  
+	weapon_ = weapon;
+
+	playerModel_.reset(Model::CreateFromOBJ("Resources/Sphere", "sphere.obj"));
 
 	textureHandle_ = TextureManager::Load("Resources/uvChecker.png");
 
@@ -50,13 +55,12 @@ void Player::Initialize()
 
 	ModelMotion();
 
-
 }
 
 void Player::Update() 
 {
 	//プレイヤーの左右移動
-	if (input_->IsPushKey(DIK_A))
+	if (input_->IsPushKey(DIK_A) && weapon_->GetIsAttack() == false)
 	{
 		playerWorldTransform_.translation_.x -= playerMoveSpeed_;
 
@@ -66,7 +70,7 @@ void Player::Update()
 		}
 	}
 
-	if (input_->IsPushKey(DIK_D))
+	if (input_->IsPushKey(DIK_D) && weapon_->GetIsAttack() == false)
 	{
 		playerWorldTransform_.translation_.x += playerMoveSpeed_;
 
@@ -101,13 +105,6 @@ void Player::ApplyGlobalVariables()
 	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
 	const char* groupName = "Player";
 	playerMoveSpeed_ = globalVariables->GetFloatValue(groupName, "playerMoveSpeed");
-}
-
-void Player::OnCollision() {
-	ImGui::Begin("Collision");
-	ImGui::Text("PlayerHit");
-	ImGui::End();
-}
 
 Vector3 Player::GetWorldPosition() {
 	Vector3 pos;
@@ -173,3 +170,4 @@ void Player::ModelMotion()
 
 	platformMotionWorldTransform_.UpdateMatrix();
 }
+

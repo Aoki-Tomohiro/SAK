@@ -1,15 +1,20 @@
 #include "MissileManager.h"
 #include "Utility/GlobalVariables.h"
 
-void MissileManager::Initialize() {
+void MissileManager::Initialize(Weapon* weapon) {
+
+	weapon_ = weapon;
 
 	//ミサイルの生成
 	leftMissile_ = std::make_unique<Missile>();
 	rightMissile_ = std::make_unique<Missile>();
 
 	//ミサイルの初期化
-	leftMissile_->Initialize(Vector3{ -13.0f,RandomTY(-1.3f, 1.8f) ,0.0f }, missileMoveSpeed_);
-	rightMissile_->Initialize(Vector3{ 13.0f,RandomTY(-1.3f, 1.8f) ,0.0f }, -missileMoveSpeed_);
+	leftMissile_->Initialize(Vector3{ -13.0f,RandomTY(-1.3f, 1.8f) ,0.0f }, Vector3{ missileMoveSpeed_,0.0f,0.0f });
+	rightMissile_->Initialize(Vector3{ 13.0f,RandomTY(-1.3f, 1.8f) ,0.0f }, Vector3{ -missileMoveSpeed_,0.0f,0.0f });
+
+	leftMissile_->SetWeapon(weapon_);
+	rightMissile_->SetWeapon(weapon_);
 
 	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
 	const char* groupName = "Missile";
@@ -24,10 +29,12 @@ void MissileManager::Update() {
 
 	if (leftMissile_->IsAlive() == false) {
 		leftMissile_->SetPosition(Vector3{ -13.0f,RandomTY(-1.3f, 1.8f) ,0.0f });
+		leftMissile_->Resporn();
 	}
 
 	if (rightMissile_->IsAlive() == false) {
 		rightMissile_->SetPosition(Vector3{ 13.0f,RandomTY(-1.3f, 1.8f) ,0.0f });
+		rightMissile_->Resporn();
 	}
 
 	//ミサイルの更新

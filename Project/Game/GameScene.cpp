@@ -20,25 +20,21 @@ void GameScene::Initialize(GameManager* gameManager) {
 	input_ = Input::GetInstance();
 	//デバッグカメラの生成
 	debugCamera_ = new DebugCamera();
-  
-	// 自キャラの生成
-	player_ = std::make_unique<Player>();
-	// 自キャラの初期化
-	player_->Initialize();
 
 	// 自キャラの生成
 	weapon_ = std::make_unique<Weapon>();
 	// 自キャラの初期化
  	weapon_->Initialize();
   
-	//ミサイルの生成
-	missileManager_ = std::make_unique<MissileManager>();
-	// ミサイルの初期化
-	missileManager_->Initialize();
+	// 自キャラの生成
+	player_ = std::make_unique<Player>();
+	// 自キャラの初期化
+	player_->Initialize(weapon_.get());
   
 	//ボスの作成
 	boss_ = std::make_unique<Boss>();
 	boss_->Initialize();
+	boss_->SetWeapon(weapon_.get());
 
 	//衝突マネージャーの生成
 	collisionManager_ = std::make_unique<CollisionManager>();
@@ -58,21 +54,23 @@ void GameScene::Update(GameManager* gameManager) {
   	//ボスの更新
 	boss_->Update();
 
-	missileManager_->Update();
 
 	//衝突判定
 	collisionManager_->ClearColliderList();
-	collisionManager_->SetColliderList(player_.get());
 	collisionManager_->SetColliderList(boss_.get());
 	const std::list<std::unique_ptr<Laser>>& lasers = boss_->GetLaser();
 	for (const std::unique_ptr<Laser>& laser : lasers) {
 		collisionManager_->SetColliderList(laser.get());
 	}
-	const std::unique_ptr<Missile>& leftMissile = missileManager_->GetLeftMissile();
-	const std::unique_ptr<Missile>& rightMissile = missileManager_->GetRightMissile();
-	collisionManager_->SetColliderList(leftMissile.get());
-	collisionManager_->SetColliderList(rightMissile.get());
+	const std::list<std::unique_ptr<Missile>>& missiles = boss_->GetMissiles();
+	for (const std::unique_ptr<Missile>& missile : missiles) {
+		collisionManager_->SetColliderList(missile.get());
+	}
 	collisionManager_->SetColliderList(weapon_.get());
+	const std::list<std::unique_ptr<ChargeShot>>& chargeShots = boss_->GetChargeShot();
+	for (const std::unique_ptr<ChargeShot>& chargeShot : chargeShots) {
+		collisionManager_->SetColliderList(chargeShot.get());
+	}
 	collisionManager_->CheckAllCollisions();
 
 	//背景の更新
@@ -105,9 +103,6 @@ void GameScene::Update(GameManager* gameManager) {
 	ImGui::Text("push 2 : Game Over");
 	ImGui::End();
 
-	ImGui::Begin("Collision");
-	ImGui::End();
-
 	viewProjection_.UpdateMatrix();
 };
 
@@ -122,8 +117,6 @@ void GameScene::Draw(GameManager* gameManager) {
 
 	//ボスの描画
 	boss_->Draw(viewProjection_);
-  
-	missileManager_->Draw(viewProjection_);
 
 	//背景の描画
 	backGround_->Draw(viewProjection_);
