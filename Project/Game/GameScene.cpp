@@ -30,11 +30,6 @@ void GameScene::Initialize(GameManager* gameManager) {
 	player_ = std::make_unique<Player>();
 	// 自キャラの初期化
 	player_->Initialize(weapon_.get());
-
-	////ミサイルの生成
-	//missileManager_ = std::make_unique<MissileManager>();
-	//// ミサイルの初期化
-	//missileManager_->Initialize(weapon_.get());
   
 	//ボスの作成
 	boss_ = std::make_unique<Boss>();
@@ -54,7 +49,6 @@ void GameScene::Update(GameManager* gameManager) {
   	//ボスの更新
 	boss_->Update();
 
-	//missileManager_->Update();
 
 	//衝突判定
 	collisionManager_->ClearColliderList();
@@ -116,8 +110,6 @@ void GameScene::Draw(GameManager* gameManager) {
 
 	//ボスの描画
 	boss_->Draw(viewProjection_);
-  
-	//missileManager_->Draw(viewProjection_);
 
 	Model::PostDraw();
 

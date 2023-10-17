@@ -16,6 +16,8 @@ void BossStateChargeShot::Initialize(Boss* pBoss) {
 
 	input_ = input_->GetInstance();
 
+	pBoss->SetHitMissileCount(0);
+
 	//グローバル変数
 	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
 	//const char* groupName = "BossStateLaserAttack";

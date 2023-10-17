@@ -16,6 +16,19 @@ struct LensDistortion
     float strength;
 };
 
+struct Fog
+{
+    bool enable;
+    float scale;
+    float attenuationRate;
+};
+
+struct DoF
+{
+    bool enable;
+};
+
+
 struct Vignette
 {
     bool enable;
