@@ -4,7 +4,7 @@
 #include "BossStateStun.h"
 #include "Utility/GlobalVariables.h"
 
-int BossStateChargeShot::chargeTime = 200;
+int BossStateChargeShot::chargeTime = 120;
 int BossStateChargeShot::chargeShotEndTime = 240;
 
 
@@ -43,7 +43,7 @@ void BossStateChargeShot::Initialize(Boss* pBoss) {
 	respownCount_ = Random(1,2);
 
 	//タイマーの初期化
-	chargeTimer_ = chargeTime;
+	chargeTimerMax_ = chargeTime;
 	endTimer_ = chargeShotEndTime;
 }
 
@@ -52,12 +52,19 @@ void BossStateChargeShot::Update(Boss* pBoss) {
 	//グローバル変数の適応
 	BossStateChargeShot::ApplyGlobalVariables();
 
-	if (chargeTimer_ > 0)
+	if (chargeTimer_ < chargeTimerMax_)
 	{
-		chargeTimer_--;
-		chargeWorldTransform_.scale_.x += 0.0008f;
-		chargeWorldTransform_.scale_.y += 0.0008f;
-		chargeWorldTransform_.scale_.z += 0.0008f;
+		chargeTimer_++;
+
+		float ta = float(chargeTimer_) / float(chargeTimerMax_);
+
+		ta = std::clamp(ta, 0.0f, 1.0f);
+
+		float scale = 1.0f * ta;
+
+		chargeWorldTransform_.scale_.x = scale;
+		chargeWorldTransform_.scale_.y = scale;
+		chargeWorldTransform_.scale_.z = scale;
 
 		if (pBoss->GetHitMissileCount() >= 5)
 		{
@@ -66,7 +73,7 @@ void BossStateChargeShot::Update(Boss* pBoss) {
 		}
 	}
 
-	if (chargeTimer_ <= 0 && IsAttack_ == false)
+	if (chargeTimer_ >= chargeTimerMax_ && IsAttack_ == false)
 	{
 		IsMove_ = true;
 	}
