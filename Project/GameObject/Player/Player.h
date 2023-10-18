@@ -5,6 +5,10 @@
 #include "Components/Input.h"
 #include "Utility/CollisionManager/Collider.h"
 #include "../GameObject/Weapon/Weapon.h"
+#include "../Particle/ParticleEmitter.h"
+
+#include <list>
+#include <memory>
 
 class Player
 {
@@ -70,6 +74,8 @@ private:
 	Vector3 NormalScale_;
 
 	platformMotionMoveStruct platformMotionMove_;
+
+	std::list<std::unique_ptr<ParticleEmitter>> particleEmitters_{};
 };
 
 

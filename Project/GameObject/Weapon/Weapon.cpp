@@ -208,6 +208,24 @@ void Weapon::Update()
 	}
 
 	weaponWorldTransform_.UpdateMatrix();
+
+	//死亡フラグの立ったパーティクルをリストから削除
+	particleEmitters_.remove_if([](std::unique_ptr<ParticleEmitter>& particleEmitter)
+		{
+			if (particleEmitter->GetIsDead())
+			{
+				particleEmitter.reset();
+				return true;
+			}
+
+			return false;
+		});
+
+	//パーティクルの更新
+	for (std::unique_ptr<ParticleEmitter>& particleEmitter : particleEmitters_)
+	{
+		particleEmitter->Update();
+	}
   
 	ModelMotion();
   
@@ -249,6 +267,13 @@ void Weapon::Draw(const ViewProjection viewProjection)
 	if (isInvolvedMissile_) {
 		involvedMissile_->Draw(involvedMissileWorldTransform_, viewProjection);
 	}
+
+	if (IsHit_ == true)
+	{
+		for (std::unique_ptr<ParticleEmitter>& particleEmitter : particleEmitters_) {
+			particleEmitter->Draw(viewProjection);
+		}
+	}
   
 }
 
@@ -273,6 +298,13 @@ void Weapon::OnCollision(uint32_t collisionAttribute, float damage)
 	//衝突相手がボスの場合
 	if (collisionAttribute & kCollisionAttributeEnemy)
 	{
+		if (IsHit_ == false)
+		{
+			ParticleEmitter* newParticleEmitter = new ParticleEmitter();
+			newParticleEmitter->Pop(weaponWorldTransform_.translation_, 10, 0.0f, 360.0f);
+			particleEmitters_.push_back(std::unique_ptr<ParticleEmitter>(newParticleEmitter));
+		}
+	
 		IsHit_ = true;
 	}
 	//ボス以外の場合

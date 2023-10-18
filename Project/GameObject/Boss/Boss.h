@@ -8,6 +8,7 @@
 #include "ChargeShot/ChargeShot.h"
 #include <random>
 
+
 class Weapon;
 
 /// <summary>
@@ -219,5 +220,4 @@ private:
 	Vector3 normalTransration_;
 
 	bossMotionStruct bossMotion_;
-
 };

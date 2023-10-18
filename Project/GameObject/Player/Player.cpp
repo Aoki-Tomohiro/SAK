@@ -58,7 +58,6 @@ void Player::Update()
 	if (input_->IsPushKey(DIK_A) && weapon_->GetIsAttack() == false)
 	{
 		playerWorldTransform_.translation_.x -= playerMoveSpeed_;
-
 		if (playerWorldTransform_.translation_.x <= -7.3f)
 		{
 			playerWorldTransform_.translation_.x = -7.3f;
@@ -68,12 +67,12 @@ void Player::Update()
 	if (input_->IsPushKey(DIK_D) && weapon_->GetIsAttack() == false)
 	{
 		playerWorldTransform_.translation_.x += playerMoveSpeed_;
-
 		if (playerWorldTransform_.translation_.x >= 7.3f)
 		{
 			playerWorldTransform_.translation_.x = 7.3f;
 		}
 	}
+
 
 	playerWorldTransform_.UpdateMatrix();
 	ModelMotion();
@@ -113,9 +112,6 @@ void Player::ModelMotion()
 		if (prePlayerTranslation_.x != playerWorldTransform_.translation_.x) {
 			motionMode_ = Move;
 		}
-
-
-
 
 
 		switch (motionMode_)

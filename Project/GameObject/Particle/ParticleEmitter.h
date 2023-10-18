@@ -9,8 +9,6 @@
 class ParticleEmitter
 {
 public:
-	~ParticleEmitter();
-
 	void Initialize();
 
 	void Update();
@@ -23,7 +21,7 @@ public:
 	/// <param name ="popCount">一度に出す個数</param>
 	/// <param name ="minAngle">最小角度</param>
 	/// <param name ="maxAngle">最大角度</param>
-	void Pop(int popCount, float minAngle, float maxAngle);
+	void Pop(Vector3 position, int popCount, float minAngle, float maxAngle);
 
 	void ApplyGlobalVariables();
 
@@ -40,9 +38,9 @@ private:
 
 	uint32_t textureHandle_ = 0u;
 
-	std::list<PopParticle*> particles_;
+	std::list<std::unique_ptr<PopParticle>> particles_{};
 
-	const int deleteFrame = 180;
+	const int deleteFrame = 90;
 
 	int nowFrame = 0;
 

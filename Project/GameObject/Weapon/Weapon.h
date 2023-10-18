@@ -5,6 +5,8 @@
 #include "Components/Input.h"
 #include "Utility/CollisionManager/Collider.h"
 
+#include "../GameObject/Particle/ParticleEmitter.h"
+
 class Weapon : public Collider
 {
 public:
@@ -127,5 +129,7 @@ private:
 		{0.0f,0.0f,0.0f,0.0f},
 	};
   
+	std::list<std::unique_ptr<ParticleEmitter>> particleEmitters_{};
+	WorldTransform particleWorldTransform_;
 };
 

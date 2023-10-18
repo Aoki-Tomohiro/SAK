@@ -191,6 +191,7 @@ void Boss::ApplyGlobalVariables()
 void Boss::OnCollision(uint32_t collisionAttribute, float damage) {
 	if (weapon_->GetIsHit() == false) {
 		Hp_ -= damage;
+
 		if (collisionAttribute & kCollisionAttributePlayer) {
 			hitMissileCount_ += weapon_->GetInvolvedMissileCount();
 		}

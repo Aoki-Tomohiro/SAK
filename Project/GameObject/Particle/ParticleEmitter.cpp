@@ -2,32 +2,28 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 
-ParticleEmitter::~ParticleEmitter()
-{
-	for (PopParticle* particle : particles_) {
-		delete particle;
-	}
-}
-
 void ParticleEmitter::Initialize()
 {
+
 }
 
 void ParticleEmitter::Update()
 {
-	for (PopParticle* particle : particles_) {
+	for (std::unique_ptr<PopParticle>& particle : particles_)
+	{
 		particle->Update();
 	}
 
-	particles_.remove_if([](PopParticle* particle) {
-		if (particle->GetIsDead()) {
-
-			delete particle;
+	particles_.remove_if([](std::unique_ptr<PopParticle>& particle)
+	{
+		if (particle->GetIsDead())
+		{
+			particle.reset();
 			return true;
 		}
+
 		return false;
-		}
-	);
+	});
 
 	nowFrame++;
 
@@ -39,13 +35,14 @@ void ParticleEmitter::Update()
 
 void ParticleEmitter::Draw(const ViewProjection viewProjection)
 {
-	for (PopParticle* particle : particles_) {
+	for (std::unique_ptr<PopParticle>& particle : particles_)
+	{
 		particle->Draw(viewProjection);
 	}
 
 }
 
-void ParticleEmitter::Pop(int popCount, float minAngle, float maxAngle)
+void ParticleEmitter::Pop(Vector3 position, int popCount, float minAngle, float maxAngle)
 {
 	for (int i = 0; i < popCount; i++) {
 		PopParticle* newParticle = new PopParticle();
@@ -65,9 +62,9 @@ void ParticleEmitter::Pop(int popCount, float minAngle, float maxAngle)
 			speed * cos(zRadian),
 		};
 
-		newParticle->Initialize(worldTransform_.translation_, speedVec3, scale, popScaleMinus_);
+		newParticle->Initialize(position, speedVec3, scale, popScaleMinus_);
 
-		particles_.push_back(newParticle);
+		particles_.push_back(std::unique_ptr<PopParticle>(newParticle));
 	}
 }
 
