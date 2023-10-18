@@ -1,17 +1,16 @@
-#include "Model.h"
+#include "Particle.h"
 
 //実体定義
-ID3D12Device* Model::sDevice_ = nullptr;
-ID3D12GraphicsCommandList* Model::sCommandList_ = nullptr;
-Model::ComPtr<IDxcUtils> Model::sDxcUtils_ = nullptr;
-Model::ComPtr<IDxcCompiler3> Model::sDxcCompiler_ = nullptr;
-Model::ComPtr<IDxcIncludeHandler> Model::sIncludeHandler_ = nullptr;
-Model::ComPtr<ID3D12RootSignature> Model::sRootSignature_ = nullptr;
-Model::ComPtr<ID3D12PipelineState> Model::sGraphicsPipelineState_ = nullptr;
-std::list<Model::ModelData> Model::modelDatas_{};
+ID3D12Device* Particle::sDevice_ = nullptr;
+ID3D12GraphicsCommandList* Particle::sCommandList_ = nullptr;
+Particle::ComPtr<IDxcUtils> Particle::sDxcUtils_ = nullptr;
+Particle::ComPtr<IDxcCompiler3> Particle::sDxcCompiler_ = nullptr;
+Particle::ComPtr<IDxcIncludeHandler> Particle::sIncludeHandler_ = nullptr;
+Particle::ComPtr<ID3D12RootSignature> Particle::sRootSignature_ = nullptr;
+Particle::ComPtr<ID3D12PipelineState> Particle::sGraphicsPipelineState_ = nullptr;
+std::list<Particle::ModelData> Particle::modelDatas_{};
 
-
-void Model::StaticInitialize() {
+void Particle::StaticInitialize() {
 
 	//デバイスの取得
 	sDevice_ = DirectXCommon::GetInstance()->GetDevice();
@@ -19,14 +18,14 @@ void Model::StaticInitialize() {
 	sCommandList_ = DirectXCommon::GetInstance()->GetCommandList();
 
 	//DXCの初期化
-	Model::InitializeDXC();
+	Particle::InitializeDXC();
 
 	//PipelineStateObjectの作成
-	Model::CreatePipelineStateObject();
+	Particle::CreatePipelineStateObject();
 }
 
 
-void Model::Release() {
+void Particle::Release() {
 
 	sDxcUtils_.Reset();
 	sDxcCompiler_.Reset();
@@ -36,119 +35,40 @@ void Model::Release() {
 }
 
 
-Model* Model::CreateFromOBJ(const std::string& directoryPath, const std::string& filename) {
+Particle* Particle::CreateFromOBJ(const std::string& directoryPath, const std::string& filename, uint32_t kNumInstance) {
 
 	//モデルを生成
-	Model* model = new Model();
+	Particle* particle = new Particle();
 
 	for (ModelData modelData : modelDatas_) {
 		if (modelData.name == filename) {
-			//メッシュの作成
-			model->mesh_ = std::make_unique<Mesh>();
-			model->mesh_->Initialize(modelData.vertices);
 
 			//テクスチャの読み込み
-			model->textureHandle_ = TextureManager::GetInstance()->Load(modelData.material.textureFilePath);
+			particle->textureHandle_ = TextureManager::GetInstance()->Load(modelData.material.textureFilePath);
 
-			//マテリアルの作成
-			model->material_ = std::make_unique<Material>();
-			model->material_->Initialize();
+			//初期化
+			particle->Initialize(kNumInstance, modelData.vertices);
 
-			//DirectionalLightの作成
-			model->directionalLight_ = std::make_unique<DirectionalLight>();
-			model->directionalLight_->Initialize();
-
-			return model;
+			return particle;
 		}
 	}
 
 	//モデルデータを読み込む
-	ModelData modelData = model->LoadObjFile(directoryPath, filename);
+	ModelData modelData = particle->LoadObjFile(directoryPath, filename);
 	modelData.name = filename;
 	modelDatas_.push_back(modelData);
 
 	//テクスチャを読み込む
-	model->textureHandle_ = TextureManager::Load(modelData.material.textureFilePath);
+	particle->textureHandle_ = TextureManager::Load(modelData.material.textureFilePath);
 
-	//メッシュの作成
-	model->mesh_ = std::make_unique<Mesh>();
-	model->mesh_->Initialize(modelData.vertices);
+	//初期化
+	particle->Initialize(kNumInstance, modelData.vertices);
 
-	//マテリアルの作成
-	model->material_ = std::make_unique<Material>();
-	model->material_->Initialize();
-
-	model->directionalLight_ = std::make_unique<DirectionalLight>();
-	model->directionalLight_->Initialize();
-
-	return model;
-}
-
-Model* Model::CreateSphere() {
-
-	//モデルを生成
-	Model* model = new Model();
-
-	//メッシュの作成
-	std::vector<Mesh::VertexData> vertices{};
-	const float pi = 3.14f;
-	const uint32_t kSubdivision = 16;
-	uint32_t latIndex = 0;
-	uint32_t lonIndex = 0;
-	//経度分割一つ分の角度φd
-	const float kLonEvery = pi * 2.0f / float(kSubdivision);
-	//緯度分割一つ分の角度θd
-	const float kLatEvery = pi / float(kSubdivision);
-	//緯度の方向に分割
-	for (latIndex = 0; latIndex < kSubdivision; ++latIndex) {
-		float lat = -pi / 2.0f + kLatEvery * latIndex;//θ
-		//経度の方向に分割しながら線を描く
-		for (lonIndex = 0; lonIndex < kSubdivision; ++lonIndex) {
-			uint32_t start = (latIndex * kSubdivision + lonIndex) * 6;
-			float lon = lonIndex * kLonEvery;//φ
-			//頂点にデータを入力する。基準点a
-			vertices.push_back(Mesh::VertexData{ {std::cos(lat) * std::cos(lon),std::sin(lat),std::cos(lat) * std::sin(lon),1.0f},
-				{ float(lonIndex) / float(kSubdivision),1.0f - float(latIndex) / float(kSubdivision)},
-				{std::cos(lat) * std::cos(lon),std::sin(lat),std::cos(lat) * std::sin(lon)} });
-
-			//残りの５頂点も順番に計算して入力していく
-			vertices.push_back(Mesh::VertexData{ {std::cos(lat + kLatEvery) * std::cos(lon),std::sin(lat + kLatEvery),std::cos(lat + kLatEvery) * std::sin(lon),1.0f},
-				{float(lonIndex) / float(kSubdivision),1.0f - float(latIndex + 1) / float(kSubdivision)},
-				{std::cos(lat + kLatEvery) * std::cos(lon),std::sin(lat + kLatEvery),std::cos(lat + kLatEvery) * std::sin(lon)} });
-
-			vertices.push_back(Mesh::VertexData{ {std::cos(lat) * std::cos(lon + kLonEvery),std::sin(lat),std::cos(lat) * std::sin(lon + kLonEvery),1.0f},
-				{float(lonIndex + 1) / float(kSubdivision),1.0f - float(latIndex) / float(kSubdivision)},
-				{std::cos(lat) * std::cos(lon + kLonEvery),std::sin(lat),std::cos(lat) * std::sin(lon + kLonEvery)} });
-
-			vertices.push_back(Mesh::VertexData{ { std::cos(lat) * std::cos(lon + kLonEvery),std::sin(lat),std::cos(lat) * std::sin(lon + kLonEvery),1.0f},
-				{float(lonIndex + 1) / float(kSubdivision),1.0f - float(latIndex) / float(kSubdivision)},
-				{std::cos(lat) * std::cos(lon + kLonEvery),std::sin(lat),std::cos(lat) * std::sin(lon + kLonEvery)} });
-
-			vertices.push_back(Mesh::VertexData{ {std::cos(lat + kLatEvery) * std::cos(lon),std::sin(lat + kLatEvery),std::cos(lat + kLatEvery) * std::sin(lon),1.0f},
-				{float(lonIndex) / float(kSubdivision),1.0f - float(latIndex + 1) / float(kSubdivision)},
-				{std::cos(lat + kLatEvery) * std::cos(lon),std::sin(lat + kLatEvery),std::cos(lat + kLatEvery) * std::sin(lon)} });
-
-			vertices.push_back(Mesh::VertexData{ {std::cos(lat + kLatEvery) * std::cos(lon + kLonEvery),std::sin(lat + kLatEvery),std::cos(lat + kLatEvery) * std::sin(lon + kLonEvery),1.0f},
-				{float(lonIndex + 1) / float(kSubdivision),1.0f - float(latIndex + 1) / float(kSubdivision)},
-				{std::cos(lat + kLatEvery) * std::cos(lon + kLonEvery),std::sin(lat + kLatEvery),std::cos(lat + kLatEvery) * std::sin(lon + kLonEvery)} });
-		}
-	}
-
-	model->mesh_ = std::make_unique<Mesh>();
-	model->mesh_->Initialize(vertices);
-
-	//マテリアルの作成
-	model->material_ = std::make_unique<Material>();
-	model->material_->Initialize();
-
-	model->directionalLight_ = std::make_unique<DirectionalLight>();
-	model->directionalLight_->Initialize();
-
-	return model;
+	return particle;
 }
 
 
-void Model::PreDraw() {
+void Particle::PreDraw() {
 
 	//RootSignatureを設定。PSOに設定しているけど別途設定が必要
 	sCommandList_->SetGraphicsRootSignature(sRootSignature_.Get());
@@ -157,64 +77,37 @@ void Model::PreDraw() {
 }
 
 
-void Model::PostDraw() {}
+void Particle::PostDraw() {
 
-
-void Model::Draw(const WorldTransform& worldTransform, const ViewProjection& viewProjection) {
-
-	//マテリアルの更新
-	material_->Update();
-
-	//DirectionalLightの更新
-	directionalLight_->Update();
-
-	//頂点データを設定
-	mesh_->SetGraphicsCommand();
-	//マテリアルCBufferの場所を設定
-	material_->SetGraphicsCommand(UINT(RootParameterIndex::Material));
-	//WorldTransform用のCBufferの場所を設定
-	sCommandList_->SetGraphicsRootConstantBufferView(UINT(RootParameterIndex::WorldlTransform), worldTransform.constBuff_->GetGPUVirtualAddress());
-	//ViewProjection用のCBufferの場所を設定
-	sCommandList_->SetGraphicsRootConstantBufferView(UINT(RootParameterIndex::ViewProjection), viewProjection.constBuff_->GetGPUVirtualAddress());
-	//DescriptorHeapを設定
-	TextureManager::GetInstance()->SetGraphicsDescriptorHeap();
-	//DescriptorTableを設定
-	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(UINT(RootParameterIndex::Texture), textureHandle_);
-	//DirectionalLightを設定
-	directionalLight_->SetGraphicsCommand(UINT(RootParameterIndex::DirectionalLight));
-	//描画!(DrawCall/ドローコール)。3頂点で1つのインスタンス。インスタンスについては今後
-	mesh_->Draw();
 }
 
 
-void Model::Draw(const WorldTransform& worldTransform, const ViewProjection& viewProjection, uint32_t textureHandle) {
+void Particle::Update() {
 
-	//マテリアルの更新
-	material_->Update();
-
-	//DirectionalLightの更新
-	directionalLight_->Update();
-
-	//頂点データを設定
-	mesh_->SetGraphicsCommand();
-	//マテリアルCBufferの場所を設定
-	material_->SetGraphicsCommand(UINT(RootParameterIndex::Material));
-	//WorldTransform用のCBufferの場所を設定
-	sCommandList_->SetGraphicsRootConstantBufferView(UINT(RootParameterIndex::WorldlTransform), worldTransform.constBuff_->GetGPUVirtualAddress());
-	//ViewProjection用のCBufferの場所を設定
-	sCommandList_->SetGraphicsRootConstantBufferView(UINT(RootParameterIndex::ViewProjection), viewProjection.constBuff_->GetGPUVirtualAddress());
-	//DescriptorHeapを設定
-	TextureManager::GetInstance()->SetGraphicsDescriptorHeap();
-	//DescriptorTableを設定
-	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(UINT(RootParameterIndex::Texture), textureHandle);
-	//DirectionalLightを設定
-	directionalLight_->SetGraphicsCommand(UINT(RootParameterIndex::DirectionalLight));
-	//描画!(DrawCall/ドローコール)。3頂点で1つのインスタンス。インスタンスについては今後
-	mesh_->Draw();
 }
 
 
-void Model::InitializeDXC() {
+void Particle::Draw(const ViewProjection& viewProjection) {
+	//DescriptorHeapを設定
+	TextureManager::GetInstance()->SetGraphicsDescriptorHeap();
+	//VBVを設定
+	sCommandList_->IASetVertexBuffers(0, 1, &vertexBufferView_);
+	//形状を設定。PSOに設定しているものとは別。同じものを設定すると考えておけば良い
+	sCommandList_->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	//マテリアルCBufferの場所を設定
+	sCommandList_->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
+	//WorldTransform用のCBufferの場所を設定
+	sCommandList_->SetGraphicsRootDescriptorTable(1, instancingSrvHandleGPU_);
+	//ViewProjection用のCBufferの場所を設定
+	sCommandList_->SetGraphicsRootConstantBufferView(2, viewProjection.constBuff_->GetGPUVirtualAddress());
+	//DescriptorTableを設定
+	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(3, textureHandle_);
+	//描画!(DrawCall/ドローコール)。3頂点で1つのインスタンス。インスタンスについては今後
+	sCommandList_->DrawInstanced(UINT(vertices_.size()), kNumInstance_, 0, 0);
+}
+
+
+void Particle::InitializeDXC() {
 
 	//dxccompilerを初期化
 	HRESULT hr = DxcCreateInstance(CLSID_DxcUtils, IID_PPV_ARGS(&sDxcUtils_));
@@ -229,7 +122,7 @@ void Model::InitializeDXC() {
 }
 
 
-Model::ComPtr<IDxcBlob> Model::CompileShader(const std::wstring& filePath, const wchar_t* profile) {
+Particle::ComPtr<IDxcBlob> Particle::CompileShader(const std::wstring& filePath, const wchar_t* profile) {
 
 	//これからシェーダーをコンパイルする旨をログに出す
 	Log(ConvertString(std::format(L"Begin CompileShader, path:{}, profile:{}\n", filePath, profile)));
@@ -291,7 +184,7 @@ Model::ComPtr<IDxcBlob> Model::CompileShader(const std::wstring& filePath, const
 }
 
 
-void Model::CreatePipelineStateObject() {
+void Particle::CreatePipelineStateObject() {
 
 	//RootSignature作成
 	D3D12_ROOT_SIGNATURE_DESC descriptionRootSignature{};
@@ -304,14 +197,21 @@ void Model::CreatePipelineStateObject() {
 	descriptorRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;//SRVを使う
 	descriptorRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;//Offsetを自動計算
 
+	D3D12_DESCRIPTOR_RANGE descriptorRangeForInstancing[1] = {};
+	descriptorRangeForInstancing[0].BaseShaderRegister = 0;//0から始まる
+	descriptorRangeForInstancing[0].NumDescriptors = 1;//数は一つ
+	descriptorRangeForInstancing[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;//SRVを使う
+	descriptorRangeForInstancing[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+
 	//RootParameter作成。複数設定できるので配列。今回は結果一つだけなので長さ1の配列
-	D3D12_ROOT_PARAMETER rootParameters[5] = {};
+	D3D12_ROOT_PARAMETER rootParameters[4] = {};
 	rootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;//CBVで使う
 	rootParameters[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;//PixelShaderで使う
 	rootParameters[0].Descriptor.ShaderRegister = 0;//レジスタ番号0とバインド
-	rootParameters[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;//CBVを使う
+	rootParameters[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;//DescriptorTableを使う
 	rootParameters[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;//VertexShaderで使う
-	rootParameters[1].Descriptor.ShaderRegister = 0;//レジスタ番号0を使う
+	rootParameters[1].DescriptorTable.pDescriptorRanges = descriptorRangeForInstancing;//Tableの中身の配列を指定
+	rootParameters[1].DescriptorTable.NumDescriptorRanges = _countof(descriptorRangeForInstancing);//Tableで利用する数
 	rootParameters[2].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;//CBVを使う
 	rootParameters[2].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;//VertexShaderで使う
 	rootParameters[2].Descriptor.ShaderRegister = 1;//レジスタ番号1を使う
@@ -319,9 +219,6 @@ void Model::CreatePipelineStateObject() {
 	rootParameters[3].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;//PixelShaderで使う
 	rootParameters[3].DescriptorTable.pDescriptorRanges = descriptorRange;//Tableの中身の配列を指定
 	rootParameters[3].DescriptorTable.NumDescriptorRanges = _countof(descriptorRange);//Tableで利用する数
-	rootParameters[4].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;//CBVを使う
-	rootParameters[4].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;//PixelShaderで使う
-	rootParameters[4].Descriptor.ShaderRegister = 1;//レジスタ番号１を使う
 	descriptionRootSignature.pParameters = rootParameters;//ルートパラメータ配列へのポインタ
 	descriptionRootSignature.NumParameters = _countof(rootParameters);//配列の長さ
 
@@ -396,10 +293,10 @@ void Model::CreatePipelineStateObject() {
 
 
 	//Shaderをコンパイルする
-	Microsoft::WRL::ComPtr<IDxcBlob> vertexShaderBlob = CompileShader(L"Resources/Shader/Object3d.VS.hlsl", L"vs_6_0");
+	Microsoft::WRL::ComPtr<IDxcBlob> vertexShaderBlob = CompileShader(L"Resources/Shader/Particle.VS.hlsl", L"vs_6_0");
 	assert(vertexShaderBlob != nullptr);
 
-	Microsoft::WRL::ComPtr<IDxcBlob> pixelShaderBlob = CompileShader(L"Resources/Shader/Object3d.PS.hlsl", L"ps_6_0");
+	Microsoft::WRL::ComPtr<IDxcBlob> pixelShaderBlob = CompileShader(L"Resources/Shader/Particle.PS.hlsl", L"ps_6_0");
 	assert(pixelShaderBlob != nullptr);
 
 
@@ -442,7 +339,75 @@ void Model::CreatePipelineStateObject() {
 }
 
 
-Model::ModelData Model::LoadObjFile(const std::string& directoryPath, const std::string& filename) {
+void Particle::Initialize(uint32_t kNumInstance, std::vector<VertexData>& vertices) {
+
+	//インスタンス数の初期化
+	kNumInstance_ = kNumInstance;
+
+	//頂点データの初期化
+	vertices_ = vertices;
+
+	//頂点リソースの作成
+	Particle::CreateVertexResource(vertices_);
+
+	//マテリアル用のリソースの作成
+	Particle::CreateMaterialResource();
+
+	//WorldTransform用のリソースの作成
+	Particle::CreateWorldTransform(kNumInstance);
+
+	//SRVの作成
+	instancingSrvHandleGPU_ = TextureManager::GetInstance()->CreateInstancingShaderResourceView(instancingResource_, kNumInstance_, sizeof(ConstBuffDataWorldTransform));
+}
+
+
+void Particle::CreateVertexResource(std::vector<VertexData>& vertices) {
+	//頂点リソースを作る
+	vertexResource_ = DirectXCommon::GetInstance()->CreateBufferResource(sizeof(VertexData) * vertices.size());
+
+	//リソースの先頭のアドレスから使う
+	vertexBufferView_.BufferLocation = vertexResource_->GetGPUVirtualAddress();
+	//使用するリソースのサイズは頂点6つ分のサイズ
+	vertexBufferView_.SizeInBytes = UINT(sizeof(VertexData) * vertices.size());
+	//頂点1つあたりのサイズ
+	vertexBufferView_.StrideInBytes = sizeof(VertexData);
+
+	//書き込むためのアドレスを取得
+	VertexData* vertexData = nullptr;
+	vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData));
+	std::memcpy(vertexData, vertices.data(), sizeof(VertexData) * vertices.size());
+	vertexResource_->Unmap(0, nullptr);
+}
+
+
+void Particle::CreateMaterialResource() {
+	//マテリアル用のリソースを作る。今回はcolor1つ分のサイズを用意する
+	materialResource_ = DirectXCommon::GetInstance()->CreateBufferResource(sizeof(ConstBuffDataMaterial));
+	//マテリアルにデータを書き込む
+	ConstBuffDataMaterial* materialData = nullptr;
+	//書き込むためのアドレスを取得
+	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData));
+	//今回は赤を書き込んでみる
+	materialData->color = Vector4{ 1.0f,1.0f,1.0f,1.0f };
+	materialData->uvTransform = MakeIdentity4x4();
+	materialResource_->Unmap(0, nullptr);
+}
+
+
+void Particle::CreateWorldTransform(uint32_t kNumInstance) {
+	//Instancing用のWorldTransformリソースを作る
+	instancingResource_ = DirectXCommon::GetInstance()->CreateBufferResource(sizeof(ConstBuffDataWorldTransform) * kNumInstance);
+	//書き込むためのアドレスを取得
+	ConstBuffDataWorldTransform* instancingData = nullptr;
+	instancingResource_->Map(0, nullptr, reinterpret_cast<void**>(&instancingData));
+	//単位行列を書き込んでおく
+	for (uint32_t index = 0; index < kNumInstance; ++index) {
+		instancingData[index].world = MakeIdentity4x4();
+	}
+}
+
+
+Particle::ModelData Particle::LoadObjFile(const std::string& directoryPath, const std::string& filename) {
 	ModelData modelData;//構築するModelData
 	std::vector<Vector4> positions;//位置
 	std::vector<Vector3> normals;//法線
@@ -477,7 +442,7 @@ Model::ModelData Model::LoadObjFile(const std::string& directoryPath, const std:
 			normals.push_back(normal);
 		}
 		else if (identifier == "f") {
-			Mesh::VertexData triangle[3];
+			VertexData triangle[3];
 			//面は三角形限定。その他は未対応
 			for (int32_t faceVertex = 0; faceVertex < 3; ++faceVertex) {
 				std::string vertexDefinition;
@@ -512,7 +477,7 @@ Model::ModelData Model::LoadObjFile(const std::string& directoryPath, const std:
 	return modelData;
 }
 
-Model::MaterialData Model::LoadMaterialTemplateFile(const std::string& directoryPath, const std::string& filename) {
+Particle::MaterialData Particle::LoadMaterialTemplateFile(const std::string& directoryPath, const std::string& filename) {
 	MaterialData materialData;//構築するMaterialData
 	std::string line;//ファイルから読んだ1行を格納するもの
 	std::ifstream file(directoryPath + "/" + filename);//ファイルを開く

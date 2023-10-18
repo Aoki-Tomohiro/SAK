@@ -298,7 +298,7 @@
       <Filter>ソース ファイル\Project\GameObject\BackGround</Filter>
     </ClCompile>
     <ClCompile Include="Project\GameObject\Boss\State\BossStateMissileAttack.cpp">
-       <Filter>ソース ファイル\Project\GameObject\Boss\State</Filter>
+      <Filter>ソース ファイル\Project\GameObject\Boss\State</Filter>
     </ClCompile>
     <ClCompile Include="Project\GameObject\Boss\ChargeShot\ChargeShot.cpp">
       <Filter>ソース ファイル\Project\GameObject\Boss\ChargeShot</Filter>
@@ -308,6 +308,9 @@
     </ClCompile>
     <ClCompile Include="Project\GameObject\Boss\State\BossStateStun.cpp">
       <Filter>ソース ファイル\Project\GameObject\Boss\State</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\3D\Model\Particle.cpp">
+      <Filter>ソース ファイル\Engine\3D\Model</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -464,6 +467,9 @@
     <ClInclude Include="Project\GameObject\Boss\State\BossStateStun.h">
       <Filter>ヘッダー ファイル\Project\GameObject\Boss\State</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\3D\Model\Particle.h">
+      <Filter>ヘッダー ファイル\Engine\3D\Model</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shader\Object3d.VS.hlsl">
@@ -502,6 +508,12 @@
     <FxCompile Include="Resources\Shader\PostProcessPS.hlsl">
       <Filter>Shader</Filter>
     </FxCompile>
+    <FxCompile Include="Resources\Shader\Particle.VS.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shader\Particle.PS.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Engine\Externals\imgui\LICENSE.txt">
@@ -525,6 +537,9 @@
       <Filter>Shader</Filter>
     </None>
     <None Include="Resources\Shader\PostProcess.hlsli">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="Resources\Shader\Particle.hlsli">
       <Filter>Shader</Filter>
     </None>
   </ItemGroup>

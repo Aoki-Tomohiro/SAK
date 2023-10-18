@@ -6,6 +6,7 @@
 #include "Components/Input.h"
 #include "Components/PostProcess.h"
 #include "3D/Model/Model.h"
+#include "3D/Model/Particle.h"
 #include "2D/Sprite.h"
 #include "2D/ImGuiManager.h"
 #include "IScene.h"
