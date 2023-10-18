@@ -169,6 +169,12 @@
     <Filter Include="ヘッダー ファイル\Project\GameObject\Boss\ChargeShot">
       <UniqueIdentifier>{ac2286af-b026-45d8-ac88-f15d54df38e9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Project\GameObject\Particle">
+      <UniqueIdentifier>{cc5a96bc-3ff2-457a-a628-a18dd4e810e5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Project\GameObject\Particle">
+      <UniqueIdentifier>{4e07aef2-1c9e-48cc-a54b-d8ac0bc52997}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -298,7 +304,7 @@
       <Filter>ソース ファイル\Project\GameObject\BackGround</Filter>
     </ClCompile>
     <ClCompile Include="Project\GameObject\Boss\State\BossStateMissileAttack.cpp">
-       <Filter>ソース ファイル\Project\GameObject\Boss\State</Filter>
+      <Filter>ソース ファイル\Project\GameObject\Boss\State</Filter>
     </ClCompile>
     <ClCompile Include="Project\GameObject\Boss\ChargeShot\ChargeShot.cpp">
       <Filter>ソース ファイル\Project\GameObject\Boss\ChargeShot</Filter>
@@ -308,6 +314,12 @@
     </ClCompile>
     <ClCompile Include="Project\GameObject\Boss\State\BossStateStun.cpp">
       <Filter>ソース ファイル\Project\GameObject\Boss\State</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\GameObject\Particle\PopParticle.cpp">
+      <Filter>ソース ファイル\Project\GameObject\Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\GameObject\Particle\ParticleEmitter.cpp">
+      <Filter>ソース ファイル\Project\GameObject\Particle</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -463,6 +475,12 @@
     </ClInclude>
     <ClInclude Include="Project\GameObject\Boss\State\BossStateStun.h">
       <Filter>ヘッダー ファイル\Project\GameObject\Boss\State</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\GameObject\Particle\PopParticle.h">
+      <Filter>ヘッダー ファイル\Project\GameObject\Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\GameObject\Particle\ParticleEmitter.h">
+      <Filter>ヘッダー ファイル\Project\GameObject\Particle</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
