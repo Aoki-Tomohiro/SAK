@@ -59,9 +59,9 @@ void Player::Update()
 	{
 		playerWorldTransform_.translation_.x -= playerMoveSpeed_;
 
-		if (playerWorldTransform_.translation_.x <= -7.3f)
+		if (playerWorldTransform_.translation_.x <= Missile::widthMin)
 		{
-			playerWorldTransform_.translation_.x = -7.3f;
+			playerWorldTransform_.translation_.x = Missile::widthMin;
 		}
 	}
 
@@ -69,9 +69,9 @@ void Player::Update()
 	{
 		playerWorldTransform_.translation_.x += playerMoveSpeed_;
 
-		if (playerWorldTransform_.translation_.x >= 7.3f)
+		if (playerWorldTransform_.translation_.x >= Missile::widthMax)
 		{
-			playerWorldTransform_.translation_.x = 7.3f;
+			playerWorldTransform_.translation_.x = Missile::widthMax;
 		}
 	}
 

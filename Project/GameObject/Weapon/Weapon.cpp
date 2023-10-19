@@ -74,9 +74,9 @@ void Weapon::Update()
 	{
 		weaponWorldTransform_.translation_.x -= weaponMoveSpeed_;
 
-		if (weaponWorldTransform_.translation_.x <= -7.3f)
+		if (weaponWorldTransform_.translation_.x <= Missile::widthMin)
 		{
-			weaponWorldTransform_.translation_.x = -7.3f;
+			weaponWorldTransform_.translation_.x = Missile::widthMin;
 		}
 	}
 
@@ -84,9 +84,9 @@ void Weapon::Update()
 	{
 		weaponWorldTransform_.translation_.x += weaponMoveSpeed_;
 
-		if (weaponWorldTransform_.translation_.x >= 7.3f)
+		if (weaponWorldTransform_.translation_.x >= Missile::widthMax)
 		{
-			weaponWorldTransform_.translation_.x = 7.3f;
+			weaponWorldTransform_.translation_.x = Missile::widthMax;
 		}
 	}
 

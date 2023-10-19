@@ -5,6 +5,7 @@
 #include "Components/Input.h"
 #include "Utility/CollisionManager/Collider.h"
 #include "../GameObject/Weapon/Weapon.h"
+#include "../GameObject/Missile/Missile.h"
 
 class Player
 {
