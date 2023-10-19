@@ -44,7 +44,7 @@ void GameScene::Initialize(GameManager* gameManager) {
 	backGround_ = std::make_unique<BackGround>();
 	backGround_->Initialize();
 
-	tex = TextureManager::Load("Resources/heart.png");
+	tex = TextureManager::Load("Resources/Images/heart.png");
 
 	sprite_->Sprite::Create(tex,{0,0});
 };
