@@ -5,7 +5,6 @@
 #include "Components/Input.h"
 #include "Utility/CollisionManager/Collider.h"
 #include "../GameObject/Weapon/Weapon.h"
-
 #include "../UI.h"
 
 class Player
@@ -77,12 +76,11 @@ private:
 
 	platformMotionMoveStruct platformMotionMove_;
 
-	//UI
-	UIStruct heartUI_;
+	UIStruct tutorialUI_;
 
-	uint32_t tex = 0;
+	float tutorialSpace = 16.0f;
+	Vector2 tutorialSpriteSize = {131.0f * 2.0f,36.0f * 2.0f };
 
-	Sprite* hpSprite_ = nullptr;
 };
 
 

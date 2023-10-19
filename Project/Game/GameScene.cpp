@@ -8,7 +8,6 @@ GameScene::GameScene() {};
 
 GameScene::~GameScene() {
 	delete debugCamera_;
-	delete sprite_;
 };
 
 void GameScene::Initialize(GameManager* gameManager) {
@@ -44,9 +43,6 @@ void GameScene::Initialize(GameManager* gameManager) {
 	backGround_ = std::make_unique<BackGround>();
 	backGround_->Initialize();
 
-	tex = TextureManager::Load("Resources/Images/heart.png");
-
-	sprite_->Sprite::Create(tex,{0,0});
 };
 
 void GameScene::Update(GameManager* gameManager) {
@@ -130,8 +126,11 @@ void GameScene::Draw(GameManager* gameManager) {
 	//スプライトの描画
 	Sprite::PreDraw(Sprite::kBlendModeNormal);
 	
-	//player_->DrawSprite();
-	sprite_->Draw();
+	weapon_->DrawSprite();
+
+	boss_->DrawSprite();
+
+	player_->DrawSprite();
 
 	Sprite::PostDraw();
 };

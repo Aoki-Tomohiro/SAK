@@ -5,7 +5,7 @@
 
 Player::~Player()
 {
-	delete hpSprite_;
+	delete tutorialUI_.sprite_;
 }
 
 void Player::Initialize(Weapon* weapon)
@@ -55,15 +55,16 @@ void Player::Initialize(Weapon* weapon)
 
 	ModelMotion();
 
-	heartUI_ = {
-		true,
-		TextureManager::Load("Resources/heart.png"),
-		{0.0f,0.0f},
-		0.0f,
-		{1.0f,1.0f},
+	tutorialUI_ = {
+			true,
+			TextureManager::Load("Resources/Images/rule.png"),
+			{ float(WinApp::GetInstance()->kClientWidth) - tutorialSpace - tutorialSpriteSize.x,float(WinApp::GetInstance()->kClientHeight) - tutorialSpace - tutorialSpriteSize.y},
+			0.0f,
+			{1.0f,1.0f},
+			nullptr,
 	};
 
-	hpSprite_->Sprite::Create(textureHandle_,{ 0.0f,0.0f});
+	tutorialUI_.sprite_ = Sprite::Create(tutorialUI_.textureHandle_, tutorialUI_.position_);
 
 }
 
@@ -176,6 +177,6 @@ void Player::ModelMotion()
 
 void Player::DrawSprite()
 {
-	//hpSprite_->Draw();
+	tutorialUI_.sprite_->Draw();
 }
 

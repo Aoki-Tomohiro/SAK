@@ -5,6 +5,13 @@
 //実体定義
 int Weapon::InvincibleTime = 60;
 
+Weapon::~Weapon()
+{
+	for (int i = 0; i < MaxHp_; i++) {
+		delete heartUI_[i].sprite_;
+	}
+}
+
 void Weapon::Initialize()
 {
   
@@ -65,10 +72,40 @@ void Weapon::Initialize()
 	}
 
 	ModelMotion();
+
+	Hp_ = MaxHp_;
+
+
+	//HP表示の隙間；
+	float hpSpace = 16.0f;
+	float hpSpriteSize = 64.0f;
+
+	for (int i = 0; i < MaxHp_; i++) {
+		heartUI_[i] = {
+			true,
+			TextureManager::Load("Resources/Images/heart.png"),
+			{ hpSpace + (hpSpace + hpSpriteSize)* i ,float(WinApp::GetInstance()->kClientHeight) - hpSpace - hpSpriteSize},
+			0.0f,
+			{1.0f,1.0f},
+			nullptr,
+		};
+
+		heartUI_[i].sprite_ = Sprite::Create(heartUI_[i].textureHandle_, heartUI_[i].position_);
+	}
 }
 
 void Weapon::Update()
 {
+
+	//HP描画
+	for (int i = 0; i < MaxHp_; i++) {
+		heartUI_[i].isDraw_ = false;
+	}
+	for (int i = 0; i < Hp_; i++) {
+		heartUI_[i].isDraw_ = true;
+	}
+
+
 	//プレイヤーの左右移動
 	if (input_->IsPushKey(DIK_A) && IsAttack_ == false)
 	{
@@ -234,7 +271,7 @@ void Weapon::Update()
 	ImGui::Text("attackDamage1 : %f", attackDamage_[1]);
 	ImGui::Text("attackDamage2 : %f", attackDamage_[2]);
 	ImGui::Text("attackDamage3 : %f", attackDamage_[3]);
-	ImGui::Text("HP : %f", Hp_);
+	ImGui::Text("HP : %d", Hp_);
 	ImGui::Text("InvolvedMissileCount : %d", involvedCount_);
 	ImGui::End();
 }
@@ -302,7 +339,7 @@ void Weapon::OnCollision(uint32_t collisionAttribute, float damage)
 				{
 					invincibleFlag_ = true;
 					invincibleTimer_ = InvincibleTime;
-					Hp_ -= damage;
+					Hp_ -= int(damage);
 				}
 			}
 		}
@@ -314,7 +351,7 @@ void Weapon::OnCollision(uint32_t collisionAttribute, float damage)
 			{
 				invincibleFlag_ = true;
 				invincibleTimer_ = InvincibleTime;
-				Hp_ -= damage;
+				Hp_ -= int(damage);
 			}
 		}
 	}
@@ -378,3 +415,13 @@ void Weapon::ModelMotion()
 	weaponMotionWorldTransform_.UpdateMatrix();
 
 }
+
+void Weapon::DrawSprite()
+{
+	for (int i = 0; i < MaxHp_; i++) {
+		if (heartUI_[i].isDraw_ == true) {
+			heartUI_[i].sprite_->Draw();
+		}
+	}
+}
+

@@ -8,4 +8,5 @@ struct UIStruct {
 	Vector2 position_{};
 	float rotation_{};
 	Vector2 size_{};
+	Sprite* sprite_ = nullptr;;
 };

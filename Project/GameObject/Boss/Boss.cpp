@@ -9,6 +9,11 @@
 //実体定義
 int Boss::MissileSpornTime = 90;
 
+Boss::~Boss()
+{
+	delete hpBar_.sprite_;
+}
+
 void Boss::Initialize() {
 
 	//モデルの作成
@@ -45,6 +50,18 @@ void Boss::Initialize() {
 	globalVariables->CreateGroup(groupName);
 	globalVariables->AddItem(groupName, "missileMoveSpeed", missileMoveSpeed_);
 	globalVariables->AddItem(groupName, "missileSpornTime", MissileSpornTime);
+
+	hpBar_ = {
+		true,
+		TextureManager::Load("Resources/Images/bossHp.png"),
+		{barSpace , barSpace},
+		0.0f,
+		{barSize,1.0f},
+		nullptr,
+	};
+
+	hpBar_.sprite_ = Sprite::Create(hpBar_.textureHandle_, hpBar_.position_);
+
 }
 
 void Boss::Update() {
@@ -111,6 +128,8 @@ void Boss::Update() {
 
 	//モーション更新
 	ModelMotion();
+	//バー
+	HPBarUpdate();
   
 	ImGui::Begin("Boss");
 	ImGui::Text("HP : %f", Hp_);
@@ -215,4 +234,19 @@ void Boss::ModelMotion()
 
 	bossMotionWorldTransform_.UpdateMatrix();
 
+}
+
+void Boss::DrawSprite()
+{
+
+	hpBar_.sprite_->Draw();
+
+}
+
+void Boss::HPBarUpdate()
+{
+
+	hpBar_.size_ = {(Hp_ / maxHp_) * barSize,1.0f };
+
+	hpBar_.sprite_->SetSize(hpBar_.size_);
 }

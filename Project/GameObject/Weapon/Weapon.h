@@ -4,10 +4,13 @@
 #include "2D/ImGuiManager.h"
 #include "Components/Input.h"
 #include "Utility/CollisionManager/Collider.h"
+#include "../UI.h"
 
 class Weapon : public Collider
 {
 public:
+
+	~Weapon();
 
 	static int InvincibleTime;
 
@@ -36,6 +39,7 @@ public:
 
 	bool GetIsHit() { return IsHit_; };
   
+	void DrawSprite();
 
 private:
 	Input* input_ = nullptr;
@@ -107,7 +111,8 @@ private:
 	bool IsHit_ = false;
 
 	//体力
-	float Hp_ = 3.0f;
+	static const  int MaxHp_ = 3;
+	int Hp_;
 
 	//無敵時間
 	bool invincibleFlag_ = false;
@@ -127,5 +132,8 @@ private:
 		{0.0f,0.0f,0.0f,0.0f},
 	};
   
+
+	//UI
+	UIStruct heartUI_[MaxHp_];
 };
 

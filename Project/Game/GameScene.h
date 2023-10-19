@@ -91,7 +91,4 @@ private:
 
 	std::unique_ptr<BackGround> backGround_ = nullptr;
 
-	uint32_t tex = 0;
-
-	Sprite* sprite_ = nullptr;
 };
