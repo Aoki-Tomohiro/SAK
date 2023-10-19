@@ -47,6 +47,8 @@ void Player::Initialize(Weapon* weapon)
 		{1.0f,1.0f,1.0f},
 		{0.0f,0.0f,0.0f},
 	};
+
+	ModelMotion();
 }
 
 void Player::Update() 
@@ -75,7 +77,6 @@ void Player::Update()
 
 	
 	playerWorldTransform_.UpdateMatrix();
-	ModelMotion();
 	prePlayerTranslation_ = playerWorldTransform_.translation_;
 	Player::ApplyGlobalVariables();
 
@@ -103,7 +104,6 @@ void Player::ApplyGlobalVariables()
 
 void Player::ModelMotion()
 {
-
 	//MoveMotion
 	{
 
