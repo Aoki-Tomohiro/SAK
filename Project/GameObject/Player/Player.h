@@ -6,9 +6,13 @@
 #include "Utility/CollisionManager/Collider.h"
 #include "../GameObject/Weapon/Weapon.h"
 
+#include "../UI.h"
+
 class Player
 {
 public:
+
+	~Player();
 
 	void Initialize(Weapon* weapon);
 
@@ -19,6 +23,8 @@ public:
 	void ApplyGlobalVariables();
 
 	void ModelMotion();
+
+	void DrawSprite();
 
 private:
 	Input* input_ = nullptr;
@@ -70,6 +76,13 @@ private:
 	Vector3 NormalScale_;
 
 	platformMotionMoveStruct platformMotionMove_;
+
+	//UI
+	UIStruct heartUI_;
+
+	uint32_t tex = 0;
+
+	Sprite* hpSprite_ = nullptr;
 };
 
 

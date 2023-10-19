@@ -3,6 +3,11 @@
 #include <math.h>
 #include "Utility/GlobalVariables.h"
 
+Player::~Player()
+{
+	delete hpSprite_;
+}
+
 void Player::Initialize(Weapon* weapon)
 {
   
@@ -49,6 +54,16 @@ void Player::Initialize(Weapon* weapon)
 	};
 
 	ModelMotion();
+
+	heartUI_ = {
+		true,
+		TextureManager::Load("Resources/heart.png"),
+		{0.0f,0.0f},
+		0.0f,
+		{1.0f,1.0f},
+	};
+
+	hpSprite_->Sprite::Create(textureHandle_,{ 0.0f,0.0f});
 
 }
 
@@ -157,5 +172,10 @@ void Player::ModelMotion()
 	platformModel_->GetMaterial()->SetColor(platformMotion_.color_);
 
 	platformMotionWorldTransform_.UpdateMatrix();
+}
+
+void Player::DrawSprite()
+{
+	//hpSprite_->Draw();
 }
 
