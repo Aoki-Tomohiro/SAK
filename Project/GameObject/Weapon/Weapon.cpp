@@ -1,4 +1,5 @@
 #include "Weapon.h"
+#include <Math.h>
 #include "../GameObject/Player/Player.h"
 #include "Utility/GlobalVariables.h"
 
@@ -18,6 +19,7 @@ void Weapon::Initialize()
 	weaponModelDummy_.reset(Model::CreateFromOBJ("Resources/Sphere", "sphere.obj"));
 
 	weaponModel_.reset(Model::CreateFromOBJ("Resources/Head", "Head.obj"));
+	weaponRodModel_.reset(Model::CreateFromOBJ("Resources/Rod", "rod.obj"));
 
 	involvedMissile_.reset(Model::CreateFromOBJ("Resources/Sphere", "sphere.obj"));
   
@@ -61,10 +63,20 @@ void Weapon::Initialize()
 		{0.0f,0.0f,0.0f},
 		{1.0f,1.0f,1.0f},
 		{1.0f,1.0f,1.0f,1.0f},
+		{ 0.0f,-0.1f,0.0f },
+		{ 1.7f,1.7f,1.7f },
+
 	};
 
-	normalScale_ = { 1.7f,1.7f,1.7f };
-	normalTransration_ = { 0.0f,-0.1f,0.0f };
+	weaponRodMotion_ = {
+		{0.0f,0.0f,0.0f},
+		{0.0f,0.0f,0.0f},
+		{1.0f,1.0f,1.0f},
+		{1.0f,1.0f,1.0f,1.0f},
+		{ 0.0f,0.0f,0.0f },
+		{ 1.7f,(3.3f + 2.2f)  * 0.5f,1.7f },
+	};
+
 
 	chargeRotateSpeed_ = 0.2f;
 	for (int i = 0; i < 4; i++) {
@@ -280,6 +292,7 @@ void Weapon::Draw(const ViewProjection viewProjection)
 {
   
 	weaponModel_->Draw(weaponMotionWorldTransform_, viewProjection);
+	weaponRodModel_->Draw(weaponRodMotionWorldTransform_, viewProjection);
 	//weaponModelDummy_->Draw(weaponWorldTransform_, viewProjection);
 
 	//ミサイルを巻き込んでいるときに描画する
@@ -407,13 +420,26 @@ void Weapon::ModelMotion()
 			break;
 	}
 
-	weaponMotionWorldTransform_.translation_ = Add(Add(weaponMotion_.translation_, weaponWorldTransform_.translation_),normalTransration_);
-	weaponMotionWorldTransform_.scale_ = Multiply(Multiply(weaponMotion_.scale_, weaponWorldTransform_.scale_),normalScale_);
+	//ヘッドとプラットフォームまでの距離
+	float distance = weaponWorldTransform_.translation_.y -playerPosY;
+	float distanceHalf = distance * 0.5f;
+
+	weaponRodMotion_.translation_.y = -distanceHalf;
+
+	weaponRodMotion_.scale_.y = distance;
+
+	weaponMotionWorldTransform_.translation_ = Add(Add(weaponMotion_.translation_, weaponWorldTransform_.translation_), weaponMotion_.normalTransration_);
+	weaponMotionWorldTransform_.scale_ = Multiply(Multiply(weaponMotion_.scale_, weaponWorldTransform_.scale_), weaponMotion_.normalScale_);
 	weaponMotionWorldTransform_.rotation_ = Add(weaponMotion_.rotation_, weaponWorldTransform_.rotation_);
 	weaponModel_->GetMaterial()->SetColor(weaponMotion_.color_);
 
-	weaponMotionWorldTransform_.UpdateMatrix();
+	weaponRodMotionWorldTransform_.translation_ = Add(Add(weaponRodMotion_.translation_, weaponWorldTransform_.translation_), weaponRodMotion_.normalTransration_);
+	weaponRodMotionWorldTransform_.scale_ = Multiply(Multiply(weaponRodMotion_.scale_, weaponWorldTransform_.scale_), weaponRodMotion_.normalScale_);
+	weaponRodMotionWorldTransform_.rotation_ = Add(weaponRodMotion_.rotation_, weaponWorldTransform_.rotation_);
+	weaponRodModel_->GetMaterial()->SetColor(weaponRodMotion_.color_);
 
+	weaponMotionWorldTransform_.UpdateMatrix();
+	weaponRodMotionWorldTransform_.UpdateMatrix();
 }
 
 void Weapon::DrawSprite()
