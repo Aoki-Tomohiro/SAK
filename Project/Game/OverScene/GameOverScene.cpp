@@ -49,7 +49,12 @@ void GameOverScene::Update(GameManager* gameManager)
 	//背景の更新
 	backGround_->Update();
 
-	if (input_->IsPushKeyEnter(DIK_SPACE))
+	if (!Input::GetInstance()->GetJoystickState(joyState_))
+	{
+		return;
+	}
+
+	if (joyState_.Gamepad.wButtons & XINPUT_GAMEPAD_A)
 	{
 		if (isTransitionEnd_) {
 			isTransition_ = true;

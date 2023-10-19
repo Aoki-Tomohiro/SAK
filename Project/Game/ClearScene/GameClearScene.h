@@ -51,6 +51,9 @@ private:
 	Audio* audio_ = nullptr;
 	//Input
 	Input* input_ = nullptr;
+
+	XINPUT_STATE joyState_;
+
 	//トランジション用のスプライト
 	std::unique_ptr<Sprite> transitionSprite_;
 	//トランジションのテクスチャ

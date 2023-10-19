@@ -54,26 +54,27 @@ void Player::Initialize(Weapon* weapon)
 
 void Player::Update() 
 {
+	Vector3 move = { 0, 0, 0 };
+
 	//プレイヤーの左右移動
-	if (input_->IsPushKey(DIK_A) && weapon_->GetIsAttack() == false)
+	if (Input::GetInstance()->GetJoystickState(joyState_) && weapon_->GetIsAttack() == false)
 	{
-		playerWorldTransform_.translation_.x -= playerMoveSpeed_;
+		move.x += (float)joyState_.Gamepad.sThumbLX / SHRT_MAX * playerMoveSpeed_;
 
 		if (playerWorldTransform_.translation_.x <= -7.3f)
 		{
 			playerWorldTransform_.translation_.x = -7.3f;
 		}
-	}
-
-	if (input_->IsPushKey(DIK_D) && weapon_->GetIsAttack() == false)
-	{
-		playerWorldTransform_.translation_.x += playerMoveSpeed_;
 
 		if (playerWorldTransform_.translation_.x >= 7.3f)
 		{
 			playerWorldTransform_.translation_.x = 7.3f;
 		}
 	}
+
+	playerWorldTransform_.translation_ = Add(playerWorldTransform_.translation_, move);
+	playerWorldTransform_.matWorld_ = MakeAffineMatrix(
+		playerWorldTransform_.scale_, playerWorldTransform_.rotation_, playerWorldTransform_.translation_);
 
 	playerWorldTransform_.UpdateMatrix();
 	ModelMotion();
@@ -110,13 +111,9 @@ void Player::ModelMotion()
 
 		motionMode_ = Stay;
 
-		if (prePlayerTranslation_.x != playerWorldTransform_.translation_.x) {
+		if (Input::GetInstance()->GetJoystickState(joyState_)) {
 			motionMode_ = Move;
 		}
-
-
-
-
 
 		switch (motionMode_)
 		{
