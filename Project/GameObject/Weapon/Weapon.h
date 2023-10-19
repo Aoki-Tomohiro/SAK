@@ -38,6 +38,8 @@ public:
 	bool GetIsAttack() { return IsAttack_; }
 
 	bool GetIsHit() { return IsHit_; };
+
+	float GetHP() { return Hp_; };
   
 	void DrawSprite();
 
