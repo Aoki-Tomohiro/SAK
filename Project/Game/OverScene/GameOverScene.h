@@ -11,6 +11,11 @@
 #include "3D/Matrix/WorldTransform.h"
 #include "3D/Matrix/ViewProjection.h"
 
+#include "../GameObject/Boss/Boss.h"
+#include "../GameObject/Player/Player.h"
+#include "../GameObject/Weapon/Weapon.h"
+#include "../BackGround.h"
+
 #include <memory>
 
 class GameOverScene : public IScene
@@ -48,5 +53,26 @@ private:
 	Audio* audio_ = nullptr;
 	//Input
 	Input* input_ = nullptr;
+
+	//カメラ
+	ViewProjection viewProjection_{};
+
+	//テクスチャ
+	uint32_t textureHandle_ = 0;
+
+	//モデル
+	std::unique_ptr<Model> model1_ = nullptr;
+	std::unique_ptr<Model> model2_ = nullptr;
+	std::unique_ptr<Model> model3_ = nullptr;
+	Vector4 modelColor1_{ 1.0f,1.0f,1.0f,1.0f };
+	Vector4 modelColor2_{ 1.0f,1.0f,1.0f,1.0f };
+	Vector4 modelColor3_{ 1.0f,1.0f,1.0f,1.0f };
+
+	//ワールドトランスフォーム
+	WorldTransform worldTransform1_{};
+	WorldTransform worldTransform2_{};
+	WorldTransform worldTransform3_{};
+
+	std::unique_ptr<BackGround> backGround_ = nullptr;
 };
 
