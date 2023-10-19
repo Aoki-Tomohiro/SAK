@@ -39,7 +39,7 @@ public:
 
 	bool GetIsHit() { return IsHit_; };
 
-	float GetHP() { return Hp_; };
+	int GetHP() { return Hp_; };
   
 	void DrawSprite();
 
