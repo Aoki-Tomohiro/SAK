@@ -47,9 +47,6 @@ void Player::Initialize(Weapon* weapon)
 		{1.0f,1.0f,1.0f},
 		{0.0f,0.0f,0.0f},
 	};
-
-	ModelMotion();
-
 }
 
 void Player::Update() 
@@ -72,6 +69,8 @@ void Player::Update()
 		{
 			playerWorldTransform_.translation_.x = 7.3f;
 		}
+
+		ModelMotion();
 	}
 
 	
