@@ -1,8 +1,8 @@
 #include "missile.h"
 #include "Utility/GlobalVariables.h"
 
-float Missile::widthMin = -5.0f;
-float Missile::widthMax = 5.0f;
+float Missile::widthMin = -7.0f;
+float Missile::widthMax = 7.0f;
 
 void Missile::Initialize(const Vector3& position, const Vector3& velocity)
 {
