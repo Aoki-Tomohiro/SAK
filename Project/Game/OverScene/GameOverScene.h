@@ -61,17 +61,14 @@ private:
 	uint32_t textureHandle_ = 0;
 
 	//モデル
-	std::unique_ptr<Model> model1_ = nullptr;
-	std::unique_ptr<Model> model2_ = nullptr;
-	std::unique_ptr<Model> model3_ = nullptr;
-	Vector4 modelColor1_{ 1.0f,1.0f,1.0f,1.0f };
-	Vector4 modelColor2_{ 1.0f,1.0f,1.0f,1.0f };
-	Vector4 modelColor3_{ 1.0f,1.0f,1.0f,1.0f };
-
+	std::unique_ptr<Model> playerModel_ = nullptr;
+	std::unique_ptr<Model> weaponModel_ = nullptr;
+	std::unique_ptr<Model> bossModel_ = nullptr;
+	
 	//ワールドトランスフォーム
-	WorldTransform worldTransform1_{};
-	WorldTransform worldTransform2_{};
-	WorldTransform worldTransform3_{};
+	WorldTransform playerWorldTransform_{};
+	WorldTransform weaponWorldTransform_{};
+	WorldTransform bossWorldTransform_{};
 
 	std::unique_ptr<BackGround> backGround_ = nullptr;
 };
