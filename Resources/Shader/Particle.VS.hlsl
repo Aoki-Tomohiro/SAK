@@ -1,8 +1,9 @@
 #include "Particle.hlsli"
 
-struct WorldTransform
+struct ParticleForGPU
 {
     float32_t4x4 world;
+    float32_t4 color;
 };
 
 struct ViewProjection
@@ -11,7 +12,7 @@ struct ViewProjection
     float32_t4x4 projection;
 };
 
-StructuredBuffer<WorldTransform> gWorldTransform : register(t0);
+StructuredBuffer<ParticleForGPU> gParticle : register(t0);
 ConstantBuffer<ViewProjection> gViewProjection : register(b1);
 
 struct VertexShaderInput
@@ -24,12 +25,10 @@ struct VertexShaderInput
 VertexShaderOutput main(VertexShaderInput input, uint32_t instanceId : SV_InstanceID)
 {
     VertexShaderOutput output;
-    output.position = mul(input.position, mul(gWorldTransform[instanceId].world, mul(gViewProjection.view, gViewProjection.projection)));
+    output.position = mul(input.position, mul(gParticle[instanceId].world, mul(gViewProjection.view, gViewProjection.projection)));
     output.texcoord = input.texcoord;
-    output.normal = normalize(mul(input.normal, (float32_t3x3) gWorldTransform[instanceId].world));
-    //線形深度
-    float z = (output.position.z - 0.1f) / (100.0f - 0.1f);
-    output.depth = float32_t4(z, 0, 0, 0);
+    output.normal = normalize(mul(input.normal, (float32_t3x3) gParticle[instanceId].world));
+    output.color = gParticle[instanceId].color;
 
     return output;
 }

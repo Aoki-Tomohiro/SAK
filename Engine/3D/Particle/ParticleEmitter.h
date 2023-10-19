@@ -26,6 +26,26 @@ public:
 	};
 
 	/// <summary>
+	/// エミッターの情報
+	/// </summary>
+	struct EmitterData {
+		//座標
+		minmaxStruct popTranslation_ = { 0.0f,0.0f };
+		//角度
+		minmaxStruct popRotate_ = { 0.0f,0.0f };
+		//スケール
+		minmaxStruct popScale_ = { 0.1f,1.0f };
+		//速度
+		minmaxStruct popVelocity_ = { 0.1f,1.0f };
+		//飛ばす方向
+		minmaxStruct popAngle_ = { 0.0f,360.0f };
+		//色
+		minmaxStruct popColor_ = { 0.0f,1.0f };
+		//寿命
+		minmaxStruct popLifeTime_ = { 0.0f,1.0f };
+	};
+
+	/// <summary>
 	/// 頂点データ
 	/// </summary>
 	struct VertexData {
@@ -59,10 +79,11 @@ public:
 	};
 
 	/// <summary>
-	/// ワールドトランスフォームの構造体
+	/// GPUに送るパーティクルの構造体
 	/// </summary>
-	struct ConstBuffDataWorldTransform {
+	struct ParticleForGPU {
 		Matrix4x4 world;
+		Vector4 color;
 	};
 
 	/// <summary>
@@ -86,21 +107,14 @@ public:
 	static void PostDraw();
 
 	/// <summary>
-	/// パーティクルエミッターの作成
+	/// エミッターの作成
 	/// </summary>
-	/// <param name="directoryPath">ディレクトリ名</param>
-	/// <param name="filename">ファイル名</param>
-	/// <param name="kNumInstance">パーティクルの数</param>
-	/// <param name="popTranslation">発生範囲</param>
-	/// <param name="popRotate">角度</param>
-	/// <param name="popScale">スケール</param>
-	/// <param name="popVelocity">速度</param>
-	/// <param name="popAngle">飛ばす方向</param>
-	/// <param name="popColor">色</param>
-	/// <param name="popLifeTime">寿命</param>
+	/// <param name="directoryPath"></param>
+	/// <param name="filename"></param>
+	/// <param name="kNumInstance"></param>
+	/// <param name="emitterData"></param>
 	/// <returns></returns>
-	static ParticleEmitter* CreateFromOBJ(const std::string& directoryPath, const std::string& filename, uint32_t kNumInstance,
-		minmaxStruct popTranslation, minmaxStruct popRotate, minmaxStruct popScale, minmaxStruct popVelocity, minmaxStruct popAngle, minmaxStruct popColor, minmaxStruct popLifeTime);
+	static ParticleEmitter* CreateFromOBJ(const std::string& directoryPath, const std::string& filename, uint32_t kNumInstance, EmitterData emitterData);
 
 	/// <summary>
 	/// 更新
@@ -144,12 +158,12 @@ private:
 	/// 初期化
 	/// </summary>
 	/// <param name="kNumInstance"></param>
-	void Initialize(uint32_t kNumInstance, std::vector<VertexData>& vertices);
+	void Initialize(uint32_t kNumInstance, EmitterData emitterData, std::vector<VertexData>& vertices);
 
 	/// <summary>
 	/// 頂点データの作成
 	/// </summary>
-	void CreateVertexResource(std::vector<VertexData>& vertices);
+	void CreateVertexResource();
 
 	/// <summary>
 	/// マテリアルリソース用の作成
@@ -159,12 +173,7 @@ private:
 	/// <summary>
 	/// ワールドトランスフォームのCBVを作成
 	/// </summary>
-	void CreateWorldTransform(uint32_t kNumInstance);
-
-	/// <summary>
-	/// マッピングする
-	/// </summary>
-	void Map();
+	void CreateWorldTransform();
 
 	/// <summary>
 	/// パーティクルの生成
@@ -224,25 +233,13 @@ private:
 	//Instancing用のSRVハンドル
 	D3D12_GPU_DESCRIPTOR_HANDLE instancingSrvHandleGPU_{};
 	//インスタンス数
-	uint32_t kNumInstance_ = 0;
+	uint32_t kMaxInstance_ = 0;
 	//テクスチャハンドル
 	uint32_t textureHandle_ = 0;
 	//パーティクルのリスト
 	std::list<std::unique_ptr<Particle>> particles_{};
-	//座標
-	minmaxStruct popTranslation_ = { 0.0f,0.0f };
-	//角度
-	minmaxStruct popRotate_ = { 0.0f,0.0f };
-	//スケール
-	minmaxStruct popScale_ = { 0.1f,1.0f };
-	//速度
-	minmaxStruct popVelocity_ = { 0.1f,1.0f };
-	//飛ばす方向
-	minmaxStruct popAngle_ = { 0.0f,360.0f };
-	//色
-	minmaxStruct popColor_ = { 0.0f,1.0f };
-	//寿命
-	minmaxStruct popLifeTime_ = { 0.0f,1.0f };
+	//エミッターの情報
+	EmitterData emitterData_{};
 	//エミッターの寿命
 	int deleteFrame_ = 180;
 	int deleteTimer_ = 0;

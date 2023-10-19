@@ -25,8 +25,17 @@ void GameTitleScene::Update(GameManager* gameManager)
 	}
 
 	if (input_->IsPushKeyEnter(DIK_P)) {
-		ParticleEmitter* newParticleEmitter = ParticleEmitter::CreateFromOBJ("Resources/particlePop", "particlePop.obj", 10,
-			{ 0.0f,0.0f }, { 0.0f,0.0f }, { 0.1f, 0.15f }, { 0.02f ,0.04f }, { 0.0f,360.0f }, { 1.0f,1.0f }, { 60.0f,60.0f });
+		ParticleEmitter::EmitterData emitterData =
+		{
+			{ 0.0f,0.0f },//座標
+			{ 0.0f,0.0f },//角度
+			{ 0.1f, 0.15f },//スケール
+			{ 0.02f ,0.04f },//速度
+			{ 0.0f,360.0f },//方角
+			{ 1.0f,1.0f },//色
+			{ 60.0f,60.0f }//寿命
+		};
+		ParticleEmitter* newParticleEmitter = ParticleEmitter::CreateFromOBJ("Resources/particlePop", "particlePop.obj", 10, emitterData);
 		particleSystem_.push_back(std::unique_ptr<ParticleEmitter>(newParticleEmitter));
 	}
 
@@ -53,6 +62,12 @@ void GameTitleScene::Update(GameManager* gameManager)
 
 void GameTitleScene::Draw(GameManager* gameManager)
 {
+	//モデルの描画
+	Model::PreDraw();
+
+
+	Model::PostDraw();
+
 	//パーティクルの描画
 	ParticleEmitter::PreDraw();
 
@@ -61,12 +76,6 @@ void GameTitleScene::Draw(GameManager* gameManager)
 	}
 
 	ParticleEmitter::PostDraw();
-
-	//モデルの描画
-	Model::PreDraw();
-
-
-	Model::PostDraw();
 
 	//スプライトの描画処理
 	Sprite::PreDraw(Sprite::kBlendModeNormal);
