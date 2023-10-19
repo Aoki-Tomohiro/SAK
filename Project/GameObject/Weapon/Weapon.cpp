@@ -21,7 +21,7 @@ void Weapon::Initialize()
 	weaponModel_.reset(Model::CreateFromOBJ("Resources/Head", "Head.obj"));
 	weaponRodModel_.reset(Model::CreateFromOBJ("Resources/Rod", "rod.obj"));
 
-	involvedMissile_.reset(Model::CreateFromOBJ("Resources/Sphere", "sphere.obj"));
+	involvedMissile_.reset(Model::CreateFromOBJ("Resources/Missile", "Missile.obj"));
   
 
 	input_ = Input::GetInstance();
@@ -34,6 +34,7 @@ void Weapon::Initialize()
 	//Missile
 	involvedMissileWorldTransform_.translation_ = { 0.0f,0.0f,0.0f };
 	involvedMissileWorldTransform_.scale_ = { 0.3f,0.3f,0.3f };
+	involvedMissileWorldTransform_.rotation_.z = 1.57f;
 
 	weaponWorldTransform_.UpdateMatrix();
 
@@ -243,8 +244,8 @@ void Weapon::Update()
 			coolDownTimer_ = 60;
 			IsCoolDown_ = false;
 			IsHit_ = false;
-			isInvolvedMissile_ = false;
-			involvedCount_ = 0;
+			/*isInvolvedMissile_ = false;*/
+			/*involvedCount_ = 0;*/
 			involvedMissile_->GetMaterial()->SetColor(missileColor_[involvedCount_]);
 		}
 	}
@@ -252,7 +253,11 @@ void Weapon::Update()
 	//巻き込んだミサイルの処理
 	if (isInvolvedMissile_)
 	{
-		involvedMissileWorldTransform_.translation_.y += attackSpeed_[3];
+		involvedMissileWorldTransform_.translation_ = {
+				weaponWorldTransform_.translation_.x,
+				weaponWorldTransform_.translation_.y + 0.5f,
+				weaponWorldTransform_.translation_.z,
+		};
 		involvedMissile_->GetMaterial()->SetColor(missileColor_[involvedCount_ - 1]);
 	}
 
@@ -324,6 +329,8 @@ void Weapon::OnCollision(uint32_t collisionAttribute, float damage)
 	if (collisionAttribute & kCollisionAttributeEnemy)
 	{
 		IsHit_ = true;
+		isInvolvedMissile_ = false;
+		involvedCount_ = 0;
 	}
 	//ボス以外の場合
 	else
@@ -334,16 +341,16 @@ void Weapon::OnCollision(uint32_t collisionAttribute, float damage)
 			//衝突相手がミサイルの場合カウントを増やす
 			if (collisionAttribute & kCollisionAttributeMissile) 
 			{
-				if (isInvolvedMissile_ == false) {
-					involvedMissileWorldTransform_.translation_ = {
-					weaponWorldTransform_.translation_.x,
-					weaponWorldTransform_.translation_.y + 0.5f,
-					weaponWorldTransform_.translation_.z,
-					};
-					involvedMissileWorldTransform_.UpdateMatrix();
-				}
 				isInvolvedMissile_ = true;
-				involvedCount_++;
+				if (involvedCount_ < 5) {
+					involvedCount_++;
+				}
+				involvedMissileWorldTransform_.translation_ = {
+				weaponWorldTransform_.translation_.x,
+				weaponWorldTransform_.translation_.y + 0.5f,
+				weaponWorldTransform_.translation_.z,
+				};
+				involvedMissileWorldTransform_.UpdateMatrix();
 			}
 			//ミサイル以外の場合はダメージを食らう
 			else {
