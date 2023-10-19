@@ -7,6 +7,7 @@
 #include "3D/DebugCamera/DebugCamera.h"
 
 #include "3D/Model/Model.h"
+#include "3D/Particle/ParticleEmitter.h"
 #include "2D/Sprite.h"
 #include "3D/Matrix/WorldTransform.h"
 #include "3D/Matrix/ViewProjection.h"
@@ -48,5 +49,9 @@ private:
 	Audio* audio_ = nullptr;
 	//Input
 	Input* input_ = nullptr;
+	//パーティクル
+	std::list<std::unique_ptr<ParticleEmitter>> particleSystem_{};
+	//ビュープロジェクション
+	ViewProjection viewProjection_{};
 };
 

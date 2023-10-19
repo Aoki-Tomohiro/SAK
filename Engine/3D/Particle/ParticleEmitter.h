@@ -2,9 +2,11 @@
 #include "Base/DirectXCommon.h"
 #include "Base/TextureManager.h"
 #include "3D/Matrix/ViewProjection.h"
+#include "Particle.h"
 #include <dxcapi.h>
 #include <fstream>
 #include <list>
+#include <random>
 #include <string>
 #include <sstream>
 #pragma comment(lib,"dxcompiler.lib")
@@ -12,12 +14,17 @@
 /// <summary>
 /// パーティクル
 /// </summary>
-class Particle {
+class ParticleEmitter {
 private:
 	//エイリアステンプレート
 	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
 
 public:
+	struct minmaxStruct {
+		float min;
+		float max;
+	};
+
 	/// <summary>
 	/// 頂点データ
 	/// </summary>
@@ -79,12 +86,21 @@ public:
 	static void PostDraw();
 
 	/// <summary>
-	/// パーティクルモデルの作成
+	/// パーティクルエミッターの作成
 	/// </summary>
-	/// <param name="directoryPath"></param>
-	/// <param name="filename"></param>
+	/// <param name="directoryPath">ディレクトリ名</param>
+	/// <param name="filename">ファイル名</param>
+	/// <param name="kNumInstance">パーティクルの数</param>
+	/// <param name="popTranslation">発生範囲</param>
+	/// <param name="popRotate">角度</param>
+	/// <param name="popScale">スケール</param>
+	/// <param name="popVelocity">速度</param>
+	/// <param name="popAngle">飛ばす方向</param>
+	/// <param name="popColor">色</param>
+	/// <param name="popLifeTime">寿命</param>
 	/// <returns></returns>
-	static Particle* CreateFromOBJ(const std::string& directoryPath, const std::string& filename, uint32_t kNumInstance);
+	static ParticleEmitter* CreateFromOBJ(const std::string& directoryPath, const std::string& filename, uint32_t kNumInstance,
+		minmaxStruct popTranslation, minmaxStruct popRotate, minmaxStruct popScale, minmaxStruct popVelocity, minmaxStruct popAngle, minmaxStruct popColor, minmaxStruct popLifeTime);
 
 	/// <summary>
 	/// 更新
@@ -96,6 +112,12 @@ public:
 	/// </summary>
 	/// <param name="viewProjection"></param>
 	void Draw(const ViewProjection& viewProjection);
+
+	/// <summary>
+	/// 死亡フラグを取得
+	/// </summary>
+	/// <returns></returns>
+	bool IsDead() { return isDead_; };
 
 private:
 	/// <summary>
@@ -140,6 +162,23 @@ private:
 	void CreateWorldTransform(uint32_t kNumInstance);
 
 	/// <summary>
+	/// マッピングする
+	/// </summary>
+	void Map();
+
+	/// <summary>
+	/// パーティクルの生成
+	/// </summary>
+	void Pop();
+
+	/// <summary>
+	/// ランダム生成
+	/// </summary>
+	/// <param name="min"></param>
+	/// <param name="max"></param>
+	float Random(float min, float max);
+
+	/// <summary>
 	/// Objファイルの読み込み
 	/// </summary>
 	/// <param name="directoryPath">ディレクトリ名</param>
@@ -170,6 +209,8 @@ private:
 	static ComPtr<ID3D12PipelineState> sGraphicsPipelineState_;
 	//モデルデータ
 	static std::list<ModelData> modelDatas_;
+	//ランダムエンジン
+	static std::mt19937 randomEngine;
 	//頂点データ
 	std::vector<VertexData> vertices_{};
 	//頂点バッファ
@@ -186,5 +227,24 @@ private:
 	uint32_t kNumInstance_ = 0;
 	//テクスチャハンドル
 	uint32_t textureHandle_ = 0;
-
+	//パーティクルのリスト
+	std::list<std::unique_ptr<Particle>> particles_{};
+	//座標
+	minmaxStruct popTranslation_ = { 0.0f,0.0f };
+	//角度
+	minmaxStruct popRotate_ = { 0.0f,0.0f };
+	//スケール
+	minmaxStruct popScale_ = { 0.1f,1.0f };
+	//速度
+	minmaxStruct popVelocity_ = { 0.1f,1.0f };
+	//飛ばす方向
+	minmaxStruct popAngle_ = { 0.0f,360.0f };
+	//色
+	minmaxStruct popColor_ = { 0.0f,1.0f };
+	//寿命
+	minmaxStruct popLifeTime_ = { 0.0f,1.0f };
+	//エミッターの寿命
+	int deleteFrame_ = 180;
+	int deleteTimer_ = 0;
+	bool isDead_ = false;
 };

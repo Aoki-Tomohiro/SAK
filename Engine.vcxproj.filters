@@ -169,6 +169,12 @@
     <Filter Include="ヘッダー ファイル\Project\GameObject\Boss\ChargeShot">
       <UniqueIdentifier>{ac2286af-b026-45d8-ac88-f15d54df38e9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ヘッダー ファイル\Engine\3D\Particle">
+      <UniqueIdentifier>{71b65ba6-f153-4508-8627-cae41e83b521}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Engine\3D\Particle">
+      <UniqueIdentifier>{000d993a-d8e3-43d1-b3a5-8aa6c97e467d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -309,8 +315,11 @@
     <ClCompile Include="Project\GameObject\Boss\State\BossStateStun.cpp">
       <Filter>ソース ファイル\Project\GameObject\Boss\State</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\3D\Model\Particle.cpp">
-      <Filter>ソース ファイル\Engine\3D\Model</Filter>
+    <ClCompile Include="Engine\3D\Particle\ParticleEmitter.cpp">
+      <Filter>ソース ファイル\Engine\3D\Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\3D\Particle\Particle.cpp">
+      <Filter>ソース ファイル\Engine\3D\Particle</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -467,8 +476,11 @@
     <ClInclude Include="Project\GameObject\Boss\State\BossStateStun.h">
       <Filter>ヘッダー ファイル\Project\GameObject\Boss\State</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\3D\Model\Particle.h">
-      <Filter>ヘッダー ファイル\Engine\3D\Model</Filter>
+    <ClInclude Include="Engine\3D\Particle\ParticleEmitter.h">
+      <Filter>ヘッダー ファイル\Engine\3D\Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\3D\Particle\Particle.h">
+      <Filter>ヘッダー ファイル\Engine\3D\Particle</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

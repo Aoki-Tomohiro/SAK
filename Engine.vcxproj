@@ -102,7 +102,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\3D\Model\Material.cpp" />
     <ClCompile Include="Engine\3D\Model\Mesh.cpp" />
     <ClCompile Include="Engine\3D\Model\Model.cpp" />
-    <ClCompile Include="Engine\3D\Model\Particle.cpp" />
+    <ClCompile Include="Engine\3D\Particle\Particle.cpp" />
+    <ClCompile Include="Engine\3D\Particle\ParticleEmitter.cpp" />
     <ClCompile Include="Engine\Base\DirectXCommon.cpp" />
     <ClCompile Include="Engine\Base\TextureManager.cpp" />
     <ClCompile Include="Engine\Base\WinApp.cpp" />
@@ -151,7 +152,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\3D\Model\Material.h" />
     <ClInclude Include="Engine\3D\Model\Mesh.h" />
     <ClInclude Include="Engine\3D\Model\Model.h" />
-    <ClInclude Include="Engine\3D\Model\Particle.h" />
+    <ClInclude Include="Engine\3D\Particle\Particle.h" />
+    <ClInclude Include="Engine\3D\Particle\ParticleEmitter.h" />
     <ClInclude Include="Engine\Base\D3DResourceLeakChecker.h" />
     <ClInclude Include="Engine\Base\DirectXCommon.h" />
     <ClInclude Include="Engine\Base\TextureManager.h" />

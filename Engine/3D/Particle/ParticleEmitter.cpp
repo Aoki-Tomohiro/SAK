@@ -1,16 +1,19 @@
-#include "Particle.h"
+#include "ParticleEmitter.h"
+#define _USE_MATH_DEFINES
+#include <math.h>
 
 //実体定義
-ID3D12Device* Particle::sDevice_ = nullptr;
-ID3D12GraphicsCommandList* Particle::sCommandList_ = nullptr;
-Particle::ComPtr<IDxcUtils> Particle::sDxcUtils_ = nullptr;
-Particle::ComPtr<IDxcCompiler3> Particle::sDxcCompiler_ = nullptr;
-Particle::ComPtr<IDxcIncludeHandler> Particle::sIncludeHandler_ = nullptr;
-Particle::ComPtr<ID3D12RootSignature> Particle::sRootSignature_ = nullptr;
-Particle::ComPtr<ID3D12PipelineState> Particle::sGraphicsPipelineState_ = nullptr;
-std::list<Particle::ModelData> Particle::modelDatas_{};
+ID3D12Device* ParticleEmitter::sDevice_ = nullptr;
+ID3D12GraphicsCommandList* ParticleEmitter::sCommandList_ = nullptr;
+ParticleEmitter::ComPtr<IDxcUtils> ParticleEmitter::sDxcUtils_ = nullptr;
+ParticleEmitter::ComPtr<IDxcCompiler3> ParticleEmitter::sDxcCompiler_ = nullptr;
+ParticleEmitter::ComPtr<IDxcIncludeHandler> ParticleEmitter::sIncludeHandler_ = nullptr;
+ParticleEmitter::ComPtr<ID3D12RootSignature> ParticleEmitter::sRootSignature_ = nullptr;
+ParticleEmitter::ComPtr<ID3D12PipelineState> ParticleEmitter::sGraphicsPipelineState_ = nullptr;
+std::list<ParticleEmitter::ModelData> ParticleEmitter::modelDatas_{};
+std::mt19937 ParticleEmitter::randomEngine;
 
-void Particle::StaticInitialize() {
+void ParticleEmitter::StaticInitialize() {
 
 	//デバイスの取得
 	sDevice_ = DirectXCommon::GetInstance()->GetDevice();
@@ -18,14 +21,18 @@ void Particle::StaticInitialize() {
 	sCommandList_ = DirectXCommon::GetInstance()->GetCommandList();
 
 	//DXCの初期化
-	Particle::InitializeDXC();
+	ParticleEmitter::InitializeDXC();
 
 	//PipelineStateObjectの作成
-	Particle::CreatePipelineStateObject();
+	ParticleEmitter::CreatePipelineStateObject();
+
+	//ランダム関数の初期化
+	std::random_device seedGenerator;
+	randomEngine = std::mt19937(seedGenerator());
 }
 
 
-void Particle::Release() {
+void ParticleEmitter::Release() {
 
 	sDxcUtils_.Reset();
 	sDxcCompiler_.Reset();
@@ -35,10 +42,11 @@ void Particle::Release() {
 }
 
 
-Particle* Particle::CreateFromOBJ(const std::string& directoryPath, const std::string& filename, uint32_t kNumInstance) {
+ParticleEmitter* ParticleEmitter::CreateFromOBJ(const std::string& directoryPath, const std::string& filename, uint32_t kNumInstance,
+	minmaxStruct popTranslation, minmaxStruct popRotate, minmaxStruct popScale, minmaxStruct popVelocity, minmaxStruct popAngle, minmaxStruct popColor, minmaxStruct popLifeTime) {
 
 	//モデルを生成
-	Particle* particle = new Particle();
+	ParticleEmitter* particle = new ParticleEmitter();
 
 	for (ModelData modelData : modelDatas_) {
 		if (modelData.name == filename) {
@@ -47,6 +55,13 @@ Particle* Particle::CreateFromOBJ(const std::string& directoryPath, const std::s
 			particle->textureHandle_ = TextureManager::GetInstance()->Load(modelData.material.textureFilePath);
 
 			//初期化
+			particle->popTranslation_ = popTranslation;
+			particle->popRotate_ = popRotate;
+			particle->popScale_ = popScale;
+			particle->popVelocity_ = popVelocity;
+			particle->popAngle_ = popAngle;
+			particle->popColor_ = popColor;
+			particle->popLifeTime_ = popLifeTime;
 			particle->Initialize(kNumInstance, modelData.vertices);
 
 			return particle;
@@ -62,13 +77,20 @@ Particle* Particle::CreateFromOBJ(const std::string& directoryPath, const std::s
 	particle->textureHandle_ = TextureManager::Load(modelData.material.textureFilePath);
 
 	//初期化
+	particle->popTranslation_ = popTranslation;
+	particle->popRotate_ = popRotate;
+	particle->popScale_ = popScale;
+	particle->popVelocity_ = popVelocity;
+	particle->popAngle_ = popAngle;
+	particle->popColor_ = popColor;
+	particle->popLifeTime_ = popLifeTime;
 	particle->Initialize(kNumInstance, modelData.vertices);
 
 	return particle;
 }
 
 
-void Particle::PreDraw() {
+void ParticleEmitter::PreDraw() {
 
 	//RootSignatureを設定。PSOに設定しているけど別途設定が必要
 	sCommandList_->SetGraphicsRootSignature(sRootSignature_.Get());
@@ -77,17 +99,41 @@ void Particle::PreDraw() {
 }
 
 
-void Particle::PostDraw() {
+void ParticleEmitter::PostDraw() {
 
 }
 
 
-void Particle::Update() {
+void ParticleEmitter::Update() {
 
+	//死亡フラグの立ったパーティクルを削除
+	particles_.remove_if([](std::unique_ptr<Particle>& particle) {
+		if (particle->IsDead()) {
+			particle.reset();
+			return true;
+		}
+		return false;
+	});
+
+	for (std::unique_ptr<Particle>& particle : particles_) {
+		particle->Update();
+	}
+
+	ParticleEmitter::Map();
+
+	deleteTimer_++;
+
+	if (deleteTimer_ > deleteFrame_) {
+		isDead_ = true;
+	}
+
+	ImGui::Begin("Particle");
+	ImGui::Text("%d", particles_.size());
+	ImGui::End();
 }
 
 
-void Particle::Draw(const ViewProjection& viewProjection) {
+void ParticleEmitter::Draw(const ViewProjection& viewProjection) {
 	//DescriptorHeapを設定
 	TextureManager::GetInstance()->SetGraphicsDescriptorHeap();
 	//VBVを設定
@@ -107,7 +153,7 @@ void Particle::Draw(const ViewProjection& viewProjection) {
 }
 
 
-void Particle::InitializeDXC() {
+void ParticleEmitter::InitializeDXC() {
 
 	//dxccompilerを初期化
 	HRESULT hr = DxcCreateInstance(CLSID_DxcUtils, IID_PPV_ARGS(&sDxcUtils_));
@@ -122,7 +168,7 @@ void Particle::InitializeDXC() {
 }
 
 
-Particle::ComPtr<IDxcBlob> Particle::CompileShader(const std::wstring& filePath, const wchar_t* profile) {
+ParticleEmitter::ComPtr<IDxcBlob> ParticleEmitter::CompileShader(const std::wstring& filePath, const wchar_t* profile) {
 
 	//これからシェーダーをコンパイルする旨をログに出す
 	Log(ConvertString(std::format(L"Begin CompileShader, path:{}, profile:{}\n", filePath, profile)));
@@ -184,7 +230,7 @@ Particle::ComPtr<IDxcBlob> Particle::CompileShader(const std::wstring& filePath,
 }
 
 
-void Particle::CreatePipelineStateObject() {
+void ParticleEmitter::CreatePipelineStateObject() {
 
 	//RootSignature作成
 	D3D12_ROOT_SIGNATURE_DESC descriptionRootSignature{};
@@ -339,7 +385,7 @@ void Particle::CreatePipelineStateObject() {
 }
 
 
-void Particle::Initialize(uint32_t kNumInstance, std::vector<VertexData>& vertices) {
+void ParticleEmitter::Initialize(uint32_t kNumInstance, std::vector<VertexData>& vertices) {
 
 	//インスタンス数の初期化
 	kNumInstance_ = kNumInstance;
@@ -348,20 +394,23 @@ void Particle::Initialize(uint32_t kNumInstance, std::vector<VertexData>& vertic
 	vertices_ = vertices;
 
 	//頂点リソースの作成
-	Particle::CreateVertexResource(vertices_);
+	ParticleEmitter::CreateVertexResource(vertices_);
 
 	//マテリアル用のリソースの作成
-	Particle::CreateMaterialResource();
+	ParticleEmitter::CreateMaterialResource();
 
 	//WorldTransform用のリソースの作成
-	Particle::CreateWorldTransform(kNumInstance);
+	ParticleEmitter::CreateWorldTransform(kNumInstance);
 
 	//SRVの作成
 	instancingSrvHandleGPU_ = TextureManager::GetInstance()->CreateInstancingShaderResourceView(instancingResource_, kNumInstance_, sizeof(ConstBuffDataWorldTransform));
+
+	//パーティクルを生成
+	ParticleEmitter::Pop();
 }
 
 
-void Particle::CreateVertexResource(std::vector<VertexData>& vertices) {
+void ParticleEmitter::CreateVertexResource(std::vector<VertexData>& vertices) {
 	//頂点リソースを作る
 	vertexResource_ = DirectXCommon::GetInstance()->CreateBufferResource(sizeof(VertexData) * vertices.size());
 
@@ -380,7 +429,7 @@ void Particle::CreateVertexResource(std::vector<VertexData>& vertices) {
 }
 
 
-void Particle::CreateMaterialResource() {
+void ParticleEmitter::CreateMaterialResource() {
 	//マテリアル用のリソースを作る。今回はcolor1つ分のサイズを用意する
 	materialResource_ = DirectXCommon::GetInstance()->CreateBufferResource(sizeof(ConstBuffDataMaterial));
 	//マテリアルにデータを書き込む
@@ -394,7 +443,7 @@ void Particle::CreateMaterialResource() {
 }
 
 
-void Particle::CreateWorldTransform(uint32_t kNumInstance) {
+void ParticleEmitter::CreateWorldTransform(uint32_t kNumInstance) {
 	//Instancing用のWorldTransformリソースを作る
 	instancingResource_ = DirectXCommon::GetInstance()->CreateBufferResource(sizeof(ConstBuffDataWorldTransform) * kNumInstance);
 	//書き込むためのアドレスを取得
@@ -407,7 +456,55 @@ void Particle::CreateWorldTransform(uint32_t kNumInstance) {
 }
 
 
-Particle::ModelData Particle::LoadObjFile(const std::string& directoryPath, const std::string& filename) {
+void ParticleEmitter::Map() {
+	//書き込むためのアドレスを取得
+	ConstBuffDataWorldTransform* instancingData = nullptr;
+	instancingResource_->Map(0, nullptr, reinterpret_cast<void**>(&instancingData));
+	//行列を書き込む
+	uint32_t index = 0;
+	for (std::unique_ptr<Particle>& particle : particles_) {
+		Matrix4x4 worldMatrix = MakeAffineMatrix(particle->GetScale(), particle->GetRotate(), particle->GetPos());
+		instancingData[index].world = worldMatrix;
+		index++;
+	}
+}
+
+
+void ParticleEmitter::Pop() {
+	for (uint32_t i = 0; i < kNumInstance_; ++i) {
+
+		Particle* particle = new Particle();
+
+		Vector3 pos = { Random(popTranslation_.min,popTranslation_.max),Random(popTranslation_.min,popTranslation_.max),Random(popTranslation_.min,popTranslation_.max) };
+
+		Vector3 rotate = { Random(popRotate_.min,popRotate_.max),Random(popRotate_.min,popRotate_.max) ,Random(popRotate_.min,popRotate_.max) };
+
+		Vector3 scale = { Random(popScale_.min,popScale_.max),Random(popScale_.min,popScale_.max) ,Random(popScale_.min,popScale_.max) };
+
+		Vector3 angle = { Random(popAngle_.min,popAngle_.max),Random(popAngle_.min,popAngle_.max) ,Random(popAngle_.min,popAngle_.max) };
+
+		Vector3 radian = { angle.x * float(M_PI / 180.0f),angle.y * float(M_PI / 180.0f),angle.z * float(M_PI / 180.0f) };
+
+		Vector3 velocity = { Random(popVelocity_.min,popVelocity_.max) * cos(radian.x),Random(popVelocity_.min,popVelocity_.max) * sin(radian.y) ,Random(popVelocity_.min,popVelocity_.max) * cos(radian.z) };
+		
+		Vector4 color = { Random(popColor_.min,popColor_.max),Random(popColor_.min,popColor_.max) ,Random(popColor_.min,popColor_.max) };
+
+		float lifeTime = Random(popLifeTime_.min, popLifeTime_.max);
+
+		particle->Initialize(pos, rotate, scale, velocity, color, lifeTime);
+
+		particles_.push_back(std::unique_ptr<Particle>(particle));
+	}
+}
+
+
+float ParticleEmitter::Random(float min, float max) {
+	std::uniform_real_distribution<float> distribution(min, max);
+	return distribution(randomEngine);
+}
+
+
+ParticleEmitter::ModelData ParticleEmitter::LoadObjFile(const std::string& directoryPath, const std::string& filename) {
 	ModelData modelData;//構築するModelData
 	std::vector<Vector4> positions;//位置
 	std::vector<Vector3> normals;//法線
@@ -477,7 +574,7 @@ Particle::ModelData Particle::LoadObjFile(const std::string& directoryPath, cons
 	return modelData;
 }
 
-Particle::MaterialData Particle::LoadMaterialTemplateFile(const std::string& directoryPath, const std::string& filename) {
+ParticleEmitter::MaterialData ParticleEmitter::LoadMaterialTemplateFile(const std::string& directoryPath, const std::string& filename) {
 	MaterialData materialData;//構築するMaterialData
 	std::string line;//ファイルから読んだ1行を格納するもの
 	std::ifstream file(directoryPath + "/" + filename);//ファイルを開く
