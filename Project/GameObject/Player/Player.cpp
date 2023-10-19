@@ -59,7 +59,9 @@ void Player::Update()
 	//プレイヤーの左右移動
 	if (Input::GetInstance()->GetJoystickState(joyState_) && weapon_->GetIsAttack() == false)
 	{
-		move.x += (float)joyState_.Gamepad.sThumbLX / SHRT_MAX * playerMoveSpeed_;
+		move.x = (float)joyState_.Gamepad.sThumbLX / SHRT_MAX * playerMoveSpeed_;
+
+		playerWorldTransform_.translation_ = Add(playerWorldTransform_.translation_, move);
 
 		if (playerWorldTransform_.translation_.x <= -7.3f)
 		{
@@ -72,10 +74,7 @@ void Player::Update()
 		}
 	}
 
-	playerWorldTransform_.translation_ = Add(playerWorldTransform_.translation_, move);
-	playerWorldTransform_.matWorld_ = MakeAffineMatrix(
-		playerWorldTransform_.scale_, playerWorldTransform_.rotation_, playerWorldTransform_.translation_);
-
+	
 	playerWorldTransform_.UpdateMatrix();
 	ModelMotion();
 	prePlayerTranslation_ = playerWorldTransform_.translation_;
@@ -111,7 +110,7 @@ void Player::ModelMotion()
 
 		motionMode_ = Stay;
 
-		if (Input::GetInstance()->GetJoystickState(joyState_)) {
+		if (prePlayerTranslation_.x != playerWorldTransform_.translation_.x) {
 			motionMode_ = Move;
 		}
 

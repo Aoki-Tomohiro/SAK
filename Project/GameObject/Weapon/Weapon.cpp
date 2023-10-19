@@ -105,20 +105,21 @@ void Weapon::Update()
 		IsCharge_ = true;
 		
 
-	}else{
-		/*if (pushCount_ < 10 && IsCoolDown_ == false)
+	}else if(preJoyState_.Gamepad.wButtons & XINPUT_GAMEPAD_A && IsCoolDown_ == false){
+		if (pushCount_ < 10)
 		{
 			IsCharge_ = false;
 			IsAttack_ = true;
 			pushCount_ = 0;
-		}*/
+		}
 
-		if (pushCount_ >= 10 && IsCoolDown_ == false)
+		if (pushCount_ >= 10)
 		{
 			IsCharge_ = false;
 			pushCount_ = 0;
 		}
 	}
+
 
 	if (IsCharge_ == true)
 	{

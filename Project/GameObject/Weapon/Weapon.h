@@ -75,6 +75,7 @@ private:
 	//クールダウン中のタイマー
 	int coolDownTimer_ = 60;
 
+	bool IsNormal_ = true;
 	bool IsCharge_ = false;
 	bool IsAttack_ = false;
 	bool IsCoolDown_ = false;
