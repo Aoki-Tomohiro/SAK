@@ -130,7 +130,7 @@ void GameScene::Draw(GameManager* gameManager) {
 	//スプライトの描画
 	Sprite::PreDraw(Sprite::kBlendModeNormal);
 	
-	player_->DrawSprite();
+	//player_->DrawSprite();
 	sprite_->Draw();
 
 	Sprite::PostDraw();
