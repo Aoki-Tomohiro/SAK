@@ -1,6 +1,9 @@
 #include "missile.h"
 #include "Utility/GlobalVariables.h"
 
+float Missile::widthMin = -5.0f;
+float Missile::widthMax = 5.0f;
+
 void Missile::Initialize(const Vector3& position, const Vector3& velocity)
 {
 	model_.reset(Model::CreateFromOBJ("Resources", "sphere.obj"));
@@ -55,7 +58,7 @@ void Missile::Update()
 		worldTransform_.UpdateMatrix();
 	}
 
-	if (worldTransform_.translation_.x < -13.0f || worldTransform_.translation_.x > 13.0f || worldTransform_.translation_.y > 13.0f) {
+	if (worldTransform_.translation_.x < widthMin || worldTransform_.translation_.x > widthMax || worldTransform_.translation_.y > 13.0f) {
 		isAlive_ = false;
 	}
 
@@ -67,6 +70,8 @@ void Missile::Update()
 	ImGui::Text("translationZ %f", worldTransform_.translation_.z);
 	ImGui::Text("isAlive %d", isAlive_);
 	ImGui::Text("IsFollowingWeapon : %d", IsFollowingWeapon_);
+	ImGui::SliderFloat("min", &widthMin, -13.0f, 0.0f, "%.3f");
+	ImGui::SliderFloat("max", &widthMax, 0.0f, 13.0f, "%.3f");
 	ImGui::End();
 }
 

@@ -38,10 +38,10 @@ void BossStateLaserAttack::Initialize(Boss* pBoss) {
 	}
 	
 	//ワールドトランスフォームの初期化
-	warningWorldTransforms_[0].translation_.x = ((rand() % 61 - 60) / 10) - laserScale_.x;
+	warningWorldTransforms_[0].translation_.x = pBoss->Random(laserScale_.x, Missile::widthMax);
 	warningWorldTransforms_[0].translation_.z = 0.0f;
 	warningWorldTransforms_[0].scale_ = laserScale_;
-	warningWorldTransforms_[1].translation_.x = (rand() % 61 / 10) + laserScale_.x;
+	warningWorldTransforms_[1].translation_.x = pBoss->Random(Missile::widthMin, -laserScale_.x);
 	warningWorldTransforms_[1].translation_.z = 0.0f;
 	warningWorldTransforms_[1].scale_ = laserScale_;
 
