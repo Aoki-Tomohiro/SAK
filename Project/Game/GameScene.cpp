@@ -166,7 +166,14 @@ void GameScene::Draw(GameManager* gameManager) {
 	//スプライトの描画
 	Sprite::PreDraw(Sprite::kBlendModeNormal);
 	
-	transitionSprite_->Draw();
 
+	weapon_->DrawSprite();
+
+	boss_->DrawSprite();
+
+	player_->DrawSprite();
+  
+	transitionSprite_->Draw();
+  
 	Sprite::PostDraw();
 };
