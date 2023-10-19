@@ -52,6 +52,7 @@ private:
 	WorldTransform bossWorldTransform_{};
 	//チャージ中の時間
 	int chargeTimer_ = 0;
+	int chargeTimerMax_ = 0;
 	//攻撃終了までのタイマー
 	int endTimer_ = 0;
 	//チャージショットのスケール

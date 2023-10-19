@@ -15,7 +15,7 @@ void GameOverScene::Initialize(GameManager* gameManager)
 	audio_ = Audio::GetInstance();
 	//Inputのインスタンスを取得
 	input_ = Input::GetInstance();
-
+  
 	playerModel_.reset(Model::CreateFromOBJ("Resources/Platform", "Platform.obj"));
 	weaponModel_.reset(Model::CreateFromOBJ("Resources/Head", "Head.obj"));
 	bossModel_.reset(Model::CreateFromOBJ("Resources/Boss", "Boss.obj"));
@@ -37,6 +37,11 @@ void GameOverScene::Initialize(GameManager* gameManager)
 	backGround_->Initialize();
 
 	viewProjection_.UpdateMatrix();
+  
+	//スプライトの生成
+	transitionSprite_.reset(Sprite::Create(transitionTextureHandle_, { 0.0f,0.0f }));
+	transitionSprite_->SetColor(transitionColor_);
+	transitionSprite_->SetSize(Vector2{ 640.0f,360.0f });
 };
 
 void GameOverScene::Update(GameManager* gameManager)
@@ -46,7 +51,30 @@ void GameOverScene::Update(GameManager* gameManager)
 
 	if (input_->IsPushKeyEnter(DIK_SPACE))
 	{
-		gameManager->ChangeScene(new GameTitleScene);
+		if (isTransitionEnd_) {
+			isTransition_ = true;
+		}
+	}
+
+	if (isTransitionEnd_ == false) {
+		transitionTimer_ += 1.0f / kTransitionTime;
+		transitionColor_.w = Lerp(transitionColor_.w, 0.0f, transitionTimer_);
+		transitionSprite_->SetColor(transitionColor_);
+
+		if (transitionColor_.w <= 0.0f) {
+			isTransitionEnd_ = true;
+			transitionTimer_ = 0.0f;
+		}
+	}
+
+	if (isTransition_) {
+		transitionTimer_ += 1.0f / kTransitionTime;
+		transitionColor_.w = Lerp(transitionColor_.w, 1.0f, transitionTimer_);
+		transitionSprite_->SetColor(transitionColor_);
+
+		if (transitionColor_.w >= 1.0f) {
+			gameManager->ChangeScene(new GameTitleScene());
+		}
 	}
 
 	ImGui::Begin("Game Over");
@@ -79,6 +107,7 @@ void GameOverScene::Draw(GameManager* gameManager)
 	//スプライトの描画処理
 	Sprite::PreDraw(Sprite::kBlendModeNormal);
 
+	transitionSprite_->Draw();
 
 	Sprite::PostDraw();
 };
