@@ -11,6 +11,10 @@
 #include "3D/Matrix/WorldTransform.h"
 #include "3D/Matrix/ViewProjection.h"
 
+#include "../GameObject/Player/Player.h"
+#include "../GameObject/Weapon/Weapon.h"
+#include "../BackGround.h"
+
 #include <memory>
 
 class GameTitleScene : public IScene
@@ -51,6 +55,25 @@ private:
 	Audio* audio_ = nullptr;
 	//Input
 	Input* input_ = nullptr;
+	//カメラ
+	ViewProjection viewProjection_{};
+
+	//モデル
+	std::unique_ptr<Model> playerModel_ = nullptr;
+	std::unique_ptr<Model> weaponModel_ = nullptr;
+
+	//ワールドトランスフォーム
+	WorldTransform playerWorldTransform_{};
+	WorldTransform weaponWorldTransform_{};
+
+	std::unique_ptr<BackGround> backGround_ = nullptr;
+
+	//自機の横移動スピード
+	float playerMoveSpeed_ = 0.05f;
+
+	//武器の横移動スピード
+	float weaponMoveSpeed_ = 0.05f;
+
 	//トランジション用のスプライト
 	std::unique_ptr<Sprite> transitionSprite_ = nullptr;
 	//トランジションのテクスチャ

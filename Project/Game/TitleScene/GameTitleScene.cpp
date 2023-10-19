@@ -16,6 +16,24 @@ void GameTitleScene::Initialize(GameManager* gameManager)
 	audio_ = Audio::GetInstance();
 	//Inputのインスタンスを取得
 	input_ = Input::GetInstance();
+
+	playerModel_.reset(Model::CreateFromOBJ("Resources/Platform", "Platform.obj"));
+	weaponModel_.reset(Model::CreateFromOBJ("Resources/Head", "Head.obj"));
+
+	playerWorldTransform_.translation_.x = 0.0f;
+	playerWorldTransform_.translation_.y = -3.3f;
+	playerWorldTransform_.scale_ = { 0.8f,0.8f,0.8f };
+
+	weaponWorldTransform_.translation_.x = 0.0f;
+	weaponWorldTransform_.translation_.y = -2.5f;
+	weaponWorldTransform_.scale_ = { 0.8f,0.8f,0.8f };
+
+	//背景の生成
+	backGround_ = std::make_unique<BackGround>();
+	backGround_->Initialize();
+
+	viewProjection_.UpdateMatrix();
+
 	//スプライトの生成
 	transitionSprite_.reset(Sprite::Create(transitionTextureHandle_, { 0.0f,0.0f }));
 	transitionSprite_->SetColor(transitionColor_);
@@ -24,6 +42,25 @@ void GameTitleScene::Initialize(GameManager* gameManager)
 
 void GameTitleScene::Update(GameManager* gameManager) 
 {
+	//背景の更新
+	backGround_->Update();
+
+	playerWorldTransform_.translation_.x -= playerMoveSpeed_;
+	weaponWorldTransform_.translation_.x -= weaponMoveSpeed_;
+
+	if (playerWorldTransform_.translation_.x <= -7.3f)
+	{
+		playerMoveSpeed_ = -0.05f;
+		weaponMoveSpeed_ = -0.05f;
+	}
+
+	if (playerWorldTransform_.translation_.x >= 7.3f)
+	{
+		playerMoveSpeed_ = 0.05f;
+		weaponMoveSpeed_ = 0.05f;
+	}
+
+
 	if (input_->IsPushKeyEnter(DIK_SPACE))
 	{
 		if (isTransitionEnd_) {
@@ -52,6 +89,11 @@ void GameTitleScene::Update(GameManager* gameManager)
 		}
 	}
 
+	playerWorldTransform_.UpdateMatrix();
+	weaponWorldTransform_.UpdateMatrix();
+
+	viewProjection_.UpdateMatrix();
+
 	ImGui::Begin("Game Title");
 	ImGui::Text("push Space : Game Select");
 	ImGui::Text("%f", transitionColor_.w);
@@ -63,6 +105,12 @@ void GameTitleScene::Draw(GameManager* gameManager)
 	//モデルの描画
 	Model::PreDraw();
 
+	//背景の描画
+	backGround_->Draw(viewProjection_);
+
+	playerModel_->Draw(playerWorldTransform_, viewProjection_);
+
+	weaponModel_->Draw(weaponWorldTransform_, viewProjection_);
 
 	Model::PostDraw();
 
