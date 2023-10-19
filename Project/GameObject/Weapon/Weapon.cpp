@@ -91,13 +91,13 @@ void Weapon::Update()
 	}
 
 	//攻撃処理
-	if (input_->IsPushKey(DIK_RETURN) && IsAttack_ == false && IsCoolDown_ == false)
+	if (input_->IsPushKey(DIK_SPACE) && IsAttack_ == false && IsCoolDown_ == false)
 	{
 		pushCount_++;
 		IsCharge_ = true;
 	}
 
-	if (input_->IsPushKeyExit(DIK_RETURN) && IsCoolDown_ == false)
+	if (input_->IsPushKeyExit(DIK_SPACE) && IsCoolDown_ == false)
 	{
 		if (pushCount_ < 10)
 		{
