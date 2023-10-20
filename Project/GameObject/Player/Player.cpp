@@ -53,23 +53,35 @@ void Player::Initialize(Weapon* weapon)
 
 void Player::Update() 
 {
-	Vector3 move = { 0, 0, 0 };
-
 	//プレイヤーの左右移動
 	if (Input::GetInstance()->GetJoystickState(joyState_) && weapon_->GetIsAttack() == false)
 	{
-		move.x = (float)joyState_.Gamepad.sThumbLX / SHRT_MAX * playerMoveSpeed_;
+		const float deadZone = 0.7f;
 
-		playerWorldTransform_.translation_ = Add(playerWorldTransform_.translation_, move);
+		bool isMoving = false;
 
-		if (playerWorldTransform_.translation_.x <= -7.3f)
+		Vector3 move = { (float)joyState_.Gamepad.sThumbLX / SHRT_MAX, 0.0f,0.0f };
+
+		if (Length(move) > deadZone)
 		{
-			playerWorldTransform_.translation_.x = -7.3f;
+			isMoving = true;
 		}
 
-		if (playerWorldTransform_.translation_.x >= 7.3f)
+		if (isMoving)
 		{
-			playerWorldTransform_.translation_.x = 7.3f;
+			move = Multiply(playerMoveSpeed_, Normalize(move));
+
+			playerWorldTransform_.translation_ = Add(playerWorldTransform_.translation_, move);
+
+			if (playerWorldTransform_.translation_.x <= -7.3f)
+			{
+				playerWorldTransform_.translation_.x = -7.3f;
+			}
+
+			if (playerWorldTransform_.translation_.x >= 7.3f)
+			{
+				playerWorldTransform_.translation_.x = 7.3f;
+			}
 		}
 
 		ModelMotion();

@@ -80,16 +80,32 @@ void Weapon::Update()
 	//プレイヤーの左右移動
 	if (Input::GetInstance()->GetJoystickState(joyState_) && IsAttack_ == false)
 	{
-		move.x += (float)joyState_.Gamepad.sThumbLX / SHRT_MAX * weaponMoveSpeed_;
+		const float deadZone = 0.7f;
 
-		if (weaponWorldTransform_.translation_.x <= -7.3f)
+		bool isMoving = false;
+
+		Vector3 move = { (float)joyState_.Gamepad.sThumbLX / SHRT_MAX, 0.0f,0.0f };
+
+		if (Length(move) > deadZone)
 		{
-			weaponWorldTransform_.translation_.x = -7.3f;
+			isMoving = true;
 		}
 
-		if (weaponWorldTransform_.translation_.x >= 7.3f)
+		if (isMoving)
 		{
-			weaponWorldTransform_.translation_.x = 7.3f;
+			move = Multiply(weaponMoveSpeed_, Normalize(move));
+
+			weaponWorldTransform_.translation_ = Add(weaponWorldTransform_.translation_, move);
+
+			if (weaponWorldTransform_.translation_.x <= -7.3f)
+			{
+				weaponWorldTransform_.translation_.x = -7.3f;
+			}
+
+			if (weaponWorldTransform_.translation_.x >= 7.3f)
+			{
+				weaponWorldTransform_.translation_.x = 7.3f;
+			}
 		}
 	}
 
