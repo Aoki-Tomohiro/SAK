@@ -321,6 +321,15 @@
     <ClCompile Include="Engine\3D\Particle\Particle.cpp">
       <Filter>ソース ファイル\Engine\3D\Particle</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\3D\Particle\EmitterBuilder.cpp">
+      <Filter>ソース ファイル\Engine\3D\Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\3D\Model\ParticleModel.cpp">
+      <Filter>ソース ファイル\Engine\3D\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\3D\Particle\BaseParticle.cpp">
+      <Filter>ソース ファイル\Engine\3D\Particle</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Base\WinApp.h">
@@ -480,6 +489,15 @@
       <Filter>ヘッダー ファイル\Engine\3D\Particle</Filter>
     </ClInclude>
     <ClInclude Include="Engine\3D\Particle\Particle.h">
+      <Filter>ヘッダー ファイル\Engine\3D\Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\3D\Particle\EmitterBuilder.h">
+      <Filter>ヘッダー ファイル\Engine\3D\Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\3D\Model\ParticleModel.h">
+      <Filter>ヘッダー ファイル\Engine\3D\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\3D\Particle\BaseParticle.h">
       <Filter>ヘッダー ファイル\Engine\3D\Particle</Filter>
     </ClInclude>
   </ItemGroup>

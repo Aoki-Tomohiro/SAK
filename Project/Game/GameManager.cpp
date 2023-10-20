@@ -40,7 +40,7 @@ GameManager::GameManager() {
 	Model::StaticInitialize();
 
 	//パーティクルの静的初期化
-	ParticleEmitter::StaticInitialize();
+	ParticleModel::StaticInitialize();
 
 	//スプライトの静的初期化
 	Sprite::StaticInitialize();
@@ -60,7 +60,7 @@ GameManager::~GameManager() {
 	currentScene_ = nullptr;
 
 	Model::Release();
-	ParticleEmitter::Release();
+	ParticleModel::Release();
 	Sprite::Release();
 }
 

@@ -1,6 +1,7 @@
 #include "GameTitleScene.h"
 #include "GameManager.h"
 #include "GameSelectScene.h"
+#include "Components/PostProcess.h"
 #include <cassert>
 
 GameTitleScene::GameTitleScene() {};
@@ -15,6 +16,11 @@ void GameTitleScene::Initialize(GameManager* gameManager)
 	audio_ = Audio::GetInstance();
 	//Inputのインスタンスを取得
 	input_ = Input::GetInstance();
+	//パーティクルモデルの作成
+	particleModel_.reset(ParticleModel::CreateFromOBJ("Resources/particlePop", "particlePop.obj"));
+	//ポストプロセスの有効化
+	PostProcess::GetInstance()->SetIsPostProcessActive(true);
+	PostProcess::GetInstance()->SetIsBloomActive(true);
 };
 
 void GameTitleScene::Update(GameManager* gameManager) 
@@ -25,22 +31,27 @@ void GameTitleScene::Update(GameManager* gameManager)
 	}
 
 	if (input_->IsPushKeyEnter(DIK_P)) {
-		ParticleEmitter::EmitterData emitterData =
-		{
-			{ 0.0f,0.0f },//座標
-			{ 0.0f,0.0f },//角度
-			{ 0.1f, 0.15f },//スケール
-			{ 0.02f ,0.04f },//速度
-			{ 0.0f,360.0f },//方角
-			{ 1.0f,1.0f },//色
-			{ 60.0f,60.0f }//寿命
-		};
-		ParticleEmitter* newParticleEmitter = ParticleEmitter::CreateFromOBJ("Resources/particlePop", "particlePop.obj", 10, emitterData);
-		particleSystem_.push_back(std::unique_ptr<ParticleEmitter>(newParticleEmitter));
+		ParticleEmitter* newParticleEmitter = EmitterBuilder()
+			.SetModel(particleModel_.get())
+			.SetParticleType(ParticleEmitter::ParticleType::kScale)
+			.SetMaxInstance(100)
+			.SetTranslation({ 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f })
+			.SetRotation({ 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f })
+			.SetScale({ 0.1f, 0.1f,0.1f }, { 0.15f ,0.15f ,0.15f })
+			.SetAzimuth(0.0f, 360.0f)
+			.SetElevation(90.0f, 90.0f)
+			.SetVelocity({ 0.02f ,0.02f ,0.02f }, { 0.04f ,0.04f ,0.04f })
+			.SetColor({ 1.0f ,1.0f ,1.0f ,1.0f }, { 1.0f ,1.0f ,1.0f ,1.0f })
+			.SetLifeTime(0.1f, 1.0f)
+			.SetCount(100)
+			.SetFrequency(4.0f)
+			.SetDeleteTime(3.0f)
+			.Build();
+		particleEmitters_.push_back(std::unique_ptr<ParticleEmitter>(newParticleEmitter));
 	}
 
 	//パーティクルエミッターデリーと
-	particleSystem_.remove_if([](std::unique_ptr<ParticleEmitter>& particleEmitter) {
+	particleEmitters_.remove_if([](std::unique_ptr<ParticleEmitter>& particleEmitter) {
 		if (particleEmitter->IsDead()) {
 			particleEmitter.reset();
 			return true;
@@ -49,7 +60,7 @@ void GameTitleScene::Update(GameManager* gameManager)
 		}
 	);
 
-	for (std::unique_ptr<ParticleEmitter>& particleEmitter : particleSystem_) {
+	for (std::unique_ptr<ParticleEmitter>& particleEmitter : particleEmitters_) {
 		particleEmitter->Update();
 	}
 
@@ -62,6 +73,8 @@ void GameTitleScene::Update(GameManager* gameManager)
 
 void GameTitleScene::Draw(GameManager* gameManager)
 {
+	PostProcess::GetInstance()->PreDraw();
+
 	//モデルの描画
 	Model::PreDraw();
 
@@ -69,13 +82,16 @@ void GameTitleScene::Draw(GameManager* gameManager)
 	Model::PostDraw();
 
 	//パーティクルの描画
-	ParticleEmitter::PreDraw();
+	ParticleModel::PreDraw();
 
-	for (std::unique_ptr<ParticleEmitter>& particleEmitter : particleSystem_) {
+	//エミッターの描画
+	for (std::unique_ptr<ParticleEmitter>& particleEmitter : particleEmitters_) {
 		particleEmitter->Draw(viewProjection_);
 	}
 
-	ParticleEmitter::PostDraw();
+	ParticleModel::PostDraw();
+
+	PostProcess::GetInstance()->PostDraw();
 
 	//スプライトの描画処理
 	Sprite::PreDraw(Sprite::kBlendModeNormal);

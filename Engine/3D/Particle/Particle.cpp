@@ -1,20 +1,28 @@
 #include "Particle.h"
-#include "2D/ImGuiManager.h"
 
-void Particle::Initialize(const ParticleData& particleData) {
-	particleData_ = particleData;
-	particleData_.scale = { particleData_.scale.x,particleData_.scale.x ,particleData_.scale.x };
-	scaleMinus_ = 0.01f;
+void Particle::Initialize(const Vector3& translation, const Vector3& rotation, const Vector3& scale, const Vector3& velocity, const Vector4& color, float lifeTime) {
+	//座標を設定
+	translation_ = translation;
+	//角度
+	rotation_ = rotation;
+	//スケール
+	scale_ = { scale.x,scale.x,scale.x };
+	//速度
+	velocity_ = velocity;
+	//色
+	color_ = color;
+	//寿命
+	lifeTime_ = lifeTime;
 }
 
 void Particle::Update() {
-
-	float scale = particleData_.scale.x;
+	//今回はxyz全部大きさ同じなので、xから大きさを取るよ
+	float scale = scale_.x;
 	scale -= scaleMinus_;
 	if (scale < 0.0f) {
 		scale = 0.0f;
 		isDead_ = true;
 	}
-	particleData_.translation = Add(particleData_.translation, particleData_.velocity);
-	particleData_.scale = { scale,scale,scale };
+	scale_ = { scale,scale,scale };
+	translation_ = Add(translation_, velocity_);
 }
