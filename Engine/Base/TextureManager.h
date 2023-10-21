@@ -56,6 +56,11 @@ public:
 	void Initialize();
 
 	/// <summary>
+	/// ディスクリプタヒープを設定
+	/// </summary>
+	void SetGraphicsDescriptorHeap();
+
+	/// <summary>
 	/// ディスクリプタテーブルを設定
 	/// </summary>
 	/// <param name="rootParameterIndex">ルートパラメータの番号</param>
@@ -68,6 +73,15 @@ public:
 	/// <param name="textureHandle">テクスチャハンドル</param>
 	/// <returns>テクスチャの情報</returns>
 	const D3D12_RESOURCE_DESC GetResourceDesc(uint32_t textureHandle);
+
+	/// <summary>
+	/// Instancing用のShaderResourceViewの作成
+	/// </summary>
+	/// <param name="resource"></param>
+	/// <param name="kNumInstance"></param>
+	/// <param name="size"></param>
+	/// <returns></returns>
+	D3D12_GPU_DESCRIPTOR_HANDLE CreateInstancingShaderResourceView(const Microsoft::WRL::ComPtr<ID3D12Resource>& instancingResource, uint32_t kNumInstance, size_t size);
 
 private:
 	TextureManager() = default;
