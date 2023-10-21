@@ -66,7 +66,7 @@ void BossStateChargeShot::Update(Boss* pBoss) {
 		chargeWorldTransform_.scale_.y = scale;
 		chargeWorldTransform_.scale_.z = scale;
 
-		if (pBoss->GetHitMissileCount() >= 5)
+		if (pBoss->GetHitMissileCount() >= 5 && IsMove_ == false && IsAttack_ == false)
 		{
 			pBoss->ChangeState(new BossStateStun());
 			return;

@@ -21,6 +21,14 @@
 
 class GameScene : public IScene {
 public:
+	//トランジションの時間
+	static const int kTransitionTime = 60;
+
+	enum class NextScene {
+		GAMECLEAR,
+		GAMEOVER,
+	};
+
 	/// <summary>
 	/// コンストラクタ
 	/// </summary>
@@ -90,4 +98,20 @@ private:
 	std::unique_ptr<Weapon> weapon_ = nullptr;
 
 	std::unique_ptr<BackGround> backGround_ = nullptr;
+
+
+	//トランジション用のスプライト
+	std::unique_ptr<Sprite> transitionSprite_;
+	//トランジションのテクスチャ
+	uint32_t transitionTextureHandle_ = 0;
+	//トランジションの色
+	Vector4 transitionColor_ = { 0.0f,0.0f,0.0f,1.0f };
+	//トランジションのフラグ
+	bool isTransition_ = false;
+	bool isTransitionEnd_ = false;
+	//トランジションのタイマー
+	float transitionTimer_ = 0;
+
+	//次のシーン
+	NextScene nextScene_ = NextScene::GAMECLEAR;
 };

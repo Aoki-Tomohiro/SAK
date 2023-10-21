@@ -3,6 +3,11 @@
 #include <math.h>
 #include "Utility/GlobalVariables.h"
 
+Player::~Player()
+{
+	delete tutorialUI_.sprite_;
+}
+
 void Player::Initialize(Weapon* weapon)
 {
   
@@ -49,6 +54,17 @@ void Player::Initialize(Weapon* weapon)
 	};
 
 	ModelMotion();
+
+	tutorialUI_ = {
+			true,
+			TextureManager::Load("Resources/Images/rule.png"),
+			{ float(WinApp::GetInstance()->kClientWidth) - tutorialSpace - tutorialSpriteSize.x,float(WinApp::GetInstance()->kClientHeight) - tutorialSpace - tutorialSpriteSize.y},
+			0.0f,
+			{1.0f,1.0f},
+			nullptr,
+	};
+
+	tutorialUI_.sprite_ = Sprite::Create(tutorialUI_.textureHandle_, tutorialUI_.position_);
 
 }
 
@@ -142,7 +158,7 @@ void Player::ModelMotion()
 
 			platformMotionMove_.flex_.x = NormalScale_.x + platformMotionMove_.maxFlex_ * ta - platformMotionMove_.maxFlex_ * 0.5f;
 			platformMotionMove_.flex_.y = NormalScale_.y + platformMotionMove_.maxFlex_ * (1.0f - ta) - platformMotionMove_.maxFlex_ * 0.5f;
-			platformMotionMove_.flexPos_.y = (platformMotionMove_.maxFlex_ * ta) * -0.25f;
+			platformMotionMove_.flexPos_.y = (platformMotionMove_.maxFlex_ * ta) * -0.5f;
 
 			platformMotion_.scale_ = platformMotionMove_.flex_;
 			platformMotion_.translation_ = platformMotionMove_.flexPos_;
@@ -157,5 +173,10 @@ void Player::ModelMotion()
 	platformModel_->GetMaterial()->SetColor(platformMotion_.color_);
 
 	platformMotionWorldTransform_.UpdateMatrix();
+}
+
+void Player::DrawSprite()
+{
+	tutorialUI_.sprite_->Draw();
 }
 

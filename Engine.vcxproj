@@ -143,6 +143,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Project\Game\GameScene.cpp" />
     <ClCompile Include="Project\Game\SelectScene\GameSelectScene.cpp" />
     <ClCompile Include="Project\Game\TitleScene\GameTitleScene.cpp" />
+    <ClCompile Include="UI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BackGround.h" />
@@ -201,6 +202,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Project\Game\SelectScene\GameSelectScene.h" />
     <ClInclude Include="Project\Game\TitleScene\GameTitleScene.h" />
     <ClInclude Include="Project\Game\IScene.h" />
+    <ClInclude Include="UI.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shader\HorizontalBlurPS.hlsl">

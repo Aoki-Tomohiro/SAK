@@ -7,7 +7,7 @@
 #include "../GameObject/Missile/Missile.h"
 #include "ChargeShot/ChargeShot.h"
 #include <random>
-
+#include "../UI.h"
 class Weapon;
 
 /// <summary>
@@ -19,6 +19,11 @@ public:
 	static int MissileSpornTime;
 
 	static const int kHpMax = 100;
+
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
+	~Boss();
 
 	/// <summary>
 	/// 初期化
@@ -168,6 +173,17 @@ public:
 	/// </summary>
 	void ModelMotion();
 
+	/// <summary>
+	/// スプライトのDraw
+	/// </summary>
+	void DrawSprite();
+
+	/// <summary>
+	/// HpBar関連の関数
+	/// </summary>
+	/// <returns></returns>
+	void HPBarUpdate();
+
 private:
 	//ボスのモデル(ダミー)
 	std::unique_ptr<Model> model_ = nullptr;
@@ -186,8 +202,10 @@ private:
 	std::list<std::unique_ptr<Missile>> missiles_{};
 	//チャージショットのリスト
 	std::list<std::unique_ptr<ChargeShot>> chargeShot_{};
+	//最大体力
+	 const float maxHp_ = 100.0f;
 	//体力
-	float Hp_ = 100.0f;
+	float Hp_ = maxHp_;
 	//当たったミサイルの数
 	int hitMissileCount_ = 0;
 	//ミサイルのスポーンタイマー
@@ -219,5 +237,10 @@ private:
 	Vector3 normalTransration_;
 
 	bossMotionStruct bossMotion_;
+
+	//HPバー系
+	UIStruct hpBar_;
+	const float barSpace = 16.0f;
+	float barSize = WinApp::GetInstance()->kClientWidth - barSpace * 2;
 
 };

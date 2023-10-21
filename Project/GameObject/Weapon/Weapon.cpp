@@ -1,9 +1,17 @@
 #include "Weapon.h"
+#include <Math.h>
 #include "../GameObject/Player/Player.h"
 #include "Utility/GlobalVariables.h"
 
 //実体定義
 int Weapon::InvincibleTime = 60;
+
+Weapon::~Weapon()
+{
+	for (int i = 0; i < MaxHp_; i++) {
+		delete heartUI_[i].sprite_;
+	}
+}
 
 void Weapon::Initialize()
 {
@@ -11,8 +19,9 @@ void Weapon::Initialize()
 	weaponModelDummy_.reset(Model::CreateFromOBJ("Resources/Sphere", "sphere.obj"));
 
 	weaponModel_.reset(Model::CreateFromOBJ("Resources/Head", "Head.obj"));
+	weaponRodModel_.reset(Model::CreateFromOBJ("Resources/Rod", "rod.obj"));
 
-	involvedMissile_.reset(Model::CreateFromOBJ("Resources/Sphere", "sphere.obj"));
+	involvedMissile_.reset(Model::CreateFromOBJ("Resources/Missile", "Missile.obj"));
   
 
 	input_ = Input::GetInstance();
@@ -25,6 +34,7 @@ void Weapon::Initialize()
 	//Missile
 	involvedMissileWorldTransform_.translation_ = { 0.0f,0.0f,0.0f };
 	involvedMissileWorldTransform_.scale_ = { 0.3f,0.3f,0.3f };
+	involvedMissileWorldTransform_.rotation_.z = 1.57f;
 
 	weaponWorldTransform_.UpdateMatrix();
 
@@ -54,10 +64,20 @@ void Weapon::Initialize()
 		{0.0f,0.0f,0.0f},
 		{1.0f,1.0f,1.0f},
 		{1.0f,1.0f,1.0f,1.0f},
+		{ 0.0f,-0.1f,0.0f },
+		{ 1.7f,1.7f,1.7f },
+
 	};
 
-	normalScale_ = { 1.7f,1.7f,1.7f };
-	normalTransration_ = { 0.0f,-0.1f,0.0f };
+	weaponRodMotion_ = {
+		{0.0f,0.0f,0.0f},
+		{0.0f,0.0f,0.0f},
+		{1.0f,1.0f,1.0f},
+		{1.0f,1.0f,1.0f,1.0f},
+		{ 0.0f,0.0f,0.0f },
+		{ 1.7f,(3.3f + 2.2f)  * 0.5f,1.7f },
+	};
+
 
 	chargeRotateSpeed_ = 0.2f;
 	for (int i = 0; i < 4; i++) {
@@ -65,10 +85,40 @@ void Weapon::Initialize()
 	}
 
 	ModelMotion();
+
+	Hp_ = MaxHp_;
+
+
+	//HP表示の隙間；
+	float hpSpace = 16.0f;
+	float hpSpriteSize = 64.0f;
+
+	for (int i = 0; i < MaxHp_; i++) {
+		heartUI_[i] = {
+			true,
+			TextureManager::Load("Resources/Images/heart.png"),
+			{ hpSpace + (hpSpace + hpSpriteSize)* i ,float(WinApp::GetInstance()->kClientHeight) - hpSpace - hpSpriteSize},
+			0.0f,
+			{1.0f,1.0f},
+			nullptr,
+		};
+
+		heartUI_[i].sprite_ = Sprite::Create(heartUI_[i].textureHandle_, heartUI_[i].position_);
+	}
 }
 
 void Weapon::Update()
 {
+
+	//HP描画
+	for (int i = 0; i < MaxHp_; i++) {
+		heartUI_[i].isDraw_ = false;
+	}
+	for (int i = 0; i < Hp_; i++) {
+		heartUI_[i].isDraw_ = true;
+	}
+
+
 	//プレイヤーの左右移動
 	if (input_->IsPushKey(DIK_A) && IsAttack_ == false)
 	{
@@ -91,13 +141,13 @@ void Weapon::Update()
 	}
 
 	//攻撃処理
-	if (input_->IsPushKey(DIK_RETURN) && IsAttack_ == false && IsCoolDown_ == false)
+	if (input_->IsPushKey(DIK_SPACE) && IsAttack_ == false && IsCoolDown_ == false)
 	{
 		pushCount_++;
 		IsCharge_ = true;
 	}
 
-	if (input_->IsPushKeyExit(DIK_RETURN) && IsCoolDown_ == false)
+	if (input_->IsPushKeyExit(DIK_SPACE) && IsCoolDown_ == false)
 	{
 		if (pushCount_ < 10)
 		{
@@ -194,8 +244,8 @@ void Weapon::Update()
 			coolDownTimer_ = 60;
 			IsCoolDown_ = false;
 			IsHit_ = false;
-			isInvolvedMissile_ = false;
-			involvedCount_ = 0;
+			/*isInvolvedMissile_ = false;*/
+			/*involvedCount_ = 0;*/
 			involvedMissile_->GetMaterial()->SetColor(missileColor_[involvedCount_]);
 		}
 	}
@@ -203,7 +253,11 @@ void Weapon::Update()
 	//巻き込んだミサイルの処理
 	if (isInvolvedMissile_)
 	{
-		involvedMissileWorldTransform_.translation_.y += attackSpeed_[3];
+		involvedMissileWorldTransform_.translation_ = {
+				weaponWorldTransform_.translation_.x,
+				weaponWorldTransform_.translation_.y + 0.5f,
+				weaponWorldTransform_.translation_.z,
+		};
 		involvedMissile_->GetMaterial()->SetColor(missileColor_[involvedCount_ - 1]);
 	}
 
@@ -234,7 +288,7 @@ void Weapon::Update()
 	ImGui::Text("attackDamage1 : %f", attackDamage_[1]);
 	ImGui::Text("attackDamage2 : %f", attackDamage_[2]);
 	ImGui::Text("attackDamage3 : %f", attackDamage_[3]);
-	ImGui::Text("HP : %f", Hp_);
+	ImGui::Text("HP : %d", Hp_);
 	ImGui::Text("InvolvedMissileCount : %d", involvedCount_);
 	ImGui::End();
 }
@@ -243,6 +297,7 @@ void Weapon::Draw(const ViewProjection viewProjection)
 {
   
 	weaponModel_->Draw(weaponMotionWorldTransform_, viewProjection);
+	weaponRodModel_->Draw(weaponRodMotionWorldTransform_, viewProjection);
 	//weaponModelDummy_->Draw(weaponWorldTransform_, viewProjection);
 
 	//ミサイルを巻き込んでいるときに描画する
@@ -274,6 +329,8 @@ void Weapon::OnCollision(uint32_t collisionAttribute, float damage)
 	if (collisionAttribute & kCollisionAttributeEnemy)
 	{
 		IsHit_ = true;
+		isInvolvedMissile_ = false;
+		involvedCount_ = 0;
 	}
 	//ボス以外の場合
 	else
@@ -284,16 +341,16 @@ void Weapon::OnCollision(uint32_t collisionAttribute, float damage)
 			//衝突相手がミサイルの場合カウントを増やす
 			if (collisionAttribute & kCollisionAttributeMissile) 
 			{
-				if (isInvolvedMissile_ == false) {
-					involvedMissileWorldTransform_.translation_ = {
-					weaponWorldTransform_.translation_.x,
-					weaponWorldTransform_.translation_.y + 0.5f,
-					weaponWorldTransform_.translation_.z,
-					};
-					involvedMissileWorldTransform_.UpdateMatrix();
-				}
 				isInvolvedMissile_ = true;
-				involvedCount_++;
+				if (involvedCount_ < 5) {
+					involvedCount_++;
+				}
+				involvedMissileWorldTransform_.translation_ = {
+				weaponWorldTransform_.translation_.x,
+				weaponWorldTransform_.translation_.y + 0.5f,
+				weaponWorldTransform_.translation_.z,
+				};
+				involvedMissileWorldTransform_.UpdateMatrix();
 			}
 			//ミサイル以外の場合はダメージを食らう
 			else {
@@ -302,7 +359,7 @@ void Weapon::OnCollision(uint32_t collisionAttribute, float damage)
 				{
 					invincibleFlag_ = true;
 					invincibleTimer_ = InvincibleTime;
-					Hp_ -= damage;
+					Hp_ -= int(damage);
 				}
 			}
 		}
@@ -314,7 +371,7 @@ void Weapon::OnCollision(uint32_t collisionAttribute, float damage)
 			{
 				invincibleFlag_ = true;
 				invincibleTimer_ = InvincibleTime;
-				Hp_ -= damage;
+				Hp_ -= int(damage);
 			}
 		}
 	}
@@ -370,11 +427,34 @@ void Weapon::ModelMotion()
 			break;
 	}
 
-	weaponMotionWorldTransform_.translation_ = Add(Add(weaponMotion_.translation_, weaponWorldTransform_.translation_),normalTransration_);
-	weaponMotionWorldTransform_.scale_ = Multiply(Multiply(weaponMotion_.scale_, weaponWorldTransform_.scale_),normalScale_);
+	//ヘッドとプラットフォームまでの距離
+	float distance = weaponWorldTransform_.translation_.y -playerPosY;
+	float distanceHalf = distance * 0.5f;
+
+	weaponRodMotion_.translation_.y = -distanceHalf;
+
+	weaponRodMotion_.scale_.y = distance;
+
+	weaponMotionWorldTransform_.translation_ = Add(Add(weaponMotion_.translation_, weaponWorldTransform_.translation_), weaponMotion_.normalTransration_);
+	weaponMotionWorldTransform_.scale_ = Multiply(Multiply(weaponMotion_.scale_, weaponWorldTransform_.scale_), weaponMotion_.normalScale_);
 	weaponMotionWorldTransform_.rotation_ = Add(weaponMotion_.rotation_, weaponWorldTransform_.rotation_);
 	weaponModel_->GetMaterial()->SetColor(weaponMotion_.color_);
 
-	weaponMotionWorldTransform_.UpdateMatrix();
+	weaponRodMotionWorldTransform_.translation_ = Add(Add(weaponRodMotion_.translation_, weaponWorldTransform_.translation_), weaponRodMotion_.normalTransration_);
+	weaponRodMotionWorldTransform_.scale_ = Multiply(Multiply(weaponRodMotion_.scale_, weaponWorldTransform_.scale_), weaponRodMotion_.normalScale_);
+	weaponRodMotionWorldTransform_.rotation_ = Add(weaponRodMotion_.rotation_, weaponWorldTransform_.rotation_);
+	weaponRodModel_->GetMaterial()->SetColor(weaponRodMotion_.color_);
 
+	weaponMotionWorldTransform_.UpdateMatrix();
+	weaponRodMotionWorldTransform_.UpdateMatrix();
 }
+
+void Weapon::DrawSprite()
+{
+	for (int i = 0; i < MaxHp_; i++) {
+		if (heartUI_[i].isDraw_ == true) {
+			heartUI_[i].sprite_->Draw();
+		}
+	}
+}
+

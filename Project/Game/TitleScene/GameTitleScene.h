@@ -13,11 +13,18 @@
 #include "3D/Matrix/ViewProjection.h"
 #include "3D/Particle/EmitterBuilder.h"
 
+#include "../GameObject/Player/Player.h"
+#include "../GameObject/Weapon/Weapon.h"
+#include "../BackGround.h"
+
 #include <memory>
 
 class GameTitleScene : public IScene
 {
 public:
+	//トランジションの時間
+	static const int kTransitionTime = 60;
+
 	/// <summary>
 	/// コンストラクタ
 	/// </summary>
@@ -50,11 +57,40 @@ private:
 	Audio* audio_ = nullptr;
 	//Input
 	Input* input_ = nullptr;
+  
 	//パーティクルモデルの作成
 	std::unique_ptr<ParticleModel> particleModel_ = nullptr;
 	//パーティクル
 	std::list<std::unique_ptr<ParticleEmitter>> particleEmitters_{};
 	//ビュープロジェクション
 	ViewProjection viewProjection_{};
+  
+	//モデル
+	std::unique_ptr<Model> playerModel_ = nullptr;
+	std::unique_ptr<Model> weaponModel_ = nullptr;
+
+	//ワールドトランスフォーム
+	WorldTransform playerWorldTransform_{};
+	WorldTransform weaponWorldTransform_{};
+
+	std::unique_ptr<BackGround> backGround_ = nullptr;
+
+	//自機の横移動スピード
+	float playerMoveSpeed_ = 0.05f;
+
+	//武器の横移動スピード
+	float weaponMoveSpeed_ = 0.05f;
+
+	//トランジション用のスプライト
+	std::unique_ptr<Sprite> transitionSprite_ = nullptr;
+	//トランジションのテクスチャ
+	uint32_t transitionTextureHandle_ = 0;
+	//トランジションの色
+	Vector4 transitionColor_ = { 0.0f,0.0f,0.0f,1.0f };
+	//トランジションのフラグ
+	bool isTransition_ = false;
+	bool isTransitionEnd_ = false;
+	//トランジションのタイマー
+	float transitionTimer_ = 0;
 };
 

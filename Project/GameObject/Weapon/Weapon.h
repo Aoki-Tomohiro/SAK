@@ -4,10 +4,13 @@
 #include "2D/ImGuiManager.h"
 #include "Components/Input.h"
 #include "Utility/CollisionManager/Collider.h"
+#include "../UI.h"
 
 class Weapon : public Collider
 {
 public:
+
+	~Weapon();
 
 	static int InvincibleTime;
 
@@ -35,7 +38,10 @@ public:
 	bool GetIsAttack() { return IsAttack_; }
 
 	bool GetIsHit() { return IsHit_; };
+
+	int GetHP() { return Hp_; };
   
+	void DrawSprite();
 
 private:
 	Input* input_ = nullptr;
@@ -43,6 +49,7 @@ private:
 	std::unique_ptr<Model> weaponModelDummy_ = nullptr;
 
 	std::unique_ptr<Model> weaponModel_ = nullptr;
+	std::unique_ptr<Model> weaponRodModel_ = nullptr;
 	std::unique_ptr<Model> involvedMissile_ = nullptr;
 
 	WorldTransform weaponWorldTransform_;
@@ -75,39 +82,13 @@ private:
 	bool IsAttack_ = false;
 	bool IsCoolDown_ = false;
 
-	//モデルとモーション
-
-	enum {
-		Stay,
-		Charge,
-		Attack,
-	};
-
-	int  motionMode_;
-
-	WorldTransform weaponMotionWorldTransform_;
-
-	struct weaponMotionStruct {
-		Vector3 translation_; /*weaponWorldTransform_.translation_を基準としたLocal座標*/
-		Vector3 rotation_;/*weaponWorldTransform_.rotation_を基準としたLocal回転*/
-		Vector3 scale_;/*weaponWorldTransform_.scale_を基準としたLocalスケール*/
-		Vector4 color_;/*色やんね*/
-	};
-
-	//そもそものサイズ
-	Vector3 normalScale_;
-	//そもそもの位置
-	Vector3 normalTransration_;
-
-	float chargeRotateSpeed_;
-	float attackRotateSpeed_[4];
-
-	weaponMotionStruct weaponMotion_;
+	
   
 	bool IsHit_ = false;
 
 	//体力
-	float Hp_ = 3.0f;
+	static const  int MaxHp_ = 3;
+	int Hp_;
 
 	//無敵時間
 	bool invincibleFlag_ = false;
@@ -124,8 +105,42 @@ private:
 		{1.0f,0.0f,0.0f,1.0f},
 		{0.0f,1.0f,0.0f,1.0f},
 		{0.0f,0.0f,1.0f,1.0f},
-		{0.0f,0.0f,0.0f,0.0f},
+		{0.0f,0.0f,0.0f,1.0f},
 	};
+
+	//モデルとモーション
+	enum {
+		Stay,
+		Charge,
+		Attack,
+	};
+
+	int  motionMode_;
+
+	WorldTransform weaponMotionWorldTransform_;
+	WorldTransform weaponRodMotionWorldTransform_;
+
+	struct weaponMotionStruct {
+		Vector3 translation_; /*weaponWorldTransform_.translation_を基準としたLocal座標*/
+		Vector3 rotation_;/*weaponWorldTransform_.rotation_を基準としたLocal回転*/
+		Vector3 scale_;/*weaponWorldTransform_.scale_を基準としたLocalスケール*/
+		Vector4 color_;/*色やんね*/
+
+		Vector3 normalTransration_;//そもそものサイズ
+		Vector3 normalScale_;		//そもそもの位置
+	};
+
+
+	float chargeRotateSpeed_;
+	float attackRotateSpeed_[4];
+
+	float playerPosY = -3.3f;
+
+	weaponMotionStruct weaponMotion_;
+	weaponMotionStruct weaponRodMotion_;
   
+
+	//UI
+	UIStruct heartUI_[MaxHp_];
 };
 
