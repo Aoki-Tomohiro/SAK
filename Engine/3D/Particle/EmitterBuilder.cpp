@@ -10,21 +10,21 @@ EmitterBuilder::~EmitterBuilder()
 
 }
 
-EmitterBuilder& EmitterBuilder::SetModel(ParticleModel* particleModel)
-{
-	particleEmitter_->particleModel_ = particleModel;
-	return *this;
-}
-
 EmitterBuilder& EmitterBuilder::SetParticleType(ParticleEmitter::ParticleType particleType)
 {
 	particleEmitter_->particleType_ = particleType;
 	return *this;
 }
 
-EmitterBuilder& EmitterBuilder::SetTranslation(const Vector3& min, const Vector3& max)
+EmitterBuilder& EmitterBuilder::SetTranslation(const Vector3& translation)
 {
-	particleEmitter_->popTranslation_ = { min,max };
+	particleEmitter_->popTranslation_ = translation;
+	return *this;
+}
+
+EmitterBuilder& EmitterBuilder::SetArea(const Vector3& min, const Vector3& max)
+{
+	particleEmitter_->popArea_ = { min,max };
 	return *this;
 }
 
@@ -70,12 +70,6 @@ EmitterBuilder& EmitterBuilder::SetLifeTime(float min, float max)
 	return *this;
 }
 
-EmitterBuilder& EmitterBuilder::SetMaxInstance(uint32_t maxInstance)
-{
-	particleEmitter_->maxInstance_ = maxInstance;
-	return *this;
-}
-
 EmitterBuilder& EmitterBuilder::SetCount(uint32_t count)
 {
 	particleEmitter_->popCount_ = count;
@@ -97,6 +91,6 @@ EmitterBuilder& EmitterBuilder::SetDeleteTime(float deleteTime)
 
 ParticleEmitter* EmitterBuilder::Build()
 {
-	particleEmitter_->Initialize();
+	//particleEmitter_->Initialize();
 	return particleEmitter_;
 }

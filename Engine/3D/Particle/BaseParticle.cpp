@@ -21,8 +21,7 @@ void BaseParticle::Update() {
 	//寿命を減らす
 	const float kDeltaTime = 1.0f / 60.0f;
 	currentTime_ += kDeltaTime;
-	float alpha = 1.0f - (currentTime_ / lifeTime_);
-	color_.w = alpha;
+	color_.w = 1.0f - (currentTime_ / lifeTime_);
 	//寿命が生存時間を上回ったら消す
 	if (lifeTime_ < currentTime_) {
 		isDead_ = true;

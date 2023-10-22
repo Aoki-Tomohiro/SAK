@@ -5,6 +5,8 @@
 #include "Components/Input.h"
 #include "Utility/CollisionManager/Collider.h"
 #include "../UI.h"
+#include "3D/Model/ParticleModel.h"
+#include "3D/Particle/ParticleSystem.h"
 
 class Weapon : public Collider
 {
@@ -30,7 +32,7 @@ public:
 
 
 	void ModelMotion();
-  
+
 	WorldTransform& GetWeaponWorldTransform() { return weaponWorldTransform_; }
 
 	bool GetIsCharge() { return IsCharge_; }
@@ -39,9 +41,15 @@ public:
 
 	bool GetIsHit() { return IsHit_; };
 
+	bool GetIsCoolDown() {
+		return IsCoolDown_;
+	};
+
 	int GetHP() { return Hp_; };
   
 	void DrawSprite();
+
+	void DrawParticle(const ViewProjection& viewProjection);
 
 private:
 	Input* input_ = nullptr;
@@ -142,5 +150,10 @@ private:
 
 	//UI
 	UIStruct heartUI_[MaxHp_];
+
+	//パーティクル
+	std::unique_ptr<ParticleModel> particleModel_ = nullptr;
+	std::unique_ptr<ParticleSystem> particleSystem_ = nullptr;
+
 };
 

@@ -67,7 +67,7 @@ void ParticleModel::PostDraw() {
 }
 
 
-void ParticleModel::Draw(D3D12_GPU_DESCRIPTOR_HANDLE gpuHandle, uint32_t numInstance, const ViewProjection& viewProjection) {
+void ParticleModel::Draw(const ParticleSystem* particleSystem, const ViewProjection& viewProjection) {
 	//DescriptorHeapを設定
 	TextureManager::GetInstance()->SetGraphicsDescriptorHeap();
 	//VBVを設定
@@ -77,13 +77,13 @@ void ParticleModel::Draw(D3D12_GPU_DESCRIPTOR_HANDLE gpuHandle, uint32_t numInst
 	//マテリアルCBufferの場所を設定
 	sCommandList_->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
 	//WorldTransform用のCBufferの場所を設定
-	sCommandList_->SetGraphicsRootDescriptorTable(1, gpuHandle);
+	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(1, particleSystem->GetSrvIndex());
 	//ViewProjection用のCBufferの場所を設定
 	sCommandList_->SetGraphicsRootConstantBufferView(2, viewProjection.constBuff_->GetGPUVirtualAddress());
 	//DescriptorTableを設定
 	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(3, textureHandle_);
 	//描画!(DrawCall/ドローコール)。3頂点で1つのインスタンス。インスタンスについては今後
-	sCommandList_->DrawInstanced(UINT(vertices_.size()), numInstance, 0, 0);
+	sCommandList_->DrawInstanced(UINT(vertices_.size()), particleSystem->GetNumInstance(), 0, 0);
 }
 
 
@@ -284,7 +284,8 @@ void ParticleModel::CreatePipelineStateObject() {
 	//DepthStencilStateの設定
 	D3D12_DEPTH_STENCIL_DESC depthStencilDesc{};
 	//Depthの機能を有効化する
-	depthStencilDesc.DepthEnable = true;
+	//depthStencilDesc.DepthEnable = true;
+	depthStencilDesc.DepthEnable = false;
 	//書き込みします
 	depthStencilDesc.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ZERO;
 	//比較関数はLessEqual。つまり、近ければ描画される

@@ -14,13 +14,6 @@ public:
 	~EmitterBuilder();
 
 	/// <summary>
-	/// モデルを設定
-	/// </summary>
-	/// <param name="particleModel"></param>
-	/// <returns></returns>
-	EmitterBuilder& SetModel(ParticleModel* particleModel);
-
-	/// <summary>
 	/// パーティクルの種類を設定
 	/// </summary>
 	/// <param name="particleType"></param>
@@ -28,19 +21,20 @@ public:
 	EmitterBuilder& SetParticleType(ParticleEmitter::ParticleType particleType);
 
 	/// <summary>
-	/// パーティクルの最大数を設定
-	/// </summary>
-	/// <param name="maxInstance"></param>
-	/// <returns></returns>
-	EmitterBuilder& SetMaxInstance(uint32_t maxInstance);
-
-	/// <summary>
-	/// パーティクルの発生範囲を設定
+	/// パーティクルの位置を設定
 	/// </summary>
 	/// <param name="min"></param>
 	/// <param name="max"></param>
 	/// <returns></returns>
-	EmitterBuilder& SetTranslation(const Vector3& min, const Vector3& max);
+	EmitterBuilder& SetTranslation(const Vector3& translation);
+
+	/// <summary>
+	/// 発生範囲を設定
+	/// </summary>
+	/// <param name="min"></param>
+	/// <param name="max"></param>
+	/// <returns></returns>
+	EmitterBuilder& SetArea(const Vector3& min, const Vector3& max);
 
 	/// <summary>
 	/// パーティクルの角度を設定
