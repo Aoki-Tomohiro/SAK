@@ -174,7 +174,7 @@
     </Filter>
     <Filter Include="ソース ファイル\Engine\3D\Particle">
       <UniqueIdentifier>{000d993a-d8e3-43d1-b3a5-8aa6c97e467d}</UniqueIdentifier>
-    </Filter>  
+    </Filter>
     <Filter Include="ヘッダー ファイル\Project\Game\UI">
       <UniqueIdentifier>{a06968c5-d8a7-4bed-8e88-d326cf7048da}</UniqueIdentifier>
     </Filter>
@@ -335,9 +335,12 @@
     </ClCompile>
     <ClCompile Include="Engine\3D\Particle\BaseParticle.cpp">
       <Filter>ソース ファイル\Engine\3D\Particle</Filter>
-    </ClCompile>   
+    </ClCompile>
     <ClCompile Include="UI.cpp">
       <Filter>ソース ファイル\Project\Game\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\GameObject\Boss\State\BossStateWait.cpp">
+      <Filter>ソース ファイル\Project\GameObject\Boss\State</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -508,9 +511,12 @@
     </ClInclude>
     <ClInclude Include="Engine\3D\Particle\BaseParticle.h">
       <Filter>ヘッダー ファイル\Engine\3D\Particle</Filter>
-    </ClInclude>  
+    </ClInclude>
     <ClInclude Include="UI.h">
       <Filter>ヘッダー ファイル\Project\Game\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\GameObject\Boss\State\BossStateWait.h">
+      <Filter>ヘッダー ファイル\Project\GameObject\Boss\State</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

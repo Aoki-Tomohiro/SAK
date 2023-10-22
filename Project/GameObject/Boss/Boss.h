@@ -157,6 +157,8 @@ public:
 	/// <returns></returns>
 	float GetHP() { return Hp_; };
 
+	bool GetIsActive() { return isActive_; };
+
 	/// <summary>
 	/// 当たり判定
 	/// </summary>
@@ -216,6 +218,8 @@ private:
 	float missileMoveSpeed_ = 0.05f;
 	//進行方向
 	int moveDirection_ = 1;
+	bool isActive_ = false;
+
 	//プレイヤー
 	Weapon* weapon_ = nullptr;
 
