@@ -345,6 +345,9 @@
     <ClCompile Include="Engine\Utility\Random.cpp">
       <Filter>ソース ファイル\Engine\Utility</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\3D\Particle\ChageParticle.cpp">
+      <Filter>ソース ファイル\Engine\3D\Particle</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Base\WinApp.h">
@@ -523,6 +526,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Utility\Random.h">
       <Filter>ヘッダー ファイル\Engine\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\3D\Particle\ChageParticle.h">
+      <Filter>ヘッダー ファイル\Engine\3D\Particle</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

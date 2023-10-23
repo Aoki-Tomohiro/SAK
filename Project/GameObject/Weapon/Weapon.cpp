@@ -354,13 +354,32 @@ void Weapon::OnCollision(uint32_t collisionAttribute, float damage)
 			//		.SetAzimuth(float(i) * 4.0f, float(i) * 4.0f)
 			//		.SetElevation(0.0f, 0.0f)
 			//		.SetVelocity({ 0.04f,0.04f,0.04f }, { 0.04f,0.04f,0.04f })
-			//		.SetLifeTime(0.5f, 0.5f)
+			//		.SetLifeTime(0.4f, 0.4f)
 			//		.SetCount(1)
 			//		.SetFrequency(2.0f)
 			//		.SetDeleteTime(1.0f)
 			//		.Build();
 			//	particleSystem_->AddParticleEmitter(particleEmitter);
 			//}
+
+			ParticleEmitter* newParticleEmitter = EmitterBuilder()
+				.SetParticleType(ParticleEmitter::ParticleType::kScale)
+				.SetTranslation(weaponWorldTransform_.translation_)
+				.SetArea({ 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f })
+				.SetRotation({ 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f })
+				.SetScale({ 0.1f, 0.1f,0.1f }, { 0.15f ,0.15f ,0.15f })
+				.SetAzimuth(0.0f, 360.0f)
+				.SetElevation(0.0f, 0.0f)
+				.SetVelocity({ 0.02f ,0.02f ,0.02f }, { 0.04f ,0.04f ,0.04f })
+				.SetColor({ 1.0f ,1.0f ,1.0f ,1.0f }, { 1.0f ,1.0f ,1.0f ,1.0f })
+				.SetLifeTime(0.1f, 1.0f)
+				.SetCount(100)
+				.SetFrequency(4.0f)
+				.SetDeleteTime(3.0f)
+				.Build();
+			particleSystem_->AddParticleEmitter(newParticleEmitter);
+
+			//火花
 			ParticleEmitter* particleEmitter = EmitterBuilder()
 				.SetTranslation(weaponWorldTransform_.translation_)
 				.SetArea({0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f})

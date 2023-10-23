@@ -1,5 +1,6 @@
 #pragma once
 #include "Particle.h"
+#include "ChageParticle.h"
 #include "Utility/Random.h"
 #include <list>
 #include <memory>
@@ -13,6 +14,7 @@ public:
 	enum class ParticleType {
 		kNormal,
 		kScale,
+		kCharge,
 	};
 
 	struct minmaxStructVector4 {

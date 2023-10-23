@@ -94,6 +94,13 @@ public:
 	/// <param name="viewProjection"></param>
 	void Draw(const ParticleSystem* particleSystem, const ViewProjection& viewProjection);
 
+	/// <summary>
+	/// 描画(テクスチャ差し替え)
+	/// </summary>
+	/// <param name="particleSystem"></param>
+	/// <param name="viewProjection"></param>
+	void Draw(const ParticleSystem* particleSystem, const ViewProjection& viewProjection, uint32_t textureHandle);
+
 private:
 	/// <summary>
 	/// DXCの初期化

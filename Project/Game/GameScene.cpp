@@ -180,6 +180,8 @@ void GameScene::Draw(GameManager* gameManager) {
 
 	weapon_->DrawParticle(viewProjection_);
 
+	boss_->DrawParticle(viewProjection_);
+
 	ParticleModel::PostDraw();
 
 #pragma endregion

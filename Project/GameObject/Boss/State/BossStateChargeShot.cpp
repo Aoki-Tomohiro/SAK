@@ -45,6 +45,35 @@ void BossStateChargeShot::Initialize(Boss* pBoss) {
 	//タイマーの初期化
 	chargeTimerMax_ = chargeTime;
 	endTimer_ = chargeShotEndTime;
+
+	//for (uint32_t i = 0; i < 150; ++i) {
+	//	ParticleEmitter* emitter = EmitterBuilder()
+	//		.SetParticleType(ParticleEmitter::ParticleType::kCharge)
+	//		.SetTranslation(chargeWorldTransform_.translation_)
+	//		.SetScale({ 0.1f,0.1f,0.1f }, { 0.1f,0.1f,0.1f })
+	//		.SetVelocity({ 0.3f,0.3f,0.0f }, { 0.6f,0.6f,0.0f })
+	//		.SetAzimuth(0.0f, 0.0f)
+	//		.SetElevation(0.0f, 0.0f)
+	//		.SetCount(1)
+	//		.SetFrequency(0.1f)
+	//		.SetLifeTime(0.1f, 0.4f)
+	//		.SetDeleteTime(float(chargeTimerMax_ / 60.0f))
+	//		.Build();
+	//	pBoss->AddParticleEmitter(emitter);
+	//}
+	ParticleEmitter* emitter = EmitterBuilder()
+		.SetParticleType(ParticleEmitter::ParticleType::kCharge)
+		.SetTranslation(chargeWorldTransform_.translation_)
+		.SetScale({ 0.1f,0.1f,0.1f }, { 0.1f,0.1f,0.1f })
+		.SetVelocity({ 0.1f,0.1f,0.1f }, { 0.1f,0.1f,0.1f })
+		.SetAzimuth(0.0f, 0.0f)
+		.SetElevation(0.0f, 0.0f)
+		.SetCount(100)
+		.SetFrequency(0.1f)
+		.SetLifeTime(0.2f, 0.2f)
+		.SetDeleteTime(float(chargeTimerMax_ / 60.0f))
+		.Build();
+	pBoss->AddParticleEmitter(emitter);
 }
 
 void BossStateChargeShot::Update(Boss* pBoss) {

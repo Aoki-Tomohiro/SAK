@@ -17,8 +17,6 @@ void GameTitleScene::Initialize(GameManager* gameManager)
 	audio_ = Audio::GetInstance();
 	//Inputのインスタンスを取得
 	input_ = Input::GetInstance();
-	//パーティクルモデルの作成
-	particleModel_.reset(ParticleModel::CreateFromOBJ("Resources/particlePop", "particlePop.obj"));
 
 	playerModel_.reset(Model::CreateFromOBJ("Resources/Platform", "Platform.obj"));
 	weaponModel_.reset(Model::CreateFromOBJ("Resources/Head", "Head.obj"));
@@ -41,6 +39,17 @@ void GameTitleScene::Initialize(GameManager* gameManager)
 	transitionSprite_.reset(Sprite::Create(transitionTextureHandle_, { 0.0f,0.0f }));
 	transitionSprite_->SetColor(transitionColor_);
 	transitionSprite_->SetSize(Vector2{ 640.0f,360.0f });
+
+
+	//ポストプロセスの有効化
+	PostProcess::GetInstance()->SetIsPostProcessActive(true);
+	PostProcess::GetInstance()->SetIsBloomActive(true);
+
+	//パーティクルモデルの作成
+	particleModel_.reset(ParticleModel::CreateFromOBJ("Resources/Particle", "Particle.obj"));
+	particleSystem_ = std::make_unique<ParticleSystem>();
+	particleSystem_->Initialize();
+	textureHandle_ = TextureManager::Load("Resources/Particle.png");
 };
 
 void GameTitleScene::Update(GameManager* gameManager) 
@@ -92,40 +101,62 @@ void GameTitleScene::Update(GameManager* gameManager)
 		}
 	}
 
-	//if (input_->IsPushKeyEnter(DIK_P)) {
-	//	//設定したい項目だけ.Setを呼び出す
-	//	ParticleEmitter* newParticleEmitter = EmitterBuilder()
-	//		.SetModel(particleModel_.get())
-	//		.SetParticleType(ParticleEmitter::ParticleType::kScale)
-	//		.SetMaxInstance(100)
-	//		.SetTranslation({ 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f })
-	//		.SetRotation({ 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f })
-	//		.SetScale({ 0.1f, 0.1f,0.1f }, { 0.15f ,0.15f ,0.15f })
-	//		.SetAzimuth(0.0f, 360.0f)
-	//		.SetElevation(90.0f, 90.0f)
-	//		.SetVelocity({ 0.02f ,0.02f ,0.02f }, { 0.04f ,0.04f ,0.04f })
-	//		.SetColor({ 1.0f ,1.0f ,1.0f ,1.0f }, { 1.0f ,1.0f ,1.0f ,1.0f })
-	//		.SetLifeTime(0.1f, 1.0f)
-	//		.SetCount(100)
-	//		.SetFrequency(4.0f)
-	//		.SetDeleteTime(3.0f)
-	//		.Build();
-	//	particleEmitters_.push_back(std::unique_ptr<ParticleEmitter>(newParticleEmitter));
-	//}
+	if (input_->IsPushKeyEnter(DIK_P)) {
+		////設定したい項目だけ.Setを呼び出す
+		//ParticleEmitter* newParticleEmitter = EmitterBuilder()
+		//	.SetParticleType(ParticleEmitter::ParticleType::kScale)
+		//	.SetTranslation({ 0.0f,0.0f,0.0f })
+		//	.SetArea({ 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f })
+		//	.SetRotation({ 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f })
+		//	.SetScale({ 0.1f, 0.1f,0.1f }, { 0.15f ,0.15f ,0.15f })
+		//	.SetAzimuth(0.0f, 360.0f)
+		//	.SetElevation(0.0f, 0.0f)
+		//	.SetVelocity({ 0.02f ,0.02f ,0.02f }, { 0.04f ,0.04f ,0.04f })
+		//	.SetColor({ 1.0f ,1.0f ,1.0f ,1.0f }, { 1.0f ,1.0f ,1.0f ,1.0f })
+		//	.SetLifeTime(0.1f, 1.0f)
+		//	.SetCount(100)
+		//	.SetFrequency(4.0f)
+		//	.SetDeleteTime(3.0f)
+		//	.Build();
+		//particleSystem_->AddParticleEmitter(newParticleEmitter);
 
-	////パーティクルエミッターデリーと
-	//particleEmitters_.remove_if([](std::unique_ptr<ParticleEmitter>& particleEmitter) {
-	//	if (particleEmitter->IsDead()) {
-	//		particleEmitter.reset();
-	//		return true;
-	//	}
-	//	return false;
-	//	}
-	//);
+		ParticleEmitter* newParticleEmitter = EmitterBuilder()
+			.SetParticleType(ParticleEmitter::ParticleType::kScale)
+			.SetTranslation({ 0.0f,0.0f,0.0f })
+			.SetArea({ 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f })
+			.SetRotation({ 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f })
+			.SetScale({ 0.2f, 0.2f,0.2f }, { 0.25f ,0.25f ,0.25f })
+			.SetAzimuth(0.0f, 360.0f)
+			.SetElevation(0.0f, 0.0f)
+			.SetVelocity({ 0.02f ,0.02f ,0.02f }, { 0.04f ,0.04f ,0.04f })
+			.SetColor({ 1.0f ,1.0f ,1.0f ,1.0f }, { 1.0f ,1.0f ,1.0f ,1.0f })
+			.SetLifeTime(0.1f, 1.0f)
+			.SetCount(100)
+			.SetFrequency(4.0f)
+			.SetDeleteTime(3.0f)
+			.Build();
+		particleSystem_->AddParticleEmitter(newParticleEmitter);
 
-	//for (std::unique_ptr<ParticleEmitter>& particleEmitter : particleEmitters_) {
-	//	particleEmitter->Update();
-	//}
+		////火花
+		//ParticleEmitter* particleEmitter = EmitterBuilder()
+		//	.SetTranslation({0.0f,0.0f,0.0f})
+		//	.SetArea({ 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f })
+		//	.SetRotation({ 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f })
+		//	.SetScale({ 0.1f,0.1f,0.1f }, { 0.1f,0.1f,0.1f })
+		//	.SetColor({ 1.0f,0.5f,0.0f,1.0f }, { 1.0f,0.5f,0.0f,1.0f })
+		//	.SetAzimuth(250.0f/* - (involvedCount_ * 5)*/, 290.0f/* + (involvedCount_ * 5)*/)
+		//	.SetElevation(0.0f, 0.0f)
+		//	.SetVelocity({ 0.2f,0.2f,0.2f }, { 0.4f,0.4f,0.4f })
+		//	.SetLifeTime(0.4f, 0.6f)
+		//	.SetCount(50/* + (involvedCount_ * 50)*/)
+		//	.SetFrequency(2.0f)
+		//	.SetDeleteTime(1.0f)
+		//	.Build();
+		//particleSystem_->AddParticleEmitter(particleEmitter);
+	}
+
+	particleSystem_->Update();
+
 	playerWorldTransform_.UpdateMatrix();
 	weaponWorldTransform_.UpdateMatrix();
 
@@ -156,10 +187,7 @@ void GameTitleScene::Draw(GameManager* gameManager)
 	//パーティクルの描画
 	ParticleModel::PreDraw();
 
-	////エミッターの描画
-	//for (std::unique_ptr<ParticleEmitter>& particleEmitter : particleEmitters_) {
-	//	particleEmitter->Draw(viewProjection_);
-	//}
+	particleModel_->Draw(particleSystem_.get(), viewProjection_, textureHandle_);
 
 	ParticleModel::PostDraw();
 

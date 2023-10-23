@@ -83,6 +83,10 @@ void ParticleEmitter::Pop() {
 		particle = new Particle();
 		particle->Initialize(translation, rotation, scale, velocity, color, lifeTime);
 		break;
+	case ParticleType::kCharge:
+		particle = new ChageParticle();
+		particle->Initialize(translation, rotation, scale, velocity, color, lifeTime);
+		break;
 	}
 	//パーティクルをリストに追加
 	particles_.push_back(std::unique_ptr<BaseParticle>(particle));

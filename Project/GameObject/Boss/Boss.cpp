@@ -62,6 +62,10 @@ void Boss::Initialize() {
 
 	hpBar_.sprite_ = Sprite::Create(hpBar_.textureHandle_, hpBar_.position_);
 
+	//パーティクル
+	particleModel_.reset(ParticleModel::CreateFromOBJ("Resources/Particle", "Particle.obj"));
+	particleSystem_ = std::make_unique<ParticleSystem>();
+	particleSystem_->Initialize();
 }
 
 void Boss::Update() {
@@ -130,6 +134,9 @@ void Boss::Update() {
 	ModelMotion();
 	//バー
 	HPBarUpdate();
+
+	//パーティクルの更新
+	particleSystem_->Update();
   
 	ImGui::Begin("Boss");
 	ImGui::Text("HP : %f", Hp_);
@@ -249,4 +256,8 @@ void Boss::HPBarUpdate()
 	hpBar_.size_ = {(Hp_ / maxHp_) * barSize,1.0f };
 
 	hpBar_.sprite_->SetSize(hpBar_.size_);
+}
+
+void Boss::DrawParticle(const ViewProjection& viewProjection) {
+	particleModel_->Draw(particleSystem_.get(), viewProjection);
 }

@@ -8,6 +8,9 @@
 #include "ChargeShot/ChargeShot.h"
 #include <random>
 #include "../UI.h"
+#include "3D/Model/ParticleModel.h"
+#include "3D/Particle/ParticleSystem.h"
+
 class Weapon;
 
 /// <summary>
@@ -184,6 +187,18 @@ public:
 	/// <returns></returns>
 	void HPBarUpdate();
 
+	/// <summary>
+	/// エミッターを追加
+	/// </summary>
+	/// <param name="particleEmitter"></param>
+	void AddParticleEmitter(ParticleEmitter* particleEmitter) { particleSystem_->AddParticleEmitter(particleEmitter); };
+
+	/// <summary>
+	/// パーティクルの描画
+	/// </summary>
+	/// <param name="viewProjection"></param>
+	void DrawParticle(const ViewProjection& viewProjection);
+
 private:
 	//ボスのモデル(ダミー)
 	std::unique_ptr<Model> model_ = nullptr;
@@ -242,5 +257,9 @@ private:
 	UIStruct hpBar_;
 	const float barSpace = 16.0f;
 	float barSize = WinApp::GetInstance()->kClientWidth - barSpace * 2;
+
+	//パーティクル
+	std::unique_ptr<ParticleModel> particleModel_ = nullptr;
+	std::unique_ptr<ParticleSystem> particleSystem_ = nullptr;
 
 };
