@@ -61,6 +61,7 @@ void BossStateChargeShot::Initialize(Boss* pBoss) {
 	//		.Build();
 	//	pBoss->AddParticleEmitter(emitter);
 	//}
+
 	ParticleEmitter* emitter = EmitterBuilder()
 		.SetParticleType(ParticleEmitter::ParticleType::kCharge)
 		.SetTranslation(chargeWorldTransform_.translation_)
