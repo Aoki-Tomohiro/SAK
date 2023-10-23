@@ -13,6 +13,8 @@ void BaseParticle::Initialize(const Vector3& translation, const Vector3& rotatio
 	color_ = color;
 	//寿命
 	lifeTime_ = lifeTime;
+	//アルファ値の初期化
+	alpha_ = color_.w;
 }
 
 void BaseParticle::Update() {
@@ -21,8 +23,7 @@ void BaseParticle::Update() {
 	//寿命を減らす
 	const float kDeltaTime = 1.0f / 60.0f;
 	currentTime_ += kDeltaTime;
-	float alpha = 1.0f - (currentTime_ / lifeTime_);
-	color_.w = alpha;
+	color_.w = alpha_ - (currentTime_ / lifeTime_);
 	//寿命が生存時間を上回ったら消す
 	if (lifeTime_ < currentTime_) {
 		isDead_ = true;

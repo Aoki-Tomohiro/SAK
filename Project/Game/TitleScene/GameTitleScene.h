@@ -11,7 +11,7 @@
 #include "2D/Sprite.h"
 #include "3D/Matrix/WorldTransform.h"
 #include "3D/Matrix/ViewProjection.h"
-#include "3D/Particle/EmitterBuilder.h"
+#include "3D/Particle/ParticleSystem.h"
 
 #include "../GameObject/Player/Player.h"
 #include "../GameObject/Weapon/Weapon.h"
@@ -59,12 +59,18 @@ private:
 	Input* input_ = nullptr;
   
 	//パーティクルモデルの作成
+	uint32_t textureHandle_ = 0;
 	std::unique_ptr<ParticleModel> particleModel_ = nullptr;
 	//パーティクル
-	std::list<std::unique_ptr<ParticleEmitter>> particleEmitters_{};
+	std::unique_ptr<ParticleSystem> particleSystem_ = nullptr;
 	//ビュープロジェクション
 	ViewProjection viewProjection_{};
-  
+
+	//サウンド
+	uint32_t soundHandle_ = 0u;
+
+	int soundCount_ = 0;
+
 	//モデル
 	std::unique_ptr<Model> playerModel_ = nullptr;
 	std::unique_ptr<Model> weaponModel_ = nullptr;

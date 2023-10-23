@@ -26,6 +26,8 @@ void Weapon::Initialize()
 
 	input_ = Input::GetInstance();
 
+	audio_ = Audio::GetInstance();
+
 	//Weapon
 	weaponWorldTransform_.translation_.x = 0.0f;
 	weaponWorldTransform_.translation_.y = 1.8f;
@@ -105,6 +107,16 @@ void Weapon::Initialize()
 
 		heartUI_[i].sprite_ = Sprite::Create(heartUI_[i].textureHandle_, heartUI_[i].position_);
 	}
+
+
+	particleModel_.reset(ParticleModel::CreateFromOBJ("Resources/Particle", "Particle.obj"));
+	particleSystem_ = std::make_unique<ParticleSystem>();
+	particleSystem_->Initialize();
+
+	soundHandle_[0] = audio_->SoundLoadWave("Resources/Sounds/Misslie_Sasaru.wav");
+	soundHandle_[1] = audio_->SoundLoadWave("Resources/Sounds/Player_Damage.wav");
+	soundHandle_[2] = audio_->SoundLoadWave("Resources/Sounds/Head_Charge.wav");
+	soundHandle_[3] = audio_->SoundLoadWave("Resources/Sounds/Head_Attack.wav");
 }
 
 void Weapon::Update()
@@ -151,6 +163,7 @@ void Weapon::Update()
 	{
 		if (pushCount_ < 10)
 		{
+			audio_->SoundPlayWave(soundHandle_[3], false);
 			IsCharge_ = false;
 			IsAttack_ = true;
 			pushCount_ = 0;
@@ -165,6 +178,7 @@ void Weapon::Update()
 
 	if (IsCharge_ == true)
 	{
+		audio_->SoundPlayWave(soundHandle_[2], false);
 		chargeCount_++;
 		weaponWorldTransform_.translation_.y -= chargeSpeed_;
 
@@ -267,6 +281,10 @@ void Weapon::Update()
   
 	involvedMissileWorldTransform_.UpdateMatrix();
 
+	//パーティクルの処理
+	particleSystem_->Update();
+
+
 	//無敵時間の処理
 	if (invincibleFlag_) {
 		invincibleTimer_--;
@@ -307,6 +325,11 @@ void Weapon::Draw(const ViewProjection viewProjection)
   
 }
 
+void Weapon::DrawParticle(const ViewProjection& viewProjection) {
+	//パーティクルの描画
+	particleModel_->Draw(particleSystem_.get(), viewProjection);
+}
+
 void Weapon::ApplyGlobalVariables()
 {
 	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
@@ -327,10 +350,65 @@ void Weapon::OnCollision(uint32_t collisionAttribute, float damage)
 {
 	//衝突相手がボスの場合
 	if (collisionAttribute & kCollisionAttributeEnemy)
-	{
-		IsHit_ = true;
-		isInvolvedMissile_ = false;
-		involvedCount_ = 0;
+	{		
+		if (IsHit_ == false && IsCoolDown_ == false) 
+		{
+			//for (uint32_t i = 0; i < 90; ++i) {
+			//	ParticleEmitter* particleEmitter = EmitterBuilder()
+			//		.SetParticleType(ParticleEmitter::ParticleType::kNormal)
+			//		.SetTranslation(weaponWorldTransform_.translation_)
+			//		.SetArea({ 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f })
+			//		.SetRotation({ 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f })
+			//		.SetScale({ 0.1f,0.1f,0.1f }, { 0.1f,0.1f,0.1f })
+			//		.SetColor({ 1.0f,0.5f,0.0f,1.0f }, { 1.0f,0.5f,0.0f,1.0f })
+			//		.SetAzimuth(float(i) * 4.0f, float(i) * 4.0f)
+			//		.SetElevation(0.0f, 0.0f)
+			//		.SetVelocity({ 0.04f,0.04f,0.04f }, { 0.04f,0.04f,0.04f })
+			//		.SetLifeTime(0.4f, 0.4f)
+			//		.SetCount(1)
+			//		.SetFrequency(2.0f)
+			//		.SetDeleteTime(1.0f)
+			//		.Build();
+			//	particleSystem_->AddParticleEmitter(particleEmitter);
+			//}
+
+			ParticleEmitter* newParticleEmitter = EmitterBuilder()
+				.SetParticleType(ParticleEmitter::ParticleType::kScale)
+				.SetTranslation(weaponWorldTransform_.translation_)
+				.SetArea({ 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f })
+				.SetRotation({ 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f })
+				.SetScale({ 0.1f, 0.1f,0.1f }, { 0.15f ,0.15f ,0.15f })
+				.SetAzimuth(0.0f, 360.0f)
+				.SetElevation(0.0f, 0.0f)
+				.SetVelocity({ 0.02f ,0.02f ,0.02f }, { 0.04f ,0.04f ,0.04f })
+				.SetColor({ 1.0f ,1.0f ,1.0f ,1.0f }, { 1.0f ,1.0f ,1.0f ,1.0f })
+				.SetLifeTime(0.1f, 1.0f)
+				.SetCount(100)
+				.SetFrequency(4.0f)
+				.SetDeleteTime(3.0f)
+				.Build();
+			particleSystem_->AddParticleEmitter(newParticleEmitter);
+
+			//火花
+			ParticleEmitter* particleEmitter = EmitterBuilder()
+				.SetTranslation(weaponWorldTransform_.translation_)
+				.SetArea({0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f})
+				.SetRotation({ 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f })
+				.SetScale({ 0.1f,0.1f,0.1f }, { 0.1f,0.1f,0.1f })
+				.SetColor({ 1.0f,0.5f,0.0f,1.0f }, { 1.0f,0.5f,0.0f,1.0f })
+				.SetAzimuth(250.0f - (involvedCount_ * 5), 290.0f + (involvedCount_ * 5))
+				.SetElevation(0.0f, 0.0f)
+				.SetVelocity({ 0.2f,0.2f,0.2f }, { 0.4f,0.4f,0.4f })
+				.SetLifeTime(0.4f, 0.6f)
+				.SetCount(50 + (involvedCount_ * 50))
+				.SetFrequency(2.0f)
+				.SetDeleteTime(1.0f)
+				.Build();
+			particleSystem_->AddParticleEmitter(particleEmitter);
+			IsHit_ = true;
+			isInvolvedMissile_ = false;
+			involvedCount_ = 0;
+		}
 	}
 	//ボス以外の場合
 	else
@@ -341,6 +419,7 @@ void Weapon::OnCollision(uint32_t collisionAttribute, float damage)
 			//衝突相手がミサイルの場合カウントを増やす
 			if (collisionAttribute & kCollisionAttributeMissile) 
 			{
+				audio_->SoundPlayWave(soundHandle_[0], false);
 				isInvolvedMissile_ = true;
 				if (involvedCount_ < 5) {
 					involvedCount_++;
@@ -357,6 +436,7 @@ void Weapon::OnCollision(uint32_t collisionAttribute, float damage)
 				//無敵状態でなければダメージを食らう
 				if (invincibleFlag_ == false)
 				{
+					audio_->SoundPlayWave(soundHandle_[1], false);
 					invincibleFlag_ = true;
 					invincibleTimer_ = InvincibleTime;
 					Hp_ -= int(damage);
@@ -369,6 +449,7 @@ void Weapon::OnCollision(uint32_t collisionAttribute, float damage)
 			//無敵状態でなければダメージを食らう
 			if (invincibleFlag_ == false)
 			{
+				audio_->SoundPlayWave(soundHandle_[1], false);
 				invincibleFlag_ = true;
 				invincibleTimer_ = InvincibleTime;
 				Hp_ -= int(damage);

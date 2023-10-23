@@ -1,5 +1,6 @@
 #pragma once
 #include "Base/TextureManager.h"
+#include "3D/Particle/ParticleSystem.h"
 #include "3D/Matrix/ViewProjection.h"
 #include "Utility/MathFunction.h"
 #include <dxcapi.h>
@@ -89,8 +90,16 @@ public:
 	/// <summary>
 	/// 描画
 	/// </summary>
+	/// <param name="particleSystem"></param>
 	/// <param name="viewProjection"></param>
-	void Draw(D3D12_GPU_DESCRIPTOR_HANDLE gpuHandle, uint32_t numInstance, const ViewProjection& viewProjection);
+	void Draw(const ParticleSystem* particleSystem, const ViewProjection& viewProjection);
+
+	/// <summary>
+	/// 描画(テクスチャ差し替え)
+	/// </summary>
+	/// <param name="particleSystem"></param>
+	/// <param name="viewProjection"></param>
+	void Draw(const ParticleSystem* particleSystem, const ViewProjection& viewProjection, uint32_t textureHandle);
 
 private:
 	/// <summary>

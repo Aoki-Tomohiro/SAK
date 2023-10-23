@@ -7,6 +7,7 @@
 #include "3D/DebugCamera/DebugCamera.h"
 
 #include "3D/Model/Model.h"
+#include "3D/Model/ParticleModel.h"
 #include "2D/Sprite.h"
 #include "3D/Matrix/WorldTransform.h"
 #include "3D/Matrix/ViewProjection.h"

@@ -2,6 +2,7 @@
 #include "GameManager.h"
 #include "GameClearScene.h"
 #include "GameOverScene.h"
+#include "Components/PostProcess.h"
 #include <cassert>
 
 GameScene::GameScene() {};
@@ -48,6 +49,9 @@ void GameScene::Initialize(GameManager* gameManager) {
 	transitionSprite_->SetColor(transitionColor_);
 	transitionSprite_->SetSize(Vector2{ 640.0f,360.0f });
 
+	//ポストプロセスの有効化
+	PostProcess::GetInstance()->SetIsPostProcessActive(true);
+	PostProcess::GetInstance()->SetIsBloomActive(true);
 };
 
 void GameScene::Update(GameManager* gameManager) {
@@ -148,6 +152,10 @@ void GameScene::Update(GameManager* gameManager) {
 
 void GameScene::Draw(GameManager* gameManager) {
 
+	PostProcess::GetInstance()->PreDraw();
+
+#pragma region モデルの描画
+
 	//モデルの描画
 	Model::PreDraw();
 
@@ -163,9 +171,26 @@ void GameScene::Draw(GameManager* gameManager) {
 
 	Model::PostDraw();
 
+#pragma endregion
+
+#pragma region パーティクルの描画
+
+	//パーティクルモデルの描画
+	ParticleModel::PreDraw();
+
+	weapon_->DrawParticle(viewProjection_);
+
+	boss_->DrawParticle(viewProjection_);
+
+	ParticleModel::PostDraw();
+
+#pragma endregion
+
+	PostProcess::GetInstance()->PostDraw();
+
+
 	//スプライトの描画
 	Sprite::PreDraw(Sprite::kBlendModeNormal);
-	
 
 	weapon_->DrawSprite();
 

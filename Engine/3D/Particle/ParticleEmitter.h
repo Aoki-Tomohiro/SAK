@@ -1,22 +1,20 @@
 #pragma once
-#include "3D/Model/ParticleModel.h"
 #include "Particle.h"
+#include "ChageParticle.h"
+#include "Utility/Random.h"
+#include <list>
 #include <memory>
 #include <numbers>
-#include <random>
 
 /// <summary>
 /// パーティクルエミッター
 /// </summary>
 class ParticleEmitter {
-private:
-	//エイリアステンプレート
-	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
-
 public:
 	enum class ParticleType {
 		kNormal,
 		kScale,
+		kCharge,
 	};
 
 	struct minmaxStructVector4 {
@@ -34,18 +32,10 @@ public:
 		float max;
 	};
 
-	/// <summary>
-	/// GPUに送るパーティクルの構造体
-	/// </summary>
-	struct ParticleForGPU {
-		Matrix4x4 world;
-		Vector4 color;
-	};
-
-	/// <summary>
-	/// 初期化
-	/// </summary>
-	void Initialize();
+	///// <summary>
+	///// 初期化
+	///// </summary>
+	//void Initialize();
 
 	/// <summary>
 	/// 更新
@@ -53,27 +43,10 @@ public:
 	void Update();
 
 	/// <summary>
-	/// 描画
-	/// </summary>
-	/// <param name="viewProjection"></param>
-	void Draw(const ViewProjection& viewProjection);
-
-	/// <summary>
-	/// インスタンス数の更新
-	/// </summary>
-	void UpdateNumInstance();
-
-	/// <summary>
-	/// GPUハンドルを取得
+	/// パーティクルのリストを取得
 	/// </summary>
 	/// <returns></returns>
-	D3D12_GPU_DESCRIPTOR_HANDLE GetDescriptorHandleGPU() { return instancingSrvHandleGPU_; };
-
-	/// <summary>
-	/// インスタンス数を取得
-	/// </summary>
-	/// <returns></returns>
-	uint32_t GetNumInstance() { return numInstance_; };
+	std::list<std::unique_ptr<BaseParticle>>& GetParticles() { return particles_; };
 
 	/// <summary>
 	/// 死亡フラグを取得
@@ -87,33 +60,15 @@ private:
 	/// </summary>
 	void Pop();
 
-	/// <summary>
-	/// ランダム生成
-	/// </summary>
-	/// <param name="min"></param>
-	/// <param name="max"></param>
-	float Random(float min, float max);
-
-	/// <summary>
-	/// ワールドトランスフォームのCBVを作成
-	/// </summary>
-	void CreateWorldTransform();
-
 private:
-	//Instancing用のWorldTransform
-	ComPtr<ID3D12Resource> instancingResource_ = nullptr;
-	//Instancing用のSRVハンドル
-	D3D12_GPU_DESCRIPTOR_HANDLE instancingSrvHandleGPU_{};
-	//ランダムエンジン
-	std::mt19937 randomEngine_;
 	//パーティクルのリスト
 	std::list<std::unique_ptr<BaseParticle>> particles_{};
-	//パーティクルモデル
-	ParticleModel* particleModel_ = nullptr;
 	//パーティクルのタイプ
 	ParticleType particleType_ = ParticleType::kNormal;
+	//パーティクルの発生位置
+	Vector3 popTranslation_ = { 0.0f,0.0f,0.0f };
 	//パーティクルの発生範囲
-	minmaxStructVector3 popTranslation_ = { {0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
+	minmaxStructVector3 popArea_ = { {0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
 	//パーティクルの角度
 	minmaxStructVector3 popRotation_ = { {0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
 	//パーティクルのスケール
@@ -128,8 +83,6 @@ private:
 	minmaxStructVector4 popColor_ = { {1.0f,1.0f,1.0f,1.0f},{1.0f,1.0f,1.0f,1.0f} };
 	//パーティクルの寿命
 	minmaxStructFloat popLifeTime_ = { 0.5f,1.0f };
-	//インスタンス数の上限
-	uint32_t maxInstance_ = 100;
 	//発生数
 	uint32_t popCount_ = 1;
 	//発生頻度
@@ -142,8 +95,6 @@ private:
 	float deleteTimer_ = 0.0f;
 	//死亡フラグ
 	bool isDead_ = false;
-	//描画するインスタンス数
-	uint32_t numInstance_ = 0;
 	//Builderをフレンドクラスに設定
 	friend class EmitterBuilder;
 

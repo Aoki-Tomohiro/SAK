@@ -9,6 +9,7 @@
 #include "3D/Model/ParticleModel.h"
 #include "2D/Sprite.h"
 #include "2D/ImGuiManager.h"
+#include "Utility/Random.h"
 #include "IScene.h"
 #include <memory>
 
