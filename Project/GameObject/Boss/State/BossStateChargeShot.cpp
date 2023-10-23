@@ -161,7 +161,7 @@ void BossStateChargeShot::Update(Boss* pBoss) {
 	ImGui::Text("bossTransform %f", bossWorldTransform_.translation_.x);
 	ImGui::Text("respownCount %d", respownCount_);
 	ImGui::Text("chargeTimer %d", chargeTimer_);
-	ImGui::Text("chargeShotSpeed %d", chargeShotSpeed_);
+	ImGui::Text("chargeShotSpeed %f", chargeShotSpeed_);
 	ImGui::Text("endTimer %d", endTimer_);
 	ImGui::End();
 }
