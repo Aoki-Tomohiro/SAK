@@ -1,7 +1,8 @@
 #include "Boss.h"
-#include "State/BossStateNormal.h"
-#include "State/BossStateLaserAttack.h"
-#include "State/BossStateChargeShot.h"
+#include "State/BossStateWait.h"
+//#include "State/BossStateNormal.h"
+//#include "State/BossStateLaserAttack.h"
+//#include "State/BossStateChargeShot.h"
 #include "2D/ImGuiManager.h"
 #include "../GameObject/Weapon/Weapon.h"
 #include "Utility/GlobalVariables.h"
@@ -29,7 +30,7 @@ void Boss::Initialize() {
 	worldTransform_.UpdateMatrix();
 
 	//ボスの行動パターンの初期化
-	state_ = std::make_unique<BossStateNormal>();
+	state_ = std::make_unique<BossStateWait>();
 	state_->Initialize(this);
 
 	//衝突属性を設定
@@ -219,11 +220,18 @@ void Boss::ApplyGlobalVariables()
 }
 
 void Boss::OnCollision(uint32_t collisionAttribute, float damage) {
-	if (weapon_->GetIsHit() == false && weapon_->GetIsCoolDown() == false) {
+	if (weapon_->GetIsHit() == false && weapon_->GetIsCoolDown() == false　&& isActive_) {
 		audio_->SoundPlayWave(soundHandle_, false);
 		Hp_ -= damage;
 		if (collisionAttribute & kCollisionAttributePlayer) {
 			hitMissileCount_ += weapon_->GetInvolvedMissileCount();
+		}
+	}
+
+	if (weapon_->GetInvolvedMissileCount() > 0 && isActive_ == false) {
+		isActive_ = true;
+		if (weapon_->GetIsHit() == false) {
+			Hp_ -= damage;
 		}
 	}
 }
