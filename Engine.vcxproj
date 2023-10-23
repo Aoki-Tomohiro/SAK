@@ -104,9 +104,11 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\3D\Model\Model.cpp" />
     <ClCompile Include="Engine\3D\Model\ParticleModel.cpp" />
     <ClCompile Include="Engine\3D\Particle\BaseParticle.cpp" />
+    <ClCompile Include="Engine\3D\Particle\ChageParticle.cpp" />
     <ClCompile Include="Engine\3D\Particle\EmitterBuilder.cpp" />
     <ClCompile Include="Engine\3D\Particle\Particle.cpp" />
     <ClCompile Include="Engine\3D\Particle\ParticleEmitter.cpp" />
+    <ClCompile Include="Engine\3D\Particle\ParticleSystem.cpp" />
     <ClCompile Include="Engine\Base\DirectXCommon.cpp" />
     <ClCompile Include="Engine\Base\TextureManager.cpp" />
     <ClCompile Include="Engine\Base\WinApp.cpp" />
@@ -124,6 +126,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\Utility\GlobalVariables.cpp" />
     <ClCompile Include="Engine\Utility\Log.cpp" />
     <ClCompile Include="Engine\Utility\MathFunction.cpp" />
+    <ClCompile Include="Engine\Utility\Random.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Project\GameObject\Boss\Boss.cpp" />
     <ClCompile Include="Project\GameObject\Boss\ChargeShot\ChargeShot.cpp" />
@@ -158,9 +161,11 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\3D\Model\Model.h" />
     <ClInclude Include="Engine\3D\Model\ParticleModel.h" />
     <ClInclude Include="Engine\3D\Particle\BaseParticle.h" />
+    <ClInclude Include="Engine\3D\Particle\ChageParticle.h" />
     <ClInclude Include="Engine\3D\Particle\EmitterBuilder.h" />
     <ClInclude Include="Engine\3D\Particle\Particle.h" />
     <ClInclude Include="Engine\3D\Particle\ParticleEmitter.h" />
+    <ClInclude Include="Engine\3D\Particle\ParticleSystem.h" />
     <ClInclude Include="Engine\Base\D3DResourceLeakChecker.h" />
     <ClInclude Include="Engine\Base\DirectXCommon.h" />
     <ClInclude Include="Engine\Base\TextureManager.h" />
@@ -182,6 +187,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\Utility\GlobalVariables.h" />
     <ClInclude Include="Engine\Utility\Log.h" />
     <ClInclude Include="Engine\Utility\MathFunction.h" />
+    <ClInclude Include="Engine\Utility\Random.h" />
     <ClInclude Include="Project\GameObject\Boss\Boss.h" />
     <ClInclude Include="Project\GameObject\Boss\ChargeShot\ChargeShot.h" />
     <ClInclude Include="Project\GameObject\Boss\Laser\Laser.h" />

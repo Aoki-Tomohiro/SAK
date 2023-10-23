@@ -66,5 +66,7 @@ protected:
 	float currentTime_ = 0.0f;
 	//死亡フラグ
 	bool isDead_ = false;
+	//アルファ値
+	float alpha_ = 0.0f;
 
 };

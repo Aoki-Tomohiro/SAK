@@ -75,13 +75,13 @@ public:
 	const D3D12_RESOURCE_DESC GetResourceDesc(uint32_t textureHandle);
 
 	/// <summary>
-	/// Instancing用のShaderResourceViewの作成
+	/// Instancing用のSRVの作成
 	/// </summary>
-	/// <param name="resource"></param>
+	/// <param name="instancingResource"></param>
 	/// <param name="kNumInstance"></param>
 	/// <param name="size"></param>
 	/// <returns></returns>
-	D3D12_GPU_DESCRIPTOR_HANDLE CreateInstancingShaderResourceView(const Microsoft::WRL::ComPtr<ID3D12Resource>& instancingResource, uint32_t kNumInstance, size_t size);
+	uint32_t CreateInstancingShaderResourceView(const Microsoft::WRL::ComPtr<ID3D12Resource>& instancingResource, uint32_t kNumInstance, size_t size);
 
 private:
 	TextureManager() = default;

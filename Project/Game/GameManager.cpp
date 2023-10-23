@@ -48,6 +48,9 @@ GameManager::GameManager() {
 	//グローバル変数の読み込み
 	GlobalVariables::GetInstance()->LoadFiles();
 
+	//ランダムエンジンの初期化
+	Random::Initialize();
+
 	//シーンの初期化
 	currentScene_ = new GameTitleScene();
 	currentScene_->Initialize(this);
