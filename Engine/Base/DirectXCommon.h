@@ -47,6 +47,11 @@ public:
 	void SetBackBuffer();
 
 	/// <summary>
+	/// デプスバッファのクリア
+	/// </summary>
+	void ClearDepthBuffer();
+
+	/// <summary>
 	/// ディスクリプタヒープの作成
 	/// </summary>
 	/// <param name="heapType">ディスクリプタヒープの種類</param>

@@ -43,9 +43,9 @@ void GameTitleScene::Initialize(GameManager* gameManager)
 	transitionSprite_->SetSize(Vector2{ 640.0f,360.0f });
 
 
-	//ポストプロセスの有効化
-	PostProcess::GetInstance()->SetIsPostProcessActive(true);
-	PostProcess::GetInstance()->SetIsBloomActive(true);
+	////ポストプロセスの有効化
+	//PostProcess::GetInstance()->SetIsPostProcessActive(true);
+	//PostProcess::GetInstance()->SetIsBloomActive(true);
 
 	//パーティクルモデルの作成
 	particleModel_.reset(ParticleModel::CreateFromOBJ("Resources/Particle", "Particle.obj"));
@@ -177,6 +177,13 @@ void GameTitleScene::Update(GameManager* gameManager)
 
 void GameTitleScene::Draw(GameManager* gameManager)
 {
+	//背景スプライトの描画
+	Sprite::PreDraw(Sprite::kBlendModeNormal);
+
+	Sprite::PostDraw();
+
+	DirectXCommon::GetInstance()->ClearDepthBuffer();
+
 	PostProcess::GetInstance()->PreDraw();
 
 	//モデルの描画

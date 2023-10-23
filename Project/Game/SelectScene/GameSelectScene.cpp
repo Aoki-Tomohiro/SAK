@@ -67,6 +67,13 @@ void GameSelectScene::Update(GameManager* gameManager)
 
 void GameSelectScene::Draw(GameManager* gameManager)
 {
+	//背景スプライトの描画
+	Sprite::PreDraw(Sprite::kBlendModeNormal);
+
+	Sprite::PostDraw();
+
+	DirectXCommon::GetInstance()->ClearDepthBuffer();
+
 	//モデルの描画
 	Model::PreDraw();
 

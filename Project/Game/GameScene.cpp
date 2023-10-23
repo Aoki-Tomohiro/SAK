@@ -49,9 +49,9 @@ void GameScene::Initialize(GameManager* gameManager) {
 	transitionSprite_->SetColor(transitionColor_);
 	transitionSprite_->SetSize(Vector2{ 640.0f,360.0f });
 
-	//ポストプロセスの有効化
-	PostProcess::GetInstance()->SetIsPostProcessActive(true);
-	PostProcess::GetInstance()->SetIsBloomActive(true);
+	////ポストプロセスの有効化
+	//PostProcess::GetInstance()->SetIsPostProcessActive(true);
+	//PostProcess::GetInstance()->SetIsBloomActive(true);
 };
 
 void GameScene::Update(GameManager* gameManager) {
@@ -152,7 +152,18 @@ void GameScene::Update(GameManager* gameManager) {
 
 void GameScene::Draw(GameManager* gameManager) {
 
+#pragma region 背景スプライトの描画
+
+	//背景スプライトの描画
+	Sprite::PreDraw(Sprite::kBlendModeNormal);
+
+	Sprite::PostDraw();
+
+	DirectXCommon::GetInstance()->ClearDepthBuffer();
+
 	PostProcess::GetInstance()->PreDraw();
+
+#pragma endregion
 
 #pragma region モデルの描画
 
