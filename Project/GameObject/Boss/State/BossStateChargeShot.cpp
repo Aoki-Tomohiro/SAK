@@ -52,6 +52,7 @@ void BossStateChargeShot::Update(Boss* pBoss) {
 	//グローバル変数の適応
 	BossStateChargeShot::ApplyGlobalVariables();
 
+
 	if (chargeTimer_ < chargeTimerMax_)
 	{
 		chargeTimer_++;
