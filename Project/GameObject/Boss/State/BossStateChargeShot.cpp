@@ -103,11 +103,11 @@ void BossStateChargeShot::Update(Boss* pBoss) {
 	if (IsAttack_ == true && respownCount_ == 1)
 	{
 		chargeTimer_ = -1;
-		chargeShotSpeed_ += 0.001f;
+		chargeShotSpeed_ = -0.05f;
 		endTimer_--;
 
 		//ボスの移動
-		bossWorldTransform_.translation_.x -= chargeShotSpeed_;
+		bossWorldTransform_.translation_.x += chargeShotSpeed_;
 		pBoss->SetWorldTransform(bossWorldTransform_);
 	}
 
@@ -137,7 +137,7 @@ void BossStateChargeShot::Update(Boss* pBoss) {
 	if (IsAttack_ == true && respownCount_ == 2)
 	{
 		chargeTimer_ = -1;
-		chargeShotSpeed_ += 0.001f;
+		chargeShotSpeed_ = 0.05f;
 		endTimer_--;
 
 		//ボスの移動

@@ -16,6 +16,10 @@ Boss::~Boss()
 
 void Boss::Initialize() {
 
+	audio_ = Audio::GetInstance();
+
+	soundHandle_ = audio_->SoundLoadWave("Resources/Sounds/Boss_Damage.wav");
+
 	//モデルの作成
 	model_.reset(Model::CreateFromOBJ("Resources/Sphere", "sphere.obj"));
 
@@ -209,6 +213,7 @@ void Boss::ApplyGlobalVariables()
 
 void Boss::OnCollision(uint32_t collisionAttribute, float damage) {
 	if (weapon_->GetIsHit() == false) {
+		audio_->SoundPlayWave(soundHandle_, false);
 		Hp_ -= damage;
 		if (collisionAttribute & kCollisionAttributePlayer) {
 			hitMissileCount_ += weapon_->GetInvolvedMissileCount();
