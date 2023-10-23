@@ -1,6 +1,6 @@
 #include "GameTitleScene.h"
 #include "GameManager.h"
-#include "GameSelectScene.h"
+#include "GameScene.h"
 #include "Components/PostProcess.h"
 #include <cassert>
 #include <algorithm>
@@ -17,6 +17,8 @@ void GameTitleScene::Initialize(GameManager* gameManager)
 	audio_ = Audio::GetInstance();
 	//Inputのインスタンスを取得
 	input_ = Input::GetInstance();
+
+	soundHandle_ = audio_->SoundLoadWave("Resources/Sounds/Selection.wav");
 
 	playerModel_.reset(Model::CreateFromOBJ("Resources/Platform", "Platform.obj"));
 	weaponModel_.reset(Model::CreateFromOBJ("Resources/Head", "Head.obj"));
@@ -77,6 +79,11 @@ void GameTitleScene::Update(GameManager* gameManager)
 	{
 		if (isTransitionEnd_) {
 			isTransition_ = true;
+			if (soundCount_ == 0)
+			{
+				soundCount_ = 1;
+				audio_->SoundPlayWave(soundHandle_, false);
+			}
 		}
 	}
 
@@ -97,7 +104,7 @@ void GameTitleScene::Update(GameManager* gameManager)
 		transitionSprite_->SetColor(transitionColor_);
 
 		if (transitionColor_.w >= 1.0f) {
-			gameManager->ChangeScene(new GameSelectScene());
+			gameManager->ChangeScene(new GameScene);
 		}
 	}
 

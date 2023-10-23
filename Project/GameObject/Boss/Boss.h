@@ -1,4 +1,5 @@
 #pragma once
+#include "Components/Audio.h"
 #include "3D/Model/Model.h"
 #include "3D/Matrix/WorldTransform.h"
 #include "Utility/CollisionManager/Collider.h"
@@ -200,6 +201,10 @@ public:
 	void DrawParticle(const ViewProjection& viewProjection);
 
 private:
+	Audio* audio_ = nullptr;
+
+	uint32_t soundHandle_ = 0u;
+
 	//ボスのモデル(ダミー)
 	std::unique_ptr<Model> model_ = nullptr;
 
@@ -218,7 +223,7 @@ private:
 	//チャージショットのリスト
 	std::list<std::unique_ptr<ChargeShot>> chargeShot_{};
 	//最大体力
-	 const float maxHp_ = 100.0f;
+	const float maxHp_ = 100.0f;
 	//体力
 	float Hp_ = maxHp_;
 	//当たったミサイルの数

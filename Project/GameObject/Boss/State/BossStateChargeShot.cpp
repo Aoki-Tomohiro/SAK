@@ -180,7 +180,8 @@ void BossStateChargeShot::Update(Boss* pBoss) {
 	chargeWorldTransform_.UpdateMatrix();
 
 	//攻撃終了
-	if (endTimer_ <= 0)
+	if (IsAttack_ == true && respownCount_ == 1 && bossWorldTransform_.translation_.x <= -6.6f||
+		IsAttack_ == true && respownCount_ == 2 && bossWorldTransform_.translation_.x >= 6.6f)
 	{
 		pBoss->ChangeState(new BossStateNormal());
 	}
@@ -190,6 +191,7 @@ void BossStateChargeShot::Update(Boss* pBoss) {
 	ImGui::Text("bossTransform %f", bossWorldTransform_.translation_.x);
 	ImGui::Text("respownCount %d", respownCount_);
 	ImGui::Text("chargeTimer %d", chargeTimer_);
+	ImGui::Text("chargeShotSpeed %f", chargeShotSpeed_);
 	ImGui::Text("endTimer %d", endTimer_);
 	ImGui::End();
 }

@@ -3,6 +3,7 @@
 #include "3D/Matrix/WorldTransform.h"
 #include "2D/ImGuiManager.h"
 #include "Components/Input.h"
+#include "Components/Audio.h"
 #include "Utility/CollisionManager/Collider.h"
 #include "../UI.h"
 #include "3D/Model/ParticleModel.h"
@@ -54,6 +55,8 @@ public:
 private:
 	Input* input_ = nullptr;
 
+	Audio* audio_ = nullptr;
+
 	std::unique_ptr<Model> weaponModelDummy_ = nullptr;
 
 	std::unique_ptr<Model> weaponModel_ = nullptr;
@@ -64,6 +67,8 @@ private:
 	WorldTransform involvedMissileWorldTransform_;
 
 	uint32_t textureHandle_ = 0u;
+
+	uint32_t soundHandle_[4] = {};
 
 	//武器の横移動スピード
 	float weaponMoveSpeed_ = 0.05f;
@@ -89,8 +94,6 @@ private:
 	bool IsCharge_ = false;
 	bool IsAttack_ = false;
 	bool IsCoolDown_ = false;
-
-	
   
 	bool IsHit_ = false;
 
