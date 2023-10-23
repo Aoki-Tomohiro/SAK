@@ -30,7 +30,11 @@ void GameClearScene::Update(GameManager* gameManager)
 	{
 		if (isTransitionEnd_) {
 			isTransition_ = true;
-			audio_->SoundPlayWave(soundHandle_, false);
+			if (soundCount_ == 0)
+			{
+				soundCount_ = 1;
+				audio_->SoundPlayWave(soundHandle_, false);
+			}
 		}
 	}
 

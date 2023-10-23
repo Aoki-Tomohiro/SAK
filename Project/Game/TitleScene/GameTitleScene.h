@@ -68,6 +68,8 @@ private:
 	//サウンド
 	uint32_t soundHandle_ = 0u;
 
+	int soundCount_ = 0;
+
 	//モデル
 	std::unique_ptr<Model> playerModel_ = nullptr;
 	std::unique_ptr<Model> weaponModel_ = nullptr;
