@@ -64,7 +64,10 @@ private:
 	std::list<std::unique_ptr<ParticleEmitter>> particleEmitters_{};
 	//ビュープロジェクション
 	ViewProjection viewProjection_{};
-  
+
+	//サウンド
+	uint32_t soundHandle_ = 0u;
+
 	//モデル
 	std::unique_ptr<Model> playerModel_ = nullptr;
 	std::unique_ptr<Model> weaponModel_ = nullptr;

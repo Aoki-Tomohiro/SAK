@@ -15,6 +15,9 @@ void GameClearScene::Initialize(GameManager* gameManager)
 	audio_ = Audio::GetInstance();
 	//Inputのインスタンスを取得
 	input_ = Input::GetInstance();
+
+	soundHandle_ = audio_->SoundLoadWave("Resources/Sounds/Selection.wav");
+
 	//スプライトの生成
 	transitionSprite_.reset(Sprite::Create(transitionTextureHandle_, { 0.0f,0.0f }));
 	transitionSprite_->SetColor(transitionColor_);
@@ -27,6 +30,7 @@ void GameClearScene::Update(GameManager* gameManager)
 	{
 		if (isTransitionEnd_) {
 			isTransition_ = true;
+			audio_->SoundPlayWave(soundHandle_, false);
 		}
 	}
 

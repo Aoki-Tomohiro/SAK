@@ -20,6 +20,8 @@ void GameTitleScene::Initialize(GameManager* gameManager)
 	//パーティクルモデルの作成
 	particleModel_.reset(ParticleModel::CreateFromOBJ("Resources/particlePop", "particlePop.obj"));
 
+	soundHandle_ = audio_->SoundLoadWave("Resources/Sounds/Selection.wav");
+
 	playerModel_.reset(Model::CreateFromOBJ("Resources/Platform", "Platform.obj"));
 	weaponModel_.reset(Model::CreateFromOBJ("Resources/Head", "Head.obj"));
 
@@ -68,6 +70,7 @@ void GameTitleScene::Update(GameManager* gameManager)
 	{
 		if (isTransitionEnd_) {
 			isTransition_ = true;
+			audio_->SoundPlayWave(soundHandle_, false);
 		}
 	}
 

@@ -26,6 +26,8 @@ void Weapon::Initialize()
 
 	input_ = Input::GetInstance();
 
+	audio_ = Audio::GetInstance();
+
 	//Weapon
 	weaponWorldTransform_.translation_.x = 0.0f;
 	weaponWorldTransform_.translation_.y = 1.8f;
@@ -105,6 +107,11 @@ void Weapon::Initialize()
 
 		heartUI_[i].sprite_ = Sprite::Create(heartUI_[i].textureHandle_, heartUI_[i].position_);
 	}
+
+	soundHandle_[0] = audio_->SoundLoadWave("Resources/Sounds/Misslie_Sasaru.wav");
+	soundHandle_[1] = audio_->SoundLoadWave("Resources/Sounds/Player_Damage.wav");
+	soundHandle_[2] = audio_->SoundLoadWave("Resources/Sounds/Head_Charge.wav");
+	soundHandle_[3] = audio_->SoundLoadWave("Resources/Sounds/Head_Attack.wav");
 }
 
 void Weapon::Update()
@@ -151,6 +158,7 @@ void Weapon::Update()
 	{
 		if (pushCount_ < 10)
 		{
+			audio_->SoundPlayWave(soundHandle_[3], false);
 			IsCharge_ = false;
 			IsAttack_ = true;
 			pushCount_ = 0;
@@ -165,6 +173,7 @@ void Weapon::Update()
 
 	if (IsCharge_ == true)
 	{
+		audio_->SoundPlayWave(soundHandle_[2], false);
 		chargeCount_++;
 		weaponWorldTransform_.translation_.y -= chargeSpeed_;
 
@@ -341,6 +350,7 @@ void Weapon::OnCollision(uint32_t collisionAttribute, float damage)
 			//衝突相手がミサイルの場合カウントを増やす
 			if (collisionAttribute & kCollisionAttributeMissile) 
 			{
+				audio_->SoundPlayWave(soundHandle_[0], false);
 				isInvolvedMissile_ = true;
 				if (involvedCount_ < 5) {
 					involvedCount_++;
@@ -357,6 +367,7 @@ void Weapon::OnCollision(uint32_t collisionAttribute, float damage)
 				//無敵状態でなければダメージを食らう
 				if (invincibleFlag_ == false)
 				{
+					audio_->SoundPlayWave(soundHandle_[1], false);
 					invincibleFlag_ = true;
 					invincibleTimer_ = InvincibleTime;
 					Hp_ -= int(damage);
@@ -369,6 +380,7 @@ void Weapon::OnCollision(uint32_t collisionAttribute, float damage)
 			//無敵状態でなければダメージを食らう
 			if (invincibleFlag_ == false)
 			{
+				audio_->SoundPlayWave(soundHandle_[1], false);
 				invincibleFlag_ = true;
 				invincibleTimer_ = InvincibleTime;
 				Hp_ -= int(damage);

@@ -15,6 +15,8 @@ void GameOverScene::Initialize(GameManager* gameManager)
 	audio_ = Audio::GetInstance();
 	//Inputのインスタンスを取得
 	input_ = Input::GetInstance();
+
+	soundHandle_ = audio_->SoundLoadWave("Resources/Sounds/Selection.wav");
   
 	playerModel_.reset(Model::CreateFromOBJ("Resources/Platform", "Platform.obj"));
 	weaponModel_.reset(Model::CreateFromOBJ("Resources/Head", "Head.obj"));
@@ -53,6 +55,7 @@ void GameOverScene::Update(GameManager* gameManager)
 	{
 		if (isTransitionEnd_) {
 			isTransition_ = true;
+			audio_->SoundPlayWave(soundHandle_, false);
 		}
 	}
 
