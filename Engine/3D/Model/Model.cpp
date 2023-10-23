@@ -176,6 +176,8 @@ void Model::Draw(const WorldTransform& worldTransform, const ViewProjection& vie
 	sCommandList_->SetGraphicsRootConstantBufferView(UINT(RootParameterIndex::WorldlTransform), worldTransform.constBuff_->GetGPUVirtualAddress());
 	//ViewProjection用のCBufferの場所を設定
 	sCommandList_->SetGraphicsRootConstantBufferView(UINT(RootParameterIndex::ViewProjection), viewProjection.constBuff_->GetGPUVirtualAddress());
+	//DescriptorHeapを設定
+	TextureManager::GetInstance()->SetGraphicsDescriptorHeap();
 	//DescriptorTableを設定
 	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(UINT(RootParameterIndex::Texture), textureHandle_);
 	//DirectionalLightを設定
@@ -201,6 +203,8 @@ void Model::Draw(const WorldTransform& worldTransform, const ViewProjection& vie
 	sCommandList_->SetGraphicsRootConstantBufferView(UINT(RootParameterIndex::WorldlTransform), worldTransform.constBuff_->GetGPUVirtualAddress());
 	//ViewProjection用のCBufferの場所を設定
 	sCommandList_->SetGraphicsRootConstantBufferView(UINT(RootParameterIndex::ViewProjection), viewProjection.constBuff_->GetGPUVirtualAddress());
+	//DescriptorHeapを設定
+	TextureManager::GetInstance()->SetGraphicsDescriptorHeap();
 	//DescriptorTableを設定
 	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(UINT(RootParameterIndex::Texture), textureHandle);
 	//DirectionalLightを設定

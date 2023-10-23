@@ -1,6 +1,7 @@
 #include "GameTitleScene.h"
 #include "GameManager.h"
 #include "GameSelectScene.h"
+#include "Components/PostProcess.h"
 #include <cassert>
 #include <algorithm>
 
@@ -16,6 +17,8 @@ void GameTitleScene::Initialize(GameManager* gameManager)
 	audio_ = Audio::GetInstance();
 	//Inputのインスタンスを取得
 	input_ = Input::GetInstance();
+	//パーティクルモデルの作成
+	particleModel_.reset(ParticleModel::CreateFromOBJ("Resources/particlePop", "particlePop.obj"));
 
 	soundHandle_ = audio_->SoundLoadWave("Resources/Sounds/Selection.wav");
 
@@ -92,6 +95,40 @@ void GameTitleScene::Update(GameManager* gameManager)
 		}
 	}
 
+	if (input_->IsPushKeyEnter(DIK_P)) {
+    //設定したい項目だけ.Setを呼び出す
+		ParticleEmitter* newParticleEmitter = EmitterBuilder()
+			.SetModel(particleModel_.get())
+			.SetParticleType(ParticleEmitter::ParticleType::kScale)
+			.SetMaxInstance(100)
+			.SetTranslation({ 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f })
+			.SetRotation({ 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f })
+			.SetScale({ 0.1f, 0.1f,0.1f }, { 0.15f ,0.15f ,0.15f })
+			.SetAzimuth(0.0f, 360.0f)
+			.SetElevation(90.0f, 90.0f)
+			.SetVelocity({ 0.02f ,0.02f ,0.02f }, { 0.04f ,0.04f ,0.04f })
+			.SetColor({ 1.0f ,1.0f ,1.0f ,1.0f }, { 1.0f ,1.0f ,1.0f ,1.0f })
+			.SetLifeTime(0.1f, 1.0f)
+			.SetCount(100)
+			.SetFrequency(4.0f)
+			.SetDeleteTime(3.0f)
+			.Build();
+		particleEmitters_.push_back(std::unique_ptr<ParticleEmitter>(newParticleEmitter));
+	}
+
+	//パーティクルエミッターデリーと
+	particleEmitters_.remove_if([](std::unique_ptr<ParticleEmitter>& particleEmitter) {
+		if (particleEmitter->IsDead()) {
+			particleEmitter.reset();
+			return true;
+		}
+		return false;
+		}
+	);
+
+	for (std::unique_ptr<ParticleEmitter>& particleEmitter : particleEmitters_) {
+		particleEmitter->Update();
+	}
 	playerWorldTransform_.UpdateMatrix();
 	weaponWorldTransform_.UpdateMatrix();
 
@@ -105,6 +142,8 @@ void GameTitleScene::Update(GameManager* gameManager)
 
 void GameTitleScene::Draw(GameManager* gameManager)
 {
+	PostProcess::GetInstance()->PreDraw();
+
 	//モデルの描画
 	Model::PreDraw();
 
@@ -116,6 +155,18 @@ void GameTitleScene::Draw(GameManager* gameManager)
 	weaponModel_->Draw(weaponWorldTransform_, viewProjection_);
 
 	Model::PostDraw();
+
+	//パーティクルの描画
+	ParticleModel::PreDraw();
+
+	//エミッターの描画
+	for (std::unique_ptr<ParticleEmitter>& particleEmitter : particleEmitters_) {
+		particleEmitter->Draw(viewProjection_);
+	}
+
+	ParticleModel::PostDraw();
+
+	PostProcess::GetInstance()->PostDraw();
 
 	//スプライトの描画処理
 	Sprite::PreDraw(Sprite::kBlendModeNormal);
