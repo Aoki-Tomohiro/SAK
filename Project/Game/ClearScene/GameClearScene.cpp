@@ -62,8 +62,6 @@ void GameClearScene::Update(GameManager* gameManager)
 		return;
 	}
 
-	if (joyState_.Gamepad.wButtons & XINPUT_GAMEPAD_A)
-
 	//背景の更新
 	backGround_->Update();
 
@@ -109,8 +107,7 @@ void GameClearScene::Update(GameManager* gameManager)
 	playerWorldTransform_.scale_.x = 1.0f + 0.5f * (1.0f - ratio);
 	playerWorldTransform_.scale_.y = 1.0f + 0.5f * ratio;
 
-	if (input_->IsPushKeyEnter(DIK_SPACE))
-
+	if (joyState_.Gamepad.wButtons & XINPUT_GAMEPAD_A)
 	{
 		if (isTransitionEnd_) {
 			isTransition_ = true;

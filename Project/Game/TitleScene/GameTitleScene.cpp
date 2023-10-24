@@ -72,8 +72,6 @@ void GameTitleScene::Update(GameManager* gameManager)
 		return;
 	}
 
-	if (joyState_.Gamepad.wButtons & XINPUT_GAMEPAD_A)
-
 	//背景の更新
 	backGround_->Update();
 
@@ -93,8 +91,7 @@ void GameTitleScene::Update(GameManager* gameManager)
 	}
 
 
-	if (input_->IsPushKeyEnter(DIK_SPACE))
-
+	if (joyState_.Gamepad.wButtons & XINPUT_GAMEPAD_A)
 	{
 		if (isTransitionEnd_) {
 			isTransition_ = true;
