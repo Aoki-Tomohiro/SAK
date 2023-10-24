@@ -4,7 +4,8 @@ int ChargeShot::chargeShotEndTime = 125;
 
 void ChargeShot::Initialize(Vector3 position, float chargeShotpeed) {
 	//モデルの作成
-	model_.reset(Model::CreateFromOBJ("Resources/Sphere", "sphere.obj"));
+	model_.reset(Model::CreateFromOBJ("Resources/ChargeBeam", "ChargeBeam.obj"));
+	model_->GetDirectionalLight()->SetEnableLighting(false);
 	//ワールドトランスフォームの初期化
 	worldTransform_.translation_ = position;
 	worldTransform_.translation_.y = -1.0f;

@@ -5,7 +5,8 @@ int Laser::deadTime = 60;
 void Laser::Initialize(const Vector3& position, const Vector3& scale) {
 
 	//モデルの作成
-	model_.reset(Model::CreateFromOBJ("Resources/Cube", "Cube.obj"));
+	model_.reset(Model::CreateFromOBJ("Resources/Laser", "Laser.obj"));
+	model_->GetDirectionalLight()->SetEnableLighting(false);
 	//ワールドトランスフォームの初期化
 	worldTransform_.translation_ = position;
 	worldTransform_.scale_ = scale;
