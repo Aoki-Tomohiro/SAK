@@ -196,9 +196,13 @@ void Weapon::Update()
 
 	if (IsCharge_ == true)
 	{
-		audio_->SoundPlayWave(soundHandle_[2], false);
 		chargeCount_++;
 		weaponWorldTransform_.translation_.y -= chargeSpeed_;
+
+		if (weaponWorldTransform_.translation_.y > -2.3f)
+		{
+			audio_->SoundPlayWave(soundHandle_[2], false);
+		}
 
 		if (weaponWorldTransform_.translation_.y <= -2.3f)
 		{

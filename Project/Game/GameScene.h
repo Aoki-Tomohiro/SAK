@@ -72,6 +72,9 @@ private:
 	//テクスチャ
 	uint32_t textureHandle_ = 0;
 
+	//サウンド
+	uint32_t soundHandle_ = 0u;
+
 	//スプライト
 	std::unique_ptr<Sprite> sprite1_ = nullptr;
 	std::unique_ptr<Sprite> sprite2_ = nullptr;

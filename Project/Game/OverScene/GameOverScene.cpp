@@ -18,6 +18,7 @@ void GameOverScene::Initialize(GameManager* gameManager)
 	input_ = Input::GetInstance();
 
 	soundHandle_ = audio_->SoundLoadWave("Resources/Sounds/Selection.wav");
+	overSoundHandle_ = audio_->SoundLoadWave("Resources/Sounds/GameOver.wav");
   
 	playerModel_.reset(Model::CreateFromOBJ("Resources/Platform", "Platform.obj"));
 	weaponModel_.reset(Model::CreateFromOBJ("Resources/Head", "Head.obj"));
@@ -40,6 +41,8 @@ void GameOverScene::Initialize(GameManager* gameManager)
 	backGround_->Initialize();
 
 	viewProjection_.UpdateMatrix();
+
+	audio_->SoundPlayWave(overSoundHandle_, true);
   
 	//スプライトの生成
 	transitionSprite_.reset(Sprite::Create(transitionTextureHandle_, { 0.0f,0.0f }));
@@ -66,6 +69,7 @@ void GameOverScene::Update(GameManager* gameManager)
 
 	if (input_->IsPushKeyEnter(DIK_T))
 	{
+		audio_->StopAudio(overSoundHandle_);
 		gameManager->ChangeScene(new GameTitleScene());
 	}
 
@@ -86,6 +90,7 @@ void GameOverScene::Update(GameManager* gameManager)
 		transitionSprite_->SetColor(transitionColor_);
 
 		if (transitionColor_.w >= 1.0f) {
+			audio_->StopAudio(overSoundHandle_);
 			gameManager->ChangeScene(new GameScene);
 		}
 	}

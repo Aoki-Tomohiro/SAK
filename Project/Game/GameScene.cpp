@@ -49,6 +49,9 @@ void GameScene::Initialize(GameManager* gameManager) {
 	transitionSprite_->SetColor(transitionColor_);
 	transitionSprite_->SetSize(Vector2{ 640.0f,360.0f });
 
+	soundHandle_ = audio_->SoundLoadWave("Resources/Sounds/GameScene.wav");
+	audio_->SoundPlayWave(soundHandle_, true);
+
 	//ポストプロセスの有効化
 	PostProcess::GetInstance()->SetIsPostProcessActive(true);
 	PostProcess::GetInstance()->SetIsBloomActive(true);
@@ -109,21 +112,23 @@ void GameScene::Update(GameManager* gameManager) {
 		}
 	}
 
-	//if (input_->IsPushKeyEnter(DIK_1)/* || boss_->GetHP() <= 0.0f*/)
-	//{
-	//	if (isTransition_ == false && isTransitionEnd_ == true) {
-	//		isTransition_ = true;
-	//		nextScene_ = NextScene::GAMECLEAR;
-	//	}
-	//}
+	if (input_->IsPushKeyEnter(DIK_1)/* || boss_->GetHP() <= 0.0f*/)
+	{
+		if (isTransition_ == false && isTransitionEnd_ == true) {
+			isTransition_ = true;
+			audio_->StopAudio(soundHandle_);
+			nextScene_ = NextScene::GAMECLEAR;
+		}
+	}
 
-	//if (input_->IsPushKeyEnter(DIK_2)/* || weapon_->GetHP() <= 0.0f*/)
-	//{
-	//	if (isTransition_ == false && isTransitionEnd_ == true) {
-	//		isTransition_ = true;
-	//		nextScene_ = NextScene::GAMEOVER;
-	//	}
-	//}
+	if (input_->IsPushKeyEnter(DIK_2)/* || weapon_->GetHP() <= 0.0f*/)
+	{
+		if (isTransition_ == false && isTransitionEnd_ == true) {
+			isTransition_ = true;
+			audio_->StopAudio(soundHandle_);
+			nextScene_ = NextScene::GAMEOVER;
+		}
+	}
 
 	if (isTransition_) {
 		transitionTimer_ += 1.0f / kTransitionTime;

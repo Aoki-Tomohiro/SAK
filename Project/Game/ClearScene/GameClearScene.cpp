@@ -17,6 +17,7 @@ void GameClearScene::Initialize(GameManager* gameManager)
 	input_ = Input::GetInstance();
 
 	soundHandle_ = audio_->SoundLoadWave("Resources/Sounds/Selection.wav");
+	clearSoundHandle_ = audio_->SoundLoadWave("Resources/Sounds/Clear.wav");
 
 	playerModel_.reset(Model::CreateFromOBJ("Resources/Platform", "Platform.obj"));
 	weaponModel_.reset(Model::CreateFromOBJ("Resources/Head", "Head.obj"));
@@ -38,6 +39,7 @@ void GameClearScene::Initialize(GameManager* gameManager)
 
 	viewProjection_.UpdateMatrix();
 
+	audio_->SoundPlayWave(clearSoundHandle_, true);
 
 	//スプライトの生成
 	transitionSprite_.reset(Sprite::Create(transitionTextureHandle_, { 0.0f,0.0f }));
@@ -121,6 +123,7 @@ void GameClearScene::Update(GameManager* gameManager)
 		transitionSprite_->SetColor(transitionColor_);
 
 		if (transitionColor_.w >= 1.0f) {
+			audio_->StopAudio(clearSoundHandle_);
 			gameManager->ChangeScene(new GameTitleScene());
 		}
 	}
