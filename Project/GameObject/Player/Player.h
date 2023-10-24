@@ -5,10 +5,15 @@
 #include "Components/Input.h"
 #include "Utility/CollisionManager/Collider.h"
 #include "../GameObject/Weapon/Weapon.h"
+#include "../UI.h"
+#include "3D/Model/ParticleModel.h"
+#include "3D/Particle/ParticleSystem.h"
 
 class Player
 {
 public:
+
+	~Player();
 
 	void Initialize(Weapon* weapon);
 
@@ -19,6 +24,12 @@ public:
 	void ApplyGlobalVariables();
 
 	void ModelMotion();
+
+	void DrawSprite();
+
+	void StartAnimation();
+  
+	void DrawParticle(const ViewProjection& viewProjection);
 
 private:
 	Input* input_ = nullptr;
@@ -72,6 +83,15 @@ private:
 	Vector3 NormalScale_;
 
 	platformMotionMoveStruct platformMotionMove_;
+
+	UIStruct tutorialUI_;
+
+	float tutorialSpace = 16.0f;
+	Vector2 tutorialSpriteSize = {131.0f * 2.0f,36.0f * 2.0f };
+
+	//パーティクル
+	std::unique_ptr<ParticleModel> particleModel_ = nullptr;
+	std::unique_ptr<ParticleSystem> particleSystem_ = nullptr;
 };
 
 

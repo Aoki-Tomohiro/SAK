@@ -7,6 +7,7 @@
 #include "3D/DebugCamera/DebugCamera.h"
 
 #include "3D/Model/Model.h"
+#include "3D/Model/ParticleModel.h"
 #include "2D/Sprite.h"
 #include "3D/Matrix/WorldTransform.h"
 #include "3D/Matrix/ViewProjection.h"
@@ -71,6 +72,9 @@ private:
 	//テクスチャ
 	uint32_t textureHandle_ = 0;
 
+	//サウンド
+	uint32_t soundHandle_ = 0u;
+
 	//スプライト
 	std::unique_ptr<Sprite> sprite1_ = nullptr;
 	std::unique_ptr<Sprite> sprite2_ = nullptr;
@@ -114,4 +118,7 @@ private:
 
 	//次のシーン
 	NextScene nextScene_ = NextScene::GAMECLEAR;
+
+	//アニメーションのフラグ
+	bool isAnimationEnd_ = false;
 };

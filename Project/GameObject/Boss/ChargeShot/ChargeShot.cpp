@@ -1,10 +1,11 @@
 #include "ChargeShot.h"
 
-int ChargeShot::chargeShotEndTime = 240;
+int ChargeShot::chargeShotEndTime = 170;
 
 void ChargeShot::Initialize(Vector3 position, float chargeShotpeed) {
 	//モデルの作成
-	model_.reset(Model::CreateFromOBJ("Resources/Sphere", "sphere.obj"));
+	model_.reset(Model::CreateFromOBJ("Resources/ChargeBeam", "ChargeBeam.obj"));
+	model_->GetDirectionalLight()->SetEnableLighting(false);
 	//ワールドトランスフォームの初期化
 	worldTransform_.translation_ = position;
 	worldTransform_.translation_.y = -1.0f;
@@ -28,6 +29,22 @@ void ChargeShot::Initialize(Vector3 position, float chargeShotpeed) {
 void ChargeShot::Update() {
 	worldTransform_.translation_.x -= chargeShotSpeed_;
 
+	ParticleEmitter* newParticleEmitter = EmitterBuilder()
+			.SetParticleType(ParticleEmitter::ParticleType::kScale)
+			.SetTranslation({ worldTransform_.translation_.x,-4.0f,worldTransform_.translation_.z })
+			.SetArea({ 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f })
+			.SetRotation({ 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f })
+			.SetScale({ 0.2f, 0.2f,0.2f }, { 0.25f ,0.25f ,0.25f })
+			.SetAzimuth(0.0f, 360.0f)
+			.SetElevation(0.0f, 0.0f)
+			.SetVelocity({ 0.02f ,0.02f ,0.02f }, { 0.04f ,0.04f ,0.04f })
+			.SetColor({ 1.0f ,0.0f ,0.0f ,1.0f }, { 1.0f ,0.0f ,0.0f ,1.0f })
+			.SetLifeTime(0.1f, 1.0f)
+			.SetCount(100)
+			.SetFrequency(4.0f)
+			.SetDeleteTime(3.0f)
+			.Build();
+		particleSystem_->AddParticleEmitter(newParticleEmitter);
 
 	//ワールドトランスフォームの更新
 	worldTransform_.UpdateMatrix();

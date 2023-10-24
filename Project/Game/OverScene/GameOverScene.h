@@ -65,6 +65,12 @@ private:
 	//テクスチャ
 	uint32_t textureHandle_ = 0;
 
+	//サウンド
+	uint32_t soundHandle_ = 0u;
+	uint32_t overSoundHandle_ = 0u;
+
+	int soundCount_ = 0;
+
 	//モデル
 	std::unique_ptr<Model> playerModel_ = nullptr;
 	std::unique_ptr<Model> weaponModel_ = nullptr;
@@ -77,6 +83,14 @@ private:
 
 	std::unique_ptr<BackGround> backGround_ = nullptr;
 
+	//まけのスプライト
+	std::unique_ptr<Sprite>  loseSprite_ = nullptr;
+	//まけのテクスチャ
+	uint32_t  loseTextureHandle_ = 0;
+	//プレスAのスプライト
+	std::unique_ptr<Sprite>  pressASprite_ = nullptr;
+	//プレスAのテクスチャ
+	uint32_t pressATextureHandle_ = 0;
 	//トランジション用のスプライト
 	std::unique_ptr<Sprite> transitionSprite_;
 	//トランジションのテクスチャ

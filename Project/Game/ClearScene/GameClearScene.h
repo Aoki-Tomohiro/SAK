@@ -10,6 +10,7 @@
 #include "2D/Sprite.h"
 #include "3D/Matrix/WorldTransform.h"
 #include "3D/Matrix/ViewProjection.h"
+#include "../BackGround.h"
 
 #include <memory>
 
@@ -53,6 +54,44 @@ private:
 	Input* input_ = nullptr;
 
 	XINPUT_STATE joyState_;
+
+	//サウンド
+	uint32_t soundHandle_ = 0u;
+	uint32_t clearSoundHandle_ = 0u;
+
+	int soundCount_ = 0;
+
+	//カメラ
+	ViewProjection viewProjection_{};
+
+	//モデル
+	std::unique_ptr<Model> playerModel_ = nullptr;
+	std::unique_ptr<Model> weaponModel_ = nullptr;
+	std::unique_ptr<Model> bossModel_ = nullptr;
+
+	//ワールドトランスフォーム
+	WorldTransform playerWorldTransform_{};
+	WorldTransform weaponWorldTransform_{};
+	WorldTransform bossWorldTransform_{};
+
+	std::unique_ptr<BackGround> backGround_ = nullptr;
+
+	bool isPush = false;
+
+	float plusMax = 5.0f;;
+	float plus = 0.0f;;
+
+	int t = 0;
+	int tMax = 15;
+
+	//かちのスプライト
+	std::unique_ptr<Sprite>  winSprite_ = nullptr;
+	//かちのテクスチャ
+	uint32_t  winTextureHandle_ = 0;
+	//プレスAのスプライト
+	std::unique_ptr<Sprite>  pressASprite_ = nullptr;
+	//プレスAのテクスチャ
+	uint32_t pressATextureHandle_ = 0;
 
 	//トランジション用のスプライト
 	std::unique_ptr<Sprite> transitionSprite_;

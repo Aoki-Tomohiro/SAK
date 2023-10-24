@@ -32,7 +32,8 @@ void BossStateLaserAttack::Initialize(Boss* pBoss) {
 	Vector4 warningColor = { 1.0f,0.0f,0.0f,0.6f };
 	bool isLighting = false;
 	for (int i = 0; i < warningModels_.size(); i++) {
-		warningModels_[i].reset(Model::CreateFromOBJ("Resources/Cube", "Cube.obj"));
+		warningModels_[i].reset(Model::CreateFromOBJ("Resources/Laser", "Laser.obj"));
+		warningModels_[i]->GetDirectionalLight()->SetEnableLighting(false);
 		warningModels_[i]->GetMaterial()->SetColor(warningColor);
 		warningModels_[i]->GetDirectionalLight()->SetEnableLighting(isLighting);
 	}
@@ -75,7 +76,9 @@ void BossStateLaserAttack::Update(Boss* pBoss) {
 				warningWorldTransforms_[i].translation_.y,
 				warningWorldTransforms_[i].translation_.z,
 			};
+			laserScale_.z = 1.0f;
 			lasers[i]->Initialize(pos, laserScale_);
+			lasers[i]->SetParticleSystem(pBoss->GetParticleSystem());
 			pBoss->AddLaser(lasers[i]);
 		}
 	}

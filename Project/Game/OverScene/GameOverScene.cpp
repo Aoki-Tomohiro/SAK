@@ -1,6 +1,7 @@
 #include "GameOverScene.h"
 #include "GameManager.h"
 #include "GameTitleScene.h"
+#include "GameScene.h"
 #include <cassert>
 
 GameOverScene::GameOverScene() {};
@@ -15,20 +16,23 @@ void GameOverScene::Initialize(GameManager* gameManager)
 	audio_ = Audio::GetInstance();
 	//Inputのインスタンスを取得
 	input_ = Input::GetInstance();
+
+	soundHandle_ = audio_->SoundLoadWave("Resources/Sounds/Selection.wav");
+	overSoundHandle_ = audio_->SoundLoadWave("Resources/Sounds/GameOver.wav");
   
 	playerModel_.reset(Model::CreateFromOBJ("Resources/Platform", "Platform.obj"));
 	weaponModel_.reset(Model::CreateFromOBJ("Resources/Head", "Head.obj"));
 	bossModel_.reset(Model::CreateFromOBJ("Resources/Boss", "Boss.obj"));
 
-	playerWorldTransform_.translation_ = { -4.5f,-2.0f,9.0f };
+	playerWorldTransform_.translation_ = { -4.5f,-3.2f,0.0f };
 	playerWorldTransform_.rotation_.z = 1.6f;
-	playerWorldTransform_.scale_ = { 1.5f,1.5f,1.5f };
+	playerWorldTransform_.scale_ = { 1.0f,1.0f,1.0f };
 
-	weaponWorldTransform_.translation_ = { -5.5f,-2.0f,9.0f };
+	weaponWorldTransform_.translation_ = { -5.5f,-3.2f,0.0f };
 	weaponWorldTransform_.rotation_.z = 1.6f;
-	weaponWorldTransform_.scale_ = { 1.5f,1.5f,1.5f };
+	playerWorldTransform_.scale_ = { 1.0f,1.0f,1.0f };
 
-	bossWorldTransform_.translation_ = { 4.5f,-2.2f,0.0f };
+	bossWorldTransform_.translation_ = { 3.5f,-1.2f,-3.0f };
 	bossWorldTransform_.rotation_.z = 0.6f;
 	bossWorldTransform_.scale_ = { 1.5f,1.5f,1.5f };
 
@@ -37,8 +41,17 @@ void GameOverScene::Initialize(GameManager* gameManager)
 	backGround_->Initialize();
 
 	viewProjection_.UpdateMatrix();
+
+	audio_->SoundPlayWave(overSoundHandle_, true);
   
 	//スプライトの生成
+	loseTextureHandle_ = TextureManager::Load("Resources/Images/lose.png");
+	loseSprite_.reset(Sprite::Create(loseTextureHandle_, { 0.0f,0.0f }));
+
+	pressATextureHandle_ = TextureManager::Load("Resources/Images/PressAbutton.png");
+	pressASprite_.reset(Sprite::Create(pressATextureHandle_,
+		{ WinApp::GetInstance()->kClientWidth * 0.5f - 508.0f * 0.5f , 550.0f }));
+
 	transitionSprite_.reset(Sprite::Create(transitionTextureHandle_, { 0.0f,0.0f }));
 	transitionSprite_->SetColor(transitionColor_);
 	transitionSprite_->SetSize(Vector2{ 640.0f,360.0f });
@@ -58,7 +71,18 @@ void GameOverScene::Update(GameManager* gameManager)
 	{
 		if (isTransitionEnd_) {
 			isTransition_ = true;
+			if (soundCount_ == 0)
+			{
+				soundCount_ = 1;
+				audio_->SoundPlayWave(soundHandle_, false);
+			}
 		}
+	}
+
+	if (input_->IsPushKeyEnter(DIK_T))
+	{
+		audio_->StopAudio(overSoundHandle_);
+		gameManager->ChangeScene(new GameTitleScene());
 	}
 
 	if (isTransitionEnd_ == false) {
@@ -78,12 +102,14 @@ void GameOverScene::Update(GameManager* gameManager)
 		transitionSprite_->SetColor(transitionColor_);
 
 		if (transitionColor_.w >= 1.0f) {
-			gameManager->ChangeScene(new GameTitleScene());
+			audio_->StopAudio(overSoundHandle_);
+			gameManager->ChangeScene(new GameScene);
 		}
 	}
 
 	ImGui::Begin("Game Over");
-	ImGui::Text("push SPACE : Title");
+	ImGui::Text("push SPACE : GameScene");
+	ImGui::Text("push T : TitleScene");
 	ImGui::End();
 
 	playerWorldTransform_.UpdateMatrix();
@@ -95,6 +121,22 @@ void GameOverScene::Update(GameManager* gameManager)
 
 void GameOverScene::Draw(GameManager* gameManager)
 {
+	PostProcess::GetInstance()->PreDraw();
+
+#pragma region 背景スプライトの描画
+
+	//背景スプライトの描画
+	Sprite::PreDraw(Sprite::kBlendModeNormal);
+
+	Sprite::PostDraw();
+
+#pragma endregion
+
+	//深度バッファをクリア
+	DirectXCommon::GetInstance()->ClearDepthBuffer();
+
+#pragma region モデルの描画
+
 	//モデルの描画
 	Model::PreDraw();
 
@@ -109,10 +151,32 @@ void GameOverScene::Draw(GameManager* gameManager)
 
 	Model::PostDraw();
 
+#pragma endregion
+
+#pragma region パーティクルの描画
+
+	//パーティクルモデルの描画
+	ParticleModel::PreDraw();
+
+	ParticleModel::PostDraw();
+
+#pragma endregion
+
+	PostProcess::GetInstance()->PostDraw();
+
+#pragma region 前景スプライトの描画
+
 	//スプライトの描画処理
 	Sprite::PreDraw(Sprite::kBlendModeNormal);
+
+	loseSprite_->Draw();
+
+	pressASprite_->Draw();
 
 	transitionSprite_->Draw();
 
 	Sprite::PostDraw();
+
+#pragma endregion
+
 };
