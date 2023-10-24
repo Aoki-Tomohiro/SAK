@@ -5,6 +5,7 @@
 #include <list>
 #include <memory>
 #include <numbers>
+#include <string>
 
 /// <summary>
 /// パーティクルエミッター
@@ -52,7 +53,30 @@ public:
 	/// 死亡フラグを取得
 	/// </summary>
 	/// <returns></returns>
-	bool IsDead() { return isDead_; };
+	bool GetIsDead() { return isDead_; };
+
+	/// <summary>
+	/// 死亡フラグを立てる
+	/// </summary>
+	void SetIsDead() { isDead_ = true; };
+
+	/// <summary>
+	/// エミッターの名前を取得
+	/// </summary>
+	/// <returns></returns>
+	const std::string& GetName() { return name_; };
+
+	/// <summary>
+	/// 座標を設定
+	/// </summary>
+	/// <param name="translation"></param>
+	void SetTranslation(const Vector3& translation) { popTranslation_ = translation; };
+
+	/// <summary>
+	/// 発生数を設定
+	/// </summary>
+	/// <param name="count"></param>
+	void SetPopCount(uint32_t count) { popCount_ = count; };
 
 private:
 	/// <summary>
@@ -63,6 +87,8 @@ private:
 private:
 	//パーティクルのリスト
 	std::list<std::unique_ptr<BaseParticle>> particles_{};
+	//エミッターの名前
+	std::string name_ = "nameless";
 	//パーティクルのタイプ
 	ParticleType particleType_ = ParticleType::kNormal;
 	//パーティクルの発生位置

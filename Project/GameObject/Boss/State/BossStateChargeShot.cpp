@@ -62,7 +62,9 @@ void BossStateChargeShot::Initialize(Boss* pBoss) {
 	//	pBoss->AddParticleEmitter(emitter);
 	//}
 
+	//チャージパーティクル
 	ParticleEmitter* emitter = EmitterBuilder()
+		.SetEmitterName("Charge")
 		.SetParticleType(ParticleEmitter::ParticleType::kCharge)
 		.SetTranslation(chargeWorldTransform_.translation_)
 		.SetScale({ 0.1f,0.1f,0.1f }, { 0.1f,0.1f,0.1f })
@@ -99,6 +101,7 @@ void BossStateChargeShot::Update(Boss* pBoss) {
 
 		if (pBoss->GetHitMissileCount() >= 5 && IsMove_ == false && IsAttack_ == false)
 		{
+			pBoss->GetParticleEmitter("Charge")->SetPopCount(0);
 			pBoss->ChangeState(new BossStateStun());
 			return;
 		}

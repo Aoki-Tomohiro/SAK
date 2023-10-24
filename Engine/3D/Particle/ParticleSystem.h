@@ -45,6 +45,20 @@ public:
 	/// <returns></returns>
 	const uint32_t& GetNumInstance() const { return numInstance_; };
 
+	/// <summary>
+	/// エミッターを取得
+	/// </summary>
+	/// <param name="name"></param>
+	/// <returns></returns>
+	ParticleEmitter* GetParticleEmitter(const std::string& name);
+
+	/// <summary>
+	/// エミッターのリストを取得
+	/// </summary>
+	/// <param name="name"></param>
+	/// <returns></returns>
+	std::list<ParticleEmitter*> GetParticleEmitters(const std::string& name);
+
 private:
 	/// <summary>
 	/// Instancing用のリソースの作成

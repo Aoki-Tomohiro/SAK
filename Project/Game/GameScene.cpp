@@ -49,9 +49,9 @@ void GameScene::Initialize(GameManager* gameManager) {
 	transitionSprite_->SetColor(transitionColor_);
 	transitionSprite_->SetSize(Vector2{ 640.0f,360.0f });
 
-	////ポストプロセスの有効化
-	//PostProcess::GetInstance()->SetIsPostProcessActive(true);
-	//PostProcess::GetInstance()->SetIsBloomActive(true);
+	//ポストプロセスの有効化
+	PostProcess::GetInstance()->SetIsPostProcessActive(true);
+	PostProcess::GetInstance()->SetIsBloomActive(true);
 };
 
 void GameScene::Update(GameManager* gameManager) {
@@ -152,6 +152,8 @@ void GameScene::Update(GameManager* gameManager) {
 
 void GameScene::Draw(GameManager* gameManager) {
 
+	PostProcess::GetInstance()->PreDraw();
+
 #pragma region 背景スプライトの描画
 
 	//背景スプライトの描画
@@ -159,11 +161,10 @@ void GameScene::Draw(GameManager* gameManager) {
 
 	Sprite::PostDraw();
 
-	DirectXCommon::GetInstance()->ClearDepthBuffer();
-
-	PostProcess::GetInstance()->PreDraw();
-
 #pragma endregion
+
+	//深度バッファをクリア
+	DirectXCommon::GetInstance()->ClearDepthBuffer();
 
 #pragma region モデルの描画
 
@@ -199,8 +200,8 @@ void GameScene::Draw(GameManager* gameManager) {
 
 	PostProcess::GetInstance()->PostDraw();
 
+#pragma region 前景スプライトの描画
 
-	//スプライトの描画
 	Sprite::PreDraw(Sprite::kBlendModeNormal);
 
 	weapon_->DrawSprite();
@@ -212,4 +213,7 @@ void GameScene::Draw(GameManager* gameManager) {
 	transitionSprite_->Draw();
   
 	Sprite::PostDraw();
+
+#pragma endregion
+
 };

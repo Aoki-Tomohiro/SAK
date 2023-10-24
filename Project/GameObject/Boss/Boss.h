@@ -197,6 +197,11 @@ public:
 	void AddParticleEmitter(ParticleEmitter* particleEmitter) { particleSystem_->AddParticleEmitter(particleEmitter); };
 
 	/// <summary>
+	/// エミッターを取得
+	/// </summary>
+	ParticleEmitter* GetParticleEmitter(const std::string& name) { return particleSystem_->GetParticleEmitter(name); };
+
+	/// <summary>
 	/// パーティクルの描画
 	/// </summary>
 	/// <param name="viewProjection"></param>

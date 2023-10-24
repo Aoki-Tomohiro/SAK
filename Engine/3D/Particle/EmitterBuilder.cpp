@@ -10,6 +10,12 @@ EmitterBuilder::~EmitterBuilder()
 
 }
 
+EmitterBuilder& EmitterBuilder::SetEmitterName(const std::string& name)
+{
+	particleEmitter_->name_ = name;
+	return *this;
+}
+
 EmitterBuilder& EmitterBuilder::SetParticleType(ParticleEmitter::ParticleType particleType)
 {
 	particleEmitter_->particleType_ = particleType;
