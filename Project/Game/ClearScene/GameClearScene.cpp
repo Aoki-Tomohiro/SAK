@@ -16,6 +16,8 @@ void GameClearScene::Initialize(GameManager* gameManager)
 	//Inputのインスタンスを取得
 	input_ = Input::GetInstance();
 
+	soundHandle_ = audio_->SoundLoadWave("Resources/Sounds/Selection.wav");
+
 	playerModel_.reset(Model::CreateFromOBJ("Resources/Platform", "Platform.obj"));
 	weaponModel_.reset(Model::CreateFromOBJ("Resources/Head", "Head.obj"));
 	bossModel_.reset(Model::CreateFromOBJ("Resources/Boss", "Boss.obj"));
