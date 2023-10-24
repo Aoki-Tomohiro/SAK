@@ -595,3 +595,143 @@ void Weapon::DrawSprite()
 	}
 }
 
+
+void Weapon::StartAnimaion() {
+
+	if (animationFlag_) {
+		if (IsAttack_ == false && IsCoolDown_ == false) {
+			pushCount_++;
+			IsCharge_ = true;
+		}
+
+		if (chargeCount_ >= 90) {
+			audio_->SoundPlayWave(soundHandle_[3], false);
+			IsCharge_ = false;
+			IsAttack_ = true;
+			pushCount_ = 0;
+			animationFlag_ = false;
+		}
+	}
+
+	//更新
+	if (IsCharge_ == true)
+	{
+		audio_->SoundPlayWave(soundHandle_[2], false);
+		chargeCount_++;
+		weaponWorldTransform_.translation_.y -= chargeSpeed_;
+
+		if (weaponWorldTransform_.translation_.y <= -2.3f)
+		{
+			weaponWorldTransform_.translation_.y = -2.3f;
+		}
+	}
+
+	if (IsAttack_ == true && chargeCount_ < 20)
+	{
+		weaponWorldTransform_.translation_.y += attackSpeed_[3];
+		SetDamage(attackDamage_[0] + involvedCount_ * 2.0f);
+
+		if (weaponWorldTransform_.translation_.y >= 2.2f)
+		{
+			weaponWorldTransform_.translation_.y = 2.2f;
+			chargeCount_ = 0;
+			IsAttack_ = false;
+			IsCoolDown_ = true;
+		}
+	}
+
+	//チャージ1
+	if (IsAttack_ == true && chargeCount_ >= 20 && chargeCount_ < 50)
+	{
+		weaponWorldTransform_.translation_.y += attackSpeed_[3];
+		SetDamage(attackDamage_[1] + involvedCount_ * 2.0f);
+
+		if (weaponWorldTransform_.translation_.y >= 2.9f)
+		{
+			weaponWorldTransform_.translation_.y = 2.9f;
+			chargeCount_ = 0;
+			IsAttack_ = false;
+			IsCoolDown_ = true;
+		}
+	}
+
+	//チャージ2
+	if (IsAttack_ == true && chargeCount_ >= 50 && chargeCount_ < 90)
+	{
+		weaponWorldTransform_.translation_.y += attackSpeed_[3];
+		SetDamage(attackDamage_[2] + involvedCount_ * 2.0f);
+
+		if (weaponWorldTransform_.translation_.y >= 3.5f)
+		{
+			weaponWorldTransform_.translation_.y = 3.5f;
+			chargeCount_ = 0;
+			IsAttack_ = false;
+			IsCoolDown_ = true;
+		}
+	}
+
+	//チャージ3
+	if (IsAttack_ == true && chargeCount_ >= 90)
+	{
+		weaponWorldTransform_.translation_.y += attackSpeed_[3];
+		SetDamage(attackDamage_[3] + involvedCount_ * 2.0f);
+
+		if (weaponWorldTransform_.translation_.y >= 5.0f)
+		{
+			weaponWorldTransform_.translation_.y = 5.0f;
+			chargeCount_ = 0;
+			IsAttack_ = false;
+			IsCoolDown_ = true;
+		}
+	}
+
+	//攻撃後のクールダウン
+	if (IsCoolDown_ == true)
+	{
+		coolDownTimer_--;
+		weaponWorldTransform_.translation_.y -= coolDownSpeed_;
+		if (weaponWorldTransform_.translation_.y <= 1.8f)
+		{
+			weaponWorldTransform_.translation_.y = 1.8f;
+			coolDownTimer_ = 60;
+			IsCoolDown_ = false;
+			IsHit_ = false;
+			/*isInvolvedMissile_ = false;*/
+			/*involvedCount_ = 0;*/
+			involvedMissile_->GetMaterial()->SetColor(missileColor_[involvedCount_]);
+		}
+	}
+
+	//巻き込んだミサイルの処理
+	if (isInvolvedMissile_)
+	{
+		involvedMissileWorldTransform_.translation_ = {
+				weaponWorldTransform_.translation_.x,
+				weaponWorldTransform_.translation_.y + 0.5f,
+				weaponWorldTransform_.translation_.z,
+		};
+		involvedMissile_->GetMaterial()->SetColor(missileColor_[involvedCount_ - 1]);
+	}
+
+	weaponWorldTransform_.UpdateMatrix();
+
+	ModelMotion();
+
+	involvedMissileWorldTransform_.UpdateMatrix();
+
+	//パーティクルの処理
+	particleSystem_->Update();
+
+
+	//無敵時間の処理
+	if (invincibleFlag_) {
+		invincibleTimer_--;
+		if (invincibleTimer_ < 0) {
+			invincibleFlag_ = false;
+		}
+	}
+
+
+	Weapon::ApplyGlobalVariables();
+}
+
