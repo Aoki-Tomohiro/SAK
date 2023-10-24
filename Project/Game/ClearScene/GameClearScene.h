@@ -53,6 +53,11 @@ private:
 	//Input
 	Input* input_ = nullptr;
 
+	//サウンド
+	uint32_t soundHandle_ = 0u;
+
+	int soundCount_ = 0;
+
 	//カメラ
 	ViewProjection viewProjection_{};
 
@@ -76,6 +81,14 @@ private:
 	int t = 0;
 	int tMax = 15;
 
+	//かちのスプライト
+	std::unique_ptr<Sprite>  winSprite_ = nullptr;
+	//かちのテクスチャ
+	uint32_t  winTextureHandle_ = 0;
+	//プレスAのスプライト
+	std::unique_ptr<Sprite>  pressASprite_ = nullptr;
+	//プレスAのテクスチャ
+	uint32_t pressATextureHandle_ = 0;
 	//トランジション用のスプライト
 	std::unique_ptr<Sprite> transitionSprite_;
 	//トランジションのテクスチャ

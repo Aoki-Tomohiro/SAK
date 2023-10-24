@@ -41,6 +41,13 @@ void GameOverScene::Initialize(GameManager* gameManager)
 	viewProjection_.UpdateMatrix();
   
 	//スプライトの生成
+	loseTextureHandle_ = TextureManager::Load("Resources/Images/lose.png");
+	loseSprite_.reset(Sprite::Create(loseTextureHandle_, { 0.0f,0.0f }));
+
+	pressATextureHandle_ = TextureManager::Load("Resources/Images/PressAbutton.png");
+	pressASprite_.reset(Sprite::Create(pressATextureHandle_,
+		{ WinApp::GetInstance()->kClientWidth * 0.5f - 508.0f * 0.5f , 550.0f }));
+
 	transitionSprite_.reset(Sprite::Create(transitionTextureHandle_, { 0.0f,0.0f }));
 	transitionSprite_->SetColor(transitionColor_);
 	transitionSprite_->SetSize(Vector2{ 640.0f,360.0f });
@@ -120,6 +127,10 @@ void GameOverScene::Draw(GameManager* gameManager)
 
 	//スプライトの描画処理
 	Sprite::PreDraw(Sprite::kBlendModeNormal);
+
+	loseSprite_->Draw();
+
+	pressASprite_->Draw();
 
 	transitionSprite_->Draw();
 
