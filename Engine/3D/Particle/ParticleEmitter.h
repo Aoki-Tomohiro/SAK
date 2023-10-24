@@ -78,6 +78,28 @@ public:
 	/// <param name="count"></param>
 	void SetPopCount(uint32_t count) { popCount_ = count; };
 
+	/// <summary>
+	/// エリアを設定
+	/// </summary>
+	/// <param name="min"></param>
+	/// <param name="max"></param>
+	void SetPopArea(const Vector3& min, const Vector3& max) { popArea_ = { min,max }; };
+
+	/// <summary>
+	/// 方位角を設定
+	/// </summary>
+	/// <param name="min"></param>
+	/// <param name="max"></param>
+	void SetPopAzimuth(float min, float max) { popAzimuth = { min,max }; }
+
+	/// <summary>
+	/// 速度を設定
+	/// </summary>
+	/// <param name="min"></param>
+	/// <param name="max"></param>
+	void SetPopVelocity(const Vector3& min, const Vector3& max) { popArea_ = { min,max }; };
+
+
 private:
 	/// <summary>
 	/// パーティクルの生成
