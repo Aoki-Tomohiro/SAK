@@ -18,6 +18,27 @@ void GameClearScene::Initialize(GameManager* gameManager)
 
 	soundHandle_ = audio_->SoundLoadWave("Resources/Sounds/Selection.wav");
 
+	playerModel_.reset(Model::CreateFromOBJ("Resources/Platform", "Platform.obj"));
+	weaponModel_.reset(Model::CreateFromOBJ("Resources/Head", "Head.obj"));
+	bossModel_.reset(Model::CreateFromOBJ("Resources/Boss", "Boss.obj"));
+
+	playerWorldTransform_.translation_ = { 0.0f,-1.7f,2.0f };
+	playerWorldTransform_.scale_ = { 1.0f,1.0f,1.0f };
+
+	weaponWorldTransform_.translation_ = { 0.0f,-0.8f,2.0f };
+	weaponWorldTransform_.scale_ = { 1.0f,1.0f,1.0f };
+
+	bossWorldTransform_.translation_ = { 0.0f,-3.5f,2.0f };
+	bossWorldTransform_.rotation_.x = 1.35f;
+	bossWorldTransform_.scale_ = { 1.0f,1.0f,1.0f };
+
+	//背景の生成
+	backGround_ = std::make_unique<BackGround>();
+	backGround_->Initialize();
+
+	viewProjection_.UpdateMatrix();
+
+
 	//スプライトの生成
 	transitionSprite_.reset(Sprite::Create(transitionTextureHandle_, { 0.0f,0.0f }));
 	transitionSprite_->SetColor(transitionColor_);
@@ -26,6 +47,51 @@ void GameClearScene::Initialize(GameManager* gameManager)
 
 void GameClearScene::Update(GameManager* gameManager)
 {
+	//背景の更新
+	backGround_->Update();
+
+	float minusSpeed = 4.0f;
+
+	if (tMax <= t) {
+
+		t = 0;
+		if(isPush == true) {
+			isPush = false;
+		}
+	else {
+			isPush = true;
+		}
+	}
+
+	t++;
+
+	if (isPush == true) {
+		if (plus < plusMax) {
+			plus += minusSpeed;
+		}
+
+		if (plus >= plusMax) {
+			plus = plusMax;
+		}
+	}else if (isPush == false) {
+		if (plus > 0.0f) {
+			plus -= minusSpeed;
+		}
+
+		if (plus <= 0.0f) {
+			plus = 0.0f;
+		}
+	}
+
+	weaponWorldTransform_.translation_ = { 0.0f,-0.8f + plus,2.0f };
+	float ratio = plus / plusMax;
+
+	weaponWorldTransform_.scale_.x = 1.0f + 0.5f * (1.0f  - ratio);
+	weaponWorldTransform_.scale_.y = 1.0f + 0.5f * ratio;
+
+	playerWorldTransform_.scale_.x = 1.0f + 0.5f * (1.0f - ratio);
+	playerWorldTransform_.scale_.y = 1.0f + 0.5f * ratio;
+
 	if (input_->IsPushKeyEnter(DIK_SPACE))
 	{
 		if (isTransitionEnd_) {
@@ -62,15 +128,61 @@ void GameClearScene::Update(GameManager* gameManager)
 	ImGui::Begin("Game Clear");
 	ImGui::Text("push SPACE : Title");
 	ImGui::End();
+
+	playerWorldTransform_.UpdateMatrix();
+	weaponWorldTransform_.UpdateMatrix();
+	bossWorldTransform_.UpdateMatrix();
+
+	viewProjection_.UpdateMatrix();
 };
 
 void GameClearScene::Draw(GameManager* gameManager)
 {
+	PostProcess::GetInstance()->PreDraw();
+
+#pragma region 背景スプライトの描画
+
+	//背景スプライトの描画
+	Sprite::PreDraw(Sprite::kBlendModeNormal);
+
+	Sprite::PostDraw();
+
+#pragma endregion
+
+	//深度バッファをクリア
+	DirectXCommon::GetInstance()->ClearDepthBuffer();
+
+#pragma region モデルの描画
+
 	//モデルの描画
 	Model::PreDraw();
 
+	//背景の描画
+	backGround_->Draw(viewProjection_);
+
+	playerModel_->Draw(playerWorldTransform_, viewProjection_);
+
+	weaponModel_->Draw(weaponWorldTransform_, viewProjection_);
+
+	bossModel_->Draw(bossWorldTransform_, viewProjection_);
+
 
 	Model::PostDraw();
+
+#pragma endregion
+
+#pragma region パーティクルの描画
+
+	//パーティクルモデルの描画
+	ParticleModel::PreDraw();
+
+	ParticleModel::PostDraw();
+
+#pragma endregion
+
+	PostProcess::GetInstance()->PostDraw();
+
+#pragma region 前景スプライトの描画
 
 	//スプライトの描画処理
 	Sprite::PreDraw(Sprite::kBlendModeNormal);
@@ -78,4 +190,7 @@ void GameClearScene::Draw(GameManager* gameManager)
 	transitionSprite_->Draw();
 
 	Sprite::PostDraw();
+
+#pragma endregion
+
 };

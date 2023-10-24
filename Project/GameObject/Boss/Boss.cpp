@@ -220,7 +220,7 @@ void Boss::ApplyGlobalVariables()
 }
 
 void Boss::OnCollision(uint32_t collisionAttribute, float damage) {
-
+  
 	if (weapon_->GetIsHit() == false && weapon_->GetIsCoolDown() == false && isActive_) {
 		audio_->SoundPlayWave(soundHandle_, false);
 		Hp_ -= damage;

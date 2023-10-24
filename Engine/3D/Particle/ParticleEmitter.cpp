@@ -27,9 +27,9 @@ void ParticleEmitter::Update() {
 void ParticleEmitter::Pop() {
 	//座標
 	Vector3 translation = {
-		Random::GetRandomFloat(popTranslation_.x - popArea_.min.x,popTranslation_.x + popArea_.max.x),
-		Random::GetRandomFloat(popTranslation_.y - popArea_.min.y,popTranslation_.y + popArea_.max.y),
-		Random::GetRandomFloat(popTranslation_.z - popArea_.min.z,popTranslation_.z + popArea_.max.z)
+		popTranslation_.x + Random::GetRandomFloat(popArea_.min.x,popArea_.max.x),
+		popTranslation_.y + Random::GetRandomFloat(popArea_.min.y,popArea_.max.y),
+		popTranslation_.z + Random::GetRandomFloat(popArea_.min.z,popArea_.max.z)
 	};
 
 	//回転

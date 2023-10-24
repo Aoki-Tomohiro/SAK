@@ -197,6 +197,11 @@ public:
 	void AddParticleEmitter(ParticleEmitter* particleEmitter) { particleSystem_->AddParticleEmitter(particleEmitter); };
 
 	/// <summary>
+	/// エミッターを取得
+	/// </summary>
+	ParticleEmitter* GetParticleEmitter(const std::string& name) { return particleSystem_->GetParticleEmitter(name); };
+
+	/// <summary>
 	/// パーティクルの描画
 	/// </summary>
 	/// <param name="viewProjection"></param>
@@ -217,6 +222,11 @@ public:
 	/// </summary>
 	/// <returns></returns>
 	bool GetAnimationEnd() { return animationEnd_; };
+  
+	/// パーティクルシステムを取得
+	/// </summary>
+	/// <returns></returns>
+	ParticleSystem* GetParticleSystem() { return particleSystem_.get(); };
 
 private:
 	Audio* audio_ = nullptr;

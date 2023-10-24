@@ -58,7 +58,7 @@ private:
 	//チャージショットのスケール
 	Vector3 chargeShotScale_ = { 1.0f,10.0f,1.0f };
 
-	float chargeShotSpeed_ = 0.05f;
+	float chargeShotSpeed_ = 0.1f;
 
 	int respownCount_ = 0;
 

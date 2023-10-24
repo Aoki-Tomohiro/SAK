@@ -153,21 +153,21 @@ void GameScene::Update(GameManager* gameManager) {
 	//	}
 	//}
 
-	if (input_->IsPushKeyEnter(DIK_1)/* || boss_->GetHP() <= 0.0f*/)
-	{
-		if (isTransition_ == false && isTransitionEnd_ == true) {
-			isTransition_ = true;
-			nextScene_ = NextScene::GAMECLEAR;
-		}
-	}
+	//if (input_->IsPushKeyEnter(DIK_1)/* || boss_->GetHP() <= 0.0f*/)
+	//{
+	//	if (isTransition_ == false && isTransitionEnd_ == true) {
+	//		isTransition_ = true;
+	//		nextScene_ = NextScene::GAMECLEAR;
+	//	}
+	//}
 
-	if (input_->IsPushKeyEnter(DIK_2)/* || weapon_->GetHP() <= 0.0f*/)
-	{
-		if (isTransition_ == false && isTransitionEnd_ == true) {
-			isTransition_ = true;
-			nextScene_ = NextScene::GAMEOVER;
-		}
-	}
+	//if (input_->IsPushKeyEnter(DIK_2)/* || weapon_->GetHP() <= 0.0f*/)
+	//{
+	//	if (isTransition_ == false && isTransitionEnd_ == true) {
+	//		isTransition_ = true;
+	//		nextScene_ = NextScene::GAMEOVER;
+	//	}
+	//}
 
 	if (isTransition_) {
 		transitionTimer_ += 1.0f / kTransitionTime;
@@ -198,6 +198,18 @@ void GameScene::Draw(GameManager* gameManager) {
 
 	PostProcess::GetInstance()->PreDraw();
 
+#pragma region 背景スプライトの描画
+
+	//背景スプライトの描画
+	Sprite::PreDraw(Sprite::kBlendModeNormal);
+
+	Sprite::PostDraw();
+
+#pragma endregion
+
+	//深度バッファをクリア
+	DirectXCommon::GetInstance()->ClearDepthBuffer();
+
 #pragma region モデルの描画
 
 	//モデルの描画
@@ -222,6 +234,8 @@ void GameScene::Draw(GameManager* gameManager) {
 	//パーティクルモデルの描画
 	ParticleModel::PreDraw();
 
+	player_->DrawParticle(viewProjection_);
+
 	weapon_->DrawParticle(viewProjection_);
 
 	boss_->DrawParticle(viewProjection_);
@@ -232,8 +246,8 @@ void GameScene::Draw(GameManager* gameManager) {
 
 	PostProcess::GetInstance()->PostDraw();
 
+#pragma region 前景スプライトの描画
 
-	//スプライトの描画
 	Sprite::PreDraw(Sprite::kBlendModeNormal);
 
 	weapon_->DrawSprite();
@@ -245,4 +259,7 @@ void GameScene::Draw(GameManager* gameManager) {
 	transitionSprite_->Draw();
   
 	Sprite::PostDraw();
+
+#pragma endregion
+
 };

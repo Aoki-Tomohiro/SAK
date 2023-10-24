@@ -22,6 +22,10 @@ private:
 
 	WorldTransform skyDomeWorldTransform_;
 
+	std::unique_ptr<Model>stageModel_ = nullptr;
+
+	WorldTransform stageWorldTransform_;
+
 	uint32_t textureHandle_ = 0u;
 };
 
