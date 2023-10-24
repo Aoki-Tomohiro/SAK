@@ -129,6 +129,11 @@ void Weapon::Update()
 		return;
 	}
 
+		if (weaponWorldTransform_.translation_.x <= Missile::widthMin)
+		{
+			weaponWorldTransform_.translation_.x = Missile::widthMin;
+		}
+
 	//HP描画
 	for (int i = 0; i < MaxHp_; i++) {
 		heartUI_[i].isDraw_ = false;
@@ -146,6 +151,9 @@ void Weapon::Update()
 
 		Vector3 move = { (float)joyState_.Gamepad.sThumbLX / SHRT_MAX, 0.0f,0.0f };
 
+		if (weaponWorldTransform_.translation_.x >= Missile::widthMax)
+		{
+			weaponWorldTransform_.translation_.x = Missile::widthMax;
 		if (Length(move) > deadZone)
 		{
 			isMoving = true;

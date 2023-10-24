@@ -120,9 +120,9 @@ void BossStateChargeShot::Update(Boss* pBoss) {
 		chargeWorldTransform_.translation_.x += chargeShotSpeed_;
 		pBoss->SetWorldTransform(bossWorldTransform_);
 
-		if (bossWorldTransform_.translation_.x >= 6.9f)
+		if (bossWorldTransform_.translation_.x > Missile::widthMax)
 		{
-			bossWorldTransform_.translation_.x = 6.9f;
+			bossWorldTransform_.translation_.x = Missile::widthMax;
 			pBoss->SetWorldTransform(bossWorldTransform_);
 
 			chargeShotSpeed_ = 0.07f;
@@ -157,9 +157,9 @@ void BossStateChargeShot::Update(Boss* pBoss) {
 		chargeWorldTransform_.translation_.x += chargeShotSpeed_;
 		pBoss->SetWorldTransform(bossWorldTransform_);
 
-		if (bossWorldTransform_.translation_.x <= -6.9f)
+		if (bossWorldTransform_.translation_.x < Missile::widthMin)
 		{
-			bossWorldTransform_.translation_.x = -6.9f;
+			bossWorldTransform_.translation_.x = Missile::widthMin;
 			pBoss->SetWorldTransform(bossWorldTransform_);
 
 			chargeShotSpeed_ = -0.07f;
@@ -187,13 +187,12 @@ void BossStateChargeShot::Update(Boss* pBoss) {
 		pBoss->SetWorldTransform(bossWorldTransform_);
 	}
 
-
 	//ワールドトランスフォームの更新
 	chargeWorldTransform_.UpdateMatrix();
 
 	//攻撃終了
-	if (IsAttack_ == true && respownCount_ == 1 && bossWorldTransform_.translation_.x <= -6.6f||
-		IsAttack_ == true && respownCount_ == 2 && bossWorldTransform_.translation_.x >= 6.6f)
+	if (IsAttack_ == true && respownCount_ == 1 && Missile::widthMin > bossWorldTransform_.translation_.x ||
+		IsAttack_ == true && respownCount_ == 2 && Missile::widthMax < bossWorldTransform_.translation_.x)
 	{
 		pBoss->ChangeState(new BossStateNormal());
 	}

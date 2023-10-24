@@ -126,6 +126,9 @@ void Player::Update()
 
 		bool isMoving = false;
 
+		if (playerWorldTransform_.translation_.x <= Missile::widthMin)
+		{
+			playerWorldTransform_.translation_.x = Missile::widthMin;
 		Vector3 move = { (float)joyState_.Gamepad.sThumbLX / SHRT_MAX, 0.0f,0.0f };
 
 		if (Length(move) > deadZone)
@@ -133,6 +136,13 @@ void Player::Update()
 			isMoving = true;
 		}
 
+	if (input_->IsPushKey(DIK_D) && weapon_->GetIsAttack() == false)
+	{
+		playerWorldTransform_.translation_.x += playerMoveSpeed_;
+
+		if (playerWorldTransform_.translation_.x >= Missile::widthMax)
+		{
+			playerWorldTransform_.translation_.x = Missile::widthMax;
 		if (isMoving)
 		{
 			move = Multiply(playerMoveSpeed_, Normalize(move));

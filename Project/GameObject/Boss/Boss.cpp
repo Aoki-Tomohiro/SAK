@@ -90,7 +90,9 @@ void Boss::Update() {
 		missileSpornTimer_ = MissileSpornTime;
 		missileDirection_ *= -1;
 		Missile* missile = new Missile();
-		missile->Initialize(Vector3{ 13.0f * missileDirection_,Random(/*-1.3f,*/-2.2f, 1.0f) ,0.0f }, Vector3{ missileMoveSpeed_ * (missileDirection_ * -1),0.0f,0.0f }, missileSoundHandle_);
+
+		missile->Initialize(Vector3{ Missile::widthMax * missileDirection_,Random(/*-1.3f,*/-2.2f, 1.0f) ,0.0f }, Vector3{ missileMoveSpeed_ * (missileDirection_ * -1),0.0f,0.0f });
+
 		Boss::AddMissile(missile);
 	}
 

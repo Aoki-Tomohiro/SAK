@@ -1,4 +1,5 @@
 #include "ChargeShot.h"
+#include "../GameObject/Missile/Missile.h"
 
 int ChargeShot::chargeShotEndTime = 170;
 
@@ -51,7 +52,7 @@ void ChargeShot::Update() {
 
 
 	//死亡フラグを立てる
-	if (--deadTimer_ <= 0) 
+	if (Missile::widthMin > worldTransform_.translation_.x || Missile::widthMax < worldTransform_.translation_.x)
 	{
 		isDead_ = true;
 	}
