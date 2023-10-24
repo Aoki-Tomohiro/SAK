@@ -14,6 +14,13 @@ public:
 	~EmitterBuilder();
 
 	/// <summary>
+	/// エミッターの名前を設定
+	/// </summary>
+	/// <param name="name"></param>
+	/// <returns></returns>
+	EmitterBuilder& SetEmitterName(const std::string& name);
+
+	/// <summary>
 	/// パーティクルの種類を設定
 	/// </summary>
 	/// <param name="particleType"></param>

@@ -167,6 +167,24 @@ void Weapon::Update()
 			IsCharge_ = false;
 			IsAttack_ = true;
 			pushCount_ = 0;
+			//発射パーティクル
+			ParticleEmitter* newParticleEmitter = EmitterBuilder()
+				.SetEmitterName("Attack")
+				.SetParticleType(ParticleEmitter::ParticleType::kNormal)
+				.SetTranslation(weaponWorldTransform_.translation_)
+				.SetArea({ -0.4f,-0.6f,0.0f }, { 0.4f,-0.6f,0.0f })
+				.SetRotation({ 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f })
+				.SetScale({ 0.05f, 0.6f,0.1f }, { 0.05f ,0.8f ,0.1f })
+				.SetAzimuth(0.0f, 0.0f)
+				.SetElevation(0.0f, 0.0f)
+				.SetVelocity({ 0.0f ,0.0f ,0.0f }, { 0.0f ,0.0f ,0.0f })
+				.SetColor({ 1.0f ,1.0f ,1.0f,0.4f }, { 1.0f ,1.0f ,1.0f ,0.6f })
+				.SetLifeTime(0.15f, 0.15f)
+				.SetCount(20)
+				.SetFrequency(0.01f)
+				.SetDeleteTime(2.0f)
+				.Build();
+			particleSystem_->AddParticleEmitter(newParticleEmitter);
 		}
 
 		if (pushCount_ >= 10)
@@ -192,6 +210,10 @@ void Weapon::Update()
 	{
 		weaponWorldTransform_.translation_.y += attackSpeed_[3];
 		SetDamage(attackDamage_[0] + involvedCount_ * 2.0f);
+		//エミッターの位置を変更
+		for (ParticleEmitter* particleEmitter : particleSystem_->GetParticleEmitters("Attack")) {
+			particleEmitter->SetTranslation(weaponWorldTransform_.translation_);
+		}
 
 		if (weaponWorldTransform_.translation_.y >= 2.2f)
 		{
@@ -199,6 +221,10 @@ void Weapon::Update()
 			chargeCount_ = 0;
 			IsAttack_ = false;
 			IsCoolDown_ = true;
+			//パーティクルを発生させないようにする
+			for (ParticleEmitter* particleEmitter : particleSystem_->GetParticleEmitters("Attack")) {
+				particleEmitter->SetPopCount(0);
+			}
 		}
 	}
 
@@ -207,6 +233,10 @@ void Weapon::Update()
 	{
 		weaponWorldTransform_.translation_.y += attackSpeed_[3];
 		SetDamage(attackDamage_[1] + involvedCount_ * 2.0f);
+		//エミッターの位置を変更
+		for (ParticleEmitter* particleEmitter : particleSystem_->GetParticleEmitters("Attack")) {
+			particleEmitter->SetTranslation(weaponWorldTransform_.translation_);
+		}
 
 		if (weaponWorldTransform_.translation_.y >= 2.9f)
 		{
@@ -214,6 +244,10 @@ void Weapon::Update()
 			chargeCount_ = 0;
 			IsAttack_ = false;
 			IsCoolDown_ = true;
+			//パーティクルを発生させないようにする
+			for (ParticleEmitter* particleEmitter : particleSystem_->GetParticleEmitters("Attack")) {
+				particleEmitter->SetPopCount(0);
+			}
 		}
 	}
 
@@ -222,6 +256,10 @@ void Weapon::Update()
 	{
 		weaponWorldTransform_.translation_.y += attackSpeed_[3];
 		SetDamage(attackDamage_[2] + involvedCount_ * 2.0f);
+		//エミッターの位置を変更
+		for (ParticleEmitter* particleEmitter : particleSystem_->GetParticleEmitters("Attack")) {
+			particleEmitter->SetTranslation(weaponWorldTransform_.translation_);
+		}
 
 		if (weaponWorldTransform_.translation_.y >= 3.5f)
 		{
@@ -229,6 +267,10 @@ void Weapon::Update()
 			chargeCount_ = 0;
 			IsAttack_ = false;
 			IsCoolDown_ = true;
+			//パーティクルを発生させないようにする
+			for (ParticleEmitter* particleEmitter : particleSystem_->GetParticleEmitters("Attack")) {
+				particleEmitter->SetPopCount(0);
+			}
 		}
 	}
 
@@ -237,6 +279,10 @@ void Weapon::Update()
 	{
 		weaponWorldTransform_.translation_.y += attackSpeed_[3];
 		SetDamage(attackDamage_[3] + involvedCount_ * 2.0f);
+		//エミッターの位置を変更
+		for (ParticleEmitter* particleEmitter : particleSystem_->GetParticleEmitters("Attack")) {
+			particleEmitter->SetTranslation(weaponWorldTransform_.translation_);
+		}
 
 		if (weaponWorldTransform_.translation_.y >= 5.0f)
 		{
@@ -244,6 +290,10 @@ void Weapon::Update()
 			chargeCount_ = 0;
 			IsAttack_ = false;
 			IsCoolDown_ = true;
+			//パーティクルを発生させないようにする
+			for (ParticleEmitter* particleEmitter : particleSystem_->GetParticleEmitters("Attack")) {
+				particleEmitter->SetPopCount(0);
+			}
 		}
 	}
 
@@ -281,7 +331,8 @@ void Weapon::Update()
   
 	involvedMissileWorldTransform_.UpdateMatrix();
 
-	//パーティクルの処理
+
+	//パーティクルの更新
 	particleSystem_->Update();
 
 
@@ -353,25 +404,7 @@ void Weapon::OnCollision(uint32_t collisionAttribute, float damage)
 	{		
 		if (IsHit_ == false && IsCoolDown_ == false) 
 		{
-			//for (uint32_t i = 0; i < 90; ++i) {
-			//	ParticleEmitter* particleEmitter = EmitterBuilder()
-			//		.SetParticleType(ParticleEmitter::ParticleType::kNormal)
-			//		.SetTranslation(weaponWorldTransform_.translation_)
-			//		.SetArea({ 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f })
-			//		.SetRotation({ 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f })
-			//		.SetScale({ 0.1f,0.1f,0.1f }, { 0.1f,0.1f,0.1f })
-			//		.SetColor({ 1.0f,0.5f,0.0f,1.0f }, { 1.0f,0.5f,0.0f,1.0f })
-			//		.SetAzimuth(float(i) * 4.0f, float(i) * 4.0f)
-			//		.SetElevation(0.0f, 0.0f)
-			//		.SetVelocity({ 0.04f,0.04f,0.04f }, { 0.04f,0.04f,0.04f })
-			//		.SetLifeTime(0.4f, 0.4f)
-			//		.SetCount(1)
-			//		.SetFrequency(2.0f)
-			//		.SetDeleteTime(1.0f)
-			//		.Build();
-			//	particleSystem_->AddParticleEmitter(particleEmitter);
-			//}
-
+			//衝撃
 			ParticleEmitter* newParticleEmitter = EmitterBuilder()
 				.SetParticleType(ParticleEmitter::ParticleType::kScale)
 				.SetTranslation(weaponWorldTransform_.translation_)
@@ -405,10 +438,33 @@ void Weapon::OnCollision(uint32_t collisionAttribute, float damage)
 				.SetDeleteTime(1.0f)
 				.Build();
 			particleSystem_->AddParticleEmitter(particleEmitter);
+
 			IsHit_ = true;
 			isInvolvedMissile_ = false;
 			involvedCount_ = 0;
 		}
+
+		//if (IsCoolDown_ == false) {
+		//	//衝撃波
+		//	for (uint32_t i = 0; i < 90; ++i) {
+		//		ParticleEmitter* particleEmitter = EmitterBuilder()
+		//			.SetParticleType(ParticleEmitter::ParticleType::kNormal)
+		//			.SetTranslation(weaponWorldTransform_.translation_)
+		//			.SetArea({ 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f })
+		//			.SetRotation({ 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f })
+		//			.SetScale({ 0.1f,0.1f,0.1f }, { 0.1f,0.1f,0.1f })
+		//			.SetColor({ 1.0f,0.5f,0.0f,1.0f }, { 1.0f,0.5f,0.0f,1.0f })
+		//			.SetAzimuth(float(i) * 4.0f, float(i) * 4.0f)
+		//			.SetElevation(0.0f, 0.0f)
+		//			.SetVelocity({ 0.04f,0.04f,0.04f }, { 0.04f,0.04f,0.04f })
+		//			.SetLifeTime(0.4f, 0.4f)
+		//			.SetCount(1)
+		//			.SetFrequency(2.0f)
+		//			.SetDeleteTime(1.0f)
+		//			.Build();
+		//		particleSystem_->AddParticleEmitter(particleEmitter);
+		//	}
+		//}
 	}
 	//ボス以外の場合
 	else
