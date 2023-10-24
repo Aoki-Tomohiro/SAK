@@ -288,9 +288,9 @@ void Weapon::Update()
 			particleEmitter->SetTranslation(weaponWorldTransform_.translation_);
 		}
 
-		if (weaponWorldTransform_.translation_.y >= 5.0f)
+		if (weaponWorldTransform_.translation_.y >= 4.5f)
 		{
-			weaponWorldTransform_.translation_.y = 5.0f;
+			weaponWorldTransform_.translation_.y = 4.5f;
 			chargeCount_ = 0;
 			IsAttack_ = false;
 			IsCoolDown_ = true;

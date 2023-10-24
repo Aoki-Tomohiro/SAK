@@ -68,7 +68,7 @@ void BossStateNormal::Update(Boss* pBoss) {
 			isAttack_ = true;
 			//ボスの体力が半分以下だったらチャージショットを攻撃パターンに加える
 			if (pBoss->GetHP() > pBoss->kHpMax / 2) {
-				nextAttack_ = 0;
+				nextAttack_ = pBoss->Random(0, 2);
 			}
 			else {
 				nextAttack_ = pBoss->Random(0, 2);
