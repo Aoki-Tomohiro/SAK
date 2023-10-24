@@ -5,7 +5,7 @@
 #include "Utility/GlobalVariables.h"
 
 int BossStateChargeShot::chargeTime = 120;
-int BossStateChargeShot::chargeShotEndTime = 240;
+int BossStateChargeShot::chargeShotEndTime = 220;
 
 
 BossStateChargeShot::~BossStateChargeShot() {
@@ -120,6 +120,8 @@ void BossStateChargeShot::Update(Boss* pBoss) {
 			bossWorldTransform_.translation_.x = 6.9f;
 			pBoss->SetWorldTransform(bossWorldTransform_);
 
+			chargeShotSpeed_ = 0.1f;
+
 			ChargeShot* chargeShot;
 
 			chargeShot = new ChargeShot();
@@ -134,7 +136,7 @@ void BossStateChargeShot::Update(Boss* pBoss) {
 	if (IsAttack_ == true && respownCount_ == 1)
 	{
 		chargeTimer_ = -1;
-		chargeShotSpeed_ = -0.05f;
+		chargeShotSpeed_ = -0.1f;
 		endTimer_--;
 
 		//ボスの移動
@@ -154,6 +156,8 @@ void BossStateChargeShot::Update(Boss* pBoss) {
 			bossWorldTransform_.translation_.x = -6.9f;
 			pBoss->SetWorldTransform(bossWorldTransform_);
 
+			chargeShotSpeed_ = -0.1f;
+
 			ChargeShot* chargeShot;
 
 			chargeShot = new ChargeShot();
@@ -168,7 +172,7 @@ void BossStateChargeShot::Update(Boss* pBoss) {
 	if (IsAttack_ == true && respownCount_ == 2)
 	{
 		chargeTimer_ = -1;
-		chargeShotSpeed_ = 0.05f;
+		chargeShotSpeed_ = 0.1f;
 		endTimer_--;
 
 		//ボスの移動
