@@ -118,6 +118,7 @@ void Player::Update()
 	//パーティクルを出さないようにする
 	particleSystem_->GetParticleEmitter("PlayerMove")->SetPopCount(0);
 
+
 	//プレイヤーの左右移動
 	if (Input::GetInstance()->GetJoystickState(joyState_) && weapon_->GetIsAttack() == false)
 	{
@@ -126,12 +127,6 @@ void Player::Update()
 		bool isMoving = false;
 
 		Vector3 move = { (float)joyState_.Gamepad.sThumbLX / SHRT_MAX, 0.0f,0.0f };
-		playerWorldTransform_.translation_.x -= playerMoveSpeed_;
-		//移動中はパーティクルを出す
-		particleSystem_->GetParticleEmitter("PlayerMove")->SetPopArea({ 1.0f,-0.5f,0.0f }, { 1.0f,-0.5f,0.0f });
-		particleSystem_->GetParticleEmitter("PlayerMove")->SetPopAzimuth(0.0f, 0.0f);
-		particleSystem_->GetParticleEmitter("PlayerMove")->SetPopCount(10);
-		particleSystem_->GetParticleEmitter("PlayerMove")->SetTranslation(playerWorldTransform_.translation_);
 
 		if (Length(move) > deadZone)
 		{
@@ -139,20 +134,18 @@ void Player::Update()
 		}
 
 		if (isMoving)
-	{
-		playerWorldTransform_.translation_.x += playerMoveSpeed_;
-		//移動中はパーティクルを出す
-		particleSystem_->GetParticleEmitter("PlayerMove")->SetPopArea({ -1.0f,-0.5f,0.0f }, { -1.0f,-0.5f,0.0f });
-		particleSystem_->GetParticleEmitter("PlayerMove")->SetPopAzimuth(180.0f, 180.0f);
-		particleSystem_->GetParticleEmitter("PlayerMove")->SetPopCount(10);
-		particleSystem_->GetParticleEmitter("PlayerMove")->SetTranslation(playerWorldTransform_.translation_);
-
-		if (playerWorldTransform_.translation_.x >= 7.3f)
 		{
 			move = Multiply(playerMoveSpeed_, Normalize(move));
 
 			playerWorldTransform_.translation_ = Add(playerWorldTransform_.translation_, move);
 
+			//移動中はパーティクルを出す
+			particleSystem_->GetParticleEmitter("PlayerMove")->SetPopArea({ -1.0f,-0.5f,0.0f }, { -1.0f,-0.5f,0.0f });
+			particleSystem_->GetParticleEmitter("PlayerMove")->SetPopAzimuth(180.0f, 180.0f);
+			particleSystem_->GetParticleEmitter("PlayerMove")->SetPopCount(10);
+			particleSystem_->GetParticleEmitter("PlayerMove")->SetTranslation(playerWorldTransform_.translation_);
+
+			
 			if (playerWorldTransform_.translation_.x <= -7.3f)
 			{
 				playerWorldTransform_.translation_.x = -7.3f;
@@ -162,8 +155,8 @@ void Player::Update()
 			{
 				playerWorldTransform_.translation_.x = 7.3f;
 			}
+			
 		}
-
 		ModelMotion();
 	}
 
