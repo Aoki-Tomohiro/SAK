@@ -1,4 +1,5 @@
 #pragma once
+#include "Components/Audio.h"
 #include "3D/Model/Model.h"
 #include "3D/Matrix/WorldTransform.h"
 #include "Utility/CollisionManager/Collider.h"
@@ -8,6 +9,9 @@
 #include "ChargeShot/ChargeShot.h"
 #include <random>
 #include "../UI.h"
+#include "3D/Model/ParticleModel.h"
+#include "3D/Particle/ParticleSystem.h"
+
 class Weapon;
 
 /// <summary>
@@ -157,6 +161,8 @@ public:
 	/// <returns></returns>
 	float GetHP() { return Hp_; };
 
+	bool GetIsActive() { return isActive_; };
+
 	/// <summary>
 	/// 当たり判定
 	/// </summary>
@@ -184,7 +190,23 @@ public:
 	/// <returns></returns>
 	void HPBarUpdate();
 
+	/// <summary>
+	/// エミッターを追加
+	/// </summary>
+	/// <param name="particleEmitter"></param>
+	void AddParticleEmitter(ParticleEmitter* particleEmitter) { particleSystem_->AddParticleEmitter(particleEmitter); };
+
+	/// <summary>
+	/// パーティクルの描画
+	/// </summary>
+	/// <param name="viewProjection"></param>
+	void DrawParticle(const ViewProjection& viewProjection);
+
 private:
+	Audio* audio_ = nullptr;
+
+	uint32_t soundHandle_ = 0u;
+
 	//ボスのモデル(ダミー)
 	std::unique_ptr<Model> model_ = nullptr;
 
@@ -203,7 +225,7 @@ private:
 	//チャージショットのリスト
 	std::list<std::unique_ptr<ChargeShot>> chargeShot_{};
 	//最大体力
-	 const float maxHp_ = 100.0f;
+	const float maxHp_ = 100.0f;
 	//体力
 	float Hp_ = maxHp_;
 	//当たったミサイルの数
@@ -216,6 +238,8 @@ private:
 	float missileMoveSpeed_ = 0.05f;
 	//進行方向
 	int moveDirection_ = 1;
+	bool isActive_ = false;
+
 	//プレイヤー
 	Weapon* weapon_ = nullptr;
 
@@ -242,5 +266,9 @@ private:
 	UIStruct hpBar_;
 	const float barSpace = 16.0f;
 	float barSize = WinApp::GetInstance()->kClientWidth - barSpace * 2;
+
+	//パーティクル
+	std::unique_ptr<ParticleModel> particleModel_ = nullptr;
+	std::unique_ptr<ParticleSystem> particleSystem_ = nullptr;
 
 };

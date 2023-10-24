@@ -15,6 +15,9 @@ void GameSelectScene::Initialize(GameManager* gameManager)
 	audio_ = Audio::GetInstance();
 	//Inputのインスタンスを取得
 	input_ = Input::GetInstance();
+
+	soundHandle_ = audio_->SoundLoadWave("Resources/Sounds/Selection.wav");
+
 	//スプライトの生成
 	transitionSprite_.reset(Sprite::Create(transitionTextureHandle_, { 0.0f,0.0f }));
 	transitionSprite_->SetColor(transitionColor_);
@@ -27,6 +30,11 @@ void GameSelectScene::Update(GameManager* gameManager)
 	{
 		if (isTransitionEnd_) {
 			isTransition_ = true;
+			if (soundCount_ == 0)
+			{
+				soundCount_ = 1;
+				audio_->SoundPlayWave(soundHandle_, false);
+			}
 		}
 	}
 
@@ -59,6 +67,13 @@ void GameSelectScene::Update(GameManager* gameManager)
 
 void GameSelectScene::Draw(GameManager* gameManager)
 {
+	//背景スプライトの描画
+	Sprite::PreDraw(Sprite::kBlendModeNormal);
+
+	Sprite::PostDraw();
+
+	DirectXCommon::GetInstance()->ClearDepthBuffer();
+
 	//モデルの描画
 	Model::PreDraw();
 

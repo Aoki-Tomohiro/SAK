@@ -1,7 +1,8 @@
 #include "Boss.h"
-#include "State/BossStateNormal.h"
-#include "State/BossStateLaserAttack.h"
-#include "State/BossStateChargeShot.h"
+#include "State/BossStateWait.h"
+//#include "State/BossStateNormal.h"
+//#include "State/BossStateLaserAttack.h"
+//#include "State/BossStateChargeShot.h"
 #include "2D/ImGuiManager.h"
 #include "../GameObject/Weapon/Weapon.h"
 #include "Utility/GlobalVariables.h"
@@ -16,6 +17,10 @@ Boss::~Boss()
 
 void Boss::Initialize() {
 
+	audio_ = Audio::GetInstance();
+
+	soundHandle_ = audio_->SoundLoadWave("Resources/Sounds/Boss_Damage.wav");
+
 	//モデルの作成
 	model_.reset(Model::CreateFromOBJ("Resources/Sphere", "sphere.obj"));
 
@@ -25,7 +30,7 @@ void Boss::Initialize() {
 	worldTransform_.UpdateMatrix();
 
 	//ボスの行動パターンの初期化
-	state_ = std::make_unique<BossStateNormal>();
+	state_ = std::make_unique<BossStateWait>();
 	state_->Initialize(this);
 
 	//衝突属性を設定
@@ -62,6 +67,10 @@ void Boss::Initialize() {
 
 	hpBar_.sprite_ = Sprite::Create(hpBar_.textureHandle_, hpBar_.position_);
 
+	//パーティクル
+	particleModel_.reset(ParticleModel::CreateFromOBJ("Resources/Particle", "Particle.obj"));
+	particleSystem_ = std::make_unique<ParticleSystem>();
+	particleSystem_->Initialize();
 }
 
 void Boss::Update() {
@@ -130,6 +139,9 @@ void Boss::Update() {
 	ModelMotion();
 	//バー
 	HPBarUpdate();
+
+	//パーティクルの更新
+	particleSystem_->Update();
   
 	ImGui::Begin("Boss");
 	ImGui::Text("HP : %f", Hp_);
@@ -208,10 +220,18 @@ void Boss::ApplyGlobalVariables()
 }
 
 void Boss::OnCollision(uint32_t collisionAttribute, float damage) {
-	if (weapon_->GetIsHit() == false) {
+	if (weapon_->GetIsHit() == false && weapon_->GetIsCoolDown() == false && isActive_) {
+		audio_->SoundPlayWave(soundHandle_, false);
 		Hp_ -= damage;
 		if (collisionAttribute & kCollisionAttributePlayer) {
 			hitMissileCount_ += weapon_->GetInvolvedMissileCount();
+		}
+	}
+
+	if (weapon_->GetInvolvedMissileCount() > 0 && isActive_ == false) {
+		isActive_ = true;
+		if (weapon_->GetIsHit() == false) {
+			Hp_ -= damage;
 		}
 	}
 }
@@ -249,4 +269,8 @@ void Boss::HPBarUpdate()
 	hpBar_.size_ = {(Hp_ / maxHp_) * barSize,1.0f };
 
 	hpBar_.sprite_->SetSize(hpBar_.size_);
+}
+
+void Boss::DrawParticle(const ViewProjection& viewProjection) {
+	particleModel_->Draw(particleSystem_.get(), viewProjection);
 }

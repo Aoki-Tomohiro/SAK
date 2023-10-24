@@ -94,6 +94,11 @@ void GameClearScene::Update(GameManager* gameManager)
 	{
 		if (isTransitionEnd_) {
 			isTransition_ = true;
+			if (soundCount_ == 0)
+			{
+				soundCount_ = 1;
+				audio_->SoundPlayWave(soundHandle_, false);
+			}
 		}
 	}
 
@@ -131,6 +136,13 @@ void GameClearScene::Update(GameManager* gameManager)
 
 void GameClearScene::Draw(GameManager* gameManager)
 {
+	//背景スプライトの描画
+	Sprite::PreDraw(Sprite::kBlendModeNormal);
+
+	Sprite::PostDraw();
+
+	DirectXCommon::GetInstance()->ClearDepthBuffer();
+
 	//モデルの描画
 	Model::PreDraw();
 
