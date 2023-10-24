@@ -22,15 +22,15 @@ void GameOverScene::Initialize(GameManager* gameManager)
 	weaponModel_.reset(Model::CreateFromOBJ("Resources/Head", "Head.obj"));
 	bossModel_.reset(Model::CreateFromOBJ("Resources/Boss", "Boss.obj"));
 
-	playerWorldTransform_.translation_ = { -4.5f,-2.0f,9.0f };
+	playerWorldTransform_.translation_ = { -4.5f,-3.2f,0.0f };
 	playerWorldTransform_.rotation_.z = 1.6f;
-	playerWorldTransform_.scale_ = { 1.5f,1.5f,1.5f };
+	playerWorldTransform_.scale_ = { 1.0f,1.0f,1.0f };
 
-	weaponWorldTransform_.translation_ = { -5.5f,-2.0f,9.0f };
+	weaponWorldTransform_.translation_ = { -5.5f,-3.2f,0.0f };
 	weaponWorldTransform_.rotation_.z = 1.6f;
-	weaponWorldTransform_.scale_ = { 1.5f,1.5f,1.5f };
+	playerWorldTransform_.scale_ = { 1.0f,1.0f,1.0f };
 
-	bossWorldTransform_.translation_ = { 4.5f,-2.2f,0.0f };
+	bossWorldTransform_.translation_ = { 3.5f,-1.2f,-3.0f };
 	bossWorldTransform_.rotation_.z = 0.6f;
 	bossWorldTransform_.scale_ = { 1.5f,1.5f,1.5f };
 
