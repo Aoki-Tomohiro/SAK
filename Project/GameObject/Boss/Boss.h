@@ -231,7 +231,7 @@ public:
 private:
 	Audio* audio_ = nullptr;
 
-	uint32_t soundHandle_ = 0u;
+	uint32_t soundHandle_[2];
 
 	//ボスのモデル(ダミー)
 	std::unique_ptr<Model> model_ = nullptr;

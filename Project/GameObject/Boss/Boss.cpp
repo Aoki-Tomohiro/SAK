@@ -19,7 +19,8 @@ void Boss::Initialize() {
 
 	audio_ = Audio::GetInstance();
 
-	soundHandle_ = audio_->SoundLoadWave("Resources/Sounds/Boss_Damage.wav");
+	soundHandle_[0] = audio_->SoundLoadWave("Resources/Sounds/Boss_Damage.wav");
+	soundHandle_[1] = audio_->SoundLoadWave("Resources/Sounds/Missile_Bakuhatu.wav");
 
 	//モデルの作成
 	model_.reset(Model::CreateFromOBJ("Resources/Sphere", "sphere.obj"));
@@ -222,7 +223,8 @@ void Boss::ApplyGlobalVariables()
 void Boss::OnCollision(uint32_t collisionAttribute, float damage) {
   
 	if (weapon_->GetIsHit() == false && weapon_->GetIsCoolDown() == false && isActive_) {
-		audio_->SoundPlayWave(soundHandle_, false);
+		audio_->SoundPlayWave(soundHandle_[0], false);
+		audio_->SoundPlayWave(soundHandle_[1], false);
 		Hp_ -= damage;
 		if (collisionAttribute & kCollisionAttributePlayer) {
 			hitMissileCount_ += weapon_->GetInvolvedMissileCount();
@@ -230,7 +232,7 @@ void Boss::OnCollision(uint32_t collisionAttribute, float damage) {
 	}
 
 	if (weapon_->GetInvolvedMissileCount() > 0 && isActive_ == false) {
-		audio_->SoundPlayWave(soundHandle_, false);
+		audio_->SoundPlayWave(soundHandle_[0], false);
 		isActive_ = true;
 		if (weapon_->GetIsHit() == false) {
 			Hp_ -= damage;
