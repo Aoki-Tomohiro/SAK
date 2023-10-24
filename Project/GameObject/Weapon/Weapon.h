@@ -160,5 +160,7 @@ private:
 	std::unique_ptr<ParticleModel> particleModel_ = nullptr;
 	std::unique_ptr<ParticleSystem> particleSystem_ = nullptr;
 
+	bool animationFlag_ = true;
+
 };
 

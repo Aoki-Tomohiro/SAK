@@ -202,6 +202,22 @@ public:
 	/// <param name="viewProjection"></param>
 	void DrawParticle(const ViewProjection& viewProjection);
 
+	/// <summary>
+	/// ゲームスタート時のアニメーション初期化
+	/// </summary>
+	void StartAnimationInit();
+
+	/// <summary>
+	/// ゲームスタート時のアニメーション
+	/// </summary>
+	void StartAnimation();
+
+	/// <summary>
+	/// アニメーションのフラグを取得
+	/// </summary>
+	/// <returns></returns>
+	bool GetAnimationEnd() { return animationEnd_; };
+
 private:
 	Audio* audio_ = nullptr;
 
@@ -271,4 +287,7 @@ private:
 	std::unique_ptr<ParticleModel> particleModel_ = nullptr;
 	std::unique_ptr<ParticleSystem> particleSystem_ = nullptr;
 
+	//アニメーション用のフラグ
+	bool animationFlag_ = false;
+	bool animationEnd_ = false;
 };

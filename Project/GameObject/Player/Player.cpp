@@ -182,5 +182,8 @@ void Player::DrawSprite()
 
 void Player::StartAnimation() {
 	//更新
-	Player::Update();
+	playerWorldTransform_.UpdateMatrix();
+	ModelMotion();
+	prePlayerTranslation_ = playerWorldTransform_.translation_;
+	Player::ApplyGlobalVariables();
 }

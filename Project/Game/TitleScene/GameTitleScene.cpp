@@ -105,7 +105,7 @@ void GameTitleScene::Update(GameManager* gameManager)
 		transitionSprite_->SetColor(transitionColor_);
 
 		if (transitionColor_.w >= 1.0f) {
-			gameManager->ChangeScene(new GameSelectScene());
+			gameManager->ChangeScene(new GameScene());
 		}
 	}
 

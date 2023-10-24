@@ -34,7 +34,7 @@ void GameScene::Initialize(GameManager* gameManager) {
   
 	//ボスの作成
 	boss_ = std::make_unique<Boss>();
-	boss_->Initialize();
+	boss_->StartAnimationInit();
 	boss_->SetWeapon(weapon_.get());
 
 	//衝突マネージャーの生成
@@ -52,9 +52,53 @@ void GameScene::Initialize(GameManager* gameManager) {
 	//ポストプロセスの有効化
 	PostProcess::GetInstance()->SetIsPostProcessActive(true);
 	PostProcess::GetInstance()->SetIsBloomActive(true);
+
+	viewProjection_.UpdateMatrix();
 };
 
 void GameScene::Update(GameManager* gameManager) {
+
+	//トランジション
+	if (isTransitionEnd_ == false) {
+		transitionTimer_ += 1.0f / kTransitionTime;
+		transitionColor_.w = Lerp(transitionColor_.w, 0.0f, transitionTimer_);
+		transitionSprite_->SetColor(transitionColor_);
+
+		if (transitionColor_.w <= 0.0f) {
+			isTransitionEnd_ = true;
+			transitionTimer_ = 0.0f;
+		}
+	}
+
+	if (isAnimationEnd_ == false) {
+		//プレイヤーのアニメーションの更新
+		player_->StartAnimation();
+
+		//武器のアニメーションの更新
+		weapon_->StartAnimaion();
+
+		//ボスのアニメーション更新
+		boss_->StartAnimation();
+
+		//衝突判定
+		collisionManager_->ClearColliderList();
+		collisionManager_->SetColliderList(boss_.get());
+		const std::list<std::unique_ptr<Missile>>& missiles = boss_->GetMissiles();
+		for (const std::unique_ptr<Missile>& missile : missiles) {
+			collisionManager_->SetColliderList(missile.get());
+		}
+		collisionManager_->SetColliderList(weapon_.get());
+		collisionManager_->CheckAllCollisions();
+
+		viewProjection_.UpdateMatrix();
+
+		if (boss_->GetAnimationEnd()) {
+			isAnimationEnd_ = true;
+		}
+
+		return;
+	}
+
 
 	player_->Update();
 
@@ -97,17 +141,17 @@ void GameScene::Update(GameManager* gameManager) {
 		}
 	}
 
-	//トランジション
-	if (isTransitionEnd_ == false) {
-		transitionTimer_ += 1.0f / kTransitionTime;
-		transitionColor_.w = Lerp(transitionColor_.w, 0.0f, transitionTimer_);
-		transitionSprite_->SetColor(transitionColor_);
+	////トランジション
+	//if (isTransitionEnd_ == false) {
+	//	transitionTimer_ += 1.0f / kTransitionTime;
+	//	transitionColor_.w = Lerp(transitionColor_.w, 0.0f, transitionTimer_);
+	//	transitionSprite_->SetColor(transitionColor_);
 
-		if (transitionColor_.w <= 0.0f) {
-			isTransitionEnd_ = true;
-			transitionTimer_ = 0.0f;
-		}
-	}
+	//	if (transitionColor_.w <= 0.0f) {
+	//		isTransitionEnd_ = true;
+	//		transitionTimer_ = 0.0f;
+	//	}
+	//}
 
 	if (input_->IsPushKeyEnter(DIK_1)/* || boss_->GetHP() <= 0.0f*/)
 	{
