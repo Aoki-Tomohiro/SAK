@@ -78,6 +78,7 @@ void BossStateLaserAttack::Update(Boss* pBoss) {
 			};
 			laserScale_.z = 1.0f;
 			lasers[i]->Initialize(pos, laserScale_);
+			lasers[i]->SetParticleSystem(pBoss->GetParticleSystem());
 			pBoss->AddLaser(lasers[i]);
 		}
 	}

@@ -61,14 +61,14 @@ void BossStateNormal::Update(Boss* pBoss) {
 	pBoss->SetWorldTransform(worldTransform_);
     
 	//チャージショット状態に変更
-	if (--nextAttackTimer_ > 0)
+	if (--nextAttackTimer_ < 0)
 	{
 		//次の行動をランダムに決める
 		if (isAttack_ == false) {
 			isAttack_ = true;
 			//ボスの体力が半分以下だったらチャージショットを攻撃パターンに加える
 			if (pBoss->GetHP() > pBoss->kHpMax / 2) {
-				nextAttack_ = 2;
+				nextAttack_ = 0;
 			}
 			else {
 				nextAttack_ = pBoss->Random(0, 2);
