@@ -77,7 +77,7 @@ void BossStateChargeShot::Update(Boss* pBoss) {
 		chargeWorldTransform_.translation_.x += chargeShotSpeed_;
 		pBoss->SetWorldTransform(bossWorldTransform_);
 
-		if (bossWorldTransform_.translation_.x >= Missile::widthMax)
+		if (bossWorldTransform_.translation_.x > Missile::widthMax)
 		{
 			bossWorldTransform_.translation_.x = Missile::widthMax;
 			pBoss->SetWorldTransform(bossWorldTransform_);
@@ -111,7 +111,7 @@ void BossStateChargeShot::Update(Boss* pBoss) {
 		chargeWorldTransform_.translation_.x += chargeShotSpeed_;
 		pBoss->SetWorldTransform(bossWorldTransform_);
 
-		if (bossWorldTransform_.translation_.x <= Missile::widthMin)
+		if (bossWorldTransform_.translation_.x < Missile::widthMin)
 		{
 			bossWorldTransform_.translation_.x = Missile::widthMin;
 			pBoss->SetWorldTransform(bossWorldTransform_);
