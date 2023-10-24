@@ -13,7 +13,7 @@ class Missile : public Collider
 {
 public:
 
-	void Initialize(const Vector3& position, const Vector3& velocity);
+	void Initialize(const Vector3& position, const Vector3& velocity, uint32_t audioHandle);
 
 	void Update();
 

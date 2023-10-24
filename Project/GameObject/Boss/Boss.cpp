@@ -72,6 +72,9 @@ void Boss::Initialize() {
 	particleModel_.reset(ParticleModel::CreateFromOBJ("Resources/Particle", "Particle.obj"));
 	particleSystem_ = std::make_unique<ParticleSystem>();
 	particleSystem_->Initialize();
+
+	//ミサイルの爆発音
+	missileSoundHandle_ = audio_->SoundLoadWave("Resources/Sounds/Missile_Bakuhatu.wav");
 }
 
 void Boss::Update() {
@@ -87,7 +90,7 @@ void Boss::Update() {
 		missileSpornTimer_ = MissileSpornTime;
 		missileDirection_ *= -1;
 		Missile* missile = new Missile();
-		missile->Initialize(Vector3{ 13.0f * missileDirection_,Random(/*-1.3f,*/-2.2f, 1.0f) ,0.0f }, Vector3{ missileMoveSpeed_ * (missileDirection_ * -1),0.0f,0.0f });
+		missile->Initialize(Vector3{ 13.0f * missileDirection_,Random(/*-1.3f,*/-2.2f, 1.0f) ,0.0f }, Vector3{ missileMoveSpeed_ * (missileDirection_ * -1),0.0f,0.0f }, missileSoundHandle_);
 		Boss::AddMissile(missile);
 	}
 
@@ -287,10 +290,10 @@ void Boss::StartAnimationInit() {
 	worldTransform_.rotation_.y = 3.14f;
 	Missile* missile[2];
 	missile[0] = new Missile();
-	missile[0]->Initialize({ 5.0f ,0.4f,0.0f }, { -missileMoveSpeed_ ,0.0f,0.0f });
+	missile[0]->Initialize({ 5.0f ,0.4f,0.0f }, { -missileMoveSpeed_ ,0.0f,0.0f }, missileSoundHandle_);
 	missiles_.push_back(std::unique_ptr<Missile>(missile[0]));
 	missile[1] = new Missile();
-	missile[1]->Initialize({ -5.0f ,-0.2f,0.0f }, { missileMoveSpeed_ ,0.0f,0.0f });
+	missile[1]->Initialize({ -5.0f ,-0.2f,0.0f }, { missileMoveSpeed_ ,0.0f,0.0f }, missileSoundHandle_);
 	missiles_.push_back(std::unique_ptr<Missile>(missile[1]));
 }
 

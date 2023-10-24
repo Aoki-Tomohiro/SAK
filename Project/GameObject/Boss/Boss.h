@@ -228,6 +228,11 @@ public:
 	/// <returns></returns>
 	ParticleSystem* GetParticleSystem() { return particleSystem_.get(); };
 
+	/// <summary>
+	/// ミサイルのサウンドハンドルを取得
+	/// </summary>
+	uint32_t GetMissileSoundHandle() { return missileSoundHandle_; };
+
 private:
 	Audio* audio_ = nullptr;
 
@@ -300,4 +305,7 @@ private:
 	//アニメーション用のフラグ
 	bool animationFlag_ = false;
 	bool animationEnd_ = false;
+
+	//ミサイルの爆発音
+	uint32_t missileSoundHandle_ = 0;
 };

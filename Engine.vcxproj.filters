@@ -303,9 +303,6 @@
     <ClCompile Include="Project\GameObject\Missile\Missile.cpp">
       <Filter>ソース ファイル\Project\GameObject\Missile</Filter>
     </ClCompile>
-    <ClCompile Include="Project\GameObject\Missile\MissileManager.cpp">
-      <Filter>ソース ファイル\Project\GameObject\Missile</Filter>
-    </ClCompile>
     <ClCompile Include="BackGround.cpp">
       <Filter>ソース ファイル\Project\GameObject\BackGround</Filter>
     </ClCompile>
@@ -484,9 +481,6 @@
     </ClInclude>
     <ClInclude Include="Project\GameObject\Player\Player.h">
       <Filter>ヘッダー ファイル\Project\GameObject\Player</Filter>
-    </ClInclude>
-    <ClInclude Include="Project\GameObject\Missile\MissileManager.h">
-      <Filter>ヘッダー ファイル\Project\GameObject\Missile</Filter>
     </ClInclude>
     <ClInclude Include="Project\GameObject\Missile\Missile.h">
       <Filter>ヘッダー ファイル\Project\GameObject\Missile</Filter>

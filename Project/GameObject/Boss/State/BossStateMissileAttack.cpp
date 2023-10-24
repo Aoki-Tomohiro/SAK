@@ -26,10 +26,10 @@ void BossStateMissileAttack::Update(Boss* pBoss) {
 		Vector3 missilePos = pBoss->GetWorldPosition();
 		Missile* missile[2];
 		missile[0] = new Missile();
-		missile[0]->Initialize(missilePos, Vector3{ 0.1f,0.0f,0.0f });
+		missile[0]->Initialize(missilePos, Vector3{ 0.1f,0.0f,0.0f }, pBoss->GetMissileSoundHandle());
 		missiles_.push_back(std::unique_ptr<Missile>(missile[0]));
 		missile[1] = new Missile();
-		missile[1]->Initialize(missilePos, Vector3{ -0.1f,0.0f,0.0f });
+		missile[1]->Initialize(missilePos, Vector3{ -0.1f,0.0f,0.0f }, pBoss->GetMissileSoundHandle());
 		missiles_.push_back(std::unique_ptr<Missile>(missile[1]));
 	}
 
@@ -55,10 +55,10 @@ void BossStateMissileAttack::Update(Boss* pBoss) {
 			addMissileCount_++;
 			Missile* missile[2];
 			missile[0] = new Missile();
-			missile[0]->Initialize(Vector3{ -8.0f,pBoss->Random(-2.2f, 1.0f) ,0.0f }, Vector3{ 0.05f,0.0f,0.0f });
+			missile[0]->Initialize(Vector3{ -8.0f,pBoss->Random(-2.2f, 1.0f) ,0.0f }, Vector3{ 0.05f,0.0f,0.0f }, pBoss->GetMissileSoundHandle());
 			pBoss->AddMissile(missile[0]);
 			missile[1] = new Missile();
-			missile[1]->Initialize(Vector3{ 8.0f,pBoss->Random(-2.2f, 1.0f) ,0.0f }, Vector3{ -0.05f,0.0f,0.0f });
+			missile[1]->Initialize(Vector3{ 8.0f,pBoss->Random(-2.2f, 1.0f) ,0.0f }, Vector3{ -0.05f,0.0f,0.0f }, pBoss->GetMissileSoundHandle());
 			pBoss->AddMissile(missile[1]);
 		}
 	}

@@ -1,7 +1,7 @@
 #include "missile.h"
 #include "Utility/GlobalVariables.h"
 
-void Missile::Initialize(const Vector3& position, const Vector3& velocity)
+void Missile::Initialize(const Vector3& position, const Vector3& velocity, uint32_t soundHandle)
 {
 	input_ = Input::GetInstance();
 
@@ -13,7 +13,8 @@ void Missile::Initialize(const Vector3& position, const Vector3& velocity)
 
 	textureHandle_ = TextureManager::Load("Resources/white.png");
 
-	soundHandle_ = audio_->SoundLoadWave("Resources/Sounds/Missile_Bakuhatu.wav");
+	/*soundHandle_ = audio_->SoundLoadWave("Resources/Sounds/Missile_Bakuhatu.wav");*/
+	soundHandle_ = soundHandle;
 
 	worldTransform_.translation_ = position;
 	worldTransform_.scale_ = { 0.3f,0.3f,0.3f };
