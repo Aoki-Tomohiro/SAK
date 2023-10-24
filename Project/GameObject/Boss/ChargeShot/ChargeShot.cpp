@@ -1,6 +1,6 @@
 #include "ChargeShot.h"
 
-int ChargeShot::chargeShotEndTime = 125;
+int ChargeShot::chargeShotEndTime = 170;
 
 void ChargeShot::Initialize(Vector3 position, float chargeShotpeed) {
 	//モデルの作成
