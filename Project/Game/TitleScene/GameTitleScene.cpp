@@ -1,4 +1,5 @@
 #include "GameTitleScene.h"
+#include "GameSelectScene.h"
 #include "GameManager.h"
 #include "GameScene.h"
 #include "Components/PostProcess.h"
@@ -19,6 +20,7 @@ void GameTitleScene::Initialize(GameManager* gameManager)
 	input_ = Input::GetInstance();
 
 	soundHandle_ = audio_->SoundLoadWave("Resources/Sounds/Selection.wav");
+	titleSoundHandle_ = audio_->SoundLoadWave("Resources/Sounds/Title.wav");
 
 	playerModel_.reset(Model::CreateFromOBJ("Resources/Platform", "Platform.obj"));
 	weaponModel_.reset(Model::CreateFromOBJ("Resources/Head", "Head.obj"));
@@ -50,10 +52,11 @@ void GameTitleScene::Initialize(GameManager* gameManager)
 	transitionSprite_->SetColor(transitionColor_);
 	transitionSprite_->SetSize(Vector2{ 640.0f,360.0f });
 
+	audio_->SoundPlayWave(titleSoundHandle_, true);
 
-	////ポストプロセスの有効化
-	//PostProcess::GetInstance()->SetIsPostProcessActive(true);
-	//PostProcess::GetInstance()->SetIsBloomActive(true);
+	//ポストプロセスの有効化
+	PostProcess::GetInstance()->SetIsPostProcessActive(true);
+	PostProcess::GetInstance()->SetIsBloomActive(true);
 
 	//パーティクルモデルの作成
 	particleModel_.reset(ParticleModel::CreateFromOBJ("Resources/Particle", "Particle.obj"));
@@ -112,7 +115,9 @@ void GameTitleScene::Update(GameManager* gameManager)
 		transitionSprite_->SetColor(transitionColor_);
 
 		if (transitionColor_.w >= 1.0f) {
+			audio_->StopAudio(titleSoundHandle_);
 			gameManager->ChangeScene(new GameScene);
+
 		}
 	}
 

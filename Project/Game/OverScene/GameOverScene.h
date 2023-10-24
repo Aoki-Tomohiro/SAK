@@ -65,6 +65,7 @@ private:
 
 	//サウンド
 	uint32_t soundHandle_ = 0u;
+	uint32_t overSoundHandle_ = 0u;
 
 	int soundCount_ = 0;
 

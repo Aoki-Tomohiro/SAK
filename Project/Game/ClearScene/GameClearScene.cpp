@@ -17,6 +17,8 @@ void GameClearScene::Initialize(GameManager* gameManager)
 	input_ = Input::GetInstance();
 
 	soundHandle_ = audio_->SoundLoadWave("Resources/Sounds/Selection.wav");
+  
+	clearSoundHandle_ = audio_->SoundLoadWave("Resources/Sounds/Clear.wav");
 
 	playerModel_.reset(Model::CreateFromOBJ("Resources/Platform", "Platform.obj"));
 	weaponModel_.reset(Model::CreateFromOBJ("Resources/Head", "Head.obj"));
@@ -38,6 +40,7 @@ void GameClearScene::Initialize(GameManager* gameManager)
 
 	viewProjection_.UpdateMatrix();
 
+	audio_->SoundPlayWave(clearSoundHandle_, true);
 
 	//スプライトの生成
 	winTextureHandle_ = TextureManager::Load("Resources/Images/win.png");
@@ -128,6 +131,7 @@ void GameClearScene::Update(GameManager* gameManager)
 		transitionSprite_->SetColor(transitionColor_);
 
 		if (transitionColor_.w >= 1.0f) {
+			audio_->StopAudio(clearSoundHandle_);
 			gameManager->ChangeScene(new GameTitleScene());
 		}
 	}
@@ -145,12 +149,21 @@ void GameClearScene::Update(GameManager* gameManager)
 
 void GameClearScene::Draw(GameManager* gameManager)
 {
+	PostProcess::GetInstance()->PreDraw();
+
+#pragma region 背景スプライトの描画
+
 	//背景スプライトの描画
 	Sprite::PreDraw(Sprite::kBlendModeNormal);
 
 	Sprite::PostDraw();
 
+#pragma endregion
+
+	//深度バッファをクリア
 	DirectXCommon::GetInstance()->ClearDepthBuffer();
+
+#pragma region モデルの描画
 
 	//モデルの描画
 	Model::PreDraw();
@@ -167,6 +180,21 @@ void GameClearScene::Draw(GameManager* gameManager)
 
 	Model::PostDraw();
 
+#pragma endregion
+
+#pragma region パーティクルの描画
+
+	//パーティクルモデルの描画
+	ParticleModel::PreDraw();
+
+	ParticleModel::PostDraw();
+
+#pragma endregion
+
+	PostProcess::GetInstance()->PostDraw();
+
+#pragma region 前景スプライトの描画
+
 	//スプライトの描画処理
 	Sprite::PreDraw(Sprite::kBlendModeNormal);
 	winSprite_->Draw();
@@ -176,4 +204,7 @@ void GameClearScene::Draw(GameManager* gameManager)
 	transitionSprite_->Draw();
 
 	Sprite::PostDraw();
+
+#pragma endregion
+
 };

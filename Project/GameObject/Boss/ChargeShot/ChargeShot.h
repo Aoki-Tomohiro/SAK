@@ -4,6 +4,7 @@
 #include "2D/ImGuiManager.h"
 #include "Utility/CollisionManager/Collider.h"
 #include "Utility/CollisionManager/CollisionConfig.h"
+#include "3D/Particle/ParticleSystem.h"
 
 class ChargeShot : public Collider
 {
@@ -45,6 +46,12 @@ public:
 	/// <returns>ワールド座標</returns>
 	Vector3 GetWorldPosition() override;
 
+	/// <summary>
+	/// パーティクルシステムを設定
+	/// </summary>
+	/// <param name="particleSystem"></param>
+	void SetParticleSystem(ParticleSystem* particleSystem) { particleSystem_ = particleSystem; }
+
 private:
 	//モデル
 	std::unique_ptr<Model> model_ = nullptr;
@@ -56,6 +63,8 @@ private:
 	//チャージショットのスケール
 	Vector3 chargeShotScale_ = { 1.0f,1.0f,1.0f };
 	//チャージショットの速さ
-	float chargeShotSpeed_ = 0.05f;
+	float chargeShotSpeed_ = 0.08f;
+	//パーティクルシステム
+	ParticleSystem* particleSystem_ = nullptr;
 };
 

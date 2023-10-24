@@ -197,15 +197,41 @@ public:
 	void AddParticleEmitter(ParticleEmitter* particleEmitter) { particleSystem_->AddParticleEmitter(particleEmitter); };
 
 	/// <summary>
+	/// エミッターを取得
+	/// </summary>
+	ParticleEmitter* GetParticleEmitter(const std::string& name) { return particleSystem_->GetParticleEmitter(name); };
+
+	/// <summary>
 	/// パーティクルの描画
 	/// </summary>
 	/// <param name="viewProjection"></param>
 	void DrawParticle(const ViewProjection& viewProjection);
 
+	/// <summary>
+	/// ゲームスタート時のアニメーション初期化
+	/// </summary>
+	void StartAnimationInit();
+
+	/// <summary>
+	/// ゲームスタート時のアニメーション
+	/// </summary>
+	void StartAnimation();
+
+	/// <summary>
+	/// アニメーションのフラグを取得
+	/// </summary>
+	/// <returns></returns>
+	bool GetAnimationEnd() { return animationEnd_; };
+  
+	/// パーティクルシステムを取得
+	/// </summary>
+	/// <returns></returns>
+	ParticleSystem* GetParticleSystem() { return particleSystem_.get(); };
+
 private:
 	Audio* audio_ = nullptr;
 
-	uint32_t soundHandle_ = 0u;
+	uint32_t soundHandle_[2];
 
 	//ボスのモデル(ダミー)
 	std::unique_ptr<Model> model_ = nullptr;
@@ -271,4 +297,7 @@ private:
 	std::unique_ptr<ParticleModel> particleModel_ = nullptr;
 	std::unique_ptr<ParticleSystem> particleSystem_ = nullptr;
 
+	//アニメーション用のフラグ
+	bool animationFlag_ = false;
+	bool animationEnd_ = false;
 };
