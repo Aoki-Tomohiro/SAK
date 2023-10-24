@@ -480,6 +480,7 @@ void Weapon::OnCollision(uint32_t collisionAttribute, float damage)
 			if (collisionAttribute & kCollisionAttributeMissile) 
 			{
 				audio_->SoundPlayWave(soundHandle_[0], false);
+				audio_->SoundPlayWave(soundHandle_[1], false);
 				isInvolvedMissile_ = true;
 				if (involvedCount_ < 5) {
 					involvedCount_++;
