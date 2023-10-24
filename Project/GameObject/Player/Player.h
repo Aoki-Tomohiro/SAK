@@ -27,6 +27,8 @@ public:
 
 	void DrawSprite();
 
+	void StartAnimation();
+  
 	void DrawParticle(const ViewProjection& viewProjection);
 
 private:

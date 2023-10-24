@@ -241,6 +241,13 @@ void Player::DrawSprite()
 	tutorialUI_.sprite_->Draw();
 }
 
+void Player::StartAnimation() {
+	//更新
+	playerWorldTransform_.UpdateMatrix();
+	ModelMotion();
+	prePlayerTranslation_ = playerWorldTransform_.translation_;
+	Player::ApplyGlobalVariables();
+}
 
 void Player::DrawParticle(const ViewProjection& viewProjection) {
 	//パーティクルモデルの描画

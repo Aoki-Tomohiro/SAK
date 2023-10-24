@@ -1,4 +1,5 @@
 #include "GameTitleScene.h"
+#include "GameSelectScene.h"
 #include "GameManager.h"
 #include "GameScene.h"
 #include "Components/PostProcess.h"
@@ -108,6 +109,7 @@ void GameTitleScene::Update(GameManager* gameManager)
 		if (transitionColor_.w >= 1.0f) {
 			audio_->StopAudio(titleSoundHandle_);
 			gameManager->ChangeScene(new GameScene);
+
 		}
 	}
 

@@ -118,4 +118,7 @@ private:
 
 	//次のシーン
 	NextScene nextScene_ = NextScene::GAMECLEAR;
+
+	//アニメーションのフラグ
+	bool isAnimationEnd_ = false;
 };
