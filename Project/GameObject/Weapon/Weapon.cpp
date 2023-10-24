@@ -121,6 +121,13 @@ void Weapon::Initialize()
 
 void Weapon::Update()
 {
+	XINPUT_STATE preJoyState_ = joyState_;
+	Vector3 move = { 0, 0, 0 };
+
+	if (!Input::GetInstance()->GetJoystickState(joyState_))
+	{
+		return;
+	}
 
 	//HP描画
 	for (int i = 0; i < MaxHp_; i++) {
@@ -130,37 +137,51 @@ void Weapon::Update()
 		heartUI_[i].isDraw_ = true;
 	}
 
-
 	//プレイヤーの左右移動
-	if (input_->IsPushKey(DIK_A) && IsAttack_ == false)
+	if (Input::GetInstance()->GetJoystickState(joyState_) && IsAttack_ == false)
 	{
-		weaponWorldTransform_.translation_.x -= weaponMoveSpeed_;
+		const float deadZone = 0.7f;
 
-		if (weaponWorldTransform_.translation_.x <= -7.3f)
+		bool isMoving = false;
+
+		Vector3 move = { (float)joyState_.Gamepad.sThumbLX / SHRT_MAX, 0.0f,0.0f };
+
+		if (Length(move) > deadZone)
 		{
-			weaponWorldTransform_.translation_.x = -7.3f;
+			isMoving = true;
+		}
+
+		if (isMoving)
+		{
+			move = Multiply(weaponMoveSpeed_, Normalize(move));
+
+			weaponWorldTransform_.translation_ = Add(weaponWorldTransform_.translation_, move);
+
+			if (weaponWorldTransform_.translation_.x <= -7.3f)
+			{
+				weaponWorldTransform_.translation_.x = -7.3f;
+			}
+
+			if (weaponWorldTransform_.translation_.x >= 7.3f)
+			{
+				weaponWorldTransform_.translation_.x = 7.3f;
+			}
 		}
 	}
 
-	if (input_->IsPushKey(DIK_D) && IsAttack_ == false)
-	{
-		weaponWorldTransform_.translation_.x += weaponMoveSpeed_;
-
-		if (weaponWorldTransform_.translation_.x >= 7.3f)
-		{
-			weaponWorldTransform_.translation_.x = 7.3f;
-		}
-	}
+	weaponWorldTransform_.translation_ = Add(weaponWorldTransform_.translation_, move);
+	weaponWorldTransform_.matWorld_ = MakeAffineMatrix(
+		weaponWorldTransform_.scale_, weaponWorldTransform_.rotation_, weaponWorldTransform_.translation_);
 
 	//攻撃処理
-	if (input_->IsPushKey(DIK_SPACE) && IsAttack_ == false && IsCoolDown_ == false)
+	if (joyState_.Gamepad.wButtons & XINPUT_GAMEPAD_A && IsAttack_ == false && IsCoolDown_ == false)
 	{
+		
 		pushCount_++;
 		IsCharge_ = true;
-	}
+		
 
-	if (input_->IsPushKeyExit(DIK_SPACE) && IsCoolDown_ == false)
-	{
+	}else if(preJoyState_.Gamepad.wButtons & XINPUT_GAMEPAD_A && IsCoolDown_ == false){
 		if (pushCount_ < 10)
 		{
 			audio_->SoundPlayWave(soundHandle_[3], false);
@@ -193,6 +214,7 @@ void Weapon::Update()
 			pushCount_ = 0;
 		}
 	}
+
 
 	if (IsCharge_ == true)
 	{

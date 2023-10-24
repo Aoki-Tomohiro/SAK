@@ -57,6 +57,8 @@ public:
 private:
 	Input* input_ = nullptr;
 
+	XINPUT_STATE joyState_;
+
 	Audio* audio_ = nullptr;
 
 	std::unique_ptr<Model> weaponModelDummy_ = nullptr;
@@ -93,6 +95,7 @@ private:
 	//クールダウン中のタイマー
 	int coolDownTimer_ = 30;
 
+	bool IsNormal_ = true;
 	bool IsCharge_ = false;
 	bool IsAttack_ = false;
 	bool IsCoolDown_ = false;

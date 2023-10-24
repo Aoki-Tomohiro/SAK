@@ -53,6 +53,8 @@ private:
 	//Input
 	Input* input_ = nullptr;
 
+	XINPUT_STATE joyState_;
+
 	//サウンド
 	uint32_t soundHandle_ = 0u;
 	uint32_t clearSoundHandle_ = 0u;
@@ -90,6 +92,7 @@ private:
 	std::unique_ptr<Sprite>  pressASprite_ = nullptr;
 	//プレスAのテクスチャ
 	uint32_t pressATextureHandle_ = 0;
+
 	//トランジション用のスプライト
 	std::unique_ptr<Sprite> transitionSprite_;
 	//トランジションのテクスチャ

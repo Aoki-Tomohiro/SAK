@@ -119,8 +119,13 @@ void Player::Update()
 	particleSystem_->GetParticleEmitter("PlayerMove")->SetPopCount(0);
 
 	//プレイヤーの左右移動
-	if (input_->IsPushKey(DIK_A) && weapon_->GetIsAttack() == false)
+	if (Input::GetInstance()->GetJoystickState(joyState_) && weapon_->GetIsAttack() == false)
 	{
+		const float deadZone = 0.7f;
+
+		bool isMoving = false;
+
+		Vector3 move = { (float)joyState_.Gamepad.sThumbLX / SHRT_MAX, 0.0f,0.0f };
 		playerWorldTransform_.translation_.x -= playerMoveSpeed_;
 		//移動中はパーティクルを出す
 		particleSystem_->GetParticleEmitter("PlayerMove")->SetPopArea({ 1.0f,-0.5f,0.0f }, { 1.0f,-0.5f,0.0f });
@@ -128,13 +133,12 @@ void Player::Update()
 		particleSystem_->GetParticleEmitter("PlayerMove")->SetPopCount(10);
 		particleSystem_->GetParticleEmitter("PlayerMove")->SetTranslation(playerWorldTransform_.translation_);
 
-		if (playerWorldTransform_.translation_.x <= -7.3f)
+		if (Length(move) > deadZone)
 		{
-			playerWorldTransform_.translation_.x = -7.3f;
+			isMoving = true;
 		}
-	}
 
-	if (input_->IsPushKey(DIK_D) && weapon_->GetIsAttack() == false)
+		if (isMoving)
 	{
 		playerWorldTransform_.translation_.x += playerMoveSpeed_;
 		//移動中はパーティクルを出す
@@ -145,12 +149,26 @@ void Player::Update()
 
 		if (playerWorldTransform_.translation_.x >= 7.3f)
 		{
-			playerWorldTransform_.translation_.x = 7.3f;
+			move = Multiply(playerMoveSpeed_, Normalize(move));
+
+			playerWorldTransform_.translation_ = Add(playerWorldTransform_.translation_, move);
+
+			if (playerWorldTransform_.translation_.x <= -7.3f)
+			{
+				playerWorldTransform_.translation_.x = -7.3f;
+			}
+
+			if (playerWorldTransform_.translation_.x >= 7.3f)
+			{
+				playerWorldTransform_.translation_.x = 7.3f;
+			}
 		}
+
+		ModelMotion();
 	}
 
+	
 	playerWorldTransform_.UpdateMatrix();
-	ModelMotion();
 	prePlayerTranslation_ = playerWorldTransform_.translation_;
 	Player::ApplyGlobalVariables();
 
@@ -181,7 +199,6 @@ void Player::ApplyGlobalVariables()
 
 void Player::ModelMotion()
 {
-
 	//MoveMotion
 	{
 
@@ -190,10 +207,6 @@ void Player::ModelMotion()
 		if (prePlayerTranslation_.x != playerWorldTransform_.translation_.x) {
 			motionMode_ = Move;
 		}
-
-
-
-
 
 		switch (motionMode_)
 		{

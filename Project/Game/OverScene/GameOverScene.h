@@ -57,6 +57,8 @@ private:
 	//Input
 	Input* input_ = nullptr;
 
+	XINPUT_STATE joyState_;
+
 	//カメラ
 	ViewProjection viewProjection_{};
 

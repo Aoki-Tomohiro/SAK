@@ -57,6 +57,8 @@ private:
 	Audio* audio_ = nullptr;
 	//Input
 	Input* input_ = nullptr;
+
+	XINPUT_STATE joyState_;
   
 	//パーティクルモデルの作成
 	uint32_t textureHandle_ = 0;

@@ -174,3 +174,7 @@ float Lerp(const float& v1, const float& v2, float t);
 /// <param name="t"></param>
 /// <returns></returns>
 Vector3 Lerp(const Vector3& v1, const Vector3& v2, float t);
+
+Vector3 Multiply(const float& v1, const Vector3& v2);
+
+Vector3 Normalize(const Vector3& v);

@@ -48,6 +48,18 @@ void GameSelectScene::Initialize(GameManager* gameManager)
 
 void GameSelectScene::Update(GameManager* gameManager)
 {
+	if (!Input::GetInstance()->GetJoystickState(joyState_))
+	{
+		return;
+	}
+
+	if (joyState_.Gamepad.wButtons & XINPUT_GAMEPAD_A)
+	{
+		if (isTransitionEnd_) {
+			isTransition_ = true;
+		}
+	}
+
 	//プレイヤーのアニメーションの更新
 	player_->StartAnimation();
 

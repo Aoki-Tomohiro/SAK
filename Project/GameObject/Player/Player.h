@@ -34,6 +34,8 @@ public:
 private:
 	Input* input_ = nullptr;
 
+	XINPUT_STATE joyState_;
+
 	std::unique_ptr<Model> playerModelDummy_ = nullptr;
 
 	std::unique_ptr<Model> platformModel_ = nullptr;
