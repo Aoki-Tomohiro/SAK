@@ -1,5 +1,7 @@
 {
-    "BossStateNormal": {
-        "AttackInterval": 200,
-        "MoveSpeed": 0.03
+  "BossStateNormal": {
+    "AttackInterval": 200,
+    "MoveSpeed": 0.03
+  }
+
 }

@@ -80,7 +80,7 @@ private:
 	float attackSpeed_[4] = { 0.03f ,0.085f ,0.15f , 0.2f };
 
 	//クールダウン中のスピード
-	float coolDownSpeed_ = 0.05f;
+	float coolDownSpeed_ = 0.4f;
 
 	//チャージ時のカウント
 	int chargeCount_ = 0;
@@ -89,7 +89,7 @@ private:
 	int pushCount_ = 0;
 
 	//クールダウン中のタイマー
-	int coolDownTimer_ = 60;
+	int coolDownTimer_ = 30;
 
 	bool IsCharge_ = false;
 	bool IsAttack_ = false;

@@ -238,9 +238,9 @@ void Weapon::Update()
 		weaponWorldTransform_.translation_.y += attackSpeed_[3];
 		SetDamage(attackDamage_[3] + involvedCount_ * 2.0f);
 
-		if (weaponWorldTransform_.translation_.y >= 5.0f)
+		if (weaponWorldTransform_.translation_.y >= 4.5f)
 		{
-			weaponWorldTransform_.translation_.y = 5.0f;
+			weaponWorldTransform_.translation_.y = 4.5f;
 			chargeCount_ = 0;
 			IsAttack_ = false;
 			IsCoolDown_ = true;
