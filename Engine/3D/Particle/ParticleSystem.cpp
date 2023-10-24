@@ -10,7 +10,7 @@ void ParticleSystem::Initialize() {
 void ParticleSystem::Update() {
 	//エミッターの削除
 	particleEmitters_.remove_if([](std::unique_ptr<ParticleEmitter>& particleEmitter) {
-		if (particleEmitter->IsDead()) {
+		if (particleEmitter->GetIsDead()) {
 			particleEmitter.reset();
 			return true;
 		}
@@ -64,4 +64,27 @@ void ParticleSystem::UpdateInstancingResource() {
 		++emitterIterator;
 	}
 	instancingResource_->Unmap(0, nullptr);
+}
+
+ParticleEmitter* ParticleSystem::GetParticleEmitter(const std::string& name) {
+	//エミッターのリストから探す
+	for (std::unique_ptr<ParticleEmitter>& particleEmitter : particleEmitters_) {
+		if (particleEmitter->GetName() == name) {
+			return particleEmitter.get();
+		}
+	}
+	//見つからなかったらnullptrを返す
+	return nullptr;
+}
+
+std::list<ParticleEmitter*> ParticleSystem::GetParticleEmitters(const std::string& name) {
+	//返却するリスト
+	std::list<ParticleEmitter*> particleEmitters{};
+	//エミッターをリストから探す
+	for (std::unique_ptr<ParticleEmitter>& particleEmitter : particleEmitters_) {
+		if (particleEmitter->GetName() == name) {
+			particleEmitters.push_back(particleEmitter.get());
+		}
+	}
+	return particleEmitters;
 }

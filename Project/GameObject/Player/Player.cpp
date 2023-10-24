@@ -66,14 +66,67 @@ void Player::Initialize(Weapon* weapon)
 
 	tutorialUI_.sprite_ = Sprite::Create(tutorialUI_.textureHandle_, tutorialUI_.position_);
 
+	//パーティクルの初期化
+	particleModel_.reset(ParticleModel::CreateFromOBJ("Resources/Particle", "Particle.obj"));
+	particleSystem_ = std::make_unique<ParticleSystem>();
+	particleSystem_->Initialize();
+
+	//エミッターの作成
+	ParticleEmitter* particleEmitter = EmitterBuilder()
+		.SetArea({ -0.5f,-0.5f,0.0f }, { 0.5f,-0.5f,0.0f })
+		.SetAzimuth(0.0f, 0.0f)
+		.SetColor({ 1.0f,1.0f,1.0f,0.5f }, { 1.0f,1.0f,1.0f,0.5f })
+		.SetCount(10)
+		.SetDeleteTime(60)
+		.SetElevation(0.0f, 0.0f)
+		.SetEmitterName("PlayerMove")
+		.SetFrequency(0.1f)
+		.SetLifeTime(0.4f, 0.4f)
+		.SetParticleType(ParticleEmitter::ParticleType::kScale)
+		.SetRotation({ 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f })
+		.SetScale({ 0.2f,0.2f,0.2f }, { 0.2f,0.2f,0.2f })
+		.SetTranslation(playerWorldTransform_.translation_)
+		.SetVelocity({ 0.1f,0.1f,0.1f }, { 0.1f,0.1f,0.1f })
+		.Build();
+	particleSystem_->AddParticleEmitter(particleEmitter);
 }
 
 void Player::Update() 
 {
+	//エミッターが消えていたら再生成
+	if (particleSystem_->GetParticleEmitter("PlayerMove") == nullptr) {
+		//エミッターの作成
+		ParticleEmitter* particleEmitter = EmitterBuilder()
+			.SetArea({ -0.5f,-0.5f,0.0f }, { 0.5f,-0.5f,0.0f })
+			.SetAzimuth(180.0f, 180.0f)
+			.SetColor({ 1.0f,1.0f,1.0f,0.5f }, { 1.0f,1.0f,1.0f,0.5f })
+			.SetCount(10)
+			.SetDeleteTime(60)
+			.SetElevation(0.0f, 0.0f)
+			.SetEmitterName("PlayerMove")
+			.SetFrequency(0.1f)
+			.SetLifeTime(0.4f, 0.4f)
+			.SetParticleType(ParticleEmitter::ParticleType::kScale)
+			.SetRotation({ 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f })
+			.SetScale({ 0.2f,0.2f,0.2f }, { 0.2f,0.2f,0.2f })
+			.SetTranslation(playerWorldTransform_.translation_)
+			.SetVelocity({ 0.1f,0.1f,0.1f }, { 0.1f,0.1f,0.1f })
+			.Build();
+		particleSystem_->AddParticleEmitter(particleEmitter);
+	}
+
+	//パーティクルを出さないようにする
+	particleSystem_->GetParticleEmitter("PlayerMove")->SetPopCount(0);
+
 	//プレイヤーの左右移動
 	if (input_->IsPushKey(DIK_A) && weapon_->GetIsAttack() == false)
 	{
 		playerWorldTransform_.translation_.x -= playerMoveSpeed_;
+		//移動中はパーティクルを出す
+		particleSystem_->GetParticleEmitter("PlayerMove")->SetPopArea({ 1.0f,-0.5f,0.0f }, { 1.0f,-0.5f,0.0f });
+		particleSystem_->GetParticleEmitter("PlayerMove")->SetPopAzimuth(0.0f, 0.0f);
+		particleSystem_->GetParticleEmitter("PlayerMove")->SetPopCount(10);
+		particleSystem_->GetParticleEmitter("PlayerMove")->SetTranslation(playerWorldTransform_.translation_);
 
 		if (playerWorldTransform_.translation_.x <= -7.3f)
 		{
@@ -84,6 +137,11 @@ void Player::Update()
 	if (input_->IsPushKey(DIK_D) && weapon_->GetIsAttack() == false)
 	{
 		playerWorldTransform_.translation_.x += playerMoveSpeed_;
+		//移動中はパーティクルを出す
+		particleSystem_->GetParticleEmitter("PlayerMove")->SetPopArea({ -1.0f,-0.5f,0.0f }, { -1.0f,-0.5f,0.0f });
+		particleSystem_->GetParticleEmitter("PlayerMove")->SetPopAzimuth(180.0f, 180.0f);
+		particleSystem_->GetParticleEmitter("PlayerMove")->SetPopCount(10);
+		particleSystem_->GetParticleEmitter("PlayerMove")->SetTranslation(playerWorldTransform_.translation_);
 
 		if (playerWorldTransform_.translation_.x >= 7.3f)
 		{
@@ -95,6 +153,9 @@ void Player::Update()
 	ModelMotion();
 	prePlayerTranslation_ = playerWorldTransform_.translation_;
 	Player::ApplyGlobalVariables();
+
+	//パーティクルの更新
+	particleSystem_->Update();
 
 	ImGui::Begin("Player");
 	ImGui::Text("translationX %f", playerWorldTransform_.translation_.x);
@@ -180,3 +241,15 @@ void Player::DrawSprite()
 	tutorialUI_.sprite_->Draw();
 }
 
+void Player::StartAnimation() {
+	//更新
+	playerWorldTransform_.UpdateMatrix();
+	ModelMotion();
+	prePlayerTranslation_ = playerWorldTransform_.translation_;
+	Player::ApplyGlobalVariables();
+}
+
+void Player::DrawParticle(const ViewProjection& viewProjection) {
+	//パーティクルモデルの描画
+	particleModel_->Draw(particleSystem_.get(), viewProjection);
+}

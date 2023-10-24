@@ -1,6 +1,6 @@
 #include "Boss.h"
-#include "State/BossStateWait.h"
-//#include "State/BossStateNormal.h"
+//#include "State/BossStateWait.h"
+#include "State/BossStateNormal.h"
 //#include "State/BossStateLaserAttack.h"
 //#include "State/BossStateChargeShot.h"
 #include "2D/ImGuiManager.h"
@@ -19,7 +19,8 @@ void Boss::Initialize() {
 
 	audio_ = Audio::GetInstance();
 
-	soundHandle_ = audio_->SoundLoadWave("Resources/Sounds/Boss_Damage.wav");
+	soundHandle_[0] = audio_->SoundLoadWave("Resources/Sounds/Boss_Damage.wav");
+	soundHandle_[1] = audio_->SoundLoadWave("Resources/Sounds/Missile_Bakuhatu.wav");
 
 	//モデルの作成
 	model_.reset(Model::CreateFromOBJ("Resources/Sphere", "sphere.obj"));
@@ -30,7 +31,7 @@ void Boss::Initialize() {
 	worldTransform_.UpdateMatrix();
 
 	//ボスの行動パターンの初期化
-	state_ = std::make_unique<BossStateWait>();
+	state_ = std::make_unique<BossStateNormal>();
 	state_->Initialize(this);
 
 	//衝突属性を設定
@@ -220,8 +221,10 @@ void Boss::ApplyGlobalVariables()
 }
 
 void Boss::OnCollision(uint32_t collisionAttribute, float damage) {
+  
 	if (weapon_->GetIsHit() == false && weapon_->GetIsCoolDown() == false && isActive_) {
-		audio_->SoundPlayWave(soundHandle_, false);
+		audio_->SoundPlayWave(soundHandle_[0], false);
+		audio_->SoundPlayWave(soundHandle_[1], false);
 		Hp_ -= damage;
 		if (collisionAttribute & kCollisionAttributePlayer) {
 			hitMissileCount_ += weapon_->GetInvolvedMissileCount();
@@ -229,11 +232,14 @@ void Boss::OnCollision(uint32_t collisionAttribute, float damage) {
 	}
 
 	if (weapon_->GetInvolvedMissileCount() > 0 && isActive_ == false) {
+		audio_->SoundPlayWave(soundHandle_[0], false);
 		isActive_ = true;
 		if (weapon_->GetIsHit() == false) {
 			Hp_ -= damage;
 		}
 	}
+
+	animationFlag_ = true;
 }
 
 Vector3 Boss::GetWorldPosition() {
@@ -273,4 +279,59 @@ void Boss::HPBarUpdate()
 
 void Boss::DrawParticle(const ViewProjection& viewProjection) {
 	particleModel_->Draw(particleSystem_.get(), viewProjection);
+}
+
+void Boss::StartAnimationInit() {
+	//初期化
+	Boss::Initialize();
+	worldTransform_.rotation_.y = 3.14f;
+	Missile* missile[2];
+	missile[0] = new Missile();
+	missile[0]->Initialize({ 5.0f ,0.4f,0.0f }, { -missileMoveSpeed_ ,0.0f,0.0f });
+	missiles_.push_back(std::unique_ptr<Missile>(missile[0]));
+	missile[1] = new Missile();
+	missile[1]->Initialize({ -5.0f ,-0.2f,0.0f }, { missileMoveSpeed_ ,0.0f,0.0f });
+	missiles_.push_back(std::unique_ptr<Missile>(missile[1]));
+}
+
+void Boss::StartAnimation() {
+
+	//グローバル変数の適応
+	Boss::ApplyGlobalVariables();
+
+	if (animationEnd_ == false) {
+		if (animationFlag_) {
+			const float rotSpeed = 0.02f;
+			worldTransform_.rotation_.y -= rotSpeed;
+		}
+
+		if (worldTransform_.rotation_.y <= 0.0f) {
+			animationEnd_ = true;
+		}
+	}
+
+	//死亡フラグの立ったミサイルをリストから削除
+	missiles_.remove_if([](std::unique_ptr<Missile>& missile) {
+		if (missile->IsAlive() == false) {
+			missile.reset();
+			return true;
+		}
+		return false;
+		});
+
+	//ミサイルの更新
+	for (std::unique_ptr<Missile>& missile : missiles_) {
+		missile->Update();
+	}
+
+	//ワールドトランスフォームの更新
+	worldTransform_.UpdateMatrix();
+
+	//モーション更新
+	ModelMotion();
+	//バー
+	HPBarUpdate();
+
+	//パーティクルの更新
+	particleSystem_->Update();
 }
