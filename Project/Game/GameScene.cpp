@@ -49,9 +49,9 @@ void GameScene::Initialize(GameManager* gameManager) {
 	transitionSprite_->SetColor(transitionColor_);
 	transitionSprite_->SetSize(Vector2{ 640.0f,360.0f });
 
-	////ポストプロセスの有効化
-	//PostProcess::GetInstance()->SetIsPostProcessActive(true);
-	//PostProcess::GetInstance()->SetIsBloomActive(true);
+	//ポストプロセスの有効化
+	PostProcess::GetInstance()->SetIsPostProcessActive(true);
+	PostProcess::GetInstance()->SetIsBloomActive(true);
 };
 
 void GameScene::Update(GameManager* gameManager) {

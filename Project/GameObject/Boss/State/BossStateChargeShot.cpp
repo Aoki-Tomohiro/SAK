@@ -31,7 +31,9 @@ void BossStateChargeShot::Initialize(Boss* pBoss) {
 	BossStateChargeShot::ApplyGlobalVariables();
 
 	//モデルの作成
-	chargemodel_.reset(Model::CreateFromOBJ("Resources/Sphere", "sphere.obj"));
+	chargemodel_.reset(Model::CreateFromOBJ("Resources/ChargeBeam", "ChargeBeam.obj"));
+	chargemodel_->GetDirectionalLight()->SetEnableLighting(false);
+
 	//ワールドトランスフォームの初期化
 	chargeWorldTransform_.translation_.y = 2.0f;
 	chargeWorldTransform_.scale_ = { 0.1f,0.1f,0.1f };
