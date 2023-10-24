@@ -138,7 +138,6 @@ void BossStateChargeShot::Update(Boss* pBoss) {
 		pBoss->SetWorldTransform(bossWorldTransform_);
 	}
 
-
 	//ワールドトランスフォームの更新
 	chargeWorldTransform_.UpdateMatrix();
 
