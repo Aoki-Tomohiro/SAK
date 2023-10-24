@@ -4,8 +4,8 @@
 #include "BossStateStun.h"
 #include "Utility/GlobalVariables.h"
 
-int BossStateChargeShot::chargeTime = 200;
-int BossStateChargeShot::chargeShotEndTime = 240;
+int BossStateChargeShot::chargeTime = 120;
+int BossStateChargeShot::chargeShotEndTime = 220;
 
 
 BossStateChargeShot::~BossStateChargeShot() {
@@ -31,7 +31,9 @@ void BossStateChargeShot::Initialize(Boss* pBoss) {
 	BossStateChargeShot::ApplyGlobalVariables();
 
 	//モデルの作成
-	chargemodel_.reset(Model::CreateFromOBJ("Resources/Sphere", "sphere.obj"));
+	chargemodel_.reset(Model::CreateFromOBJ("Resources/ChargeBeam", "ChargeBeam.obj"));
+	chargemodel_->GetDirectionalLight()->SetEnableLighting(false);
+
 	//ワールドトランスフォームの初期化
 	chargeWorldTransform_.translation_.y = 2.0f;
 	chargeWorldTransform_.scale_ = { 0.1f,0.1f,0.1f };
@@ -43,8 +45,40 @@ void BossStateChargeShot::Initialize(Boss* pBoss) {
 	respownCount_ = Random(1,2);
 
 	//タイマーの初期化
-	chargeTimer_ = chargeTime;
+	chargeTimerMax_ = chargeTime;
 	endTimer_ = chargeShotEndTime;
+
+	//for (uint32_t i = 0; i < 150; ++i) {
+	//	ParticleEmitter* emitter = EmitterBuilder()
+	//		.SetParticleType(ParticleEmitter::ParticleType::kCharge)
+	//		.SetTranslation(chargeWorldTransform_.translation_)
+	//		.SetScale({ 0.1f,0.1f,0.1f }, { 0.1f,0.1f,0.1f })
+	//		.SetVelocity({ 0.3f,0.3f,0.0f }, { 0.6f,0.6f,0.0f })
+	//		.SetAzimuth(0.0f, 0.0f)
+	//		.SetElevation(0.0f, 0.0f)
+	//		.SetCount(1)
+	//		.SetFrequency(0.1f)
+	//		.SetLifeTime(0.1f, 0.4f)
+	//		.SetDeleteTime(float(chargeTimerMax_ / 60.0f))
+	//		.Build();
+	//	pBoss->AddParticleEmitter(emitter);
+	//}
+
+	//チャージパーティクル
+	ParticleEmitter* emitter = EmitterBuilder()
+		.SetEmitterName("Charge")
+		.SetParticleType(ParticleEmitter::ParticleType::kCharge)
+		.SetTranslation(chargeWorldTransform_.translation_)
+		.SetScale({ 0.1f,0.1f,0.1f }, { 0.1f,0.1f,0.1f })
+		.SetVelocity({ 0.1f,0.1f,0.1f }, { 0.1f,0.1f,0.1f })
+		.SetAzimuth(0.0f, 0.0f)
+		.SetElevation(0.0f, 0.0f)
+		.SetCount(100)
+		.SetFrequency(0.1f)
+		.SetLifeTime(0.2f, 0.2f)
+		.SetDeleteTime(float(chargeTimerMax_ / 60.0f))
+		.Build();
+	pBoss->AddParticleEmitter(emitter);
 }
 
 void BossStateChargeShot::Update(Boss* pBoss) {
@@ -52,21 +86,30 @@ void BossStateChargeShot::Update(Boss* pBoss) {
 	//グローバル変数の適応
 	BossStateChargeShot::ApplyGlobalVariables();
 
-	if (chargeTimer_ > 0)
-	{
-		chargeTimer_--;
-		chargeWorldTransform_.scale_.x += 0.0008f;
-		chargeWorldTransform_.scale_.y += 0.0008f;
-		chargeWorldTransform_.scale_.z += 0.0008f;
 
-		if (pBoss->GetHitMissileCount() >= 5)
+	if (chargeTimer_ < chargeTimerMax_)
+	{
+		chargeTimer_++;
+
+		float ta = float(chargeTimer_) / float(chargeTimerMax_);
+
+		ta = std::clamp(ta, 0.0f, 1.0f);
+
+		float scale = 0.6f * ta;
+
+		chargeWorldTransform_.scale_.x = scale;
+		chargeWorldTransform_.scale_.y = scale;
+		chargeWorldTransform_.scale_.z = scale;
+
+		if (pBoss->GetHitMissileCount() >= 5 && IsMove_ == false && IsAttack_ == false)
 		{
+			pBoss->GetParticleEmitter("Charge")->SetPopCount(0);
 			pBoss->ChangeState(new BossStateStun());
 			return;
 		}
 	}
 
-	if (chargeTimer_ <= 0 && IsAttack_ == false)
+	if (chargeTimer_ >= chargeTimerMax_ && IsAttack_ == false)
 	{
 		IsMove_ = true;
 	}
@@ -82,10 +125,13 @@ void BossStateChargeShot::Update(Boss* pBoss) {
 			bossWorldTransform_.translation_.x = Missile::widthMax;
 			pBoss->SetWorldTransform(bossWorldTransform_);
 
+			chargeShotSpeed_ = 0.07f;
+
 			ChargeShot* chargeShot;
 
 			chargeShot = new ChargeShot();
 			chargeShot->Initialize(bossWorldTransform_.translation_,chargeShotSpeed_);
+			chargeShot->SetParticleSystem(pBoss->GetParticleSystem());
 			pBoss->AddChargeShot(chargeShot);
 
 			IsMove_ = false;
@@ -96,7 +142,7 @@ void BossStateChargeShot::Update(Boss* pBoss) {
 	if (IsAttack_ == true && respownCount_ == 1)
 	{
 		chargeTimer_ = -1;
-		chargeShotSpeed_ = -0.05f;
+		chargeShotSpeed_ = -0.07f;
 		endTimer_--;
 
 		//ボスの移動
@@ -116,10 +162,13 @@ void BossStateChargeShot::Update(Boss* pBoss) {
 			bossWorldTransform_.translation_.x = Missile::widthMin;
 			pBoss->SetWorldTransform(bossWorldTransform_);
 
+			chargeShotSpeed_ = -0.07f;
+
 			ChargeShot* chargeShot;
 
 			chargeShot = new ChargeShot();
 			chargeShot->Initialize(bossWorldTransform_.translation_, chargeShotSpeed_);
+			chargeShot->SetParticleSystem(pBoss->GetParticleSystem());
 			pBoss->AddChargeShot(chargeShot);
 
 			IsMove_ = false;
@@ -130,7 +179,7 @@ void BossStateChargeShot::Update(Boss* pBoss) {
 	if (IsAttack_ == true && respownCount_ == 2)
 	{
 		chargeTimer_ = -1;
-		chargeShotSpeed_ = 0.05f;
+		chargeShotSpeed_ = 0.07f;
 		endTimer_--;
 
 		//ボスの移動
@@ -142,7 +191,8 @@ void BossStateChargeShot::Update(Boss* pBoss) {
 	chargeWorldTransform_.UpdateMatrix();
 
 	//攻撃終了
-	if (Missile::widthMin > bossWorldTransform_.translation_.x || Missile::widthMax < bossWorldTransform_.translation_.x)
+	if (IsAttack_ == true && respownCount_ == 1 && Missile::widthMin > bossWorldTransform_.translation_.x ||
+		IsAttack_ == true && respownCount_ == 2 && Missile::widthMax < bossWorldTransform_.translation_.x)
 	{
 		pBoss->ChangeState(new BossStateNormal());
 	}
@@ -152,6 +202,7 @@ void BossStateChargeShot::Update(Boss* pBoss) {
 	ImGui::Text("bossTransform %f", bossWorldTransform_.translation_.x);
 	ImGui::Text("respownCount %d", respownCount_);
 	ImGui::Text("chargeTimer %d", chargeTimer_);
+	ImGui::Text("chargeShotSpeed %f", chargeShotSpeed_);
 	ImGui::Text("endTimer %d", endTimer_);
 	ImGui::End();
 }

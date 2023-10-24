@@ -156,3 +156,25 @@ Matrix4x4 MakeOrthographicMatrix(float left, float top, float right, float botto
 /// <param name="matrix">ワールド行列</param>
 /// <returns>回転成分</returns>
 Vector3 TransformNormal(const Vector3& vector, const Matrix4x4& matrix);
+
+/// <summary>
+/// 線形補間
+/// </summary>
+/// <param name="v1"></param>
+/// <param name="v2"></param>
+/// <param name="t"></param>
+/// <returns></returns>
+float Lerp(const float& v1, const float& v2, float t);
+
+/// <summary>
+/// 線形補間
+/// </summary>
+/// <param name="v1"></param>
+/// <param name="v2"></param>
+/// <param name="t"></param>
+/// <returns></returns>
+Vector3 Lerp(const Vector3& v1, const Vector3& v2, float t);
+
+Vector3 Multiply(const float& v1, const Vector3& v2);
+
+Vector3 Normalize(const Vector3& v);

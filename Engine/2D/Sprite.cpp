@@ -78,6 +78,8 @@ void Sprite::Draw() {
 	sCommandList_->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
 	//wvp用のCBufferの場所を設定
 	sCommandList_->SetGraphicsRootConstantBufferView(1, wvpResource_->GetGPUVirtualAddress());
+	//DescriptorHeapを設定
+	TextureManager::GetInstance()->SetGraphicsDescriptorHeap();
 	//DescriptorTableを設定
 	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(2, textureHandle_);
 	//描画!(DrawCall/ドローコール)。3頂点で1つのインスタンス。インスタンスについては今後

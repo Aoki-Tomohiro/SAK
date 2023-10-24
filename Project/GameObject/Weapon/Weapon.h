@@ -3,11 +3,17 @@
 #include "3D/Matrix/WorldTransform.h"
 #include "2D/ImGuiManager.h"
 #include "Components/Input.h"
+#include "Components/Audio.h"
 #include "Utility/CollisionManager/Collider.h"
+#include "../UI.h"
+#include "3D/Model/ParticleModel.h"
+#include "3D/Particle/ParticleSystem.h"
 
 class Weapon : public Collider
 {
 public:
+
+	~Weapon();
 
 	static int InvincibleTime;
 
@@ -27,7 +33,7 @@ public:
 
 
 	void ModelMotion();
-  
+
 	WorldTransform& GetWeaponWorldTransform() { return weaponWorldTransform_; }
 
 	bool GetIsCharge() { return IsCharge_; }
@@ -35,20 +41,38 @@ public:
 	bool GetIsAttack() { return IsAttack_; }
 
 	bool GetIsHit() { return IsHit_; };
+
+	bool GetIsCoolDown() {
+		return IsCoolDown_;
+	};
+
+	int GetHP() { return Hp_; };
   
+	void DrawSprite();
+
+	void DrawParticle(const ViewProjection& viewProjection);
+
+	void StartAnimaion();
 
 private:
 	Input* input_ = nullptr;
 
+	XINPUT_STATE joyState_;
+
+	Audio* audio_ = nullptr;
+
 	std::unique_ptr<Model> weaponModelDummy_ = nullptr;
 
 	std::unique_ptr<Model> weaponModel_ = nullptr;
+	std::unique_ptr<Model> weaponRodModel_ = nullptr;
 	std::unique_ptr<Model> involvedMissile_ = nullptr;
 
 	WorldTransform weaponWorldTransform_;
 	WorldTransform involvedMissileWorldTransform_;
 
 	uint32_t textureHandle_ = 0u;
+
+	uint32_t soundHandle_[4] = {};
 
 	//武器の横移動スピード
 	float weaponMoveSpeed_ = 0.05f;
@@ -60,7 +84,7 @@ private:
 	float attackSpeed_[4] = { 0.03f ,0.085f ,0.15f , 0.2f };
 
 	//クールダウン中のスピード
-	float coolDownSpeed_ = 0.05f;
+	float coolDownSpeed_ = 0.4f;
 
 	//チャージ時のカウント
 	int chargeCount_ = 0;
@@ -69,45 +93,18 @@ private:
 	int pushCount_ = 0;
 
 	//クールダウン中のタイマー
-	int coolDownTimer_ = 60;
+	int coolDownTimer_ = 30;
 
+	bool IsNormal_ = true;
 	bool IsCharge_ = false;
 	bool IsAttack_ = false;
 	bool IsCoolDown_ = false;
-
-	//モデルとモーション
-
-	enum {
-		Stay,
-		Charge,
-		Attack,
-	};
-
-	int  motionMode_;
-
-	WorldTransform weaponMotionWorldTransform_;
-
-	struct weaponMotionStruct {
-		Vector3 translation_; /*weaponWorldTransform_.translation_を基準としたLocal座標*/
-		Vector3 rotation_;/*weaponWorldTransform_.rotation_を基準としたLocal回転*/
-		Vector3 scale_;/*weaponWorldTransform_.scale_を基準としたLocalスケール*/
-		Vector4 color_;/*色やんね*/
-	};
-
-	//そもそものサイズ
-	Vector3 normalScale_;
-	//そもそもの位置
-	Vector3 normalTransration_;
-
-	float chargeRotateSpeed_;
-	float attackRotateSpeed_[4];
-
-	weaponMotionStruct weaponMotion_;
   
 	bool IsHit_ = false;
 
 	//体力
-	float Hp_ = 3.0f;
+	static const  int MaxHp_ = 3;
+	int Hp_;
 
 	//無敵時間
 	bool invincibleFlag_ = false;
@@ -124,8 +121,49 @@ private:
 		{1.0f,0.0f,0.0f,1.0f},
 		{0.0f,1.0f,0.0f,1.0f},
 		{0.0f,0.0f,1.0f,1.0f},
-		{0.0f,0.0f,0.0f,0.0f},
+		{0.0f,0.0f,0.0f,1.0f},
 	};
+
+	//モデルとモーション
+	enum {
+		Stay,
+		Charge,
+		Attack,
+	};
+
+	int  motionMode_;
+
+	WorldTransform weaponMotionWorldTransform_;
+	WorldTransform weaponRodMotionWorldTransform_;
+
+	struct weaponMotionStruct {
+		Vector3 translation_; /*weaponWorldTransform_.translation_を基準としたLocal座標*/
+		Vector3 rotation_;/*weaponWorldTransform_.rotation_を基準としたLocal回転*/
+		Vector3 scale_;/*weaponWorldTransform_.scale_を基準としたLocalスケール*/
+		Vector4 color_;/*色やんね*/
+
+		Vector3 normalTransration_;//そもそものサイズ
+		Vector3 normalScale_;		//そもそもの位置
+	};
+
+
+	float chargeRotateSpeed_;
+	float attackRotateSpeed_[4];
+
+	float playerPosY = -3.3f;
+
+	weaponMotionStruct weaponMotion_;
+	weaponMotionStruct weaponRodMotion_;
   
+
+	//UI
+	UIStruct heartUI_[MaxHp_];
+
+	//パーティクル
+	std::unique_ptr<ParticleModel> particleModel_ = nullptr;
+	std::unique_ptr<ParticleSystem> particleSystem_ = nullptr;
+
+	bool animationFlag_ = true;
+
 };
 

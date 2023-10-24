@@ -379,3 +379,41 @@ Vector3 TransformNormal(const Vector3& vector, const Matrix4x4& matrix) {
 	result.z = vector.x * matrix.m[0][2] + vector.y * matrix.m[1][2] + vector.z * matrix.m[2][2];
 	return result;
 }
+
+float Lerp(const float& v1, const float& v2, float t) {
+	float result{};
+	result = v1 + t * (v2 - v1);
+	return result;
+}
+
+Vector3 Lerp(const Vector3& v1, const Vector3& v2, float t) {
+	Vector3 result{};
+	result.x = v1.x + t * (v2.x - v1.x);
+	result.y = v1.y + t * (v2.y - v1.y);
+	result.z = v1.z + t * (v2.z - v1.z);
+	return result;
+}
+
+Vector3 Multiply(const float& v1, const Vector3& v2)
+{
+	Vector3 result{};
+
+	result.x = v1 * v2.x;
+	result.y = v1 * v2.y;
+	result.z = v1 * v2.z;
+
+	return result;
+}
+
+Vector3 Normalize(const Vector3& v)
+{
+	Vector3 result{};
+
+	float date = sqrtf(v.x * v.x + v.y * v.y + v.z * v.z);
+	if (date != 0) {
+		result.x = v.x / date;
+		result.y = v.y / date;
+		result.z = v.z / date;
+	}
+	return result;
+}

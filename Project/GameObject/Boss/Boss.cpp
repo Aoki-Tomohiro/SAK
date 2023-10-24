@@ -1,7 +1,8 @@
 #include "Boss.h"
+//#include "State/BossStateWait.h"
 #include "State/BossStateNormal.h"
-#include "State/BossStateLaserAttack.h"
-#include "State/BossStateChargeShot.h"
+//#include "State/BossStateLaserAttack.h"
+//#include "State/BossStateChargeShot.h"
 #include "2D/ImGuiManager.h"
 #include "../GameObject/Weapon/Weapon.h"
 #include "Utility/GlobalVariables.h"
@@ -9,7 +10,17 @@
 //実体定義
 int Boss::MissileSpornTime = 90;
 
+Boss::~Boss()
+{
+	delete hpBar_.sprite_;
+}
+
 void Boss::Initialize() {
+
+	audio_ = Audio::GetInstance();
+
+	soundHandle_[0] = audio_->SoundLoadWave("Resources/Sounds/Boss_Damage.wav");
+	soundHandle_[1] = audio_->SoundLoadWave("Resources/Sounds/Missile_Bakuhatu.wav");
 
 	//モデルの作成
 	model_.reset(Model::CreateFromOBJ("Resources/Sphere", "sphere.obj"));
@@ -45,6 +56,25 @@ void Boss::Initialize() {
 	globalVariables->CreateGroup(groupName);
 	globalVariables->AddItem(groupName, "missileMoveSpeed", missileMoveSpeed_);
 	globalVariables->AddItem(groupName, "missileSpornTime", MissileSpornTime);
+
+	hpBar_ = {
+		true,
+		TextureManager::Load("Resources/Images/bossHp.png"),
+		{barSpace , barSpace},
+		0.0f,
+		{barSize,1.0f},
+		nullptr,
+	};
+
+	hpBar_.sprite_ = Sprite::Create(hpBar_.textureHandle_, hpBar_.position_);
+
+	//パーティクル
+	particleModel_.reset(ParticleModel::CreateFromOBJ("Resources/Particle", "Particle.obj"));
+	particleSystem_ = std::make_unique<ParticleSystem>();
+	particleSystem_->Initialize();
+
+	//ミサイルの爆発音
+	missileSoundHandle_ = audio_->SoundLoadWave("Resources/Sounds/Missile_Bakuhatu.wav");
 }
 
 void Boss::Update() {
@@ -60,7 +90,9 @@ void Boss::Update() {
 		missileSpornTimer_ = MissileSpornTime;
 		missileDirection_ *= -1;
 		Missile* missile = new Missile();
+
 		missile->Initialize(Vector3{ Missile::widthMax * missileDirection_,Random(/*-1.3f,*/-2.2f, 1.0f) ,0.0f }, Vector3{ missileMoveSpeed_ * (missileDirection_ * -1),0.0f,0.0f });
+
 		Boss::AddMissile(missile);
 	}
 
@@ -111,6 +143,11 @@ void Boss::Update() {
 
 	//モーション更新
 	ModelMotion();
+	//バー
+	HPBarUpdate();
+
+	//パーティクルの更新
+	particleSystem_->Update();
   
 	ImGui::Begin("Boss");
 	ImGui::Text("HP : %f", Hp_);
@@ -189,12 +226,25 @@ void Boss::ApplyGlobalVariables()
 }
 
 void Boss::OnCollision(uint32_t collisionAttribute, float damage) {
-	if (weapon_->GetIsHit() == false) {
+  
+	if (weapon_->GetIsHit() == false && weapon_->GetIsCoolDown() == false && isActive_) {
+		audio_->SoundPlayWave(soundHandle_[0], false);
+		audio_->SoundPlayWave(soundHandle_[1], false);
 		Hp_ -= damage;
 		if (collisionAttribute & kCollisionAttributePlayer) {
 			hitMissileCount_ += weapon_->GetInvolvedMissileCount();
 		}
 	}
+
+	if (weapon_->GetInvolvedMissileCount() > 0 && isActive_ == false) {
+		audio_->SoundPlayWave(soundHandle_[0], false);
+		isActive_ = true;
+		if (weapon_->GetIsHit() == false) {
+			Hp_ -= damage;
+		}
+	}
+
+	animationFlag_ = true;
 }
 
 Vector3 Boss::GetWorldPosition() {
@@ -215,4 +265,78 @@ void Boss::ModelMotion()
 
 	bossMotionWorldTransform_.UpdateMatrix();
 
+}
+
+void Boss::DrawSprite()
+{
+
+	hpBar_.sprite_->Draw();
+
+}
+
+void Boss::HPBarUpdate()
+{
+
+	hpBar_.size_ = {(Hp_ / maxHp_) * barSize,1.0f };
+
+	hpBar_.sprite_->SetSize(hpBar_.size_);
+}
+
+void Boss::DrawParticle(const ViewProjection& viewProjection) {
+	particleModel_->Draw(particleSystem_.get(), viewProjection);
+}
+
+void Boss::StartAnimationInit() {
+	//初期化
+	Boss::Initialize();
+	worldTransform_.rotation_.y = 3.14f;
+	Missile* missile[2];
+	missile[0] = new Missile();
+	missile[0]->Initialize({ 5.0f ,0.4f,0.0f }, { -missileMoveSpeed_ ,0.0f,0.0f }, missileSoundHandle_);
+	missiles_.push_back(std::unique_ptr<Missile>(missile[0]));
+	missile[1] = new Missile();
+	missile[1]->Initialize({ -5.0f ,-0.2f,0.0f }, { missileMoveSpeed_ ,0.0f,0.0f }, missileSoundHandle_);
+	missiles_.push_back(std::unique_ptr<Missile>(missile[1]));
+}
+
+void Boss::StartAnimation() {
+
+	//グローバル変数の適応
+	Boss::ApplyGlobalVariables();
+
+	if (animationEnd_ == false) {
+		if (animationFlag_) {
+			const float rotSpeed = 0.02f;
+			worldTransform_.rotation_.y -= rotSpeed;
+		}
+
+		if (worldTransform_.rotation_.y <= 0.0f) {
+			animationEnd_ = true;
+		}
+	}
+
+	//死亡フラグの立ったミサイルをリストから削除
+	missiles_.remove_if([](std::unique_ptr<Missile>& missile) {
+		if (missile->IsAlive() == false) {
+			missile.reset();
+			return true;
+		}
+		return false;
+		});
+
+	//ミサイルの更新
+	for (std::unique_ptr<Missile>& missile : missiles_) {
+		missile->Update();
+	}
+
+	//ワールドトランスフォームの更新
+	worldTransform_.UpdateMatrix();
+
+	//モーション更新
+	ModelMotion();
+	//バー
+	HPBarUpdate();
+
+	//パーティクルの更新
+	particleSystem_->Update();
 }

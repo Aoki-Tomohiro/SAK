@@ -39,11 +39,17 @@ GameManager::GameManager() {
 	//モデルの静的初期化
 	Model::StaticInitialize();
 
+	//パーティクルの静的初期化
+	ParticleModel::StaticInitialize();
+
 	//スプライトの静的初期化
 	Sprite::StaticInitialize();
 
 	//グローバル変数の読み込み
 	GlobalVariables::GetInstance()->LoadFiles();
+
+	//ランダムエンジンの初期化
+	Random::Initialize();
 
 	//シーンの初期化
 	currentScene_ = new GameTitleScene();
@@ -57,6 +63,7 @@ GameManager::~GameManager() {
 	currentScene_ = nullptr;
 
 	Model::Release();
+	ParticleModel::Release();
 	Sprite::Release();
 }
 

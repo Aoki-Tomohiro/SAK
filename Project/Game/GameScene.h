@@ -7,6 +7,7 @@
 #include "3D/DebugCamera/DebugCamera.h"
 
 #include "3D/Model/Model.h"
+#include "3D/Model/ParticleModel.h"
 #include "2D/Sprite.h"
 #include "3D/Matrix/WorldTransform.h"
 #include "3D/Matrix/ViewProjection.h"
@@ -21,6 +22,14 @@
 
 class GameScene : public IScene {
 public:
+	//トランジションの時間
+	static const int kTransitionTime = 60;
+
+	enum class NextScene {
+		GAMECLEAR,
+		GAMEOVER,
+	};
+
 	/// <summary>
 	/// コンストラクタ
 	/// </summary>
@@ -63,6 +72,9 @@ private:
 	//テクスチャ
 	uint32_t textureHandle_ = 0;
 
+	//サウンド
+	uint32_t soundHandle_ = 0u;
+
 	//スプライト
 	std::unique_ptr<Sprite> sprite1_ = nullptr;
 	std::unique_ptr<Sprite> sprite2_ = nullptr;
@@ -90,4 +102,23 @@ private:
 	std::unique_ptr<Weapon> weapon_ = nullptr;
 
 	std::unique_ptr<BackGround> backGround_ = nullptr;
+
+
+	//トランジション用のスプライト
+	std::unique_ptr<Sprite> transitionSprite_;
+	//トランジションのテクスチャ
+	uint32_t transitionTextureHandle_ = 0;
+	//トランジションの色
+	Vector4 transitionColor_ = { 0.0f,0.0f,0.0f,1.0f };
+	//トランジションのフラグ
+	bool isTransition_ = false;
+	bool isTransitionEnd_ = false;
+	//トランジションのタイマー
+	float transitionTimer_ = 0;
+
+	//次のシーン
+	NextScene nextScene_ = NextScene::GAMECLEAR;
+
+	//アニメーションのフラグ
+	bool isAnimationEnd_ = false;
 };

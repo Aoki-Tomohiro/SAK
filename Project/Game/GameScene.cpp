@@ -2,6 +2,7 @@
 #include "GameManager.h"
 #include "GameClearScene.h"
 #include "GameOverScene.h"
+#include "Components/PostProcess.h"
 #include <cassert>
 
 GameScene::GameScene() {};
@@ -33,7 +34,7 @@ void GameScene::Initialize(GameManager* gameManager) {
   
 	//ボスの作成
 	boss_ = std::make_unique<Boss>();
-	boss_->Initialize();
+	boss_->StartAnimationInit();
 	boss_->SetWeapon(weapon_.get());
 
 	//衝突マネージャーの生成
@@ -43,9 +44,64 @@ void GameScene::Initialize(GameManager* gameManager) {
 	backGround_ = std::make_unique<BackGround>();
 	backGround_->Initialize();
 
+	//トランジション用スプライトの生成
+	transitionSprite_.reset(Sprite::Create(transitionTextureHandle_, { 0.0f,0.0f }));
+	transitionSprite_->SetColor(transitionColor_);
+	transitionSprite_->SetSize(Vector2{ 640.0f,360.0f });
+
+	soundHandle_ = audio_->SoundLoadWave("Resources/Sounds/GameScene.wav");
+	audio_->SoundPlayWave(soundHandle_, true);
+
+	//ポストプロセスの有効化
+	PostProcess::GetInstance()->SetIsPostProcessActive(true);
+	PostProcess::GetInstance()->SetIsBloomActive(true);
+
+	viewProjection_.UpdateMatrix();
 };
 
 void GameScene::Update(GameManager* gameManager) {
+
+	//トランジション
+	if (isTransitionEnd_ == false) {
+		transitionTimer_ += 1.0f / kTransitionTime;
+		transitionColor_.w = Lerp(transitionColor_.w, 0.0f, transitionTimer_);
+		transitionSprite_->SetColor(transitionColor_);
+
+		if (transitionColor_.w <= 0.0f) {
+			isTransitionEnd_ = true;
+			transitionTimer_ = 0.0f;
+		}
+	}
+
+	if (isAnimationEnd_ == false) {
+		//プレイヤーのアニメーションの更新
+		player_->StartAnimation();
+
+		//武器のアニメーションの更新
+		weapon_->StartAnimaion();
+
+		//ボスのアニメーション更新
+		boss_->StartAnimation();
+
+		//衝突判定
+		collisionManager_->ClearColliderList();
+		collisionManager_->SetColliderList(boss_.get());
+		const std::list<std::unique_ptr<Missile>>& missiles = boss_->GetMissiles();
+		for (const std::unique_ptr<Missile>& missile : missiles) {
+			collisionManager_->SetColliderList(missile.get());
+		}
+		collisionManager_->SetColliderList(weapon_.get());
+		collisionManager_->CheckAllCollisions();
+
+		viewProjection_.UpdateMatrix();
+
+		if (boss_->GetAnimationEnd()) {
+			isAnimationEnd_ = true;
+		}
+
+		return;
+	}
+
 
 	player_->Update();
 
@@ -88,14 +144,51 @@ void GameScene::Update(GameManager* gameManager) {
 		}
 	}
 
-	if (input_->IsPushKeyEnter(DIK_1))
+	////トランジション
+	//if (isTransitionEnd_ == false) {
+	//	transitionTimer_ += 1.0f / kTransitionTime;
+	//	transitionColor_.w = Lerp(transitionColor_.w, 0.0f, transitionTimer_);
+	//	transitionSprite_->SetColor(transitionColor_);
+
+	//	if (transitionColor_.w <= 0.0f) {
+	//		isTransitionEnd_ = true;
+	//		transitionTimer_ = 0.0f;
+	//	}
+	//}
+
+	if (input_->IsPushKeyEnter(DIK_1)/* || boss_->GetHP() <= 0.0f*/)
 	{
-		gameManager->ChangeScene(new GameClearScene);
+		if (isTransition_ == false && isTransitionEnd_ == true) {
+			isTransition_ = true;
+			audio_->StopAudio(soundHandle_);
+			nextScene_ = NextScene::GAMECLEAR;
+		}
 	}
 
-	if (input_->IsPushKeyEnter(DIK_2))
+	if (input_->IsPushKeyEnter(DIK_2)/* || weapon_->GetHP() <= 0.0f*/)
 	{
-		gameManager->ChangeScene(new GameOverScene);
+		if (isTransition_ == false && isTransitionEnd_ == true) {
+			isTransition_ = true;
+			audio_->StopAudio(soundHandle_);
+			nextScene_ = NextScene::GAMEOVER;
+		}
+	}
+
+	if (isTransition_) {
+		transitionTimer_ += 1.0f / kTransitionTime;
+		transitionColor_.w = Lerp(transitionColor_.w, 1.0f, transitionTimer_);
+		transitionSprite_->SetColor(transitionColor_);
+
+		if (transitionColor_.w >= 1.0f) {
+			switch (nextScene_) {
+			case NextScene::GAMECLEAR:
+				gameManager->ChangeScene(new GameClearScene());
+				break;
+			case NextScene::GAMEOVER:
+				gameManager->ChangeScene(new GameOverScene());
+				break;
+			}
+		}
 	}
 
 	ImGui::Begin("Game Play");
@@ -107,6 +200,22 @@ void GameScene::Update(GameManager* gameManager) {
 };
 
 void GameScene::Draw(GameManager* gameManager) {
+
+	PostProcess::GetInstance()->PreDraw();
+
+#pragma region 背景スプライトの描画
+
+	//背景スプライトの描画
+	Sprite::PreDraw(Sprite::kBlendModeNormal);
+
+	Sprite::PostDraw();
+
+#pragma endregion
+
+	//深度バッファをクリア
+	DirectXCommon::GetInstance()->ClearDepthBuffer();
+
+#pragma region モデルの描画
 
 	//モデルの描画
 	Model::PreDraw();
@@ -123,9 +232,39 @@ void GameScene::Draw(GameManager* gameManager) {
 
 	Model::PostDraw();
 
-	//スプライトの描画
-	Sprite::PreDraw(Sprite::kBlendModeNormal);
-	
+#pragma endregion
 
+#pragma region パーティクルの描画
+
+	//パーティクルモデルの描画
+	ParticleModel::PreDraw();
+
+	player_->DrawParticle(viewProjection_);
+
+	weapon_->DrawParticle(viewProjection_);
+
+	boss_->DrawParticle(viewProjection_);
+
+	ParticleModel::PostDraw();
+
+#pragma endregion
+
+	PostProcess::GetInstance()->PostDraw();
+
+#pragma region 前景スプライトの描画
+
+	Sprite::PreDraw(Sprite::kBlendModeNormal);
+
+	weapon_->DrawSprite();
+
+	boss_->DrawSprite();
+
+	player_->DrawSprite();
+  
+	transitionSprite_->Draw();
+  
 	Sprite::PostDraw();
+
+#pragma endregion
+
 };

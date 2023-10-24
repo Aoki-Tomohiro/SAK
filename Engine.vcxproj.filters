@@ -169,6 +169,18 @@
     <Filter Include="ヘッダー ファイル\Project\GameObject\Boss\ChargeShot">
       <UniqueIdentifier>{ac2286af-b026-45d8-ac88-f15d54df38e9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ヘッダー ファイル\Engine\3D\Particle">
+      <UniqueIdentifier>{71b65ba6-f153-4508-8627-cae41e83b521}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Engine\3D\Particle">
+      <UniqueIdentifier>{000d993a-d8e3-43d1-b3a5-8aa6c97e467d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Project\Game\UI">
+      <UniqueIdentifier>{a06968c5-d8a7-4bed-8e88-d326cf7048da}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Project\Game\UI">
+      <UniqueIdentifier>{1238cbd8-5041-47d0-8891-27f52238ff14}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -291,14 +303,11 @@
     <ClCompile Include="Project\GameObject\Missile\Missile.cpp">
       <Filter>ソース ファイル\Project\GameObject\Missile</Filter>
     </ClCompile>
-    <ClCompile Include="Project\GameObject\Missile\MissileManager.cpp">
-      <Filter>ソース ファイル\Project\GameObject\Missile</Filter>
-    </ClCompile>
     <ClCompile Include="BackGround.cpp">
       <Filter>ソース ファイル\Project\GameObject\BackGround</Filter>
     </ClCompile>
     <ClCompile Include="Project\GameObject\Boss\State\BossStateMissileAttack.cpp">
-       <Filter>ソース ファイル\Project\GameObject\Boss\State</Filter>
+      <Filter>ソース ファイル\Project\GameObject\Boss\State</Filter>
     </ClCompile>
     <ClCompile Include="Project\GameObject\Boss\ChargeShot\ChargeShot.cpp">
       <Filter>ソース ファイル\Project\GameObject\Boss\ChargeShot</Filter>
@@ -308,6 +317,36 @@
     </ClCompile>
     <ClCompile Include="Project\GameObject\Boss\State\BossStateStun.cpp">
       <Filter>ソース ファイル\Project\GameObject\Boss\State</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\3D\Particle\ParticleEmitter.cpp">
+      <Filter>ソース ファイル\Engine\3D\Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\3D\Particle\Particle.cpp">
+      <Filter>ソース ファイル\Engine\3D\Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\3D\Particle\EmitterBuilder.cpp">
+      <Filter>ソース ファイル\Engine\3D\Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\3D\Model\ParticleModel.cpp">
+      <Filter>ソース ファイル\Engine\3D\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\3D\Particle\BaseParticle.cpp">
+      <Filter>ソース ファイル\Engine\3D\Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="UI.cpp">
+      <Filter>ソース ファイル\Project\Game\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\GameObject\Boss\State\BossStateWait.cpp">
+      <Filter>ソース ファイル\Project\GameObject\Boss\State</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\3D\Particle\ParticleSystem.cpp">
+      <Filter>ソース ファイル\Engine\3D\Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Utility\Random.cpp">
+      <Filter>ソース ファイル\Engine\Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\3D\Particle\ChageParticle.cpp">
+      <Filter>ソース ファイル\Engine\3D\Particle</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -443,9 +482,6 @@
     <ClInclude Include="Project\GameObject\Player\Player.h">
       <Filter>ヘッダー ファイル\Project\GameObject\Player</Filter>
     </ClInclude>
-    <ClInclude Include="Project\GameObject\Missile\MissileManager.h">
-      <Filter>ヘッダー ファイル\Project\GameObject\Missile</Filter>
-    </ClInclude>
     <ClInclude Include="Project\GameObject\Missile\Missile.h">
       <Filter>ヘッダー ファイル\Project\GameObject\Missile</Filter>
     </ClInclude>
@@ -463,6 +499,36 @@
     </ClInclude>
     <ClInclude Include="Project\GameObject\Boss\State\BossStateStun.h">
       <Filter>ヘッダー ファイル\Project\GameObject\Boss\State</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\3D\Particle\ParticleEmitter.h">
+      <Filter>ヘッダー ファイル\Engine\3D\Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\3D\Particle\Particle.h">
+      <Filter>ヘッダー ファイル\Engine\3D\Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\3D\Particle\EmitterBuilder.h">
+      <Filter>ヘッダー ファイル\Engine\3D\Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\3D\Model\ParticleModel.h">
+      <Filter>ヘッダー ファイル\Engine\3D\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\3D\Particle\BaseParticle.h">
+      <Filter>ヘッダー ファイル\Engine\3D\Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="UI.h">
+      <Filter>ヘッダー ファイル\Project\Game\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\GameObject\Boss\State\BossStateWait.h">
+      <Filter>ヘッダー ファイル\Project\GameObject\Boss\State</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\3D\Particle\ParticleSystem.h">
+      <Filter>ヘッダー ファイル\Engine\3D\Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Utility\Random.h">
+      <Filter>ヘッダー ファイル\Engine\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\3D\Particle\ChageParticle.h">
+      <Filter>ヘッダー ファイル\Engine\3D\Particle</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -502,6 +568,12 @@
     <FxCompile Include="Resources\Shader\PostProcessPS.hlsl">
       <Filter>Shader</Filter>
     </FxCompile>
+    <FxCompile Include="Resources\Shader\Particle.VS.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shader\Particle.PS.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Engine\Externals\imgui\LICENSE.txt">
@@ -525,6 +597,9 @@
       <Filter>Shader</Filter>
     </None>
     <None Include="Resources\Shader\PostProcess.hlsli">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="Resources\Shader\Particle.hlsli">
       <Filter>Shader</Filter>
     </None>
   </ItemGroup>

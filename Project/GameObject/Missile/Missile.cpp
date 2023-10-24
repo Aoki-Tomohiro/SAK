@@ -4,15 +4,20 @@
 float Missile::widthMin = -5.0f;
 float Missile::widthMax = 5.0f;
 
-void Missile::Initialize(const Vector3& position, const Vector3& velocity)
+void Missile::Initialize(const Vector3& position, const Vector3& velocity, uint32_t soundHandle)
 {
+	input_ = Input::GetInstance();
+
+	audio_ = Audio::GetInstance();
+
 	model_.reset(Model::CreateFromOBJ("Resources", "sphere.obj"));
 
 	missileModel_.reset(Model::CreateFromOBJ("Resources/Missile", "Missile.obj"));
 
 	textureHandle_ = TextureManager::Load("Resources/white.png");
 
-	input_ = Input::GetInstance();
+	/*soundHandle_ = audio_->SoundLoadWave("Resources/Sounds/Missile_Bakuhatu.wav");*/
+	soundHandle_ = soundHandle;
 
 	worldTransform_.translation_ = position;
 	worldTransform_.scale_ = { 0.3f,0.3f,0.3f };
@@ -86,6 +91,7 @@ void Missile::Draw(const ViewProjection viewProjection)
 
 void Missile::OnCollision(uint32_t collisionAttribute, float damage)
 {
+	audio_->SoundPlayWave(soundHandle_, false);
 	isAlive_ = false;
 
 	ImGui::Begin("Collision");
@@ -105,7 +111,6 @@ Vector3 Missile::GetWorldPosition()
 
 void Missile::ModelMotion()
 {
-
 	if (missileMoveSpeed_.x < 0) {
 		missileMotion_.rotation_.z = 3.14f;
 		missileMotion_.rotation_.x -= 0.1f;
