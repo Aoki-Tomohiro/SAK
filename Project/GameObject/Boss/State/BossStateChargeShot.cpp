@@ -129,6 +129,7 @@ void BossStateChargeShot::Update(Boss* pBoss) {
 
 			chargeShot = new ChargeShot();
 			chargeShot->Initialize(bossWorldTransform_.translation_,chargeShotSpeed_);
+			chargeShot->SetParticleSystem(pBoss->GetParticleSystem());
 			pBoss->AddChargeShot(chargeShot);
 
 			IsMove_ = false;
@@ -165,6 +166,7 @@ void BossStateChargeShot::Update(Boss* pBoss) {
 
 			chargeShot = new ChargeShot();
 			chargeShot->Initialize(bossWorldTransform_.translation_, chargeShotSpeed_);
+			chargeShot->SetParticleSystem(pBoss->GetParticleSystem());
 			pBoss->AddChargeShot(chargeShot);
 
 			IsMove_ = false;

@@ -36,7 +36,23 @@ void ChargeShot::Update() {
 	//死亡フラグを立てる
 	if (--deadTimer_ <= 0) 
 	{
-		isDead_ = true;
+		//isDead_ = true;
+		//ParticleEmitter* newParticleEmitter = EmitterBuilder()
+		//	.SetParticleType(ParticleEmitter::ParticleType::kScale)
+		//	.SetTranslation({ 0.0f,0.0f,0.0f })
+		//	.SetArea({ 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f })
+		//	.SetRotation({ 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f })
+		//	.SetScale({ 0.2f, 0.2f,0.2f }, { 0.25f ,0.25f ,0.25f })
+		//	.SetAzimuth(0.0f, 360.0f)
+		//	.SetElevation(0.0f, 0.0f)
+		//	.SetVelocity({ 0.02f ,0.02f ,0.02f }, { 0.04f ,0.04f ,0.04f })
+		//	.SetColor({ 1.0f ,1.0f ,1.0f ,1.0f }, { 1.0f ,1.0f ,1.0f ,1.0f })
+		//	.SetLifeTime(0.1f, 1.0f)
+		//	.SetCount(100)
+		//	.SetFrequency(4.0f)
+		//	.SetDeleteTime(3.0f)
+		//	.Build();
+		//particleSystem_->AddParticleEmitter(newParticleEmitter);
 	}
 }
 

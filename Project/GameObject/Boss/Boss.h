@@ -207,6 +207,12 @@ public:
 	/// <param name="viewProjection"></param>
 	void DrawParticle(const ViewProjection& viewProjection);
 
+	/// <summary>
+	/// パーティクルシステムを取得
+	/// </summary>
+	/// <returns></returns>
+	ParticleSystem* GetParticleSystem() { return particleSystem_.get(); };
+
 private:
 	Audio* audio_ = nullptr;
 
