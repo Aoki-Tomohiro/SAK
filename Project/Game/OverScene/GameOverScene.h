@@ -81,6 +81,14 @@ private:
 
 	std::unique_ptr<BackGround> backGround_ = nullptr;
 
+	//まけのスプライト
+	std::unique_ptr<Sprite>  loseSprite_ = nullptr;
+	//まけのテクスチャ
+	uint32_t  loseTextureHandle_ = 0;
+	//プレスAのスプライト
+	std::unique_ptr<Sprite>  pressASprite_ = nullptr;
+	//プレスAのテクスチャ
+	uint32_t pressATextureHandle_ = 0;
 	//トランジション用のスプライト
 	std::unique_ptr<Sprite> transitionSprite_;
 	//トランジションのテクスチャ

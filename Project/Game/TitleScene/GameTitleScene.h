@@ -88,6 +88,16 @@ private:
 	//武器の横移動スピード
 	float weaponMoveSpeed_ = 0.05f;
 
+	//タイトル用のスプライト
+	std::unique_ptr<Sprite>  titleSprite_ = nullptr;
+	//タイトルのテクスチャ
+	uint32_t titleTextureHandle_ = 0;
+
+	//プレスAのスプライト
+	std::unique_ptr<Sprite>  pressASprite_ = nullptr;
+	//プレスAのテクスチャ
+	uint32_t pressATextureHandle_ = 0;
+
 	//トランジション用のスプライト
 	std::unique_ptr<Sprite> transitionSprite_ = nullptr;
 	//トランジションのテクスチャ

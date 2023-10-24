@@ -17,6 +17,7 @@ void GameClearScene::Initialize(GameManager* gameManager)
 	input_ = Input::GetInstance();
 
 	soundHandle_ = audio_->SoundLoadWave("Resources/Sounds/Selection.wav");
+  
 	clearSoundHandle_ = audio_->SoundLoadWave("Resources/Sounds/Clear.wav");
 
 	playerModel_.reset(Model::CreateFromOBJ("Resources/Platform", "Platform.obj"));
@@ -42,6 +43,13 @@ void GameClearScene::Initialize(GameManager* gameManager)
 	audio_->SoundPlayWave(clearSoundHandle_, true);
 
 	//スプライトの生成
+	winTextureHandle_ = TextureManager::Load("Resources/Images/win.png");
+	winSprite_.reset(Sprite::Create(winTextureHandle_, { 0.0f,0.0f }));
+
+	pressATextureHandle_ = TextureManager::Load("Resources/Images/PressAbutton.png");
+	pressASprite_.reset(Sprite::Create(pressATextureHandle_,
+		{ WinApp::GetInstance()->kClientWidth * 0.5f - 508.0f * 0.5f , 550.0f }));
+
 	transitionSprite_.reset(Sprite::Create(transitionTextureHandle_, { 0.0f,0.0f }));
 	transitionSprite_->SetColor(transitionColor_);
 	transitionSprite_->SetSize(Vector2{ 640.0f,360.0f });
@@ -189,6 +197,9 @@ void GameClearScene::Draw(GameManager* gameManager)
 
 	//スプライトの描画処理
 	Sprite::PreDraw(Sprite::kBlendModeNormal);
+	winSprite_->Draw();
+
+	pressASprite_->Draw();
 
 	transitionSprite_->Draw();
 

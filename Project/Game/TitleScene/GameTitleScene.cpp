@@ -40,6 +40,14 @@ void GameTitleScene::Initialize(GameManager* gameManager)
 	viewProjection_.UpdateMatrix();
 
 	//スプライトの生成
+	titleTextureHandle_ = TextureManager::Load("Resources/Images/title.png");
+	titleSprite_.reset(Sprite::Create(titleTextureHandle_, { 0.0f,0.0f }));
+
+	pressATextureHandle_ = TextureManager::Load("Resources/Images/PressAbutton.png");
+	pressASprite_.reset(Sprite::Create(pressATextureHandle_,
+		{ WinApp::GetInstance()->kClientWidth * 0.5f - 508.0f * 0.5f , 550.0f}));
+
+	//スプライトの生成
 	transitionSprite_.reset(Sprite::Create(transitionTextureHandle_, { 0.0f,0.0f }));
 	transitionSprite_->SetColor(transitionColor_);
 	transitionSprite_->SetSize(Vector2{ 640.0f,360.0f });
@@ -214,6 +222,11 @@ void GameTitleScene::Draw(GameManager* gameManager)
 
 	//スプライトの描画処理
 	Sprite::PreDraw(Sprite::kBlendModeNormal);
+
+
+	titleSprite_->Draw();
+
+	pressASprite_->Draw();
 
 	transitionSprite_->Draw();
 
