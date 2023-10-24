@@ -52,6 +52,8 @@ public:
 
 	void DrawParticle(const ViewProjection& viewProjection);
 
+	void StartAnimaion();
+
 private:
 	Input* input_ = nullptr;
 

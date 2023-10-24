@@ -1,4 +1,5 @@
 #include "GameTitleScene.h"
+#include "GameSelectScene.h"
 #include "GameManager.h"
 #include "GameScene.h"
 #include "Components/PostProcess.h"
@@ -104,7 +105,7 @@ void GameTitleScene::Update(GameManager* gameManager)
 		transitionSprite_->SetColor(transitionColor_);
 
 		if (transitionColor_.w >= 1.0f) {
-			gameManager->ChangeScene(new GameScene);
+			gameManager->ChangeScene(new GameSelectScene());
 		}
 	}
 

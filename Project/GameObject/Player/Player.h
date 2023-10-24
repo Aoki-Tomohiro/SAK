@@ -25,6 +25,8 @@ public:
 
 	void DrawSprite();
 
+	void StartAnimation();
+
 private:
 	Input* input_ = nullptr;
 

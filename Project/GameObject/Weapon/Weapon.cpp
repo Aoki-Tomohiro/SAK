@@ -539,3 +539,15 @@ void Weapon::DrawSprite()
 	}
 }
 
+
+void Weapon::StartAnimaion() {
+
+	if (IsAttack_ == false && IsCoolDown_ == false) {
+		pushCount_++;
+		IsCharge_ = true;
+	}
+
+	//更新
+	Weapon::Update();
+}
+

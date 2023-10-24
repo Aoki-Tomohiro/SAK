@@ -180,3 +180,7 @@ void Player::DrawSprite()
 	tutorialUI_.sprite_->Draw();
 }
 
+void Player::StartAnimation() {
+	//更新
+	Player::Update();
+}
