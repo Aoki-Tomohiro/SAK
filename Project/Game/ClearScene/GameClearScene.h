@@ -10,6 +10,7 @@
 #include "2D/Sprite.h"
 #include "3D/Matrix/WorldTransform.h"
 #include "3D/Matrix/ViewProjection.h"
+#include "../BackGround.h"
 
 #include <memory>
 
@@ -51,9 +52,35 @@ private:
 	Audio* audio_ = nullptr;
 	//Input
 	Input* input_ = nullptr;
+
 	//サウンド
 	uint32_t soundHandle_ = 0u;
+
 	int soundCount_ = 0;
+
+	//カメラ
+	ViewProjection viewProjection_{};
+
+	//モデル
+	std::unique_ptr<Model> playerModel_ = nullptr;
+	std::unique_ptr<Model> weaponModel_ = nullptr;
+	std::unique_ptr<Model> bossModel_ = nullptr;
+
+	//ワールドトランスフォーム
+	WorldTransform playerWorldTransform_{};
+	WorldTransform weaponWorldTransform_{};
+	WorldTransform bossWorldTransform_{};
+
+	std::unique_ptr<BackGround> backGround_ = nullptr;
+
+	bool isPush = false;
+
+	float plusMax = 5.0f;;
+	float plus = 0.0f;;
+
+	int t = 0;
+	int tMax = 15;
+
 	//トランジション用のスプライト
 	std::unique_ptr<Sprite> transitionSprite_;
 	//トランジションのテクスチャ

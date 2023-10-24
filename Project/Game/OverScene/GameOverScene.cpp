@@ -1,6 +1,7 @@
 #include "GameOverScene.h"
 #include "GameManager.h"
 #include "GameTitleScene.h"
+#include "GameScene.h"
 #include <cassert>
 
 GameOverScene::GameOverScene() {};
@@ -63,6 +64,11 @@ void GameOverScene::Update(GameManager* gameManager)
 		}
 	}
 
+	if (input_->IsPushKeyEnter(DIK_T))
+	{
+		gameManager->ChangeScene(new GameTitleScene());
+	}
+
 	if (isTransitionEnd_ == false) {
 		transitionTimer_ += 1.0f / kTransitionTime;
 		transitionColor_.w = Lerp(transitionColor_.w, 0.0f, transitionTimer_);
@@ -80,12 +86,13 @@ void GameOverScene::Update(GameManager* gameManager)
 		transitionSprite_->SetColor(transitionColor_);
 
 		if (transitionColor_.w >= 1.0f) {
-			gameManager->ChangeScene(new GameTitleScene());
+			gameManager->ChangeScene(new GameScene);
 		}
 	}
 
 	ImGui::Begin("Game Over");
-	ImGui::Text("push SPACE : Title");
+	ImGui::Text("push SPACE : GameScene");
+	ImGui::Text("push T : TitleScene");
 	ImGui::End();
 
 	playerWorldTransform_.UpdateMatrix();

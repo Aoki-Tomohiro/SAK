@@ -56,6 +56,6 @@ private:
 	//チャージショットのスケール
 	Vector3 chargeShotScale_ = { 1.0f,1.0f,1.0f };
 	//チャージショットの速さ
-	float chargeShotSpeed_ = 0.05f;
+	float chargeShotSpeed_ = 0.08f;
 };
 
