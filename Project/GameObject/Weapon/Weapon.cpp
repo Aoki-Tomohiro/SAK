@@ -34,7 +34,7 @@ void Weapon::Initialize()
 	weaponWorldTransform_.scale_ = { 0.4f,0.4f,0.4f };
 	
 	//Missile
-	involvedMissileWorldTransform_.translation_ = { 0.0f,0.0f,0.0f };
+	involvedMissileWorldTransform_.translation_ = { 0.0f,-1.5f,0.0f };
 	involvedMissileWorldTransform_.scale_ = { 0.3f,0.3f,0.3f };
 	involvedMissileWorldTransform_.rotation_.z = 1.57f;
 
@@ -66,7 +66,7 @@ void Weapon::Initialize()
 		{0.0f,0.0f,0.0f},
 		{1.0f,1.0f,1.0f},
 		{1.0f,1.0f,1.0f,1.0f},
-		{ 0.0f,-0.1f,0.0f },
+		{ 0.0f,0.1f,0.0f },
 		{ 1.7f,1.7f,1.7f },
 
 	};
@@ -77,7 +77,7 @@ void Weapon::Initialize()
 		{1.0f,1.0f,1.0f},
 		{1.0f,1.0f,1.0f,1.0f},
 		{ 0.0f,0.0f,0.0f },
-		{ 1.7f,(3.3f + 2.2f)  * 0.5f,1.7f },
+		{ 1.7f,(3.3f + 2.2f)  * 0.5f - 0.2f,1.7f },
 	};
 
 
@@ -348,7 +348,7 @@ void Weapon::Update()
 	{
 		involvedMissileWorldTransform_.translation_ = {
 				weaponWorldTransform_.translation_.x,
-				weaponWorldTransform_.translation_.y + 0.5f,
+				weaponWorldTransform_.translation_.y + 0.25f,
 				weaponWorldTransform_.translation_.z,
 		};
 		involvedMissile_->GetMaterial()->SetColor(missileColor_[involvedCount_ - 1]);
@@ -504,7 +504,7 @@ void Weapon::OnCollision(uint32_t collisionAttribute, float damage)
 				}
 				involvedMissileWorldTransform_.translation_ = {
 				weaponWorldTransform_.translation_.x,
-				weaponWorldTransform_.translation_.y + 0.5f,
+				weaponWorldTransform_.translation_.y + 0.25f,
 				weaponWorldTransform_.translation_.z,
 				};
 				involvedMissileWorldTransform_.UpdateMatrix();
@@ -732,7 +732,7 @@ void Weapon::StartAnimaion() {
 	{
 		involvedMissileWorldTransform_.translation_ = {
 				weaponWorldTransform_.translation_.x,
-				weaponWorldTransform_.translation_.y + 0.5f,
+				weaponWorldTransform_.translation_.y + 0.25f,
 				weaponWorldTransform_.translation_.z,
 		};
 		involvedMissile_->GetMaterial()->SetColor(missileColor_[involvedCount_ - 1]);

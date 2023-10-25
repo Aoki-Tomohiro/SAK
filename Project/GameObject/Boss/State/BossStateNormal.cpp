@@ -7,7 +7,7 @@
 #include "Utility/GlobalVariables.h"
 
 //実態定義
-int BossStateNormal::AttackInterval = 300;
+int BossStateNormal::AttackInterval = 360;
 
 BossStateNormal::~BossStateNormal() {
 

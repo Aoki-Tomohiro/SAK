@@ -262,7 +262,7 @@ private:
 	//チャージショットのリスト
 	std::list<std::unique_ptr<ChargeShot>> chargeShot_{};
 	//最大体力
-	const float maxHp_ = 500.0f;
+	const float maxHp_ = 430.0f;
 	//体力
 	float Hp_ = maxHp_;
 	//当たったミサイルの数

@@ -87,7 +87,7 @@ void GameManager::run() {
 		//Inputの更新
 		input_->Update();
 		//グローバル変数の更新
-		GlobalVariables::GetInstance()->Update();
+		//GlobalVariables::GetInstance()->Update();
 		//ゲームシーンの更新
 		currentScene_->Update(this);
 		//ポストプロセスの更新
