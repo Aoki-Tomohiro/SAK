@@ -92,11 +92,6 @@ void BossStateNormal::Update(Boss* pBoss) {
 			break;
 		}
 	}
-
-	ImGui::Begin("Normal");
-	ImGui::Text("transform : %f", worldTransform_.translation_.x);
-	ImGui::Text("nextAttackTimer %d", nextAttackTimer_);
-	ImGui::End();
 }
 
 void BossStateNormal::Draw(Boss* pBoss, const ViewProjection& viewProjection) {

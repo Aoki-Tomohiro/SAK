@@ -168,13 +168,6 @@ void Player::Update()
 
 	//パーティクルの更新
 	particleSystem_->Update();
-
-	ImGui::Begin("Player");
-	ImGui::Text("translationX %f", playerWorldTransform_.translation_.x);
-	ImGui::Text("translationY %f", playerWorldTransform_.translation_.y);
-	ImGui::Text("translationZ %f", playerWorldTransform_.translation_.z);
-	ImGui::Text("A : moveLeft  D : moveRight");
-	ImGui::End();
 }
 
 void Player::Draw(const ViewProjection viewProjection)

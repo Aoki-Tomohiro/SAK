@@ -111,11 +111,6 @@ void GameOverScene::Update(GameManager* gameManager)
 		}
 	}
 
-	ImGui::Begin("Game Over");
-	ImGui::Text("push SPACE : GameScene");
-	ImGui::Text("push T : TitleScene");
-	ImGui::End();
-
 	playerWorldTransform_.UpdateMatrix();
 	weaponWorldTransform_.UpdateMatrix();
 	bossWorldTransform_.UpdateMatrix();

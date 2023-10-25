@@ -372,20 +372,6 @@ void Weapon::Update()
 
   
 	Weapon::ApplyGlobalVariables();
-
-	ImGui::Begin("PlayerWeapon");
-	ImGui::Text("translationY %f", weaponWorldTransform_.translation_.y);
-	ImGui::Text("attackSpeed %f", attackSpeed_);
-	ImGui::Text("attackCount %d", chargeCount_);
-	ImGui::Text("pushCount %d", pushCount_);
-	ImGui::Text("attackDamage : %f", GetDamage());
-	ImGui::Text("attackDamage0 : %f", attackDamage_[0]);
-	ImGui::Text("attackDamage1 : %f", attackDamage_[1]);
-	ImGui::Text("attackDamage2 : %f", attackDamage_[2]);
-	ImGui::Text("attackDamage3 : %f", attackDamage_[3]);
-	ImGui::Text("HP : %d", Hp_);
-	ImGui::Text("InvolvedMissileCount : %d", involvedCount_);
-	ImGui::End();
 }
 
 void Weapon::Draw(const ViewProjection viewProjection)

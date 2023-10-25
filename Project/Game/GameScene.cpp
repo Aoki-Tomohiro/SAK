@@ -205,11 +205,6 @@ void GameScene::Update(GameManager* gameManager) {
 		}
 	}
 
-	ImGui::Begin("Game Play");
-	ImGui::Text("push 1 : Game Clear");
-	ImGui::Text("push 2 : Game Over");
-	ImGui::End();
-
 	viewProjection_.UpdateMatrix();
 };
 
