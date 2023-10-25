@@ -262,6 +262,7 @@ private:
 	//当たったミサイルの数
 	int hitMissileCount_ = 0;
 	//ミサイルのスポーンタイマー
+	int currentMissileSpornTime_ = 0;
 	int missileSpornTimer_ = 0;
 	//ミサイルの進行方向
 	int missileDirection_ = 1;

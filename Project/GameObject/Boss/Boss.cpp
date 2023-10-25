@@ -75,6 +75,9 @@ void Boss::Initialize() {
 
 	//ミサイルの爆発音
 	missileSoundHandle_ = audio_->SoundLoadWave("Resources/Sounds/Missile_Bakuhatu.wav");
+
+	//ミサイルのスポーンタイムの初期化
+	currentMissileSpornTime_ = MissileSpornTime * 2;
 }
 
 void Boss::Update() {
@@ -84,10 +87,11 @@ void Boss::Update() {
 
 	//状態の更新
 	state_->Update(this);
-	//
+	currentMissileSpornTime_ = int(float(MissileSpornTime + MissileSpornTime * Hp_ / kHpMax));
+
 	//ミサイルを生成
 	if (--missileSpornTimer_ < 0) {
-		missileSpornTimer_ = MissileSpornTime;
+		missileSpornTimer_ = currentMissileSpornTime_;
 		missileDirection_ *= -1;
 		Missile* missile = new Missile();
 
@@ -152,6 +156,9 @@ void Boss::Update() {
 	ImGui::Begin("Boss");
 	ImGui::Text("HP : %f", Hp_);
 	ImGui::Text("HitMissileCount : %d", hitMissileCount_);
+	ImGui::Text("MissileSpornTime : %d", MissileSpornTime);
+	ImGui::Text("CurrentMissileSpornTime : %d", currentMissileSpornTime_);
+	ImGui::Text("MissileTimer: %d", missileSpornTimer_);
 	ImGui::End();
 }
 
