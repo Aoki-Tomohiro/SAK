@@ -4,8 +4,8 @@
 #include "BossStateStun.h"
 #include "Utility/GlobalVariables.h"
 
-int BossStateChargeShot::chargeTime = 120;
-int BossStateChargeShot::chargeShotEndTime = 220;
+int BossStateChargeShot::chargeTime = 710;
+int BossStateChargeShot::chargeShotEndTime = chargeTime + 220;
 
 
 BossStateChargeShot::~BossStateChargeShot() {

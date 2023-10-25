@@ -12,7 +12,7 @@ void BossStateStun::Initialize(Boss* pBoss)
 {
 	input_ = input_->GetInstance();
 
-	stunTimer_ = 60;
+	stunTimer_ = 300;
 
 	//グローバル変数
 	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
