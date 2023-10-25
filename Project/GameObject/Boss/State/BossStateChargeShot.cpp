@@ -202,15 +202,6 @@ void BossStateChargeShot::Update(Boss* pBoss) {
 	{
 		pBoss->ChangeState(new BossStateNormal());
 	}
-
-	ImGui::Begin("ChargeShot");
-	ImGui::Text("Push T Key : BossStateStun");
-	ImGui::Text("bossTransform %f", bossWorldTransform_.translation_.x);
-	ImGui::Text("respownCount %d", respownCount_);
-	ImGui::Text("chargeTimer %d", chargeTimer_);
-	ImGui::Text("chargeShotSpeed %f", chargeShotSpeed_);
-	ImGui::Text("endTimer %d", endTimer_);
-	ImGui::End();
 }
 
 void BossStateChargeShot::Draw(Boss* pBoss, const ViewProjection& viewProjection) {

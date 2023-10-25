@@ -68,16 +68,6 @@ void Missile::Update()
 	}
 
 	ModelMotion();
-
-	ImGui::Begin("Missile");
-	ImGui::Text("translationX %f", worldTransform_.translation_.x);
-	ImGui::Text("translationY %f", worldTransform_.translation_.y);
-	ImGui::Text("translationZ %f", worldTransform_.translation_.z);
-	ImGui::Text("isAlive %d", isAlive_);
-	ImGui::Text("IsFollowingWeapon : %d", IsFollowingWeapon_);
-	ImGui::SliderFloat("min", &widthMin, -13.0f, 0.0f, "%.3f");
-	ImGui::SliderFloat("max", &widthMax, 0.0f, 13.0f, "%.3f");
-	ImGui::End();
 }
 
 void Missile::Draw(const ViewProjection viewProjection)
@@ -93,11 +83,6 @@ void Missile::OnCollision(uint32_t collisionAttribute, float damage)
 {
 	audio_->SoundPlayWave(soundHandle_, false);
 	isAlive_ = false;
-
-	ImGui::Begin("Collision");
-	ImGui::Text("MissileHit");
-	ImGui::Text("IsFollowingWeapon %d", IsFollowingWeapon_);
-	ImGui::End();
 }
 
 Vector3 Missile::GetWorldPosition()

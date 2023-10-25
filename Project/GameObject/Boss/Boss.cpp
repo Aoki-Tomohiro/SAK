@@ -160,14 +160,6 @@ void Boss::Update() {
 
 	//パーティクルの更新
 	particleSystem_->Update();
-  
-	ImGui::Begin("Boss");
-	ImGui::Text("HP : %f", Hp_);
-	ImGui::Text("HitMissileCount : %d", hitMissileCount_);
-	ImGui::Text("MissileSpornTime : %d", MissileSpornTime);
-	ImGui::Text("CurrentMissileSpornTime : %d", currentMissileSpornTime_);
-	ImGui::Text("MissileTimer: %d", missileSpornTimer_);
-	ImGui::End();
 }
 
 void Boss::Draw(const ViewProjection& viewProjection) {

@@ -145,10 +145,6 @@ void GameClearScene::Update(GameManager* gameManager)
 		}
 	}
 
-	ImGui::Begin("Game Clear");
-	ImGui::Text("push SPACE : Title");
-	ImGui::End();
-
 	playerWorldTransform_.UpdateMatrix();
 	weaponWorldTransform_.UpdateMatrix();
 	bossWorldTransform_.UpdateMatrix();

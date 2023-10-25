@@ -33,10 +33,6 @@ void BossStateDown::Update(Boss* pBoss) {
 	if (timer_ > 1.0f) {
 		pBoss->SetIsDead();
 	}
-
-	ImGui::Begin("Down");
-	ImGui::Text("AnimationTimer : %f", timer_);
-	ImGui::End();
 }
 
 void BossStateDown::Draw(Boss* pBoss, const ViewProjection& viewProjection) {

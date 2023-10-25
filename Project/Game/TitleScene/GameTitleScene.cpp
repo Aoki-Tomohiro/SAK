@@ -190,11 +190,6 @@ void GameTitleScene::Update(GameManager* gameManager)
 	weaponWorldTransform_.UpdateMatrix();
 
 	viewProjection_.UpdateMatrix();
-
-	ImGui::Begin("Game Title");
-	ImGui::Text("push Space : Game Select");
-	ImGui::Text("%f", transitionColor_.w);
-	ImGui::End();
 };
 
 void GameTitleScene::Draw(GameManager* gameManager)
