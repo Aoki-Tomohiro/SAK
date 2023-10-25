@@ -111,6 +111,7 @@ void GameScene::Update(GameManager* gameManager) {
 	player_->Update();
 
 	weapon_->Update();
+	weapon_->GetBossIsDead(boss_->GetIsDeadAnimation());
 
   	//ボスの更新
 	boss_->Update();

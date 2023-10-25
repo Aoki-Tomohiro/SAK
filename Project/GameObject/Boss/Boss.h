@@ -237,6 +237,8 @@ public:
 
 	bool GetIsDead() { return isDead_; };
 
+	bool GetIsDeadAnimation() { return isDeadAnimation_; };
+
 private:
 	Audio* audio_ = nullptr;
 

@@ -512,7 +512,7 @@ void Weapon::OnCollision(uint32_t collisionAttribute, float damage)
 			//ミサイル以外の場合はダメージを食らう
 			else {
 				//無敵状態でなければダメージを食らう
-				if (invincibleFlag_ == false)
+				if (invincibleFlag_ == false && IsDeadAnimation_ == false)
 				{
 					audio_->SoundPlayWave(soundHandle_[1], false);
 					invincibleFlag_ = true;
@@ -525,7 +525,7 @@ void Weapon::OnCollision(uint32_t collisionAttribute, float damage)
 		else
 		{
 			//無敵状態でなければダメージを食らう
-			if (invincibleFlag_ == false)
+			if (invincibleFlag_ == false && IsDeadAnimation_ == false)
 			{
 				audio_->SoundPlayWave(soundHandle_[1], false);
 				invincibleFlag_ = true;
@@ -547,7 +547,6 @@ Vector3 Weapon::GetWorldPosition()
 
 void Weapon::ModelMotion()
 {
-
 	motionMode_ = Stay;
 
 	if (IsCharge_ == true && chargeCount_< 90) {
