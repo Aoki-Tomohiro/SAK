@@ -121,11 +121,6 @@ void GameSelectScene::Update(GameManager* gameManager)
 	if (boss_->GetAnimationEnd()) {
 		gameManager->ChangeScene(new GameScene());
 	}
-
-	ImGui::Begin("Game Select");
-	ImGui::Text("push Space : Game Play");
-	ImGui::Text("%f", transitionColor_.w);
-	ImGui::End();
 };
 
 void GameSelectScene::Draw(GameManager* gameManager)

@@ -34,10 +34,6 @@ void BossStateStun::Update(Boss* pBoss)
 	{
 		pBoss->ChangeState(new BossStateNormal());
 	}
-
-	ImGui::Begin("Stun");
-	ImGui::Text("stunTimer : %d",stunTimer_);
-	ImGui::End();
 }
 
 void BossStateStun::Draw(Boss* pBoss, const ViewProjection& viewProjection)
