@@ -60,9 +60,9 @@ void Boss::Initialize() {
 	hpBar_ = {
 		true,
 		TextureManager::Load("Resources/Images/bossHp.png"),
-		{barSpace , barSpace},
+		{barSpace  + 160, barSpace},
 		0.0f,
-		{barSize,1.0f},
+		{barSize  ,1.0f},
 		nullptr,
 	};
 

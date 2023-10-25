@@ -58,7 +58,7 @@ void Player::Initialize(Weapon* weapon)
 	tutorialUI_ = {
 			true,
 			TextureManager::Load("Resources/Images/rule.png"),
-			{ float(WinApp::GetInstance()->kClientWidth) - tutorialSpace - tutorialSpriteSize.x,float(WinApp::GetInstance()->kClientHeight) - tutorialSpace - tutorialSpriteSize.y},
+			{ float(WinApp::GetInstance()->kClientWidth) - tutorialSpace - tutorialSpriteSize.x - 160,float(WinApp::GetInstance()->kClientHeight) - tutorialSpace - tutorialSpriteSize.y},
 			0.0f,
 			{1.0f,1.0f},
 			nullptr,

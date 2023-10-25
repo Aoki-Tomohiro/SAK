@@ -296,7 +296,7 @@ private:
 	//HPバー系
 	UIStruct hpBar_;
 	const float barSpace = 16.0f;
-	float barSize = WinApp::GetInstance()->kClientWidth - barSpace * 2;
+	float barSize = WinApp::GetInstance()->kClientWidth - 320 - barSpace * 2;
 
 	//パーティクル
 	std::unique_ptr<ParticleModel> particleModel_ = nullptr;
