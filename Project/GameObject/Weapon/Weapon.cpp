@@ -235,7 +235,7 @@ void Weapon::Update()
 	if (IsAttack_ == true && chargeCount_ < 20)
 	{
 		weaponWorldTransform_.translation_.y += attackSpeed_[3];
-		SetDamage(attackDamage_[0] + involvedCount_ * 2.0f);
+		SetDamage(attackDamage_[0] + involvedCount_ * missileDamage);
 		//エミッターの位置を変更
 		for (ParticleEmitter* particleEmitter : particleSystem_->GetParticleEmitters("Attack")) {
 			particleEmitter->SetTranslation(weaponWorldTransform_.translation_);
@@ -258,7 +258,7 @@ void Weapon::Update()
 	if (IsAttack_ == true && chargeCount_ >= 20 && chargeCount_ < 50)
 	{
 		weaponWorldTransform_.translation_.y += attackSpeed_[3];
-		SetDamage(attackDamage_[1] + involvedCount_ * 2.0f);
+		SetDamage(attackDamage_[1] + involvedCount_ * missileDamage);
 		//エミッターの位置を変更
 		for (ParticleEmitter* particleEmitter : particleSystem_->GetParticleEmitters("Attack")) {
 			particleEmitter->SetTranslation(weaponWorldTransform_.translation_);
@@ -281,7 +281,7 @@ void Weapon::Update()
 	if (IsAttack_ == true && chargeCount_ >= 50 && chargeCount_ < 90)
 	{
 		weaponWorldTransform_.translation_.y += attackSpeed_[3];
-		SetDamage(attackDamage_[2] + involvedCount_ * 2.0f);
+		SetDamage(attackDamage_[2] + involvedCount_ * missileDamage);
 		//エミッターの位置を変更
 		for (ParticleEmitter* particleEmitter : particleSystem_->GetParticleEmitters("Attack")) {
 			particleEmitter->SetTranslation(weaponWorldTransform_.translation_);
@@ -304,7 +304,7 @@ void Weapon::Update()
 	if (IsAttack_ == true && chargeCount_ >= 90)
 	{
 		weaponWorldTransform_.translation_.y += attackSpeed_[3];
-		SetDamage(attackDamage_[3] + involvedCount_ * 2.0f);
+		SetDamage(attackDamage_[3] + involvedCount_ * missileDamage);
 		//エミッターの位置を変更
 		for (ParticleEmitter* particleEmitter : particleSystem_->GetParticleEmitters("Attack")) {
 			particleEmitter->SetTranslation(weaponWorldTransform_.translation_);
@@ -655,7 +655,7 @@ void Weapon::StartAnimaion() {
 	if (IsAttack_ == true && chargeCount_ < 20)
 	{
 		weaponWorldTransform_.translation_.y += attackSpeed_[3];
-		SetDamage(attackDamage_[0] + involvedCount_ * 2.0f);
+		SetDamage(attackDamage_[0] + involvedCount_ * missileDamage);
 
 		if (weaponWorldTransform_.translation_.y >= 2.2f)
 		{
@@ -670,7 +670,7 @@ void Weapon::StartAnimaion() {
 	if (IsAttack_ == true && chargeCount_ >= 20 && chargeCount_ < 50)
 	{
 		weaponWorldTransform_.translation_.y += attackSpeed_[3];
-		SetDamage(attackDamage_[1] + involvedCount_ * 2.0f);
+		SetDamage(attackDamage_[1] + involvedCount_ * missileDamage);
 
 		if (weaponWorldTransform_.translation_.y >= 2.9f)
 		{
@@ -685,7 +685,7 @@ void Weapon::StartAnimaion() {
 	if (IsAttack_ == true && chargeCount_ >= 50 && chargeCount_ < 90)
 	{
 		weaponWorldTransform_.translation_.y += attackSpeed_[3];
-		SetDamage(attackDamage_[2] + involvedCount_ * 2.0f);
+		SetDamage(attackDamage_[2] + involvedCount_ * missileDamage);
 
 		if (weaponWorldTransform_.translation_.y >= 3.5f)
 		{
@@ -700,7 +700,7 @@ void Weapon::StartAnimaion() {
 	if (IsAttack_ == true && chargeCount_ >= 90)
 	{
 		weaponWorldTransform_.translation_.y += attackSpeed_[3];
-		SetDamage(attackDamage_[3] + involvedCount_ * 2.0f);
+		SetDamage(attackDamage_[3] + involvedCount_ * missileDamage);
 
 		if (weaponWorldTransform_.translation_.y >= 5.0f)
 		{
