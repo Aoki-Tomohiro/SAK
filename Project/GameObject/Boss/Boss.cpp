@@ -1,8 +1,6 @@
 #include "Boss.h"
-//#include "State/BossStateWait.h"
 #include "State/BossStateNormal.h"
-//#include "State/BossStateLaserAttack.h"
-//#include "State/BossStateChargeShot.h"
+#include "State/BossStateDown.h"
 #include "2D/ImGuiManager.h"
 #include "../GameObject/Weapon/Weapon.h"
 #include "Utility/GlobalVariables.h"
@@ -87,10 +85,20 @@ void Boss::Update() {
 
 	//状態の更新
 	state_->Update(this);
+
+	if (Hp_ < 0 && isDeadAnimation_ == false) {
+		isDeadAnimation_ = true;
+		ChangeState(new BossStateDown());
+		if (particleSystem_->GetParticleEmitter("Charge")) {
+			particleSystem_->GetParticleEmitter("Charge")->SetPopCount(0);
+		}
+	}
+
+	//ミサイルの発生頻度を変更
 	currentMissileSpornTime_ = int(float(MissileSpornTime + MissileSpornTime * Hp_ / kHpMax));
 
 	//ミサイルを生成
-	if (--missileSpornTimer_ < 0) {
+	if (--missileSpornTimer_ < 0 && isDeadAnimation_ == false) {
 		missileSpornTimer_ = currentMissileSpornTime_;
 		missileDirection_ *= -1;
 		Missile* missile = new Missile();

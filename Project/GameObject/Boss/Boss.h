@@ -233,6 +233,10 @@ public:
 	/// </summary>
 	uint32_t GetMissileSoundHandle() { return missileSoundHandle_; };
 
+	void SetIsDead() { isDead_ = true; };
+
+	bool GetIsDead() { return isDead_; };
+
 private:
 	Audio* audio_ = nullptr;
 
@@ -309,4 +313,7 @@ private:
 
 	//ミサイルの爆発音
 	uint32_t missileSoundHandle_ = 0;
+
+	bool isDead_ = false;
+	bool isDeadAnimation_ = false;
 };
