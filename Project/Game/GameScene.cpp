@@ -1,5 +1,6 @@
 #include "GameScene.h"
 #include "GameManager.h"
+#include "GameTitleScene.h"
 #include "GameClearScene.h"
 #include "GameOverScene.h"
 #include "Components/PostProcess.h"
@@ -175,6 +176,15 @@ void GameScene::Update(GameManager* gameManager) {
 			isTransition_ = true;
 			audio_->StopAudio(soundHandle_);
 			nextScene_ = NextScene::GAMEOVER;
+		}
+	}
+
+	if (input_->IsPushKeyEnter(DIK_T))
+	{
+		if (isTransition_ == false && isTransitionEnd_ == true) {
+			isTransition_ = true;
+			audio_->StopAudio(soundHandle_);
+			gameManager->ChangeScene(new GameTitleScene());
 		}
 	}
 
