@@ -71,10 +71,7 @@ void GameTitleScene::Initialize(GameManager* gameManager)
 
 void GameTitleScene::Update(GameManager* gameManager) 
 {
-	if (!Input::GetInstance()->GetJoystickState(joyState_))
-	{
-		return;
-	}
+	Input::GetInstance()->GetJoystickState(joyState_);
 
 	//背景の更新
 	backGround_->Update();
