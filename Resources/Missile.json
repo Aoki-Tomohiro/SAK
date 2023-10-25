@@ -1,6 +1,6 @@
 {
     "Missile": {
         "missileMoveSpeed": 0.03,
-        "missileSpornTime": 70
+        "missileSpornTime": 40
     }
 }
