@@ -170,7 +170,7 @@ void GameScene::Update(GameManager* gameManager) {
 		}
 	}
 
-	if (input_->IsPushKeyEnter(DIK_2)/* || weapon_->GetHP() <= 0.0f*/)
+	if (/*input_->IsPushKeyEnter(DIK_2) || */weapon_->GetHP() <= 0.0f)
 	{
 		if (isTransition_ == false && isTransitionEnd_ == true) {
 			isTransition_ = true;
