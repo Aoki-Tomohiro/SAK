@@ -54,6 +54,8 @@ public:
 
 	void StartAnimaion();
 
+	void GetBossIsDead(bool IsDeadAnimation) { IsDeadAnimation_ = IsDeadAnimation; };
+
 private:
 	Input* input_ = nullptr;
 
@@ -165,6 +167,8 @@ private:
 	std::unique_ptr<ParticleSystem> particleSystem_ = nullptr;
 
 	bool animationFlag_ = true;
+
+	bool IsDeadAnimation_ = false;
 
 };
 
