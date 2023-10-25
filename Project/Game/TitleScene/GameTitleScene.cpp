@@ -44,6 +44,10 @@ void GameTitleScene::Initialize(GameManager* gameManager)
 	x4x3TextureHandle_ = TextureManager::Load("Resources/Images/4x3Black.png");
 	x4x3Sprite_.reset(Sprite::Create(x4x3TextureHandle_, { 0.0f,0.0f }));
 
+	//コントローラースプライトの生成
+	controllerTextureHandle_ = TextureManager::Load("Resources/Images/Cont.png");
+	controllerSprite_.reset(Sprite::Create(controllerTextureHandle_, { 0.0f,0.0f }));
+
 	titleTextureHandle_ = TextureManager::Load("Resources/Images/title.png");
 	titleSprite_.reset(Sprite::Create(titleTextureHandle_, { 0.0f,0.0f }));
 
@@ -228,6 +232,8 @@ void GameTitleScene::Draw(GameManager* gameManager)
 	titleSprite_->Draw();
 	
 	pressASprite_->Draw();
+
+	controllerSprite_->Draw();
 
 	x4x3Sprite_->Draw();
 
