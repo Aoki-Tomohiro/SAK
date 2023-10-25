@@ -264,13 +264,13 @@ void GameScene::Draw(GameManager* gameManager) {
 
 	Sprite::PreDraw(Sprite::kBlendModeNormal);
 
-	x4x3Sprite_->Draw();
-
 	weapon_->DrawSprite();
 
 	boss_->DrawSprite();
 
 	player_->DrawSprite();
+
+	x4x3Sprite_->Draw();
   
 	transitionSprite_->Draw();
   

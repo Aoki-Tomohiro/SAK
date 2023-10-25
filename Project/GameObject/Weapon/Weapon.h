@@ -119,11 +119,18 @@ private:
 	float missileDamage = 5.0f;
 	Vector4 missileColor_[5]{
 		{1.0f,1.0f,1.0f,1.0f},
+		{1.0f,0.75f,0.75f,1.0f},
+		{1.0f,0.5f,0.5f,1.0f},
+		{1.0f,0.25f,0.25f,1.0f},
 		{1.0f,0.0f,0.0f,1.0f},
-		{0.0f,1.0f,0.0f,1.0f},
-		{0.0f,0.0f,1.0f,1.0f},
-		{0.0f,0.0f,0.0f,1.0f},
 	};
+
+	//ダメージ赤のスプライト
+	std::unique_ptr<Sprite> redSprite_;
+	//ダメージ赤のテクスチャ
+	uint32_t  redTextureHandle_ = 0;
+
+	bool damageRed = false;
 
 	//モデルとモーション
 	enum {

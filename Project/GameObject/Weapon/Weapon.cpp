@@ -108,6 +108,9 @@ void Weapon::Initialize()
 		heartUI_[i].sprite_ = Sprite::Create(heartUI_[i].textureHandle_, heartUI_[i].position_);
 	}
 
+	redTextureHandle_ = TextureManager::Load("Resources/Images/Red.png");
+	redSprite_.reset(Sprite::Create(redTextureHandle_, { 0.0f,0.0f }));
+	redSprite_->SetColor({1.0f,1.0f ,1.0f ,0.3f});
 
 	particleModel_.reset(ParticleModel::CreateFromOBJ("Resources/Particle", "Particle.obj"));
 	particleSystem_ = std::make_unique<ParticleSystem>();
@@ -368,6 +371,13 @@ void Weapon::Update()
 		if (invincibleTimer_ < 0) {
 			invincibleFlag_ = false;
 		}
+
+		if (invincibleTimer_ > 40) {
+			damageRed = true;
+		}
+		else {
+			damageRed = false;
+		}
 	}
 
   
@@ -604,6 +614,10 @@ void Weapon::DrawSprite()
 		if (heartUI_[i].isDraw_ == true) {
 			heartUI_[i].sprite_->Draw();
 		}
+	}
+
+	if (damageRed == true) {
+		redSprite_->Draw();
 	}
 }
 
