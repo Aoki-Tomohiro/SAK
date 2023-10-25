@@ -140,10 +140,18 @@ void Player::Update()
 			playerWorldTransform_.translation_ = Add(playerWorldTransform_.translation_, move);
 
 			//移動中はパーティクルを出す
-			particleSystem_->GetParticleEmitter("PlayerMove")->SetPopArea({ -1.0f,-0.5f,0.0f }, { -1.0f,-0.5f,0.0f });
-			particleSystem_->GetParticleEmitter("PlayerMove")->SetPopAzimuth(180.0f, 180.0f);
-			particleSystem_->GetParticleEmitter("PlayerMove")->SetPopCount(10);
-			particleSystem_->GetParticleEmitter("PlayerMove")->SetTranslation(playerWorldTransform_.translation_);
+			if (move.x > 0.0f) {
+				particleSystem_->GetParticleEmitter("PlayerMove")->SetPopArea({ -1.0f,-0.5f,0.0f }, { -1.0f,-0.5f,0.0f });
+				particleSystem_->GetParticleEmitter("PlayerMove")->SetPopAzimuth(180.0f, 180.0f);
+				particleSystem_->GetParticleEmitter("PlayerMove")->SetPopCount(10);
+				particleSystem_->GetParticleEmitter("PlayerMove")->SetTranslation(playerWorldTransform_.translation_);
+			}
+			else if (move.x <= 0.0f) {
+				particleSystem_->GetParticleEmitter("PlayerMove")->SetPopArea({ 1.0f,-0.5f,0.0f }, { 1.0f,-0.5f,0.0f });
+				particleSystem_->GetParticleEmitter("PlayerMove")->SetPopAzimuth(0.0f, 0.0f);
+				particleSystem_->GetParticleEmitter("PlayerMove")->SetPopCount(10);
+				particleSystem_->GetParticleEmitter("PlayerMove")->SetTranslation(playerWorldTransform_.translation_);
+			}
 
 			
 			if (playerWorldTransform_.translation_.x <= Missile::widthMin)
