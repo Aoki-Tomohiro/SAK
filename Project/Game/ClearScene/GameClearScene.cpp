@@ -46,6 +46,10 @@ void GameClearScene::Initialize(GameManager* gameManager)
 	winTextureHandle_ = TextureManager::Load("Resources/Images/win.png");
 	winSprite_.reset(Sprite::Create(winTextureHandle_, { 0.0f,0.0f }));
 
+	//4x3用スプライトの生成
+	x4x3TextureHandle_ = TextureManager::Load("Resources/Images/4x3Black.png");
+	x4x3Sprite_.reset(Sprite::Create(x4x3TextureHandle_, { 0.0f,0.0f }));
+
 	pressATextureHandle_ = TextureManager::Load("Resources/Images/PressAbutton.png");
 	pressASprite_.reset(Sprite::Create(pressATextureHandle_,
 		{ WinApp::GetInstance()->kClientWidth * 0.5f - 508.0f * 0.5f , 550.0f }));
@@ -205,6 +209,8 @@ void GameClearScene::Draw(GameManager* gameManager)
 	winSprite_->Draw();
 
 	pressASprite_->Draw();
+
+	x4x3Sprite_->Draw();
 
 	transitionSprite_->Draw();
 

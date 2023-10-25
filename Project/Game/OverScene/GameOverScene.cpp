@@ -32,7 +32,7 @@ void GameOverScene::Initialize(GameManager* gameManager)
 	weaponWorldTransform_.rotation_.z = 1.6f;
 	playerWorldTransform_.scale_ = { 1.0f,1.0f,1.0f };
 
-	bossWorldTransform_.translation_ = { 3.5f,-1.2f,-3.0f };
+	bossWorldTransform_.translation_ = { 2.5f,-1.2f,-3.0f };
 	bossWorldTransform_.rotation_.z = 0.6f;
 	bossWorldTransform_.scale_ = { 1.5f,1.5f,1.5f };
 
@@ -47,6 +47,10 @@ void GameOverScene::Initialize(GameManager* gameManager)
 	//スプライトの生成
 	loseTextureHandle_ = TextureManager::Load("Resources/Images/lose.png");
 	loseSprite_.reset(Sprite::Create(loseTextureHandle_, { 0.0f,0.0f }));
+
+	//4x3用スプライトの生成
+	x4x3TextureHandle_ = TextureManager::Load("Resources/Images/4x3Black.png");
+	x4x3Sprite_.reset(Sprite::Create(x4x3TextureHandle_, { 0.0f,0.0f }));
 
 	pressATextureHandle_ = TextureManager::Load("Resources/Images/PressAbutton.png");
 	pressASprite_.reset(Sprite::Create(pressATextureHandle_,
@@ -170,6 +174,8 @@ void GameOverScene::Draw(GameManager* gameManager)
 	Sprite::PreDraw(Sprite::kBlendModeNormal);
 
 	loseSprite_->Draw();
+
+	x4x3Sprite_->Draw();
 
 	pressASprite_->Draw();
 

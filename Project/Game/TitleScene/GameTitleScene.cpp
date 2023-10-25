@@ -40,6 +40,10 @@ void GameTitleScene::Initialize(GameManager* gameManager)
 	viewProjection_.UpdateMatrix();
 
 	//スプライトの生成
+	//4x3用スプライトの生成
+	x4x3TextureHandle_ = TextureManager::Load("Resources/Images/4x3Black.png");
+	x4x3Sprite_.reset(Sprite::Create(x4x3TextureHandle_, { 0.0f,0.0f }));
+
 	titleTextureHandle_ = TextureManager::Load("Resources/Images/title.png");
 	titleSprite_.reset(Sprite::Create(titleTextureHandle_, { 0.0f,0.0f }));
 
@@ -78,13 +82,13 @@ void GameTitleScene::Update(GameManager* gameManager)
 	playerWorldTransform_.translation_.x -= playerMoveSpeed_;
 	weaponWorldTransform_.translation_.x -= weaponMoveSpeed_;
 
-	if (playerWorldTransform_.translation_.x <= -7.3f)
+	if (playerWorldTransform_.translation_.x <= -5.6f)
 	{
 		playerMoveSpeed_ = -0.05f;
 		weaponMoveSpeed_ = -0.05f;
 	}
 
-	if (playerWorldTransform_.translation_.x >= 7.3f)
+	if (playerWorldTransform_.translation_.x >= 5.6f)
 	{
 		playerMoveSpeed_ = 0.05f;
 		weaponMoveSpeed_ = 0.05f;
@@ -230,8 +234,10 @@ void GameTitleScene::Draw(GameManager* gameManager)
 
 
 	titleSprite_->Draw();
-
+	
 	pressASprite_->Draw();
+
+	x4x3Sprite_->Draw();
 
 	transitionSprite_->Draw();
 

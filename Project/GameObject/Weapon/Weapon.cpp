@@ -99,7 +99,7 @@ void Weapon::Initialize()
 		heartUI_[i] = {
 			true,
 			TextureManager::Load("Resources/Images/heart.png"),
-			{ hpSpace + (hpSpace + hpSpriteSize)* i ,float(WinApp::GetInstance()->kClientHeight) - hpSpace - hpSpriteSize},
+			{ hpSpace + (hpSpace + hpSpriteSize)* i + 160 ,float(WinApp::GetInstance()->kClientHeight) - hpSpace - hpSpriteSize},
 			0.0f,
 			{1.0f,1.0f},
 			nullptr,
