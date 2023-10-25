@@ -147,7 +147,7 @@ void BossStateChargeShot::Update(Boss* pBoss) {
 
 	if (IsAttack_ == true && respownCount_ == 1)
 	{
-		chargeTimer_ = 121;
+		chargeTimer_ = 720;
 		chargeShotSpeed_ = -0.07f;
 		endTimer_--;
 
@@ -184,7 +184,7 @@ void BossStateChargeShot::Update(Boss* pBoss) {
 
 	if (IsAttack_ == true && respownCount_ == 2)
 	{
-		chargeTimer_ = 121;
+		chargeTimer_ = 720;
 		chargeShotSpeed_ = 0.07f;
 		endTimer_--;
 
