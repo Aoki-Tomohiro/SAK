@@ -191,8 +191,8 @@ void BossStateChargeShot::Update(Boss* pBoss) {
 	chargeWorldTransform_.UpdateMatrix();
 
 	//攻撃終了
-	if (IsAttack_ == true && respownCount_ == 1 && Missile::widthMin > bossWorldTransform_.translation_.x ||
-		IsAttack_ == true && respownCount_ == 2 && Missile::widthMax < bossWorldTransform_.translation_.x)
+	if (IsAttack_ == true && respownCount_ == 1 && Missile::widthMin + 0.3f > bossWorldTransform_.translation_.x ||
+		IsAttack_ == true && respownCount_ == 2 && Missile::widthMax - 0.3f < bossWorldTransform_.translation_.x)
 	{
 		pBoss->ChangeState(new BossStateNormal());
 	}
