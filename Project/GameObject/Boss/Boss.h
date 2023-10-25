@@ -233,6 +233,10 @@ public:
 	/// </summary>
 	uint32_t GetMissileSoundHandle() { return missileSoundHandle_; };
 
+	void SetIsDead() { isDead_ = true; };
+
+	bool GetIsDead() { return isDead_; };
+
 private:
 	Audio* audio_ = nullptr;
 
@@ -262,6 +266,7 @@ private:
 	//当たったミサイルの数
 	int hitMissileCount_ = 0;
 	//ミサイルのスポーンタイマー
+	int currentMissileSpornTime_ = 0;
 	int missileSpornTimer_ = 0;
 	//ミサイルの進行方向
 	int missileDirection_ = 1;
@@ -296,7 +301,7 @@ private:
 	//HPバー系
 	UIStruct hpBar_;
 	const float barSpace = 16.0f;
-	float barSize = WinApp::GetInstance()->kClientWidth - barSpace * 2;
+	float barSize = WinApp::GetInstance()->kClientWidth - 320 - barSpace * 2;
 
 	//パーティクル
 	std::unique_ptr<ParticleModel> particleModel_ = nullptr;
@@ -308,4 +313,7 @@ private:
 
 	//ミサイルの爆発音
 	uint32_t missileSoundHandle_ = 0;
+
+	bool isDead_ = false;
+	bool isDeadAnimation_ = false;
 };

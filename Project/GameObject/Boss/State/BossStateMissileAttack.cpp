@@ -1,6 +1,7 @@
 #include "BossStateMissileAttack.h"
 #include "BossStateNormal.h"
 #include "../GameObject/Boss/Boss.h"
+#include "Utility/GlobalVariables.h"
 
 BossStateMissileAttack::~BossStateMissileAttack() {
 
@@ -19,6 +20,16 @@ void BossStateMissileAttack::Initialize(Boss* pBoss) {
 }
 
 void BossStateMissileAttack::Update(Boss* pBoss) {
+	//グローバル変数の適応
+	BossStateMissileAttack::ApplyGlobalVariables();
+	//移動処理
+	if (pBoss->GetMoveDirection() == 1) {
+		moveSpeed_ = moveSpeed_;
+	}
+	else {
+		moveSpeed_ = -moveSpeed_;
+	}
+
 	//演出用のミサイルを生成
 	if (--missileSpornTimer_ < 0 && missileCount_ < kMissileMax) {
 		missileSpornTimer_ = kMissileSpornTime;
@@ -55,10 +66,10 @@ void BossStateMissileAttack::Update(Boss* pBoss) {
 			addMissileCount_++;
 			Missile* missile[2];
 			missile[0] = new Missile();
-			missile[0]->Initialize(Vector3{ -8.0f,pBoss->Random(-2.2f, 1.0f) ,0.0f }, Vector3{ 0.05f,0.0f,0.0f }, pBoss->GetMissileSoundHandle());
+			missile[0]->Initialize(Vector3{ Missile::widthMin,pBoss->Random(-2.2f, 1.0f) ,0.0f }, Vector3{ 0.05f,0.0f,0.0f }, pBoss->GetMissileSoundHandle());
 			pBoss->AddMissile(missile[0]);
 			missile[1] = new Missile();
-			missile[1]->Initialize(Vector3{ 8.0f,pBoss->Random(-2.2f, 1.0f) ,0.0f }, Vector3{ -0.05f,0.0f,0.0f }, pBoss->GetMissileSoundHandle());
+			missile[1]->Initialize(Vector3{ Missile::widthMax,pBoss->Random(-2.2f, 1.0f) ,0.0f }, Vector3{ -0.05f,0.0f,0.0f }, pBoss->GetMissileSoundHandle());
 			pBoss->AddMissile(missile[1]);
 		}
 	}
@@ -68,7 +79,7 @@ void BossStateMissileAttack::Update(Boss* pBoss) {
 		worldTransform_.translation_ = Add(worldTransform_.translation_, Vector3{ moveSpeed_,0.0f,0.0f });
 
 		//画面端まで移動したら移動方向を変える
-		if (worldTransform_.translation_.x <= -7.0f || worldTransform_.translation_.x >= 7.0f) {
+		if (worldTransform_.translation_.x <= Missile::widthMin || worldTransform_.translation_.x >= Missile::widthMax) {
 			int direction = pBoss->GetMoveDirection();
 			pBoss->SetMoveDirection(direction *= -1);
 			moveSpeed_ *= pBoss->GetMoveDirection();
@@ -92,5 +103,7 @@ void BossStateMissileAttack::Draw(Boss* pBoss, const ViewProjection& viewProject
 }
 
 void BossStateMissileAttack::ApplyGlobalVariables() {
-
+	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
+	const char* groupName = "BossStateNormal";
+	moveSpeed_ = globalVariables->GetFloatValue(groupName, "MoveSpeed");
 }

@@ -12,6 +12,8 @@
 class Missile : public Collider
 {
 public:
+	static float widthMin;
+	static float widthMax;
 
 	void Initialize(const Vector3& position, const Vector3& velocity, uint32_t audioHandle);
 

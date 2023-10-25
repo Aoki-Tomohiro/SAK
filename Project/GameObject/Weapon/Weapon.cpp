@@ -99,7 +99,7 @@ void Weapon::Initialize()
 		heartUI_[i] = {
 			true,
 			TextureManager::Load("Resources/Images/heart.png"),
-			{ hpSpace + (hpSpace + hpSpriteSize)* i ,float(WinApp::GetInstance()->kClientHeight) - hpSpace - hpSpriteSize},
+			{ hpSpace + (hpSpace + hpSpriteSize)* i + 160 ,float(WinApp::GetInstance()->kClientHeight) - hpSpace - hpSpriteSize},
 			0.0f,
 			{1.0f,1.0f},
 			nullptr,
@@ -157,14 +157,14 @@ void Weapon::Update()
 
 			weaponWorldTransform_.translation_ = Add(weaponWorldTransform_.translation_, move);
 
-			if (weaponWorldTransform_.translation_.x <= -7.3f)
+			if (weaponWorldTransform_.translation_.x <= Missile::widthMin)
 			{
-				weaponWorldTransform_.translation_.x = -7.3f;
+				weaponWorldTransform_.translation_.x = Missile::widthMin;
 			}
 
-			if (weaponWorldTransform_.translation_.x >= 7.3f)
+			if (weaponWorldTransform_.translation_.x >= Missile::widthMax)
 			{
-				weaponWorldTransform_.translation_.x = 7.3f;
+				weaponWorldTransform_.translation_.x = Missile::widthMax;
 			}
 		}
 	}

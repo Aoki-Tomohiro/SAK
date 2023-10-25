@@ -52,7 +52,7 @@ void BossStateNormal::Update(Boss* pBoss) {
 	worldTransform_.translation_ = Add(worldTransform_.translation_, Vector3{ moveSpeed_,0.0f,0.0f });
 
 	//画面端まで移動したら移動方向を変える
-	if (worldTransform_.translation_.x <= -7.0f || worldTransform_.translation_.x >= 7.0f) {
+	if (worldTransform_.translation_.x < Missile::widthMin || worldTransform_.translation_.x > Missile::widthMax) {
 		int direction = pBoss->GetMoveDirection();
 		pBoss->SetMoveDirection(direction *= -1);
 	}

@@ -58,7 +58,7 @@ void Player::Initialize(Weapon* weapon)
 	tutorialUI_ = {
 			true,
 			TextureManager::Load("Resources/Images/rule.png"),
-			{ float(WinApp::GetInstance()->kClientWidth) - tutorialSpace - tutorialSpriteSize.x,float(WinApp::GetInstance()->kClientHeight) - tutorialSpace - tutorialSpriteSize.y},
+			{ float(WinApp::GetInstance()->kClientWidth) - tutorialSpace - tutorialSpriteSize.x - 160,float(WinApp::GetInstance()->kClientHeight) - tutorialSpace - tutorialSpriteSize.y},
 			0.0f,
 			{1.0f,1.0f},
 			nullptr,
@@ -146,15 +146,16 @@ void Player::Update()
 			particleSystem_->GetParticleEmitter("PlayerMove")->SetTranslation(playerWorldTransform_.translation_);
 
 			
-			if (playerWorldTransform_.translation_.x <= -7.3f)
+			if (playerWorldTransform_.translation_.x <= Missile::widthMin)
 			{
-				playerWorldTransform_.translation_.x = -7.3f;
+				playerWorldTransform_.translation_.x = Missile::widthMin;
 			}
 
-			if (playerWorldTransform_.translation_.x >= 7.3f)
+			if (playerWorldTransform_.translation_.x >= Missile::widthMax)
 			{
-				playerWorldTransform_.translation_.x = 7.3f;
+				playerWorldTransform_.translation_.x = Missile::widthMax;
 			}
+
 			
 		}
 		ModelMotion();

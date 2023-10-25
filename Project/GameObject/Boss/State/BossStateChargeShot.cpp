@@ -16,6 +16,9 @@ void BossStateChargeShot::Initialize(Boss* pBoss) {
 
 	input_ = input_->GetInstance();
 
+	//Audioのインスタンスを取得
+	audio_ = Audio::GetInstance();
+
 	pBoss->SetHitMissileCount(0);
 
 	//グローバル変数
@@ -29,6 +32,8 @@ void BossStateChargeShot::Initialize(Boss* pBoss) {
 
 	//グローバル変数の適応
 	BossStateChargeShot::ApplyGlobalVariables();
+
+	soundHandle_ = audio_->SoundLoadWave("Resources/Sounds/Charge.wav");
 
 	//モデルの作成
 	chargemodel_.reset(Model::CreateFromOBJ("Resources/ChargeBeam", "ChargeBeam.obj"));
@@ -90,6 +95,7 @@ void BossStateChargeShot::Update(Boss* pBoss) {
 	if (chargeTimer_ < chargeTimerMax_)
 	{
 		chargeTimer_++;
+		audio_->SoundPlayWave(soundHandle_, false);
 
 		float ta = float(chargeTimer_) / float(chargeTimerMax_);
 
@@ -120,9 +126,9 @@ void BossStateChargeShot::Update(Boss* pBoss) {
 		chargeWorldTransform_.translation_.x += chargeShotSpeed_;
 		pBoss->SetWorldTransform(bossWorldTransform_);
 
-		if (bossWorldTransform_.translation_.x >= 6.9f)
+		if (bossWorldTransform_.translation_.x > Missile::widthMax)
 		{
-			bossWorldTransform_.translation_.x = 6.9f;
+			bossWorldTransform_.translation_.x = Missile::widthMax;
 			pBoss->SetWorldTransform(bossWorldTransform_);
 
 			chargeShotSpeed_ = 0.07f;
@@ -141,7 +147,7 @@ void BossStateChargeShot::Update(Boss* pBoss) {
 
 	if (IsAttack_ == true && respownCount_ == 1)
 	{
-		chargeTimer_ = -1;
+		chargeTimer_ = 121;
 		chargeShotSpeed_ = -0.07f;
 		endTimer_--;
 
@@ -157,9 +163,9 @@ void BossStateChargeShot::Update(Boss* pBoss) {
 		chargeWorldTransform_.translation_.x += chargeShotSpeed_;
 		pBoss->SetWorldTransform(bossWorldTransform_);
 
-		if (bossWorldTransform_.translation_.x <= -6.9f)
+		if (bossWorldTransform_.translation_.x < Missile::widthMin)
 		{
-			bossWorldTransform_.translation_.x = -6.9f;
+			bossWorldTransform_.translation_.x = Missile::widthMin;
 			pBoss->SetWorldTransform(bossWorldTransform_);
 
 			chargeShotSpeed_ = -0.07f;
@@ -178,7 +184,7 @@ void BossStateChargeShot::Update(Boss* pBoss) {
 
 	if (IsAttack_ == true && respownCount_ == 2)
 	{
-		chargeTimer_ = -1;
+		chargeTimer_ = 121;
 		chargeShotSpeed_ = 0.07f;
 		endTimer_--;
 
@@ -187,13 +193,12 @@ void BossStateChargeShot::Update(Boss* pBoss) {
 		pBoss->SetWorldTransform(bossWorldTransform_);
 	}
 
-
 	//ワールドトランスフォームの更新
 	chargeWorldTransform_.UpdateMatrix();
 
 	//攻撃終了
-	if (IsAttack_ == true && respownCount_ == 1 && bossWorldTransform_.translation_.x <= -6.6f||
-		IsAttack_ == true && respownCount_ == 2 && bossWorldTransform_.translation_.x >= 6.6f)
+	if (IsAttack_ == true && respownCount_ == 1 && Missile::widthMin + 0.3f > bossWorldTransform_.translation_.x ||
+		IsAttack_ == true && respownCount_ == 2 && Missile::widthMax - 0.3f < bossWorldTransform_.translation_.x)
 	{
 		pBoss->ChangeState(new BossStateNormal());
 	}

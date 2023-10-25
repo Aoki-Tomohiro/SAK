@@ -5,6 +5,7 @@
 #include "Components/Input.h"
 #include "Utility/CollisionManager/Collider.h"
 #include "../GameObject/Weapon/Weapon.h"
+#include "../GameObject/Missile/Missile.h"
 #include "../UI.h"
 #include "3D/Model/ParticleModel.h"
 #include "3D/Particle/ParticleSystem.h"

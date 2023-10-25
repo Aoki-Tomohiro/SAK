@@ -1,6 +1,7 @@
 #include "ChargeShot.h"
+#include "../GameObject/Missile/Missile.h"
 
-int ChargeShot::chargeShotEndTime = 170;
+int ChargeShot::chargeShotEndTime = 120;
 
 void ChargeShot::Initialize(Vector3 position, float chargeShotpeed) {
 	//モデルの作成
@@ -51,7 +52,7 @@ void ChargeShot::Update() {
 
 
 	//死亡フラグを立てる
-	if (--deadTimer_ <= 0) 
+	if (--deadTimer_ < 0)
 	{
 		isDead_ = true;
 	}

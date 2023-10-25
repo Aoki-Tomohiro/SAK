@@ -1,8 +1,6 @@
 #include "Boss.h"
-//#include "State/BossStateWait.h"
 #include "State/BossStateNormal.h"
-//#include "State/BossStateLaserAttack.h"
-//#include "State/BossStateChargeShot.h"
+#include "State/BossStateDown.h"
 #include "2D/ImGuiManager.h"
 #include "../GameObject/Weapon/Weapon.h"
 #include "Utility/GlobalVariables.h"
@@ -60,9 +58,9 @@ void Boss::Initialize() {
 	hpBar_ = {
 		true,
 		TextureManager::Load("Resources/Images/bossHp.png"),
-		{barSpace , barSpace},
+		{barSpace  + 160, barSpace},
 		0.0f,
-		{barSize,1.0f},
+		{barSize  ,1.0f},
 		nullptr,
 	};
 
@@ -75,6 +73,9 @@ void Boss::Initialize() {
 
 	//ミサイルの爆発音
 	missileSoundHandle_ = audio_->SoundLoadWave("Resources/Sounds/Missile_Bakuhatu.wav");
+
+	//ミサイルのスポーンタイムの初期化
+	currentMissileSpornTime_ = MissileSpornTime * 2;
 }
 
 void Boss::Update() {
@@ -84,13 +85,26 @@ void Boss::Update() {
 
 	//状態の更新
 	state_->Update(this);
-	//
+
+	if (Hp_ < 0 && isDeadAnimation_ == false) {
+		isDeadAnimation_ = true;
+		ChangeState(new BossStateDown());
+		if (particleSystem_->GetParticleEmitter("Charge")) {
+			particleSystem_->GetParticleEmitter("Charge")->SetPopCount(0);
+		}
+	}
+
+	//ミサイルの発生頻度を変更
+	currentMissileSpornTime_ = int(float(MissileSpornTime + MissileSpornTime * Hp_ / kHpMax));
+
 	//ミサイルを生成
-	if (--missileSpornTimer_ < 0) {
-		missileSpornTimer_ = MissileSpornTime;
+	if (--missileSpornTimer_ < 0 && isDeadAnimation_ == false) {
+		missileSpornTimer_ = currentMissileSpornTime_;
 		missileDirection_ *= -1;
 		Missile* missile = new Missile();
-		missile->Initialize(Vector3{ 13.0f * missileDirection_,Random(/*-1.3f,*/-2.2f, 1.0f) ,0.0f }, Vector3{ missileMoveSpeed_ * (missileDirection_ * -1),0.0f,0.0f }, missileSoundHandle_);
+
+		missile->Initialize(Vector3{ Missile::widthMax * missileDirection_,Random(/*-1.3f,*/-2.2f, 1.0f) ,0.0f }, Vector3{ missileMoveSpeed_ * (missileDirection_ * -1),0.0f,0.0f }, missileSoundHandle_);
+
 		Boss::AddMissile(missile);
 	}
 
@@ -150,6 +164,9 @@ void Boss::Update() {
 	ImGui::Begin("Boss");
 	ImGui::Text("HP : %f", Hp_);
 	ImGui::Text("HitMissileCount : %d", hitMissileCount_);
+	ImGui::Text("MissileSpornTime : %d", MissileSpornTime);
+	ImGui::Text("CurrentMissileSpornTime : %d", currentMissileSpornTime_);
+	ImGui::Text("MissileTimer: %d", missileSpornTimer_);
 	ImGui::End();
 }
 
