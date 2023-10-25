@@ -4,6 +4,7 @@
 #include "3D/Model/Model.h"
 #include "3D/Matrix/WorldTransform.h"
 #include "Components/Input.h"
+#include "Components/Audio.h"
 
 class BossStateChargeShot : public IBossState
 {
@@ -45,11 +46,18 @@ class BossStateChargeShot : public IBossState
 private:
 	Input* input_ = nullptr;
 
+	//Audio
+	Audio* audio_ = nullptr;
+
 	//モデル
 	std::unique_ptr<Model> chargemodel_ = nullptr;
 	//ワールドトランスフォーム
 	WorldTransform chargeWorldTransform_{};
 	WorldTransform bossWorldTransform_{};
+
+	//サウンド
+	uint32_t soundHandle_ = 0u;
+
 	//チャージ中の時間
 	int chargeTimer_ = 0;
 	int chargeTimerMax_ = 0;
