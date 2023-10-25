@@ -1,6 +1,7 @@
 #include "BossStateMissileAttack.h"
 #include "BossStateNormal.h"
 #include "../GameObject/Boss/Boss.h"
+#include "Utility/GlobalVariables.h"
 
 BossStateMissileAttack::~BossStateMissileAttack() {
 
@@ -19,6 +20,16 @@ void BossStateMissileAttack::Initialize(Boss* pBoss) {
 }
 
 void BossStateMissileAttack::Update(Boss* pBoss) {
+	//グローバル変数の適応
+	BossStateMissileAttack::ApplyGlobalVariables();
+	//移動処理
+	if (pBoss->GetMoveDirection() == 1) {
+		moveSpeed_ = moveSpeed_;
+	}
+	else {
+		moveSpeed_ = -moveSpeed_;
+	}
+
 	//演出用のミサイルを生成
 	if (--missileSpornTimer_ < 0 && missileCount_ < kMissileMax) {
 		missileSpornTimer_ = kMissileSpornTime;
@@ -92,5 +103,7 @@ void BossStateMissileAttack::Draw(Boss* pBoss, const ViewProjection& viewProject
 }
 
 void BossStateMissileAttack::ApplyGlobalVariables() {
-
+	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
+	const char* groupName = "BossStateNormal";
+	moveSpeed_ = globalVariables->GetFloatValue(groupName, "MoveSpeed");
 }
