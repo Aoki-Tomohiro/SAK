@@ -103,6 +103,10 @@ private:
 
 	std::unique_ptr<BackGround> backGround_ = nullptr;
 
+	//4x3のスプライト
+	std::unique_ptr<Sprite> x4x3Sprite_;
+	//4x3のテクスチャ
+	uint32_t x4x3TextureHandle_ = 0;
 
 	//トランジション用のスプライト
 	std::unique_ptr<Sprite> transitionSprite_;

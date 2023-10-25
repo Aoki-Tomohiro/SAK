@@ -44,6 +44,10 @@ void GameScene::Initialize(GameManager* gameManager) {
 	backGround_ = std::make_unique<BackGround>();
 	backGround_->Initialize();
 
+	//4x3用スプライトの生成
+	x4x3TextureHandle_ = TextureManager::Load("Resources/Images/4x3Black.png") ;
+	x4x3Sprite_.reset(Sprite::Create(x4x3TextureHandle_, { 0.0f,0.0f }));
+
 	//トランジション用スプライトの生成
 	transitionSprite_.reset(Sprite::Create(transitionTextureHandle_, { 0.0f,0.0f }));
 	transitionSprite_->SetColor(transitionColor_);
@@ -254,6 +258,8 @@ void GameScene::Draw(GameManager* gameManager) {
 #pragma region 前景スプライトの描画
 
 	Sprite::PreDraw(Sprite::kBlendModeNormal);
+
+	x4x3Sprite_->Draw();
 
 	weapon_->DrawSprite();
 
