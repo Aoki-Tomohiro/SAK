@@ -95,7 +95,7 @@ void Boss::Update() {
 	}
 
 	//ミサイルの発生頻度を変更
-	currentMissileSpornTime_ = int(float(MissileSpornTime + MissileSpornTime * Hp_ / kHpMax));
+	currentMissileSpornTime_ = int(float(MissileSpornTime + MissileSpornTime * Hp_ / maxHp_));
 
 	//ミサイルを生成
 	if (--missileSpornTimer_ < 0 && isDeadAnimation_ == false) {
