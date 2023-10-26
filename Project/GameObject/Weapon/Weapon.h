@@ -118,7 +118,7 @@ private:
 	//ミサイルを巻き込んでいるか
 	bool isInvolvedMissile_ = false;
 	int involvedCount_ = 0;
-	float missileDamage = 5.0f;
+	float missileDamage = 7.0f;
 	Vector4 missileColor_[5]{
 		{1.0f,1.0f,1.0f,1.0f},
 		{1.0f,0.5f,0.5f,1.0f},
