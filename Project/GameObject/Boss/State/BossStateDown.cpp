@@ -17,6 +17,23 @@ void BossStateDown::Initialize(Boss* pBoss) {
 
 void BossStateDown::Update(Boss* pBoss) {
 
+	ParticleEmitter* particleEmitter = EmitterBuilder()
+		.SetParticleType(ParticleEmitter::ParticleType::kScale)
+		.SetTranslation(worldTransform_.translation_)
+		.SetArea({ -2.0f,-2.0f,-2.0f }, { 2.0f,2.0f,2.0f })
+		.SetRotation({ 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f })
+		.SetScale({ 0.1f, 0.1f,0.1f }, { 0.15f ,0.15f ,0.15f })
+		.SetAzimuth(0.0f, 360.0f)
+		.SetElevation(0.0f, 0.0f)
+		.SetVelocity({ 0.2f ,0.2f ,0.2f }, { 0.2f ,0.2f ,0.2f })
+		.SetColor({ 1.0f,0.5f,0.0f,1.0f }, { 1.0f,0.5f,0.0f,1.0f })
+		.SetLifeTime(0.1f, 1.0f)
+		.SetCount(100)
+		.SetFrequency(4.0f)
+		.SetDeleteTime(1.0f)
+		.Build();
+	pBoss->AddParticleEmitter(particleEmitter);
+
 	if (timer_ < 1.0f) {
 		timer_ += 1.0f / kAnimationTime;
 	}

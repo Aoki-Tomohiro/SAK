@@ -10,7 +10,7 @@ GameManager::GameManager() {
 
 	//ゲームウィンドウ作成
 	winApp_ = WinApp::GetInstance();
-	winApp_->CreateGameWindow(L"DirectXGame", winApp_->kClientWidth, winApp_->kClientHeight);
+	winApp_->CreateGameWindow(L"2101_くしざしピストン", winApp_->kClientWidth, winApp_->kClientHeight);
 
 	//DirectXの初期化
 	dxCommon_ = DirectXCommon::GetInstance();
