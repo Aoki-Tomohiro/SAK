@@ -11,6 +11,7 @@
 #include "../UI.h"
 #include "3D/Model/ParticleModel.h"
 #include "3D/Particle/ParticleSystem.h"
+#include <sstream>
 
 class Weapon;
 
@@ -239,6 +240,11 @@ public:
 
 	bool GetIsDeadAnimation() { return isDeadAnimation_; };
 
+	/// <summary>
+	/// ミサイルデータの読み込み
+	/// </summary>
+	void LoadMissileData();
+
 private:
 	Audio* audio_ = nullptr;
 
@@ -318,4 +324,31 @@ private:
 
 	bool isDead_ = false;
 	bool isDeadAnimation_ = false;
+
+
+
+
+	//ミサイルのパターン
+	struct MissilePattern {
+		std::vector<Vector3> position;
+		std::vector<Vector3> velocity;
+	};
+
+	//ミサイルのテンプレート
+	struct MissileTemplate {
+		std::vector<MissilePattern> missilePatterns;
+		int spornTime = 0;
+		int spornTimer = 0;
+	};
+
+	//ミサイルのテンプレが変わる閾値
+	int missileTemplateThreshold1_ = 70;
+	int missileTemplateThreshold2_ = 30;
+	int missileTemplateThreshold3_ = 0;
+
+	//テンプレートの配列
+	std::vector<MissileTemplate> missileTemplates_;
+
+	//ミサイルCSVの読み込み
+	std::stringstream missileData_;
 };

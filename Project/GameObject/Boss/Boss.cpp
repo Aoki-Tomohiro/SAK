@@ -76,6 +76,8 @@ void Boss::Initialize() {
 
 	//ミサイルのスポーンタイムの初期化
 	currentMissileSpornTime_ = MissileSpornTime * 2;
+
+	LoadMissileData();
 }
 
 void Boss::Update() {
@@ -94,18 +96,40 @@ void Boss::Update() {
 		}
 	}
 
-	//ミサイルの発生頻度を変更
-	currentMissileSpornTime_ = int(float(MissileSpornTime + MissileSpornTime * Hp_ / maxHp_));
+	////ミサイルの発生頻度を変更
+	//currentMissileSpornTime_ = int(float(MissileSpornTime + MissileSpornTime * Hp_ / maxHp_));
 
-	//ミサイルを生成
-	if (--missileSpornTimer_ < 0 && isDeadAnimation_ == false) {
-		missileSpornTimer_ = currentMissileSpornTime_;
-		missileDirection_ *= -1;
-		Missile* missile = new Missile();
+	////ミサイルを生成
+	//if (--missileSpornTimer_ < 0 && isDeadAnimation_ == false) {
+	//	missileSpornTimer_ = currentMissileSpornTime_;
+	//	missileDirection_ *= -1;
+	//	Missile* missile = new Missile();
 
-		missile->Initialize(Vector3{ 6.5f * missileDirection_,Random(/*-1.3f,*/-2.2f, 1.0f) ,0.0f }, Vector3{ missileMoveSpeed_ * (missileDirection_ * -1),0.0f,0.0f }, missileSoundHandle_);
+	//	missile->Initialize(Vector3{ 6.5f * missileDirection_,Random(/*-1.3f,*/-2.2f, 1.0f) ,0.0f }, Vector3{ missileMoveSpeed_ * (missileDirection_ * -1),0.0f,0.0f }, missileSoundHandle_);
 
-		Boss::AddMissile(missile);
+	//	Boss::AddMissile(missile);
+	//}
+
+	if (Hp_ >= missileTemplateThreshold1_) {
+		//ミサイルタイマーを進める
+		if (++missileTemplates_[0].spornTimer >= missileTemplates_[0].spornTime) {
+			//タイマーのリセット
+			missileTemplates_[0].spornTimer = 0;
+			//ミサイルのパターンをランダムで決める
+			int index = Random(0, static_cast<int>(missileTemplates_[0].missilePatterns.size() - 1));
+			//ミサイルの生成
+			for (int i = 0; i < missileTemplates_[0].missilePatterns[index].position.size(); i++) {
+				Missile* missile = new Missile;
+				missile->Initialize(missileTemplates_[0].missilePatterns[index].position[i], missileTemplates_[0].missilePatterns[index].velocity[i], missileSoundHandle_);
+				AddMissile(missile);
+			}
+		}
+	}
+	else if (Hp_ < missileTemplateThreshold1_ && Hp_ >= missileTemplateThreshold2_) {
+
+	}
+	else if (Hp_ < missileTemplateThreshold2_ && Hp_ >= missileTemplateThreshold3_) {
+
 	}
 
 	//死亡フラグの立ったレーザーをリストから削除
@@ -346,4 +370,64 @@ void Boss::StartAnimation() {
 
 	//パーティクルの更新
 	particleSystem_->Update();
+}
+
+void Boss::LoadMissileData() {
+	//ファイルを開く
+	std::ifstream file;
+	file.open("Resources/Missile.csv");
+	assert(file.is_open());
+
+	//ファイル内容をコピー
+	missileData_ << file.rdbuf();
+	file.close();
+
+	//読み込み
+	uint32_t templateIndex = 0;
+	uint32_t patternIndex = 0;
+	std::string line;
+	while (getline(missileData_, line)) {
+		std::istringstream line_stream(line);
+		std::string word;
+		getline(line_stream, word, ',');
+
+		if (word.find("//") == 0) {
+			continue;
+		}
+
+		if (word.find("Template") == 0) {
+			MissileTemplate missileTemplate;
+			getline(line_stream, word, ',');
+			missileTemplate.spornTime = (int)std::atof(word.c_str());
+			missileTemplates_.push_back(missileTemplate);
+			templateIndex++;
+		}
+		else if (word.find("Pattern") == 0) {
+			MissilePattern missilePattern;
+			missileTemplates_[templateIndex - 1].missilePatterns.push_back(missilePattern);
+			patternIndex++;
+		}
+		else if (word.find("Missile") == 0) {
+			getline(line_stream, word, ',');
+			float posX = (float)std::atof(word.c_str());
+
+			getline(line_stream, word, ',');
+			float posY = (float)std::atof(word.c_str());
+
+			getline(line_stream, word, ',');
+			float posZ = (float)std::atof(word.c_str());
+
+			getline(line_stream, word, ',');
+			float velX = (float)std::atof(word.c_str());
+
+			getline(line_stream, word, ',');
+			float velY = (float)std::atof(word.c_str());
+
+			getline(line_stream, word, ',');
+			float velZ = (float)std::atof(word.c_str());
+
+			missileTemplates_[templateIndex - 1].missilePatterns[patternIndex - 1].position.push_back(Vector3{ posX,posY,posZ });
+			missileTemplates_[templateIndex - 1].missilePatterns[patternIndex - 1].velocity.push_back(Vector3{ velX,velY,velZ });
+		}
+	}
 }
