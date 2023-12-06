@@ -185,37 +185,37 @@ void Weapon::Update()
 		
 
 	}else if(preJoyState_.Gamepad.wButtons & XINPUT_GAMEPAD_A && IsCoolDown_ == false){
-		if (pushCount_ < 12)
-		{
-			audio_->SoundPlayWave(soundHandle_[3], false);
-			IsCharge_ = false;
-			IsAttack_ = true;
-			pushCount_ = 0;
-			//発射パーティクル
-			ParticleEmitter* newParticleEmitter = EmitterBuilder()
-				.SetEmitterName("Attack")
-				.SetParticleType(ParticleEmitter::ParticleType::kNormal)
-				.SetTranslation(weaponWorldTransform_.translation_)
-				.SetArea({ -0.4f,-0.6f,0.0f }, { 0.4f,-0.6f,0.0f })
-				.SetRotation({ 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f })
-				.SetScale({ 0.05f, 0.6f,0.1f }, { 0.05f ,0.8f ,0.1f })
-				.SetAzimuth(0.0f, 0.0f)
-				.SetElevation(0.0f, 0.0f)
-				.SetVelocity({ 0.0f ,0.0f ,0.0f }, { 0.0f ,0.0f ,0.0f })
-				.SetColor({ 1.0f ,1.0f ,1.0f,0.4f }, { 1.0f ,1.0f ,1.0f ,0.6f })
-				.SetLifeTime(0.15f, 0.15f)
-				.SetCount(20)
-				.SetFrequency(0.01f)
-				.SetDeleteTime(2.0f)
-				.Build();
-			particleSystem_->AddParticleEmitter(newParticleEmitter);
-		}
 
-		if (pushCount_ >= 12)
-		{
-			IsCharge_ = false;
-			pushCount_ = 0;
-		}
+		
+		IsCharge_ = false;
+		pushCount_ = 0;
+		
+	}
+
+	if (joyState_.Gamepad.wButtons & XINPUT_GAMEPAD_B && IsCoolDown_ == false)
+	{
+		audio_->SoundPlayWave(soundHandle_[3], false);
+		IsCharge_ = false;
+		IsAttack_ = true;
+		pushCount_ = 0;
+		//発射パーティクル
+		ParticleEmitter* newParticleEmitter = EmitterBuilder()
+			.SetEmitterName("Attack")
+			.SetParticleType(ParticleEmitter::ParticleType::kNormal)
+			.SetTranslation(weaponWorldTransform_.translation_)
+			.SetArea({ -0.4f,-0.6f,0.0f }, { 0.4f,-0.6f,0.0f })
+			.SetRotation({ 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f })
+			.SetScale({ 0.05f, 0.6f,0.1f }, { 0.05f ,0.8f ,0.1f })
+			.SetAzimuth(0.0f, 0.0f)
+			.SetElevation(0.0f, 0.0f)
+			.SetVelocity({ 0.0f ,0.0f ,0.0f }, { 0.0f ,0.0f ,0.0f })
+			.SetColor({ 1.0f ,1.0f ,1.0f,0.4f }, { 1.0f ,1.0f ,1.0f ,0.6f })
+			.SetLifeTime(0.15f, 0.15f)
+			.SetCount(20)
+			.SetFrequency(0.01f)
+			.SetDeleteTime(2.0f)
+			.Build();
+		particleSystem_->AddParticleEmitter(newParticleEmitter);
 	}
 
 
