@@ -42,7 +42,7 @@ void GameOverScene::Initialize(GameManager* gameManager)
 
 	viewProjection_.UpdateMatrix();
 
-	audio_->SoundPlayWave(overSoundHandle_, true);
+	audio_->SoundPlayWave(overSoundHandle_, true, 1.0f);
   
 	//スプライトの生成
 	loseTextureHandle_ = TextureManager::Load("Resources/Images/lose.png");
@@ -78,7 +78,7 @@ void GameOverScene::Update(GameManager* gameManager)
 			if (soundCount_ == 0)
 			{
 				soundCount_ = 1;
-				audio_->SoundPlayWave(soundHandle_, false);
+				audio_->SoundPlayWave(soundHandle_, false, 1.0f);
 			}
 		}
 	}

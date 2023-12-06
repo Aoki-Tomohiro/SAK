@@ -60,7 +60,7 @@ void GameTitleScene::Initialize(GameManager* gameManager)
 	transitionSprite_->SetColor(transitionColor_);
 	transitionSprite_->SetSize(Vector2{ 640.0f,360.0f });
 
-	audio_->SoundPlayWave(titleSoundHandle_, true);
+	audio_->SoundPlayWave(titleSoundHandle_, true, 1.0f);
 
 	//ポストプロセスの有効化
 	PostProcess::GetInstance()->SetIsPostProcessActive(true);
@@ -103,7 +103,7 @@ void GameTitleScene::Update(GameManager* gameManager)
 			if (soundCount_ == 0)
 			{
 				soundCount_ = 1;
-				audio_->SoundPlayWave(soundHandle_, false);
+				audio_->SoundPlayWave(soundHandle_, false, 1.0f);
 			}
 		}
 	}

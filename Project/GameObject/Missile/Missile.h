@@ -35,12 +35,14 @@ public:
 
 	void SetWeapon(Weapon* weapon) { weapon_ = weapon; }
 
+	void SetColor(const Vector4& color) { color_ = color; };
+
 private:
 	Input* input_ = nullptr;
 
 	Audio* audio_ = nullptr;
 
-	std::unique_ptr<Model> model_;
+	std::unique_ptr<Model> floorMissileModel_;
 
 	std::unique_ptr<Model> missileModel_;
 
@@ -79,5 +81,7 @@ private:
 	missileMotionStruct missileMotion_;
   
 	bool IsMove_ = false;
+
+	Vector4 color_ = { 1.0f,1.0f,1.0f,1.0f };
 };
 

@@ -95,7 +95,7 @@ void BossStateChargeShot::Update(Boss* pBoss) {
 	if (chargeTimer_ < chargeTimerMax_)
 	{
 		chargeTimer_++;
-		audio_->SoundPlayWave(soundHandle_, false);
+		audio_->SoundPlayWave(soundHandle_, false, 1.0f);
 
 		float ta = float(chargeTimer_) / float(chargeTimerMax_);
 

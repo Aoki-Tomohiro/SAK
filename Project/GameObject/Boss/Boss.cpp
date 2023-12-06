@@ -176,6 +176,19 @@ void Boss::Update() {
 
 	//ミサイルの更新
 	for (std::unique_ptr<Missile>& missile : missiles_) {
+		//プレイヤーとあたる高さにいるミサイルの色を変える
+		Vector3 weaponPosition = weapon_->GetWorldPosition();
+		float weaponRadius = weapon_->GetRadius();
+		Vector3 missilePosition = missile->GetWorldPosition();
+		AABB missileAABB = missile->GetAABB();
+		float missileRadius = missile->GetRadius();
+		if (weaponPosition.y - weaponRadius <= missilePosition.y + missileAABB.max.y && weaponPosition.y + weaponRadius >= missilePosition.y + missileAABB.min.y) {
+			missile->SetColor({ 0.9f,0.3f,0.3f,1.0f });
+		}
+		else {
+			missile->SetColor({ 1.0f,1.0f,1.0f,1.0f });
+		}
+
 		missile->Update();
 	}
 
@@ -264,8 +277,8 @@ void Boss::ApplyGlobalVariables()
 void Boss::OnCollision(uint32_t collisionAttribute, float damage) {
   
 	if (weapon_->GetIsHit() == false && weapon_->GetIsCoolDown() == false && isActive_) {
-		audio_->SoundPlayWave(soundHandle_[0], false);
-		audio_->SoundPlayWave(soundHandle_[1], false);
+		audio_->SoundPlayWave(soundHandle_[0], false, 1.0f);
+		audio_->SoundPlayWave(soundHandle_[1], false, 1.0f);
 		Hp_ -= damage;
 		if (collisionAttribute & kCollisionAttributePlayer) {
 			hitMissileCount_ += weapon_->GetInvolvedMissileCount();
@@ -273,7 +286,7 @@ void Boss::OnCollision(uint32_t collisionAttribute, float damage) {
 	}
 
 	if (weapon_->GetInvolvedMissileCount() > 0 && isActive_ == false) {
-		audio_->SoundPlayWave(soundHandle_[0], false);
+		audio_->SoundPlayWave(soundHandle_[0], false, 1.0f);
 		isActive_ = true;
 		if (weapon_->GetIsHit() == false) {
 			Hp_ -= damage;

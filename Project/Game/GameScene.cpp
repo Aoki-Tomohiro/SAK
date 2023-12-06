@@ -55,7 +55,7 @@ void GameScene::Initialize(GameManager* gameManager) {
 	transitionSprite_->SetSize(Vector2{ 640.0f,360.0f });
 
 	soundHandle_ = audio_->SoundLoadWave("Resources/Sounds/GameScene.wav");
-	audio_->SoundPlayWave(soundHandle_, true);
+	audio_->SoundPlayWave(soundHandle_, true, 1.0f);
 
 	//ポストプロセスの有効化
 	PostProcess::GetInstance()->SetIsPostProcessActive(true);
@@ -65,6 +65,23 @@ void GameScene::Initialize(GameManager* gameManager) {
 };
 
 void GameScene::Update(GameManager* gameManager) {
+
+	if (weapon_->GetIsHit() && currentInvolvedMissileCount_ > 0 || weapon_->GetIsDamaged()) {
+		isShake_ = true;
+		shakeTimer_ = kShakeTime;
+	}
+
+	if (isShake_) {
+		viewProjection_.translation_.x = boss_->Random(shakePower_.x, shakePower_.y);
+		viewProjection_.translation_.y = boss_->Random(shakePower_.x, shakePower_.y);
+		if (--shakeTimer_ < 0) {
+			isShake_ = false;
+			viewProjection_.translation_.x = 0.0f;
+			viewProjection_.translation_.y = 0.0f;
+		}
+	}
+
+	viewProjection_.UpdateMatrix();
 
 	//トランジション
 	if (isTransitionEnd_ == false) {
@@ -84,6 +101,7 @@ void GameScene::Update(GameManager* gameManager) {
 
 		//武器のアニメーションの更新
 		weapon_->StartAnimaion();
+		currentInvolvedMissileCount_ = weapon_->GetInvolvedMissileCount();
 
 		//ボスのアニメーション更新
 		boss_->StartAnimation();
@@ -112,6 +130,7 @@ void GameScene::Update(GameManager* gameManager) {
 
 	weapon_->Update();
 	weapon_->GetBossIsDead(boss_->GetIsDeadAnimation());
+	currentInvolvedMissileCount_ = weapon_->GetInvolvedMissileCount();
 
   	//ボスの更新
 	boss_->Update();
@@ -205,8 +224,6 @@ void GameScene::Update(GameManager* gameManager) {
 			}
 		}
 	}
-
-	viewProjection_.UpdateMatrix();
 };
 
 void GameScene::Draw(GameManager* gameManager) {
