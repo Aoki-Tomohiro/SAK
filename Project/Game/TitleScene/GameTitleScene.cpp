@@ -53,7 +53,7 @@ void GameTitleScene::Initialize(GameManager* gameManager)
 
 	pressATextureHandle_ = TextureManager::Load("Resources/Images/PressAbutton.png");
 	pressASprite_.reset(Sprite::Create(pressATextureHandle_,
-		{ WinApp::GetInstance()->kClientWidth * 0.5f - 508.0f * 0.5f , 550.0f}));
+		{ WinApp::GetInstance()->kClientWidth * 0.5f - 508.0f * 0.5f , 520.0f}));
 
 	//スプライトの生成
 	transitionSprite_.reset(Sprite::Create(transitionTextureHandle_, { 0.0f,0.0f }));

@@ -87,8 +87,8 @@ private:
 
 	UIStruct tutorialUI_;
 
-	float tutorialSpace = 16.0f;
-	Vector2 tutorialSpriteSize = {131.0f * 2.0f,36.0f * 2.0f };
+	float tutorialSpace = 12.0f;
+	Vector2 tutorialSpriteSize = {462.0f,72.0f};
 
 	//パーティクル
 	std::unique_ptr<ParticleModel> particleModel_ = nullptr;
