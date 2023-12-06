@@ -42,7 +42,7 @@ private:
 
 	Audio* audio_ = nullptr;
 
-	std::unique_ptr<Model> model_;
+	std::unique_ptr<Model> floorMissileModel_;
 
 	std::unique_ptr<Model> missileModel_;
 

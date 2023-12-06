@@ -10,7 +10,7 @@ void Missile::Initialize(const Vector3& position, const Vector3& velocity, uint3
 
 	audio_ = Audio::GetInstance();
 
-	model_.reset(Model::CreateFromOBJ("Resources", "sphere.obj"));
+	floorMissileModel_.reset(Model::CreateFromOBJ("Resources/FloorMissile", "FloorMissile.obj"));
 
 	missileModel_.reset(Model::CreateFromOBJ("Resources/Missile", "Missile.obj"));
 
@@ -76,10 +76,15 @@ void Missile::Update()
 
 void Missile::Draw(const ViewProjection viewProjection)
 {
-	if (isAlive_) {
+	if (isAlive_ && missileMotionWorldTransform_.translation_.y > -1.6f) {
 		//model_->Draw(worldTransform_, viewProjection, textureHandle_);
 		missileModel_->GetMaterial()->SetColor(color_);
 		missileModel_->Draw(missileMotionWorldTransform_, viewProjection);
+	}
+
+	if (missileMotionWorldTransform_.translation_.y <= -1.6f) {
+		floorMissileModel_->GetMaterial()->SetColor(color_);
+		floorMissileModel_->Draw(missileMotionWorldTransform_, viewProjection);
 	}
 }
 
