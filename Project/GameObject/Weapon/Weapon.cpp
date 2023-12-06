@@ -193,7 +193,7 @@ void Weapon::Update()
 
 	if (!(preJoyState_.Gamepad.wButtons & XINPUT_GAMEPAD_B) && joyState_.Gamepad.wButtons & XINPUT_GAMEPAD_B && IsCoolDown_ == false)
 	{
-		audio_->SoundPlayWave(soundHandle_[3], false);
+		audio_->SoundPlayWave(soundHandle_[3], false, 1.0f);
 		IsCharge_ = false;
 		IsAttack_ = true;
 		pushCount_ = 0;
