@@ -126,6 +126,7 @@ void Weapon::Update()
 {
 	XINPUT_STATE preJoyState_ = joyState_;
 	Vector3 move = { 0, 0, 0 };
+	isDamaged_ = false;
 
 	if (!Input::GetInstance()->GetJoystickState(joyState_))
 	{
@@ -518,6 +519,7 @@ void Weapon::OnCollision(uint32_t collisionAttribute, float damage)
 					invincibleFlag_ = true;
 					invincibleTimer_ = InvincibleTime;
 					Hp_ -= int(damage);
+					isDamaged_ = true;
 				}
 			}
 		}
@@ -531,6 +533,7 @@ void Weapon::OnCollision(uint32_t collisionAttribute, float damage)
 				invincibleFlag_ = true;
 				invincibleTimer_ = InvincibleTime;
 				Hp_ -= int(damage);
+				isDamaged_ = true;
 			}
 		}
 	}
