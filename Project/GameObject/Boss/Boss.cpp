@@ -110,27 +110,32 @@ void Boss::Update() {
 	//	Boss::AddMissile(missile);
 	//}
 
+	//残り体力に応じてテンプレートを変える
 	if (Hp_ >= missileTemplateThreshold1_) {
-		//ミサイルタイマーを進める
-		if (++missileTemplates_[0].spornTimer >= missileTemplates_[0].spornTime) {
-			//タイマーのリセット
-			missileTemplates_[0].spornTimer = 0;
-			//ミサイルのパターンをランダムで決める
-			int index = Random(0, static_cast<int>(missileTemplates_[0].missilePatterns.size() - 1));
-			//ミサイルの生成
-			for (int i = 0; i < missileTemplates_[0].missilePatterns[index].position.size(); i++) {
-				Missile* missile = new Missile;
-				missile->Initialize(missileTemplates_[0].missilePatterns[index].position[i], missileTemplates_[0].missilePatterns[index].velocity[i], missileSoundHandle_);
-				AddMissile(missile);
-			}
-		}
+		templateIndex_ = 0;
 	}
 	else if (Hp_ < missileTemplateThreshold1_ && Hp_ >= missileTemplateThreshold2_) {
-
+		templateIndex_ = 1;
 	}
 	else if (Hp_ < missileTemplateThreshold2_ && Hp_ >= missileTemplateThreshold3_) {
-
+		templateIndex_ = 2;
 	}
+
+
+	//ミサイルの発射処理
+	if (++missileTemplates_[templateIndex_].spornTimer >= missileTemplates_[templateIndex_].spornTime) {
+		//タイマーのリセット
+		missileTemplates_[templateIndex_].spornTimer = 0;
+		//ミサイルのパターンをランダムで決める
+		int index = Random(0, static_cast<int>(missileTemplates_[templateIndex_].missilePatterns.size() - 1));
+		//ミサイルの生成
+		for (int i = 0; i < missileTemplates_[templateIndex_].missilePatterns[index].position.size(); i++) {
+			Missile* missile = new Missile;
+			missile->Initialize(missileTemplates_[templateIndex_].missilePatterns[index].position[i], missileTemplates_[templateIndex_].missilePatterns[index].velocity[i], missileSoundHandle_);
+			AddMissile(missile);
+		}
+	}
+
 
 	//死亡フラグの立ったレーザーをリストから削除
 	lasers_.remove_if([](std::unique_ptr<Laser>& laser) {
@@ -428,6 +433,9 @@ void Boss::LoadMissileData() {
 
 			missileTemplates_[templateIndex - 1].missilePatterns[patternIndex - 1].position.push_back(Vector3{ posX,posY,posZ });
 			missileTemplates_[templateIndex - 1].missilePatterns[patternIndex - 1].velocity.push_back(Vector3{ velX,velY,velZ });
+		}
+		else if (word.find("End") == 0) {
+			patternIndex = 0;
 		}
 	}
 }

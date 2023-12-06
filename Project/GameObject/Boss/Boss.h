@@ -342,8 +342,8 @@ private:
 	};
 
 	//ミサイルのテンプレが変わる閾値
-	int missileTemplateThreshold1_ = 70;
-	int missileTemplateThreshold2_ = 30;
+	int missileTemplateThreshold1_ = 290;
+	int missileTemplateThreshold2_ = 140;
 	int missileTemplateThreshold3_ = 0;
 
 	//テンプレートの配列
@@ -351,4 +351,7 @@ private:
 
 	//ミサイルCSVの読み込み
 	std::stringstream missileData_;
+
+	//テンプレートのインデックス
+	int templateIndex_ = 0;
 };
