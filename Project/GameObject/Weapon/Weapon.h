@@ -56,6 +56,8 @@ public:
 
 	void GetBossIsDead(bool IsDeadAnimation) { IsDeadAnimation_ = IsDeadAnimation; };
 
+	bool GetIsDamaged() { return isDamaged_; };
+
 private:
 	Input* input_ = nullptr;
 
@@ -176,6 +178,8 @@ private:
 	bool animationFlag_ = true;
 
 	bool IsDeadAnimation_ = false;
+
+	bool isDamaged_ = false;
 
 };
 
