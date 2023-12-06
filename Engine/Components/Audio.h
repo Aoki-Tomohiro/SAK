@@ -1,5 +1,6 @@
 #pragma once
 #include <array>
+#include <set>
 #include <fstream>
 #include <wrl.h>
 #include <xaudio2.h>
@@ -48,12 +49,24 @@ public:
 		BYTE* pBuffer;
 		//バッファのサイズ
 		unsigned int bufferSize;
+		//名前
+		std::string name;
+		//オーディオハンドル
+		uint32_t audioHandle;
+	};
+
+	/// <summary>
+	/// ボイスデータ
+	/// </summary>
+	struct Voice {
+		uint32_t handle = 0;
+		IXAudio2SourceVoice* sourceVoice = nullptr;
 	};
 
 	/// <summary>
 	/// シングルトンインスタンスの取得
 	/// </summary>
-	/// <returns>シングルトンインスタンス</returns>
+	/// <returns></returns>
 	static Audio* GetInstance();
 
 	/// <summary>
@@ -66,45 +79,33 @@ public:
 	/// </summary>
 	void Initialize();
 
-	///// <summary>
-	///// 音声データの読み込み
-	///// </summary>
-	///// <param name="filename"></param>
-	///// <returns></returns>
-	//SoundData SoundLoadWave(const char* filename);
-
 	/// <summary>
 	/// 音声データの読み込み
 	/// </summary>
-	/// <param name="filename">ファイル名</param>
-	/// <returns>オーディオハンドル</returns>
+	/// <param name="filename"></param>
+	/// <returns></returns>
 	uint32_t SoundLoadWave(const char* filename);
 
 	/// <summary>
 	/// 音声データ開放
 	/// </summary>
-	/// <param name="soundData">サウンドデータ</param>
+	/// <param name="soundData"></param>
 	void SoundUnload(SoundData* soundData);
-
-	///// <summary>
-	///// 音声再生
-	///// </summary>
-	///// <param name="xAudio2"></param>
-	///// <param name="soundData"></param>
-	//void SoundPlayWave(IXAudio2* xAudio2, const SoundData& soundData);
 
 	/// <summary>
 	/// 音声再生
 	/// </summary>
-	/// <param name="audioHandle">オーディオハンドル</param>
-	/// <param name="roopFlag">ループするか</param>
-	void SoundPlayWave(uint32_t audioHandle, bool roopFlag);
+	/// <param name="audioHandle"></param>
+	/// <param name="loopFlag"></param>
+	/// <param name="volume"></param>
+	/// <returns></returns>
+	uint32_t SoundPlayWave(uint32_t audioHandle, bool loopFlag, float volume);
 
 	/// <summary>
 	/// 音声停止
 	/// </summary>
-	/// <param name="audioHandle">オーディオハンドル</param>
-	void StopAudio(uint32_t audioHandle);
+	/// <param name="voiceHandle"></param>
+	void StopAudio(uint32_t voiceHandle);
 
 private:
 	Audio() = default;
@@ -116,7 +117,7 @@ private:
 	ComPtr<IXAudio2> xAudio2_ = nullptr;
 	IXAudio2MasteringVoice* masterVoice_ = nullptr;
 	std::array<SoundData, kMaxSoundData> soundDatas_{};
-	std::array<IXAudio2SourceVoice*, kMaxSoundData> sourceVoices_{};
+	std::set<Voice*> sourceVoices_{};
 	uint32_t audioHandle_ = -1;
-
+	uint32_t voiceHandle_ = -1;
 };

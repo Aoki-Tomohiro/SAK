@@ -85,7 +85,7 @@ void Missile::Draw(const ViewProjection viewProjection)
 
 void Missile::OnCollision(uint32_t collisionAttribute, float damage)
 {
-	audio_->SoundPlayWave(soundHandle_, false);
+	audio_->SoundPlayWave(soundHandle_, false, 1.0f);
 	isAlive_ = false;
 }
 

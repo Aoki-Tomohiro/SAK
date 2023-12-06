@@ -264,8 +264,8 @@ void Boss::ApplyGlobalVariables()
 void Boss::OnCollision(uint32_t collisionAttribute, float damage) {
   
 	if (weapon_->GetIsHit() == false && weapon_->GetIsCoolDown() == false && isActive_) {
-		audio_->SoundPlayWave(soundHandle_[0], false);
-		audio_->SoundPlayWave(soundHandle_[1], false);
+		audio_->SoundPlayWave(soundHandle_[0], false, 1.0f);
+		audio_->SoundPlayWave(soundHandle_[1], false, 1.0f);
 		Hp_ -= damage;
 		if (collisionAttribute & kCollisionAttributePlayer) {
 			hitMissileCount_ += weapon_->GetInvolvedMissileCount();
@@ -273,7 +273,7 @@ void Boss::OnCollision(uint32_t collisionAttribute, float damage) {
 	}
 
 	if (weapon_->GetInvolvedMissileCount() > 0 && isActive_ == false) {
-		audio_->SoundPlayWave(soundHandle_[0], false);
+		audio_->SoundPlayWave(soundHandle_[0], false, 1.0f);
 		isActive_ = true;
 		if (weapon_->GetIsHit() == false) {
 			Hp_ -= damage;
