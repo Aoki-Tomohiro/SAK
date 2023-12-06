@@ -1,4 +1,5 @@
 #include "WinApp.h"
+#pragma comment(lib,"winmm.lib")
 
 WinApp* WinApp::GetInstance() {
 	static WinApp instance;
@@ -63,6 +64,9 @@ void WinApp::CreateGameWindow(const wchar_t* title, int32_t clientWidth, int32_t
 		nullptr);
 	//ウィンドウを表示する
 	ShowWindow(hwnd_, SW_SHOW);
+
+	//システムタイマーの分解能をあげる
+	timeBeginPeriod(1);
 }
 
 void WinApp::CloseGameWindow() {

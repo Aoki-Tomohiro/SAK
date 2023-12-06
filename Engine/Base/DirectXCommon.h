@@ -4,9 +4,9 @@
 
 #include <d3d12.h>
 #include <dxgi1_6.h>
+#include <chrono>
 #include <cassert>
 #include <wrl.h>
-#include <mmsystem.h>
 #pragma comment(lib,"d3d12.lib")
 #pragma comment(lib,"dxgi.lib")
 #pragma comment(lib,"winmm.lib")
@@ -14,7 +14,7 @@
 /// <summary>
 /// DirectX基本
 /// </summary>
-class DirectXCommon final{
+class DirectXCommon final {
 public:
 	//インクリメントサイズ
 	static uint32_t descriptorSizeRTV;
@@ -45,6 +45,11 @@ public:
 	/// バックバッファをセット
 	/// </summary>
 	void SetBackBuffer();
+
+	/// <summary>
+	/// デプスバッファのクリア
+	/// </summary>
+	void ClearDepthBuffer();
 
 	/// <summary>
 	/// ディスクリプタヒープの作成
@@ -118,6 +123,16 @@ private:
 	/// <returns></returns>
 	Microsoft::WRL::ComPtr<ID3D12Resource> CreateDepthStencilTextureResource(int32_t width, int32_t height);
 
+	/// <summary>
+	/// FPS固定初期化
+	/// </summary>
+	void InitializeFixFPS();
+
+	/// <summary>
+	/// FPS固定更新
+	/// </summary>
+	void UpdateFixFPS();
+
 private:
 	//ウィンドウズアプリケーション
 	WinApp* winApp_ = nullptr;
@@ -146,6 +161,7 @@ private:
 	uint64_t fenceValue_{};
 	//レンダーターゲットビューの設定
 	D3D12_RENDER_TARGET_VIEW_DESC rtvDesc_{};
+	//記録時間(FPS固定用)
+	std::chrono::steady_clock::time_point reference_{};
 
 };
-

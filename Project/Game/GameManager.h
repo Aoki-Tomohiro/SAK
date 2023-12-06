@@ -6,8 +6,10 @@
 #include "Components/Input.h"
 #include "Components/PostProcess.h"
 #include "3D/Model/Model.h"
+#include "3D/Model/ParticleModel.h"
 #include "2D/Sprite.h"
 #include "2D/ImGuiManager.h"
+#include "Utility/Random.h"
 #include "IScene.h"
 #include <memory>
 

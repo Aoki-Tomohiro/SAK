@@ -10,7 +10,7 @@ GameManager::GameManager() {
 
 	//ゲームウィンドウ作成
 	winApp_ = WinApp::GetInstance();
-	winApp_->CreateGameWindow(L"DirectXGame", winApp_->kClientWidth, winApp_->kClientHeight);
+	winApp_->CreateGameWindow(L"2101_くしざしピストン", winApp_->kClientWidth, winApp_->kClientHeight);
 
 	//DirectXの初期化
 	dxCommon_ = DirectXCommon::GetInstance();
@@ -39,11 +39,17 @@ GameManager::GameManager() {
 	//モデルの静的初期化
 	Model::StaticInitialize();
 
+	//パーティクルの静的初期化
+	ParticleModel::StaticInitialize();
+
 	//スプライトの静的初期化
 	Sprite::StaticInitialize();
 
 	//グローバル変数の読み込み
 	GlobalVariables::GetInstance()->LoadFiles();
+
+	//ランダムエンジンの初期化
+	Random::Initialize();
 
 	//シーンの初期化
 	currentScene_ = new GameTitleScene();
@@ -52,11 +58,12 @@ GameManager::GameManager() {
 
 GameManager::~GameManager() {
 
+	//シーンの削除
 	delete currentScene_;
 	currentScene_ = nullptr;
 
 	Model::Release();
-
+	ParticleModel::Release();
 	Sprite::Release();
 }
 
@@ -80,9 +87,11 @@ void GameManager::run() {
 		//Inputの更新
 		input_->Update();
 		//グローバル変数の更新
-		GlobalVariables::GetInstance()->Update();
+		//GlobalVariables::GetInstance()->Update();
 		//ゲームシーンの更新
 		currentScene_->Update(this);
+		//ポストプロセスの更新
+		postProcess_->Update();
 		//ImGui受付終了
 		imguiManager_->End();
 

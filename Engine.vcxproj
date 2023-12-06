@@ -92,6 +92,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BackGround.cpp" />
     <ClCompile Include="Engine\2D\ImGuiManager.cpp" />
     <ClCompile Include="Engine\2D\Sprite.cpp" />
     <ClCompile Include="Engine\3D\DebugCamera\DebugCamera.cpp" />
@@ -101,32 +102,69 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\3D\Model\Material.cpp" />
     <ClCompile Include="Engine\3D\Model\Mesh.cpp" />
     <ClCompile Include="Engine\3D\Model\Model.cpp" />
+    <ClCompile Include="Engine\3D\Model\ParticleModel.cpp" />
+    <ClCompile Include="Engine\3D\Particle\BaseParticle.cpp" />
+    <ClCompile Include="Engine\3D\Particle\ChageParticle.cpp" />
+    <ClCompile Include="Engine\3D\Particle\EmitterBuilder.cpp" />
+    <ClCompile Include="Engine\3D\Particle\Particle.cpp" />
+    <ClCompile Include="Engine\3D\Particle\ParticleEmitter.cpp" />
+    <ClCompile Include="Engine\3D\Particle\ParticleSystem.cpp" />
     <ClCompile Include="Engine\Base\DirectXCommon.cpp" />
     <ClCompile Include="Engine\Base\TextureManager.cpp" />
     <ClCompile Include="Engine\Base\WinApp.cpp" />
     <ClCompile Include="Engine\Components\Audio.cpp" />
     <ClCompile Include="Engine\Components\Input.cpp" />
     <ClCompile Include="Engine\Components\PostProcess.cpp" />
-    <ClCompile Include="Engine\Externals\imgui\imgui.cpp" />
-    <ClCompile Include="Engine\Externals\imgui\imgui_demo.cpp" />
-    <ClCompile Include="Engine\Externals\imgui\imgui_draw.cpp" />
-    <ClCompile Include="Engine\Externals\imgui\imgui_impl_dx12.cpp" />
-    <ClCompile Include="Engine\Externals\imgui\imgui_impl_win32.cpp" />
-    <ClCompile Include="Engine\Externals\imgui\imgui_tables.cpp" />
-    <ClCompile Include="Engine\Externals\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="Engine\Externals\imgui\imgui.cpp">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MinSpace</Optimization>
+    </ClCompile>
+    <ClCompile Include="Engine\Externals\imgui\imgui_demo.cpp">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MinSpace</Optimization>
+    </ClCompile>
+    <ClCompile Include="Engine\Externals\imgui\imgui_draw.cpp">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MinSpace</Optimization>
+    </ClCompile>
+    <ClCompile Include="Engine\Externals\imgui\imgui_impl_dx12.cpp">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MinSpace</Optimization>
+    </ClCompile>
+    <ClCompile Include="Engine\Externals\imgui\imgui_impl_win32.cpp">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MinSpace</Optimization>
+    </ClCompile>
+    <ClCompile Include="Engine\Externals\imgui\imgui_tables.cpp">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MinSpace</Optimization>
+    </ClCompile>
+    <ClCompile Include="Engine\Externals\imgui\imgui_widgets.cpp">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MinSpace</Optimization>
+    </ClCompile>
     <ClCompile Include="Engine\Utility\CollisionManager\CollisionManager.cpp" />
     <ClCompile Include="Engine\Utility\GlobalVariables.cpp" />
     <ClCompile Include="Engine\Utility\Log.cpp" />
     <ClCompile Include="Engine\Utility\MathFunction.cpp" />
+    <ClCompile Include="Engine\Utility\Random.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Project\GameObject\Boss\Boss.cpp" />
+    <ClCompile Include="Project\GameObject\Boss\ChargeShot\ChargeShot.cpp" />
+    <ClCompile Include="Project\GameObject\Boss\Laser\Laser.cpp" />
+    <ClCompile Include="Project\GameObject\Boss\State\BossStateChargeShot.cpp" />
+    <ClCompile Include="Project\GameObject\Boss\State\BossStateDown.cpp" />
+    <ClCompile Include="Project\GameObject\Boss\State\BossStateLazerAttack.cpp" />
+    <ClCompile Include="Project\GameObject\Boss\State\BossStateMissileAttack.cpp" />
+    <ClCompile Include="Project\GameObject\Boss\State\BossStateNormal.cpp" />
+    <ClCompile Include="Project\GameObject\Boss\State\BossStateStun.cpp" />
+    <ClCompile Include="Project\GameObject\Boss\State\BossStateWait.cpp" />
+    <ClCompile Include="Project\GameObject\Missile\Missile.cpp" />
+    <ClCompile Include="Project\GameObject\Player\Player.cpp" />
+    <ClCompile Include="Project\GameObject\Weapon\Weapon.cpp" />
     <ClCompile Include="Project\Game\ClearScene\GameClearScene.cpp" />
     <ClCompile Include="Project\Game\GameManager.cpp" />
     <ClCompile Include="Project\Game\OverScene\GameOverScene.cpp" />
     <ClCompile Include="Project\Game\GameScene.cpp" />
     <ClCompile Include="Project\Game\SelectScene\GameSelectScene.cpp" />
     <ClCompile Include="Project\Game\TitleScene\GameTitleScene.cpp" />
+    <ClCompile Include="UI.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BackGround.h" />
     <ClInclude Include="Engine\2D\ImGuiManager.h" />
     <ClInclude Include="Engine\2D\Sprite.h" />
     <ClInclude Include="Engine\3D\DebugCamera\DebugCamera.h" />
@@ -136,6 +174,13 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\3D\Model\Material.h" />
     <ClInclude Include="Engine\3D\Model\Mesh.h" />
     <ClInclude Include="Engine\3D\Model\Model.h" />
+    <ClInclude Include="Engine\3D\Model\ParticleModel.h" />
+    <ClInclude Include="Engine\3D\Particle\BaseParticle.h" />
+    <ClInclude Include="Engine\3D\Particle\ChageParticle.h" />
+    <ClInclude Include="Engine\3D\Particle\EmitterBuilder.h" />
+    <ClInclude Include="Engine\3D\Particle\Particle.h" />
+    <ClInclude Include="Engine\3D\Particle\ParticleEmitter.h" />
+    <ClInclude Include="Engine\3D\Particle\ParticleSystem.h" />
     <ClInclude Include="Engine\Base\D3DResourceLeakChecker.h" />
     <ClInclude Include="Engine\Base\DirectXCommon.h" />
     <ClInclude Include="Engine\Base\TextureManager.h" />
@@ -157,6 +202,21 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\Utility\GlobalVariables.h" />
     <ClInclude Include="Engine\Utility\Log.h" />
     <ClInclude Include="Engine\Utility\MathFunction.h" />
+    <ClInclude Include="Engine\Utility\Random.h" />
+    <ClInclude Include="Project\GameObject\Boss\Boss.h" />
+    <ClInclude Include="Project\GameObject\Boss\ChargeShot\ChargeShot.h" />
+    <ClInclude Include="Project\GameObject\Boss\Laser\Laser.h" />
+    <ClInclude Include="Project\GameObject\Boss\State\BossStateChargeShot.h" />
+    <ClInclude Include="Project\GameObject\Boss\State\BossStateDown.h" />
+    <ClInclude Include="Project\GameObject\Boss\State\BossStateLaserAttack.h" />
+    <ClInclude Include="Project\GameObject\Boss\State\BossStateMissileAttack.h" />
+    <ClInclude Include="Project\GameObject\Boss\State\BossStateNormal.h" />
+    <ClInclude Include="Project\GameObject\Boss\State\BossStateStun.h" />
+    <ClInclude Include="Project\GameObject\Boss\State\BossStateWait.h" />
+    <ClInclude Include="Project\GameObject\Boss\State\IBossState.h" />
+    <ClInclude Include="Project\GameObject\Missile\Missile.h" />
+    <ClInclude Include="Project\GameObject\Player\Player.h" />
+    <ClInclude Include="Project\GameObject\Weapon\Weapon.h" />
     <ClInclude Include="Project\Game\ClearScene\GameClearScene.h" />
     <ClInclude Include="Project\Game\GameManager.h" />
     <ClInclude Include="Project\Game\OverScene\GameOverScene.h" />
@@ -164,6 +224,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Project\Game\SelectScene\GameSelectScene.h" />
     <ClInclude Include="Project\Game\TitleScene\GameTitleScene.h" />
     <ClInclude Include="Project\Game\IScene.h" />
+    <ClInclude Include="UI.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shader\HorizontalBlurPS.hlsl">
@@ -197,6 +258,18 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="Resources\Shader\Object3d.VS.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="Resources\Shader\Particle.PS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="Resources\Shader\Particle.VS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
@@ -249,6 +322,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <None Include="Resources\Shader\HorizontalBlur.hlsli" />
     <None Include="Resources\Shader\MultiPass.hlsli" />
     <None Include="Resources\Shader\Object3d.hlsli" />
+    <None Include="Resources\Shader\Particle.hlsli" />
     <None Include="Resources\Shader\PostProcess.hlsli" />
     <None Include="Resources\Shader\Sprite.hlsli" />
     <None Include="Resources\Shader\VerticalBlur.hlsli" />

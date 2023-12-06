@@ -25,12 +25,10 @@ void Material::Update() {
 	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData));
 	materialData->color = color_;
 	materialData->uvTransform = uvTransformMatrix;
+	materialResource_->Unmap(0, nullptr);
 }
 
 void Material::SetGraphicsCommand(UINT rootParameterIndex) {
-
-	//マテリアルの更新
-	Material::Update();
 
 	//マテリアルリソースを設定
 	DirectXCommon::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(rootParameterIndex, materialResource_->GetGPUVirtualAddress());

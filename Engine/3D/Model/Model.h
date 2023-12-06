@@ -30,7 +30,8 @@ public:
 	/// </summary>
 	enum class RootParameterIndex {
 		Material,
-		TransformationMatrix,
+		WorldlTransform,
+		ViewProjection,
 		Texture,
 		DirectionalLight
 	};
@@ -157,16 +158,6 @@ private:
 	/// <returns></returns>
 	MaterialData LoadMaterialTemplateFile(const std::string& directoryPath, const std::string& filename);
 
-	/// <summary>
-	/// WVP用のリソースの作成
-	/// </summary>
-	void CreateWVPResource();
-
-	/// <summary>
-	/// 行列の計算・転送
-	/// </summary>
-	void UpdateMatrix(const WorldTransform& worldTransform, const ViewProjection& viewProjection);
-
 private:
 	//デバイス
 	static ID3D12Device* sDevice_;
@@ -182,8 +173,6 @@ private:
 	static ComPtr<ID3D12PipelineState> sGraphicsPipelineState_;
 	//モデルデータ
 	static std::list<ModelData> modelDatas_;
-	//WVP用のリソース
-	ComPtr<ID3D12Resource> wvpResource_ = nullptr;
 	//頂点データ
 	std::unique_ptr<Mesh> mesh_ = nullptr;
 	//マテリアルデータ

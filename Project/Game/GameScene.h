@@ -7,14 +7,29 @@
 #include "3D/DebugCamera/DebugCamera.h"
 
 #include "3D/Model/Model.h"
+#include "3D/Model/ParticleModel.h"
 #include "2D/Sprite.h"
 #include "3D/Matrix/WorldTransform.h"
 #include "3D/Matrix/ViewProjection.h"
+#include "Utility/CollisionManager/CollisionManager.h"
+
+#include "../GameObject/Boss/Boss.h"
+#include "../GameObject/Player/Player.h"
+#include "../GameObject/Weapon/Weapon.h"
+#include "../BackGround.h"
 
 #include <memory>
 
 class GameScene : public IScene {
 public:
+	//トランジションの時間
+	static const int kTransitionTime = 60;
+
+	enum class NextScene {
+		GAMECLEAR,
+		GAMEOVER,
+	};
+
 	/// <summary>
 	/// コンストラクタ
 	/// </summary>
@@ -57,6 +72,9 @@ private:
 	//テクスチャ
 	uint32_t textureHandle_ = 0;
 
+	//サウンド
+	uint32_t soundHandle_ = 0u;
+
 	//スプライト
 	std::unique_ptr<Sprite> sprite1_ = nullptr;
 	std::unique_ptr<Sprite> sprite2_ = nullptr;
@@ -73,4 +91,38 @@ private:
 	WorldTransform worldTransform1_{};
 	WorldTransform worldTransform2_{};
 
+	//ボス
+	std::unique_ptr<Boss> boss_ = nullptr;
+
+	std::unique_ptr<Player> player_ = nullptr;
+
+
+	//衝突マネージャー
+	std::unique_ptr<CollisionManager> collisionManager_ = nullptr;
+	std::unique_ptr<Weapon> weapon_ = nullptr;
+
+	std::unique_ptr<BackGround> backGround_ = nullptr;
+
+	//4x3のスプライト
+	std::unique_ptr<Sprite> x4x3Sprite_;
+	//4x3のテクスチャ
+	uint32_t x4x3TextureHandle_ = 0;
+
+	//トランジション用のスプライト
+	std::unique_ptr<Sprite> transitionSprite_;
+	//トランジションのテクスチャ
+	uint32_t transitionTextureHandle_ = 0;
+	//トランジションの色
+	Vector4 transitionColor_ = { 0.0f,0.0f,0.0f,1.0f };
+	//トランジションのフラグ
+	bool isTransition_ = false;
+	bool isTransitionEnd_ = false;
+	//トランジションのタイマー
+	float transitionTimer_ = 0;
+
+	//次のシーン
+	NextScene nextScene_ = NextScene::GAMECLEAR;
+
+	//アニメーションのフラグ
+	bool isAnimationEnd_ = false;
 };
