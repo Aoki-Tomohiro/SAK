@@ -125,4 +125,10 @@ private:
 
 	//アニメーションのフラグ
 	bool isAnimationEnd_ = false;
+
+	//シェイクのフラグ
+	bool isShake_ = false;
+	const int kShakeTime = 20;
+	int shakeTimer_ = 0;
+	Vector2 shakePower_ = { -0.1f,0.1f };
 };

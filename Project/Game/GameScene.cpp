@@ -66,6 +66,26 @@ void GameScene::Initialize(GameManager* gameManager) {
 
 void GameScene::Update(GameManager* gameManager) {
 
+	if (weapon_->GetIsHit()) {
+		isShake_ = true;
+		shakeTimer_ = kShakeTime;
+	}
+
+	if (isShake_) {
+		shakeTimer_--;
+
+		viewProjection_.translation_.x = boss_->Random(shakePower_.x, shakePower_.y);
+		viewProjection_.translation_.y = boss_->Random(shakePower_.x, shakePower_.y);
+
+		if (shakeTimer_ < 0) {
+			isShake_ = false;
+			viewProjection_.translation_.x = 0.0f;
+			viewProjection_.translation_.y = 0.0f;
+		}
+	}
+
+	viewProjection_.UpdateMatrix();
+
 	//トランジション
 	if (isTransitionEnd_ == false) {
 		transitionTimer_ += 1.0f / kTransitionTime;
@@ -205,8 +225,6 @@ void GameScene::Update(GameManager* gameManager) {
 			}
 		}
 	}
-
-	viewProjection_.UpdateMatrix();
 };
 
 void GameScene::Draw(GameManager* gameManager) {
