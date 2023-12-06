@@ -40,7 +40,7 @@ void GameClearScene::Initialize(GameManager* gameManager)
 
 	viewProjection_.UpdateMatrix();
 
-	audio_->SoundPlayWave(clearSoundHandle_, true);
+	audio_->SoundPlayWave(clearSoundHandle_, true, 1.0f);
 
 	//スプライトの生成
 	winTextureHandle_ = TextureManager::Load("Resources/Images/win.png");
@@ -118,7 +118,7 @@ void GameClearScene::Update(GameManager* gameManager)
 			if (soundCount_ == 0)
 			{
 				soundCount_ = 1;
-				audio_->SoundPlayWave(soundHandle_, false);
+				audio_->SoundPlayWave(soundHandle_, false, 1.0f);
 			}
 		}
 	}

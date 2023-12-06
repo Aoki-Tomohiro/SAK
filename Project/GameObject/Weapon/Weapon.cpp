@@ -188,7 +188,7 @@ void Weapon::Update()
 	}else if(preJoyState_.Gamepad.wButtons & XINPUT_GAMEPAD_A && IsCoolDown_ == false){
 		if (pushCount_ < 12)
 		{
-			audio_->SoundPlayWave(soundHandle_[3], false);
+			audio_->SoundPlayWave(soundHandle_[3], false, 1.0f);
 			IsCharge_ = false;
 			IsAttack_ = true;
 			pushCount_ = 0;
@@ -227,7 +227,7 @@ void Weapon::Update()
 
 		if (weaponWorldTransform_.translation_.y > -2.3f)
 		{
-			audio_->SoundPlayWave(soundHandle_[2], false);
+			audio_->SoundPlayWave(soundHandle_[2], false, 1.0f);
 		}
 
 		if (weaponWorldTransform_.translation_.y <= -2.3f)
@@ -498,7 +498,7 @@ void Weapon::OnCollision(uint32_t collisionAttribute, float damage)
 			//衝突相手がミサイルの場合カウントを増やす
 			if (collisionAttribute & kCollisionAttributeMissile) 
 			{
-				audio_->SoundPlayWave(soundHandle_[0], false);
+				audio_->SoundPlayWave(soundHandle_[0], false, 1.0f);
 				isInvolvedMissile_ = true;
 				if (involvedCount_ < 5) {
 					involvedCount_++;
@@ -515,7 +515,7 @@ void Weapon::OnCollision(uint32_t collisionAttribute, float damage)
 				//無敵状態でなければダメージを食らう
 				if (invincibleFlag_ == false && IsDeadAnimation_ == false)
 				{
-					audio_->SoundPlayWave(soundHandle_[1], false);
+					audio_->SoundPlayWave(soundHandle_[1], false, 1.0f);
 					invincibleFlag_ = true;
 					invincibleTimer_ = InvincibleTime;
 					Hp_ -= int(damage);
@@ -529,7 +529,7 @@ void Weapon::OnCollision(uint32_t collisionAttribute, float damage)
 			//無敵状態でなければダメージを食らう
 			if (invincibleFlag_ == false && IsDeadAnimation_ == false)
 			{
-				audio_->SoundPlayWave(soundHandle_[1], false);
+				audio_->SoundPlayWave(soundHandle_[1], false, 1.0f);
 				invincibleFlag_ = true;
 				invincibleTimer_ = InvincibleTime;
 				Hp_ -= int(damage);
@@ -633,7 +633,7 @@ void Weapon::StartAnimaion() {
 		}
 
 		if (chargeCount_ >= 90) {
-			audio_->SoundPlayWave(soundHandle_[3], false);
+			audio_->SoundPlayWave(soundHandle_[3], false, 1.0f);
 			IsCharge_ = false;
 			IsAttack_ = true;
 			pushCount_ = 0;
@@ -644,7 +644,7 @@ void Weapon::StartAnimaion() {
 	//更新
 	if (IsCharge_ == true)
 	{
-		audio_->SoundPlayWave(soundHandle_[2], false);
+		audio_->SoundPlayWave(soundHandle_[2], false, 1.0f);
 		chargeCount_++;
 		weaponWorldTransform_.translation_.y -= chargeSpeed_;
 

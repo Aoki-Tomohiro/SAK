@@ -55,7 +55,7 @@ void GameScene::Initialize(GameManager* gameManager) {
 	transitionSprite_->SetSize(Vector2{ 640.0f,360.0f });
 
 	soundHandle_ = audio_->SoundLoadWave("Resources/Sounds/GameScene.wav");
-	audio_->SoundPlayWave(soundHandle_, true);
+	audio_->SoundPlayWave(soundHandle_, true, 1.0f);
 
 	//ポストプロセスの有効化
 	PostProcess::GetInstance()->SetIsPostProcessActive(true);
