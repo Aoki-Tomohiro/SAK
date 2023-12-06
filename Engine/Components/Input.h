@@ -99,6 +99,13 @@ public:
 	/// <returns></returns>
 	bool GetJoystickState(XINPUT_STATE& state);
 
+	/// <summary>
+	/// ボタンが押された瞬間を判定
+	/// </summary>
+	/// <param name="button"></param>
+	/// <returns></returns>
+	bool IsPressButtonEnter(WORD button);
+
 private:
 	//WindowsAPI
 	WinApp* winApp_ = nullptr;
@@ -118,6 +125,7 @@ private:
 	DIMOUSESTATE mousePre_ = {};
 	//コントローラーの情報
 	XINPUT_STATE state_{};
-
+	//前のフレームのコントローラーの情報
+	XINPUT_STATE preState_{};
 };
 
