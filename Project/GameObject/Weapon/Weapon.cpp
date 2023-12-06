@@ -192,7 +192,7 @@ void Weapon::Update()
 		
 	}
 
-	if (joyState_.Gamepad.wButtons & XINPUT_GAMEPAD_B && IsCoolDown_ == false)
+	if (!(preJoyState_.Gamepad.wButtons & XINPUT_GAMEPAD_B) && joyState_.Gamepad.wButtons & XINPUT_GAMEPAD_B && IsCoolDown_ == false)
 	{
 		audio_->SoundPlayWave(soundHandle_[3], false);
 		IsCharge_ = false;
@@ -244,9 +244,9 @@ void Weapon::Update()
 			particleEmitter->SetTranslation(weaponWorldTransform_.translation_);
 		}
 
-		if (weaponWorldTransform_.translation_.y >= 2.2f)
+		if (weaponWorldTransform_.translation_.y >= 2.5f)
 		{
-			weaponWorldTransform_.translation_.y = 2.2f;
+			weaponWorldTransform_.translation_.y = 2.5f;
 			chargeCount_ = 0;
 			IsAttack_ = false;
 			IsCoolDown_ = true;
@@ -656,9 +656,9 @@ void Weapon::StartAnimaion() {
 		weaponWorldTransform_.translation_.y += attackSpeed_[3];
 		SetDamage(attackDamage_[0] + involvedCount_ * missileDamage);
 
-		if (weaponWorldTransform_.translation_.y >= 2.2f)
+		if (weaponWorldTransform_.translation_.y >= 2.5f)
 		{
-			weaponWorldTransform_.translation_.y = 2.2f;
+			weaponWorldTransform_.translation_.y = 2.5f;
 			chargeCount_ = 0;
 			IsAttack_ = false;
 			IsCoolDown_ = true;

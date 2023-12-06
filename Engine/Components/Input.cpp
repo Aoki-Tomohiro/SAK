@@ -39,6 +39,10 @@ void Input::Initialize() {
 	result = mouseDevice_->SetCooperativeLevel(
 		winApp_->GetHwnd(), DISCL_FOREGROUND | DISCL_NONEXCLUSIVE);
 	assert(SUCCEEDED(result));
+
+	//コントローラーデバイスの初期化
+	ZeroMemory(&state_, sizeof(XINPUT_STATE));
+	ZeroMemory(&preState_, sizeof(XINPUT_STATE));
 }
 
 
@@ -49,6 +53,9 @@ void Input::Update() {
 	//前のフレームのマウス入力を取得する
 	mousePre_ = mouse_;
 
+	//前のフレームのコントローラー入力を取得する
+	preState_ = state_;
+
 	//キーボード情報の取得開始
 	keyboardDevice_->Acquire();
 	//マウス情報の取得開始
@@ -58,6 +65,12 @@ void Input::Update() {
 	keyboardDevice_->GetDeviceState(sizeof(key_), key_);
 	//マウスの入力状態を取得する
 	mouseDevice_->GetDeviceState(sizeof(DIMOUSESTATE), &mouse_);
+
+	//コントローラーの状態を取得
+	DWORD dwResult = XInputGetState(0, &state_);
+	if (dwResult == ERROR_SUCCESS) {
+		ZeroMemory(&state_, sizeof(XINPUT_STATE));
+	}
 }
 
 
@@ -133,6 +146,13 @@ int32_t Input::GetWheel() {
 bool Input::GetJoystickState(XINPUT_STATE& state) {
 	DWORD dwResult = XInputGetState(0, &state);
 	if (dwResult == ERROR_SUCCESS){
+		return true;
+	}
+	return false;
+}
+
+bool Input::IsPressButtonEnter(WORD button) {
+	if ((state_.Gamepad.wButtons & button) && !(preState_.Gamepad.wButtons & button)) {
 		return true;
 	}
 	return false;
