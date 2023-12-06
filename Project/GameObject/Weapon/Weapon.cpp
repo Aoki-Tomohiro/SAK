@@ -185,7 +185,7 @@ void Weapon::Update()
 		
 
 	}else if(preJoyState_.Gamepad.wButtons & XINPUT_GAMEPAD_A && IsCoolDown_ == false){
-		if (pushCount_ < 10)
+		if (pushCount_ < 12)
 		{
 			audio_->SoundPlayWave(soundHandle_[3], false);
 			IsCharge_ = false;
@@ -211,7 +211,7 @@ void Weapon::Update()
 			particleSystem_->AddParticleEmitter(newParticleEmitter);
 		}
 
-		if (pushCount_ >= 10)
+		if (pushCount_ >= 12)
 		{
 			IsCharge_ = false;
 			pushCount_ = 0;
