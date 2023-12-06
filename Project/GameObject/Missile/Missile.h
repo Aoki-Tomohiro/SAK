@@ -35,6 +35,8 @@ public:
 
 	void SetWeapon(Weapon* weapon) { weapon_ = weapon; }
 
+	void SetColor(const Vector4& color) { color_ = color; };
+
 private:
 	Input* input_ = nullptr;
 
@@ -79,5 +81,7 @@ private:
 	missileMotionStruct missileMotion_;
   
 	bool IsMove_ = false;
+
+	Vector4 color_ = { 1.0f,1.0f,1.0f,1.0f };
 };
 

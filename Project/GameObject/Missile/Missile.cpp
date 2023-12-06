@@ -78,7 +78,7 @@ void Missile::Draw(const ViewProjection viewProjection)
 {
 	if (isAlive_) {
 		//model_->Draw(worldTransform_, viewProjection, textureHandle_);
-
+		missileModel_->GetMaterial()->SetColor(color_);
 		missileModel_->Draw(missileMotionWorldTransform_, viewProjection);
 	}
 }

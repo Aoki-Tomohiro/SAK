@@ -176,6 +176,19 @@ void Boss::Update() {
 
 	//ミサイルの更新
 	for (std::unique_ptr<Missile>& missile : missiles_) {
+		//プレイヤーとあたる高さにいるミサイルの色を変える
+		Vector3 weaponPosition = weapon_->GetWorldPosition();
+		float weaponRadius = weapon_->GetRadius();
+		Vector3 missilePosition = missile->GetWorldPosition();
+		AABB missileAABB = missile->GetAABB();
+		float missileRadius = missile->GetRadius();
+		if (weaponPosition.y - weaponRadius <= missilePosition.y + missileAABB.max.y && weaponPosition.y + weaponRadius >= missilePosition.y + missileAABB.min.y) {
+			missile->SetColor({ 1.0f,0.0f,0.0f,1.0f });
+		}
+		else {
+			missile->SetColor({ 1.0f,1.0f,1.0f,1.0f });
+		}
+
 		missile->Update();
 	}
 
