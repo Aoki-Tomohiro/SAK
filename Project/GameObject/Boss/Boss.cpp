@@ -183,7 +183,7 @@ void Boss::Update() {
 		AABB missileAABB = missile->GetAABB();
 		float missileRadius = missile->GetRadius();
 		if (weaponPosition.y - weaponRadius <= missilePosition.y + missileAABB.max.y && weaponPosition.y + weaponRadius >= missilePosition.y + missileAABB.min.y) {
-			missile->SetColor({ 1.0f,0.0f,0.0f,1.0f });
+			missile->SetColor({ 0.9f,0.3f,0.3f,1.0f });
 		}
 		else {
 			missile->SetColor({ 1.0f,1.0f,1.0f,1.0f });
