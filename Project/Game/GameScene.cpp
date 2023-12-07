@@ -246,16 +246,17 @@ void GameScene::Draw(GameManager* gameManager) {
 
 	//モデルの描画
 	Model::PreDraw();
+	//背景の描画
+	backGround_->Draw(viewProjection_);
+
+	//ボスの描画
+	boss_->Draw(viewProjection_);
 
 	player_->Draw(viewProjection_);
 
 	weapon_->Draw(viewProjection_);
 
-	//ボスの描画
-	boss_->Draw(viewProjection_);
-
-	//背景の描画
-	backGround_->Draw(viewProjection_);
+	
 
 	Model::PostDraw();
 

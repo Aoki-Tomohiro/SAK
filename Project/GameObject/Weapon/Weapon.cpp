@@ -19,7 +19,9 @@ void Weapon::Initialize()
 	weaponModelDummy_.reset(Model::CreateFromOBJ("Resources/Sphere", "sphere.obj"));
 
 	weaponModel_.reset(Model::CreateFromOBJ("Resources/Head", "Head.obj"));
-	weaponRodModel_.reset(Model::CreateFromOBJ("Resources/Rod", "rod.obj"));
+	weaponRodModel_.reset(Model::CreateFromOBJ("Resources/EnergyRod", "EnergyRod.obj"));
+
+	weaponRodModel_->GetDirectionalLight()->SetEnableLighting(false);
 
 	involvedMissile_.reset(Model::CreateFromOBJ("Resources/Missile", "Missile.obj"));
   
@@ -76,8 +78,8 @@ void Weapon::Initialize()
 		{0.0f,0.0f,0.0f},
 		{1.0f,1.0f,1.0f},
 		{1.0f,1.0f,1.0f,1.0f},
-		{ 0.0f,0.0f,0.0f },
-		{ 1.7f,(3.3f + 2.2f)  * 0.5f - 0.2f,1.7f },
+		{ 0.0f,-0.6f,0.0f },
+		{ 0.7f,0.7f,0.7f},
 	};
 
 
@@ -564,35 +566,40 @@ void Weapon::ModelMotion()
 		break;
 		case  Charge:
 			weaponMotion_.rotation_.y += chargeRotateSpeed_;
+			weaponRodMotion_.rotation_.y += chargeRotateSpeed_;
 			break;
 		case  Attack:
 
 			if (chargeCount_ < 20)
 			{
 				weaponMotion_.rotation_.y += attackRotateSpeed_[0];
+				weaponRodMotion_.rotation_.y += attackRotateSpeed_[0];
 			}
 			else if (chargeCount_ >= 20 && chargeCount_ < 50)
 			{
 				weaponMotion_.rotation_.y += attackRotateSpeed_[1];
+				weaponRodMotion_.rotation_.y += attackRotateSpeed_[1];
 			}
 			else if (chargeCount_ >= 50 && chargeCount_ < 90)
 			{
 				weaponMotion_.rotation_.y += attackRotateSpeed_[2];
+				weaponRodMotion_.rotation_.y += attackRotateSpeed_[2];
 			}
 			else if (chargeCount_ >= 90 )
 			{
 				weaponMotion_.rotation_.y += attackRotateSpeed_[3];
+				weaponRodMotion_.rotation_.y += attackRotateSpeed_[3];
 			}
 			break;
 	}
 
 	//ヘッドとプラットフォームまでの距離
-	float distance = weaponWorldTransform_.translation_.y -playerPosY;
-	float distanceHalf = distance * 0.5f;
+	//float distance = weaponWorldTransform_.translation_.y -playerPosY;
+	//float distanceHalf = distance * 0.5f;
 
-	weaponRodMotion_.translation_.y = -distanceHalf;
+	//weaponRodMotion_.translation_.y = -distanceHalf;
 
-	weaponRodMotion_.scale_.y = distance;
+	//weaponRodMotion_.scale_.y = distance;
 
 	weaponMotionWorldTransform_.translation_ = Add(Add(weaponMotion_.translation_, weaponWorldTransform_.translation_), weaponMotion_.normalTransration_);
 	weaponMotionWorldTransform_.scale_ = Multiply(Multiply(weaponMotion_.scale_, weaponWorldTransform_.scale_), weaponMotion_.normalScale_);

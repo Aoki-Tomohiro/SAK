@@ -154,8 +154,8 @@ private:
 		Vector3 scale_;/*weaponWorldTransform_.scale_を基準としたLocalスケール*/
 		Vector4 color_;/*色やんね*/
 
-		Vector3 normalTransration_;//そもそものサイズ
-		Vector3 normalScale_;		//そもそもの位置
+		Vector3 normalTransration_;//そもそもの位置
+		Vector3 normalScale_;		//そもそものサイズ
 	};
 
 
