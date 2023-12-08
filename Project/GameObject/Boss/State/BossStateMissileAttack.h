@@ -7,7 +7,7 @@
 class BossStateMissileAttack : public IBossState{
 public:
 	//演出用のミサイルの発生時間
-	static const int kMissileSpornTime = 20;
+	static const int kMissileSpornTime = 40;
 	static const int kMissileMax = 3;
 
 	/// <summary>

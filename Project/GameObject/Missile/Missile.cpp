@@ -10,7 +10,7 @@ void Missile::Initialize(const Vector3& position, const Vector3& velocity, uint3
 
 	audio_ = Audio::GetInstance();
 
-	floorMissileModel_.reset(Model::CreateFromOBJ("Resources/FloorMissile", "FloorMissile.obj"));
+	floorMissileModel_.reset(Model::CreateFromOBJ("Resources/Missile", "Missile.obj"));
 
 	missileModel_.reset(Model::CreateFromOBJ("Resources/Missile", "Missile.obj"));
 
