@@ -111,13 +111,13 @@ void Boss::Update() {
 	//}
 
 	//残り体力に応じてテンプレートを変える
-	if (Hp_ >= missileTemplateThreshold1_) {
+	if (Hp_ >= (maxHp_ / 3.0f) * 2.0f) {
 		templateIndex_ = 0;
 	}
-	else if (Hp_ < missileTemplateThreshold1_ && Hp_ >= missileTemplateThreshold2_) {
+	else if (Hp_ < (maxHp_ / 3.0f) * 2.0f && Hp_ >= (maxHp_ / 3.0f) * 1.0f) {
 		templateIndex_ = 1;
 	}
-	else if (Hp_ < missileTemplateThreshold2_ && Hp_ >= missileTemplateThreshold3_) {
+	else if (Hp_ < (maxHp_ / 3.0f) * 1.0f && Hp_ >= 0.0f) {
 		templateIndex_ = 2;
 	}
 
@@ -329,6 +329,16 @@ void Boss::HPBarUpdate()
 	hpBar_.size_ = {(Hp_ / maxHp_) * barSize,1.0f };
 
 	hpBar_.sprite_->SetSize(hpBar_.size_);
+
+	if (Hp_ >= (maxHp_ / 3.0f) * 2.0f) {
+		hpBar_.sprite_->SetColor({ 0.9f, 0.0f, 1.0f, 1.0f });
+	}
+	else if (Hp_ < (maxHp_ / 3.0f) * 2.0f && Hp_ >= (maxHp_ / 3.0f) * 1.0f) {
+		hpBar_.sprite_->SetColor({ 1.0f, 1.0f, 0.0f, 1.0f });
+	}
+	else if (Hp_ < (maxHp_ / 3.0f) * 1.0f && Hp_ >= 0.0f) {
+		hpBar_.sprite_->SetColor({ 1.0f, 0.0f, 0.0f, 1.0f });
+	}
 }
 
 void Boss::DrawParticle(const ViewProjection& viewProjection) {

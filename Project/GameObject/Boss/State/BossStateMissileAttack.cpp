@@ -66,10 +66,14 @@ void BossStateMissileAttack::Update(Boss* pBoss) {
 			addMissileCount_++;
 			Missile* missile[2];
 			missile[0] = new Missile();
-			missile[0]->Initialize(Vector3{ -6.5f,pBoss->Random(-2.2f, 1.0f) ,0.0f }, Vector3{ 0.05f,0.0f,0.0f }, pBoss->GetMissileSoundHandle());
+			//ミサイルの生成高さを3つ刻みにする(-1.2,-0.1,1.0)
+			float missileY = -1.2f + (int)(pBoss->Random(0.0f, 2.0f) + 0.4f) * 1.1f;
+			missile[0]->Initialize(Vector3{ -6.5f,missileY,0.0f }, Vector3{ 0.05f,0.0f,0.0f }, pBoss->GetMissileSoundHandle());
 			pBoss->AddMissile(missile[0]);
 			missile[1] = new Missile();
-			missile[1]->Initialize(Vector3{ 6.5f,pBoss->Random(-2.2f, 1.0f) ,0.0f }, Vector3{ -0.05f,0.0f,0.0f }, pBoss->GetMissileSoundHandle());
+			//ミサイルの生成高さを3つ刻みにする(-1.2,-0.1,1.0)
+			missileY = -1.2f + (int)(pBoss->Random(0.0f, 2.0f) + 0.4f) * 1.1f;
+			missile[1]->Initialize(Vector3{ 6.5f,missileY,0.0f }, Vector3{ -0.05f,0.0f,0.0f }, pBoss->GetMissileSoundHandle());
 			pBoss->AddMissile(missile[1]);
 		}
 	}

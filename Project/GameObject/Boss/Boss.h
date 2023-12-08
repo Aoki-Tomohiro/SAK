@@ -268,7 +268,7 @@ private:
 	//チャージショットのリスト
 	std::list<std::unique_ptr<ChargeShot>> chargeShot_{};
 	//最大体力
-	const float maxHp_ = 430.0f;
+	const float maxHp_ = 550.0f;
 	//体力
 	float Hp_ = maxHp_;
 	//当たったミサイルの数
@@ -342,9 +342,9 @@ private:
 	};
 
 	//ミサイルのテンプレが変わる閾値
-	int missileTemplateThreshold1_ = 290;
-	int missileTemplateThreshold2_ = 140;
-	int missileTemplateThreshold3_ = 0;
+	//int missileTemplateThreshold1_ = 290;
+	//int missileTemplateThreshold2_ = 140;
+	//int missileTemplateThreshold3_ = 0;
 
 	//テンプレートの配列
 	std::vector<MissileTemplate> missileTemplates_;
